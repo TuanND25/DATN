@@ -1,6 +1,6 @@
-using DATN.Data;
-using DATN.IServices;
-using DATN.Services;
+using DATN_API.Data;
+using DATN_API.Service_IService.IServices;
+using DATN_API.Service_IService.Services;
 using DATN_Shared.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

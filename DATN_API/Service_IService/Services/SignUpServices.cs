@@ -1,10 +1,9 @@
-﻿
-using DATN.IServices;
+﻿using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Identity;
 
-namespace DATN.Services
+namespace DATN_API.Service_IService.Services
 {
     public class SignUpServices : ISignUpServices
     {
@@ -51,7 +50,7 @@ namespace DATN.Services
             {
                 UserName = user.UserName,
                 Email = user.Email,
-                Name= user.Name,
+                Name = user.Name,
             };
             if (await _roleManager.RoleExistsAsync(role))
             {
@@ -88,6 +87,6 @@ namespace DATN.Services
 
         }
 
-       
+
     }
 }

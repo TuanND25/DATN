@@ -2,27 +2,27 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using DATN.IServices;
+using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
-namespace DATN.Services
+namespace DATN_API.Service_IService.Services
 {
     public class LoginServices : ILoginServices
     {
         private readonly UserManager<User> _userManager;
 
         private readonly IConfiguration _configuration;
-        
-        public LoginServices(UserManager<User> userManager,IConfiguration configuration)
+
+        public LoginServices(UserManager<User> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
-           
+
             _configuration = configuration;
         }
-    
+
         public async Task<Response> LoginAsync(LoginUser userLogin)
         {
             var user = await _userManager.FindByNameAsync(userLogin.UserName);
@@ -30,12 +30,12 @@ namespace DATN.Services
             {
                 return new Response
                 {
-                    IsSuccess= false,
-                    Message= "username không tồn tại",
+                    IsSuccess = false,
+                    Message = "username không tồn tại",
                     StatusCode = 400
                 };
             }
-            else if (!await _userManager.CheckPasswordAsync(user,userLogin.Password))
+            else if (!await _userManager.CheckPasswordAsync(user, userLogin.Password))
             {
                 return new Response
                 {
@@ -61,10 +61,10 @@ namespace DATN.Services
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
                 var token = new JwtSecurityToken(
 
-                    claims:claims,
+                    claims: claims,
                     expires: DateTime.Now.AddDays(1),
                     signingCredentials: creds
-                                        
+
                     );
                 return new Response
                 {

@@ -1,6 +1,6 @@
 ﻿using DATN_Shared.ViewModel;
 
-namespace DATN.IServices
+namespace DATN_API.Service_IService.IServices
 {
     public interface ISignUpServices
     {
