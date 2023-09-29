@@ -38,15 +38,6 @@ builder.Services.AddScoped<ISizeService, SizeService>();
 builder.Services.AddScoped<IVoucherService, VoucherService>();
 
 
-
-
-
-
-
-
-
-
-
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireDigit = false;
