@@ -18,6 +18,12 @@ builder.Services.AddIdentity<User, Role>()
 
 builder.Services.AddScoped<ISignUpServices, SignUpServices>();
 builder.Services.AddScoped<ILoginServices, LoginServices>();
+
+builder.Services.AddTransient<IProductItemServices, ProductItemServices>();
+builder.Services.AddTransient<IProductsServices, ProductServices>();
+builder.Services.AddTransient<IPromotionServices, PromotionServices>();
+builder.Services.AddTransient<IPromotionProductItemServices, PromotionProductItemServices>();
+
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireDigit = false;

@@ -1,5 +1,6 @@
 ﻿using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
+using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,15 +34,25 @@ namespace DATN_API.Controllers
             return Ok(a);
         }
         [HttpPost("add_product")]
-        public async Task<IActionResult> AddPromotionItem(PromotionsProduct promotionsProduct)
+        public async Task<IActionResult> AddPromotionItem(PromotionProduct_VM promotionsProduct)
         {
-            var a = await _promotionProductItemServices.AddPromotionsProduct(promotionsProduct);
+            PromotionsProduct promotions= new PromotionsProduct();
+            promotions.Id = promotionsProduct.Id;
+            promotions.ProductItemsId = promotionsProduct.ProductItemsId;
+            promotions.PromotionsId = promotionsProduct.PromotionsId;
+            promotions.Status = promotionsProduct.Status;
+            var a = await _promotionProductItemServices.AddPromotionsProduct(promotions);
             return Ok(a);
         }
         [HttpPut("update_product")]
-        public async Task<IActionResult> UpdatePromotionItem(PromotionsProduct promotionsProduct)
+        public async Task<IActionResult> UpdatePromotionItem(PromotionProduct_VM promotionsProduct)
         {
-            var a = await _promotionProductItemServices.UpdatePromotionsProduct(promotionsProduct);
+            PromotionsProduct promotions = new PromotionsProduct();
+            promotions.Id = promotionsProduct.Id;
+            promotions.ProductItemsId = promotionsProduct.ProductItemsId;
+            promotions.PromotionsId = promotionsProduct.PromotionsId;
+            promotions.Status = promotionsProduct.Status;
+            var a = await _promotionProductItemServices.UpdatePromotionsProduct(promotions);
             return Ok(a);
         }
         [HttpDelete("delete_product")]
