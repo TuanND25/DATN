@@ -1,5 +1,6 @@
 ﻿using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
+using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,15 +29,25 @@ namespace DATN_API.Controllers
             return Ok(a);
         }
         [HttpPost("add_product")]
-        public async Task<IActionResult> AddProduct(Products products)
+        public async Task<IActionResult> AddProduct(Products_VM products)
         {
-            var a = await _productsServices.GetAllProducts();
+            Products pr = new Products();
+            pr.Id=products.Id;
+            pr.Name=products.Name;
+            pr.CategoryId=products.CategoryId;
+            pr.Status=products.Status;
+            var a = await _productsServices.AddProducts(pr);
             return Ok(a);
         }
         [HttpPut("update_product")]
-        public async Task<IActionResult> UpdatelProduct(Products products)
+        public async Task<IActionResult> UpdatelProduct(Products_VM products)
         {
-            var a = await _productsServices.GetAllProducts();
+            Products pr = new Products();
+            //pr.Id = products.Id;
+            pr.Name = products.Name;
+            pr.CategoryId = products.CategoryId;
+            pr.Status = products.Status;
+            var a = await _productsServices.UpdateProducts(pr);
             return Ok(a);
         }
         [HttpDelete("delete_product/{Id}")]

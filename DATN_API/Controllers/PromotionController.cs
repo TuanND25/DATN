@@ -1,5 +1,6 @@
 ﻿using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
+using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,15 +28,38 @@ namespace DATN_API.Controllers
             return Ok(a);
         }
         [HttpPost("add_promotion")]
-        public async Task<IActionResult> AddPromotion(Promotions promotions)
+        public async Task<IActionResult> AddPromotion(Promotions_VM promotions)
         {
-            var a = await _promotionsServices.AddPromotions(promotions);
+            Promotions promotions1 = new Promotions();
+            promotions1.Id = promotions.Id;
+            promotions1.Name = promotions.Name;
+            promotions1.Description = promotions.Description;
+            promotions1.Code = promotions.Code;
+            promotions1.Percent = promotions.Percent;
+            promotions1.Quantity = promotions.Quantity;
+            promotions1.StartDate = promotions.StartDate;
+            promotions1.EndDate = promotions.EndDate;
+            promotions1.Discount_Conditions = promotions.Discount_Conditions;
+            promotions1.Status = promotions.Status;
+
+            var a = await _promotionsServices.AddPromotions(promotions1);
             return Ok(a);
         }
         [HttpPut("update_promotion")]
-        public async Task<IActionResult> UpdatePromotion(Promotions promotions)
+        public async Task<IActionResult> UpdatePromotion(Promotions_VM promotions)
         {
-            var a = await _promotionsServices.UpdatePromotions(promotions);
+            Promotions promotions1 = new Promotions();
+            promotions1.Id = promotions.Id;
+            promotions1.Name = promotions.Name;
+            promotions1.Description = promotions.Description;
+            promotions1.Code = promotions.Code;
+            promotions1.Percent = promotions.Percent;
+            promotions1.Quantity = promotions.Quantity;
+            promotions1.StartDate = promotions.StartDate;
+            promotions1.EndDate = promotions.EndDate;
+            promotions1.Discount_Conditions = promotions.Discount_Conditions;
+            promotions1.Status = promotions.Status;
+            var a = await _promotionsServices.UpdatePromotions(promotions1);
             return Ok(a);
         }
         [HttpDelete("delete_promotion")]

@@ -1,5 +1,6 @@
 ﻿using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
+using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,16 +34,36 @@ namespace DATN_API.Controllers
             return Ok(a);
         }
         [HttpPost("add_productitem")]
-        public async Task<IActionResult> AddProductItem(ProductItems productItems)
+        public async Task<IActionResult> AddProductItem(ProductItem_VM productItems)
         {
-            var a = await _productItemServices.AddProductItem(productItems);
-            return Ok(productItems);
+            ProductItems product  = new ProductItems();
+            product.Id = productItems.Id;
+            product.ProductId = productItems.ProductId;
+            product.ColorId = productItems.ColorId;
+            product.SizeId = productItems.SizeId;
+            product.ImagesId = productItems.ImagesId;
+            product.AvaiableQuantity = productItems.AvaiableQuantity;
+            product.PurchasePrice = productItems.PurchasePrice;
+            product.CostPrice = productItems.CostPrice;
+            product.Status= productItems.Status;
+            var a = await _productItemServices.AddProductItem(product);
+            return Ok(a);
         }
         [HttpPut("update_productitem")]
-        public async Task<IActionResult> UpdateProductItem(ProductItems productItems)
+        public async Task<IActionResult> UpdateProductItem(ProductItem_VM productItems)
         {
-            var a = await _productItemServices.UpdateProductItem(productItems);
-            return Ok(productItems);
+            ProductItems product = new ProductItems();
+            //product.Id = productItems.Id;
+            product.ProductId = productItems.ProductId;
+            product.ColorId = productItems.ColorId;
+            product.SizeId = productItems.SizeId;
+            product.ImagesId = productItems.ImagesId;
+            product.AvaiableQuantity = productItems.AvaiableQuantity;
+            product.PurchasePrice = productItems.PurchasePrice;
+            product.CostPrice = productItems.CostPrice;
+            product.Status = productItems.Status;
+            var a = await _productItemServices.UpdateProductItem(product);
+            return Ok(a);
         }
         [HttpDelete("delete_productitem")]
         public async Task<IActionResult> DeleteProductItem(Guid Id)
