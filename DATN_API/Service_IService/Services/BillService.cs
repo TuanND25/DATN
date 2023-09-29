@@ -17,11 +17,13 @@ namespace DATN_API.Service_IService.Services
         {
             try
             {
-                var dte = await _context.Bills.FirstOrDefaultAsync(x => x.Id == Id);
-                if (dte == null) return dte;
-                _context.Bills.Remove(dte);
+                var a = await _context.Bills.FindAsync(Id);
+                if (a == null) return a;
+                a.Status = 0;
+              
+                _context.Bills.Update(a);
                 await _context.SaveChangesAsync();
-                return dte;
+                return a;
             }
             catch (Exception ex)
             {

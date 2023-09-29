@@ -17,11 +17,20 @@ namespace DATN_API.Service_IService.Services
         {
             try
             {
-                var dte = await _context.BillItems.FirstOrDefaultAsync(x => x.Id == Id);
-                if (dte == null) return dte;
-                _context.BillItems.Remove(dte);
+                var a = await _context.BillItems.FindAsync(Id);
+                if (a == null) return a;
+                a.Status = 0;
+                //addressShip.UserId = a.UserId;
+                //addressShip.Recipient = a.Recipient;
+                //addressShip.DistrictID = a.DistrictID;
+                //addressShip.ProvinceID = a.ProvinceID;
+                //addressShip.WardCode = a.WardCode;
+                //addressShip.ToAddress = a.ToAddress;
+                //addressShip.NumberPhone = a.NumberPhone;
+                //addressShip.Status = a.Status;
+                _context.BillItems.Update(a);
                 await _context.SaveChangesAsync();
-                return dte;
+                return a;
             }
             catch (Exception ex)
             {
