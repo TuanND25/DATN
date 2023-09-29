@@ -19,6 +19,34 @@ builder.Services.AddIdentity<User, Role>()
 builder.Services.AddScoped<ISignUpServices, SignUpServices>();
 builder.Services.AddScoped<ILoginServices, LoginServices>();
 
+builder.Services.AddScoped<IAddressShipService, AddressShipService>();
+builder.Services.AddScoped<IBillItemService, BillItemService>();
+builder.Services.AddScoped<IBillService, BillService>();
+builder.Services.AddScoped<ICartItemsService, CartItemsService>();
+builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IColorService, ColorService>();
+builder.Services.AddScoped<IFormulaService, FormulaService>();
+builder.Services.AddScoped<IHistoryConsumerPointService, HistoryConsumerPointService>();
+builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddTransient<IProductItemServices, ProductItemServices>();
+builder.Services.AddTransient<IProductsServices, ProductServices>();
+builder.Services.AddTransient<IPromotionServices, PromotionServices>();
+builder.Services.AddTransient<IPromotionProductItemServices, PromotionProductItemServices>();
+builder.Services.AddTransient<IReviewsService, ReviewsService>();
+builder.Services.AddScoped<ISizeService, SizeService>();
+builder.Services.AddScoped<IVoucherService, VoucherService>();
+
+
+
+
+
+
+
+
+
+
+
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireDigit = false;
