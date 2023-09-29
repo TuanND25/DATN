@@ -18,6 +18,12 @@ builder.Services.AddIdentity<User, Role>()
 
 builder.Services.AddScoped<ISignUpServices, SignUpServices>();
 builder.Services.AddScoped<ILoginServices, LoginServices>();
+builder.Services.AddScoped<ISizeService, SizeService>();
+builder.Services.AddScoped<IColorService, ColorService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IFormulaService, FormulaService>();
+builder.Services.AddScoped<IVoucherService, VoucherService>();
+builder.Services.AddScoped<IAddressShipService, AddressShipService>();
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireDigit = false;
