@@ -33,7 +33,7 @@ namespace DATN_API.Controllers
         }
 
         // GET api/<AddressShipController>/5
-        [HttpGet("UserId")]
+        [HttpGet("BillId")]
         public async Task<ActionResult<BillItems>> GetBillItemsByBillId(Guid BillId)
         {
             try
