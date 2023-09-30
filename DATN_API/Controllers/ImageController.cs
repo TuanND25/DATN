@@ -35,7 +35,7 @@ namespace DATN_API.Controllers
         }
 
         // GET api/<AddressShipController>/5
-        [HttpGet("UserId")]
+        [HttpGet("pro")]
         public async Task<ActionResult<Image>> GetImageByProductItemId(Guid pro)
         {
             try
