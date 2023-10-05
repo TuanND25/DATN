@@ -17,7 +17,7 @@ namespace DATN_API.Controllers
         {
             _billService = billService;
         }
-        [HttpGet]
+        [HttpGet("get_alll_bill")]
         public async Task<ActionResult<Bill>> GetAllBill()
         {
             try
@@ -34,7 +34,7 @@ namespace DATN_API.Controllers
         }
 
         // GET api/<AddressShipController>/5
-        [HttpGet("UserId")]
+        [HttpGet("get_bill_by_user/{UserId}")]
         public async Task<ActionResult<Bill>> GetBillByUserId(Guid UserId)
         {
             try
@@ -48,7 +48,7 @@ namespace DATN_API.Controllers
 
             }
         }
-        [HttpGet("Id")]
+        [HttpGet("get_bill_by_id/{Id}")]
         public async Task<ActionResult<Bill>> GetBillById(Guid Id)
         {
             try

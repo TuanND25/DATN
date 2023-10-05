@@ -16,7 +16,7 @@ namespace DATN_API.Controllers
         {
             return View();
         }
-        [HttpGet]
+        [HttpGet("get_alll_bill_item")]
         public async Task<ActionResult<BillItems>> GetAllBillItems()
         {
             try
@@ -33,7 +33,7 @@ namespace DATN_API.Controllers
         }
 
         // GET api/<AddressShipController>/5
-        [HttpGet("BillId")]
+        [HttpGet("get_alll_bill_byId/{BillId}")]
         public async Task<ActionResult<BillItems>> GetBillItemsByBillId(Guid BillId)
         {
             try
@@ -47,7 +47,7 @@ namespace DATN_API.Controllers
 
             }
         }
-        [HttpGet("Id")]
+        [HttpGet("get_alll_billItem_byId")]
         public async Task<ActionResult<BillItems>> GetBillItemById(Guid Id)
         {
             try
