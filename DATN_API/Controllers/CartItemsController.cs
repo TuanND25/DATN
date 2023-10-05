@@ -39,10 +39,10 @@ namespace DATN_API.Controllers
 		{
 			CartItems CartItems = new CartItems();
 			CartItems.Id = rvm.Id;
-			CartItems.UserId = rvm.UserId;
-			CartItems.CartId = rvm.CartId;
+			CartItems.UserId = rvm.UserId;			
 			CartItems.ProductItemId = rvm.ProductItemId;
-			CartItems.Name = rvm.Name;
+			CartItems.Price = rvm.Price;
+			CartItems.Quantity = rvm.Quantity;
 			CartItems.Status = rvm.Status;
 			await _CartItems.AddCartItems(CartItems);
 			return Ok();
@@ -52,9 +52,9 @@ namespace DATN_API.Controllers
 		{
 			CartItems CartItems = await _CartItems.GetCartItemsById(rvm.Id);
 			CartItems.UserId = rvm.UserId;
-			CartItems.CartId = rvm.CartId;
 			CartItems.ProductItemId = rvm.ProductItemId;
-			CartItems.Name = rvm.Name;
+			CartItems.Quantity = rvm.Quantity;
+			CartItems.Price = rvm.Price;
 			CartItems.Status = rvm.Status;
 			await _CartItems.UpdateCartItems(CartItems);
 			return Ok();

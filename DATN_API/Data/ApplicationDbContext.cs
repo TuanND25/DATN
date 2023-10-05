@@ -54,7 +54,7 @@ namespace DATN_API.Data
 			builder.Entity<ProductItems>().HasOne(p => p.Products).WithMany(pi => pi.ProductItems).HasForeignKey(pi => pi.ProductId);
 			builder.Entity<Products>().HasOne(c => c.Categorys).WithMany(p => p.Products).HasForeignKey(p => p.CategoryId);
 			builder.Entity<CartItems>().HasOne(pi => pi.ProductItems).WithMany(ci => ci.CartItems).HasForeignKey(ci => ci.ProductItemId);
-			builder.Entity<CartItems>().HasOne(c => c.Cart).WithMany(ci => ci.CartItems).HasForeignKey(ci => ci.CartId);
+			builder.Entity<CartItems>().HasOne(c => c.Cart).WithMany(ci => ci.CartItems).HasForeignKey(ci => ci.UserId);
 			builder.Entity<BillItems>().HasOne(pi => pi.ProductItems).WithMany(bi => bi.BillItems).HasForeignKey(bi => bi.ProductItemsId);
 			builder.Entity<BillItems>().HasOne(b => b.Bills).WithMany(bi => bi.BillItems).HasForeignKey(bi => bi.BillId);
 			builder.Entity<Bill>().HasOne(h => h.HistoryConsumerPoints).WithMany(b => b.Bills).HasForeignKey(b => b.HistoryConsumerPointID);
