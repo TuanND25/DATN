@@ -2,6 +2,7 @@
 using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DATN_API.Controllers
@@ -15,6 +16,7 @@ namespace DATN_API.Controllers
         {
             _sizeService = sizeService;
         }
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<Size>> GetAllSize()
         {
