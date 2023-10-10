@@ -17,7 +17,7 @@ namespace DATN_API.Controllers
         {
             _billService = billService;
         }
-        [HttpGet]
+        [HttpGet("get_alll_bill")]
         public async Task<ActionResult<Bill>> GetAllBill()
         {
             try
@@ -34,7 +34,7 @@ namespace DATN_API.Controllers
         }
 
         // GET api/<AddressShipController>/5
-        [HttpGet("UserId")]
+        [HttpGet("get_bill_by_user/{UserId}")]
         public async Task<ActionResult<Bill>> GetBillByUserId(Guid UserId)
         {
             try
@@ -48,7 +48,7 @@ namespace DATN_API.Controllers
 
             }
         }
-        [HttpGet("Id")]
+        [HttpGet("get_bill_by_id/{Id}")]
         public async Task<ActionResult<Bill>> GetBillById(Guid Id)
         {
             try
@@ -72,10 +72,7 @@ namespace DATN_API.Controllers
                 Bill bill = new Bill();
                bill.Id = bill_vm.Id;
                 bill.UserId= bill_vm.UserId;
-                bill.CreateDate = bill_vm.CreateDate;
                 bill.TotalAmount= bill_vm.TotalAmount;
-                bill.Transport_Fee = bill_vm.Transport_Fee;
-                bill.ShipCode= bill_vm.ShipCode;
                 bill.Note=bill_vm.Note;
                 bill.HistoryConsumerPointID = bill_vm.HistoryConsumerPointID;
                 bill.Status = bill_vm.Status;
@@ -98,10 +95,7 @@ namespace DATN_API.Controllers
                 Bill bill = await _billService.GetBillById(bill_vm.Id);
                 bill.Id = bill_vm.Id;
                 bill.UserId = bill_vm.UserId;
-                bill.CreateDate = bill_vm.CreateDate;
                 bill.TotalAmount = bill_vm.TotalAmount;
-                bill.Transport_Fee = bill_vm.Transport_Fee;
-                bill.ShipCode = bill_vm.ShipCode;
                 bill.Note = bill_vm.Note;
                 bill.HistoryConsumerPointID = bill_vm.HistoryConsumerPointID;
                 bill.Status = bill_vm.Status;

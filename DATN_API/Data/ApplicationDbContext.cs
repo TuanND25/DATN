@@ -29,11 +29,12 @@ namespace DATN_API.Data
 		public DbSet<Reviews> Reviews { get; set; }
 		public DbSet<Promotions> Promotions { get; set; }
 		public DbSet<PromotionsProduct> PromotionsProducts { get; set; }
-
 		public DbSet<Size> Sizes { get; set; }
 		public DbSet<User> Users { get; set; }
 		public DbSet<Voucher> Vouchers { get; set; }
-		public DbSet<VoucherBill> VoucherBills { get; set; }
+		public DbSet<VoucherUser> VoucherUsers { get; set; }
+		public DbSet<PaymentMethod> PaymentMethods { get; set; }
+
 
 
 		protected override void OnModelCreating(ModelBuilder builder)
@@ -41,8 +42,8 @@ namespace DATN_API.Data
 			builder.Entity<Cart>().HasOne(u => u.User).WithOne(c => c.Cart).HasForeignKey<Cart>(c => c.UserId);
 			builder.Entity<Bill>().HasOne(u => u.Users).WithMany(b => b.Bills).HasForeignKey(b => b.UserId);
 			builder.Entity<BillItems>().HasOne(b => b.Bills).WithMany(bi => bi.BillItems).HasForeignKey(bi => bi.BillId);
-			builder.Entity<VoucherBill>().HasOne(u => u.Users).WithMany(vb => vb.VoucherBills).HasForeignKey(vb => vb.UserId);
-			builder.Entity<VoucherBill>().HasOne(v => v.Voucher).WithMany(vb => vb.Voucher_Bills).HasForeignKey(vb => vb.VoucherId);
+			builder.Entity<VoucherUser>().HasOne(u => u.Users).WithMany(vb => vb.VoucherUsers).HasForeignKey(vb => vb.UserId);
+			builder.Entity<VoucherUser>().HasOne(v => v.Voucher).WithMany(vb => vb.Voucher_Users).HasForeignKey(vb => vb.VoucherId);
 			builder.Entity<AddressShip>().HasOne(u => u.Users).WithMany(a => a.AddressShips).HasForeignKey(a => a.UserId);
 			builder.Entity<Reviews>().HasOne(u => u.Users).WithMany(r => r.Reviews).HasForeignKey(r => r.UserId);
 			builder.Entity<Image>().HasOne(r => r.Reviews).WithMany(i => i.Images).HasForeignKey(i => i.ReviewId).OnDelete(DeleteBehavior.NoAction);
@@ -52,12 +53,14 @@ namespace DATN_API.Data
 			builder.Entity<PromotionsProduct>().HasOne(pi => pi.ProductItems).WithMany(pp => pp.PromotionsProducts).HasForeignKey(pp => pp.ProductItemsId);
 			builder.Entity<PromotionsProduct>().HasOne(p => p.Promotions).WithMany(pp => pp.PromotionsProducts).HasForeignKey(pp => pp.PromotionsId);
 			builder.Entity<ProductItems>().HasOne(p => p.Products).WithMany(pi => pi.ProductItems).HasForeignKey(pi => pi.ProductId);
-			builder.Entity<Products>().HasOne(c => c.Categorys).WithMany(p => p.Products).HasForeignKey(p => p.CategoryId);
+			builder.Entity<ProductItems>().HasOne(c => c.Categorys).WithMany(p => p.ProductItems).HasForeignKey(p => p.CategoryId);
 			builder.Entity<CartItems>().HasOne(pi => pi.ProductItems).WithMany(ci => ci.CartItems).HasForeignKey(ci => ci.ProductItemId);
-			builder.Entity<CartItems>().HasOne(c => c.Cart).WithMany(ci => ci.CartItems).HasForeignKey(ci => ci.CartId);
+			builder.Entity<CartItems>().HasOne(c => c.Cart).WithMany(ci => ci.CartItems).HasForeignKey(ci => ci.UserId);
 			builder.Entity<BillItems>().HasOne(pi => pi.ProductItems).WithMany(bi => bi.BillItems).HasForeignKey(bi => bi.ProductItemsId);
 			builder.Entity<BillItems>().HasOne(b => b.Bills).WithMany(bi => bi.BillItems).HasForeignKey(bi => bi.BillId);
 			builder.Entity<Bill>().HasOne(h => h.HistoryConsumerPoints).WithMany(b => b.Bills).HasForeignKey(b => b.HistoryConsumerPointID);
+			builder.Entity<Bill>().HasOne(e=>e.PaymentMethods).WithMany(b=>b.Bills).HasForeignKey(y => y.PaymentMethodId);
+			builder.Entity<Bill>().HasOne(e=>e.Vouchers).WithMany(b=>b.Bills).HasForeignKey(y => y.VoucherId);
 			builder.Entity<HistoryConsumerPoint>().HasOne(f => f.Formulas).WithMany(h => h.HistoryConsumerPoints).HasForeignKey(h => h.FormulaId);
 			builder.Entity<HistoryConsumerPoint>().HasOne(c => c.ConsumerPoints).WithMany(h => h.HistoryConsumerPoints).HasForeignKey(h => h.ConsumerPointId);
 			builder.Entity<ConsumerPoint>().HasOne(c => c.Users).WithOne(u => u.ConsumerPoint).HasForeignKey<ConsumerPoint>(u => u.UserID).OnDelete(DeleteBehavior.NoAction);
