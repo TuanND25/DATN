@@ -12,8 +12,6 @@ namespace DATN_Shared.Models
         [Key]
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
-        public Guid ProductId { get; set; }
-     
         public int Rating { get; set; }
         public string Comment { get; set; }
         public DateTime CreateAt { get; set; }
@@ -22,7 +20,6 @@ namespace DATN_Shared.Models
 
 
         public User Users { get; set; }
-        public Products Products { get; set; }
         public virtual ICollection<Image> Images { get; set; }
     }
 }

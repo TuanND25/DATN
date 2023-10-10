@@ -43,7 +43,6 @@ namespace DATN_API.Controllers
 			Reviews Reviews = new Reviews();
 			Reviews.Id = Guid.NewGuid();
 			Reviews.UserId = rvm.UserId;
-			Reviews.ProductId = rvm.ProductId;
 			Reviews.Rating = rvm.Rating;
 			Reviews.Comment = rvm.Comment;
 			Reviews.CreateAt = rvm.CreateAt;
@@ -57,7 +56,6 @@ namespace DATN_API.Controllers
 		{
 			Reviews Reviews = await _Reviews.GetReviewsById(rvm.Id);
 			Reviews.UserId = rvm.UserId;
-			Reviews.ProductId = rvm.ProductId;
 			Reviews.Rating = rvm.Rating;
 			Reviews.Comment = rvm.Comment;
 			Reviews.CreateAt = rvm.CreateAt;
