@@ -72,10 +72,7 @@ namespace DATN_API.Controllers
                 Bill bill = new Bill();
                bill.Id = bill_vm.Id;
                 bill.UserId= bill_vm.UserId;
-                bill.CreateDate = bill_vm.CreateDate;
                 bill.TotalAmount= bill_vm.TotalAmount;
-                bill.Transport_Fee = bill_vm.Transport_Fee;
-                bill.ShipCode= bill_vm.ShipCode;
                 bill.Note=bill_vm.Note;
                 bill.HistoryConsumerPointID = bill_vm.HistoryConsumerPointID;
                 bill.Status = bill_vm.Status;
@@ -98,10 +95,7 @@ namespace DATN_API.Controllers
                 Bill bill = await _billService.GetBillById(bill_vm.Id);
                 bill.Id = bill_vm.Id;
                 bill.UserId = bill_vm.UserId;
-                bill.CreateDate = bill_vm.CreateDate;
                 bill.TotalAmount = bill_vm.TotalAmount;
-                bill.Transport_Fee = bill_vm.Transport_Fee;
-                bill.ShipCode = bill_vm.ShipCode;
                 bill.Note = bill_vm.Note;
                 bill.HistoryConsumerPointID = bill_vm.HistoryConsumerPointID;
                 bill.Status = bill_vm.Status;

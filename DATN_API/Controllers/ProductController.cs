@@ -34,7 +34,6 @@ namespace DATN_API.Controllers
             Products pr = new Products();
             pr.Id=products.Id;
             pr.Name=products.Name;
-            pr.CategoryId=products.CategoryId;
             pr.Status=products.Status;
             var a = await _productsServices.AddProducts(pr);
             return Ok(a);
@@ -45,7 +44,6 @@ namespace DATN_API.Controllers
             Products pr = new Products();
             //pr.Id = products.Id;
             pr.Name = products.Name;
-            pr.CategoryId = products.CategoryId;
             pr.Status = products.Status;
             var a = await _productsServices.UpdateProducts(pr);
             return Ok(a);

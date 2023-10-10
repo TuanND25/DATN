@@ -41,7 +41,6 @@ namespace DATN_API.Controllers
             product.ProductId = productItems.ProductId;
             product.ColorId = productItems.ColorId;
             product.SizeId = productItems.SizeId;
-            product.ImagesId = productItems.ImagesId;
             product.AvaiableQuantity = productItems.AvaiableQuantity;
             product.PurchasePrice = productItems.PurchasePrice;
             product.CostPrice = productItems.CostPrice;
@@ -57,7 +56,6 @@ namespace DATN_API.Controllers
             product.ProductId = productItems.ProductId;
             product.ColorId = productItems.ColorId;
             product.SizeId = productItems.SizeId;
-            product.ImagesId = productItems.ImagesId;
             product.AvaiableQuantity = productItems.AvaiableQuantity;
             product.PurchasePrice = productItems.PurchasePrice;
             product.CostPrice = productItems.CostPrice;
