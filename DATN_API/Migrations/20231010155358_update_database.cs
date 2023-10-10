@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DATN_API.Migrations
 {
-    public partial class kien : Migration
+    public partial class update_database : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -94,6 +94,32 @@ namespace DATN_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PaymentMethods",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentMethods", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Promotions",
                 columns: table => new
                 {
@@ -104,8 +130,8 @@ namespace DATN_API.Migrations
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Discount_Conditions = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Discount_Conditions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -137,7 +163,7 @@ namespace DATN_API.Migrations
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Discount_Conditions = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Discount_Conditions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -175,7 +201,7 @@ namespace DATN_API.Migrations
                     Recipient = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DistrictID = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProvinceID = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    WardCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WardCode = table.Column<int>(type: "int", nullable: false),
                     ToAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NumberPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
@@ -281,7 +307,7 @@ namespace DATN_API.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -314,21 +340,70 @@ namespace DATN_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
+                name: "ProductItems",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ColorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SizeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AvaiableQuantity = table.Column<int>(type: "int", nullable: false),
+                    PurchasePrice = table.Column<int>(type: "int", nullable: false),
+                    CostPrice = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.PrimaryKey("PK_ProductItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Products_Categories_CategoryId",
+                        name: "FK_ProductItems_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductItems_Colors_ColorId",
+                        column: x => x.ColorId,
+                        principalTable: "Colors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductItems_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductItems_Sizes_SizeId",
+                        column: x => x.SizeId,
+                        principalTable: "Sizes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VoucherUsers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    VoucherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VoucherUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VoucherUsers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_VoucherUsers_Vouchers_VoucherId",
+                        column: x => x.VoucherId,
+                        principalTable: "Vouchers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -360,90 +435,22 @@ namespace DATN_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductItems",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ColorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SizeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ImagesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AvaiableQuantity = table.Column<int>(type: "int", nullable: false),
-                    PurchasePrice = table.Column<int>(type: "int", nullable: false),
-                    CostPrice = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductItems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductItems_Colors_ColorId",
-                        column: x => x.ColorId,
-                        principalTable: "Colors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductItems_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductItems_Sizes_SizeId",
-                        column: x => x.SizeId,
-                        principalTable: "Sizes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Bills",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreateDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TotalAmount = table.Column<int>(type: "int", nullable: false),
-                    Transport_Fee = table.Column<int>(type: "int", nullable: false),
-                    ShipCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HistoryConsumerPointID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Bills", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Bills_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Bills_HistoryConsumerPoints_HistoryConsumerPointID",
-                        column: x => x.HistoryConsumerPointID,
-                        principalTable: "HistoryConsumerPoints",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CartItems",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CartItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CartItems_Carts_CartId",
-                        column: x => x.CartId,
+                        name: "FK_CartItems_Carts_UserId",
+                        column: x => x.UserId,
                         principalTable: "Carts",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
@@ -482,6 +489,57 @@ namespace DATN_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Bills",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    HistoryConsumerPointID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PaymentMethodId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    VoucherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    BillCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TotalAmount = table.Column<int>(type: "int", nullable: false),
+                    ReducedAmount = table.Column<int>(type: "int", nullable: false),
+                    Cash = table.Column<int>(type: "int", nullable: true),
+                    CustomerPayment = table.Column<int>(type: "int", nullable: true),
+                    FinalAmount = table.Column<int>(type: "int", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ConfirmationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CompletionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bills", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bills_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Bills_HistoryConsumerPoints_HistoryConsumerPointID",
+                        column: x => x.HistoryConsumerPointID,
+                        principalTable: "HistoryConsumerPoints",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Bills_PaymentMethods_PaymentMethodId",
+                        column: x => x.PaymentMethodId,
+                        principalTable: "PaymentMethods",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Bills_Vouchers_VoucherId",
+                        column: x => x.VoucherId,
+                        principalTable: "Vouchers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BillItems",
                 columns: table => new
                 {
@@ -510,50 +568,16 @@ namespace DATN_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "VoucherBills",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    VoucherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    BillId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_VoucherBills", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_VoucherBills_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_VoucherBills_Bills_BillId",
-                        column: x => x.BillId,
-                        principalTable: "Bills",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_VoucherBills_Vouchers_VoucherId",
-                        column: x => x.VoucherId,
-                        principalTable: "Vouchers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Reviews",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    ProductsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BillItemsId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -570,12 +594,6 @@ namespace DATN_API.Migrations
                         column: x => x.BillItemsId,
                         principalTable: "BillItems",
                         principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Reviews_Products_ProductsId",
-                        column: x => x.ProductsId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -583,7 +601,7 @@ namespace DATN_API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PathImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -608,12 +626,12 @@ namespace DATN_API.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { new Guid("abef31f9-c953-4cf1-8fb0-b58972b36bfa"), "55041244-0a08-4b87-9df7-582c8e5e4f89", "Admin", "ADMIN" });
+                values: new object[] { new Guid("5dac6ad2-0762-4df5-95bb-4947fd66a616"), "1d73b14b-1fd2-40c3-82dc-b151a713e312", "User", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { new Guid("dee4b0ec-8369-48e4-a15e-325bd521a413"), "9abf4e21-33eb-4c13-85a1-93e7927bc8e8", "User", "USER" });
+                values: new object[] { new Guid("bbdf77a4-fd6d-4681-977b-d036515506bd"), "6c1f36e8-f5e3-4941-9227-9e856084b3e5", "Admin", "ADMIN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AddressShips_UserId",
@@ -675,19 +693,29 @@ namespace DATN_API.Migrations
                 column: "HistoryConsumerPointID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Bills_PaymentMethodId",
+                table: "Bills",
+                column: "PaymentMethodId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Bills_UserId",
                 table: "Bills",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CartItems_CartId",
-                table: "CartItems",
-                column: "CartId");
+                name: "IX_Bills_VoucherId",
+                table: "Bills",
+                column: "VoucherId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartItems_ProductItemId",
                 table: "CartItems",
                 column: "ProductItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartItems_UserId",
+                table: "CartItems",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HistoryConsumerPoints_ConsumerPointId",
@@ -710,6 +738,11 @@ namespace DATN_API.Migrations
                 column: "ReviewId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductItems_CategoryId",
+                table: "ProductItems",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductItems_ColorId",
                 table: "ProductItems",
                 column: "ColorId");
@@ -723,11 +756,6 @@ namespace DATN_API.Migrations
                 name: "IX_ProductItems_SizeId",
                 table: "ProductItems",
                 column: "SizeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_CategoryId",
-                table: "Products",
-                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PromotionsProducts_ProductItemsId",
@@ -745,28 +773,18 @@ namespace DATN_API.Migrations
                 column: "BillItemsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reviews_ProductsId",
-                table: "Reviews",
-                column: "ProductsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Reviews_UserId",
                 table: "Reviews",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VoucherBills_BillId",
-                table: "VoucherBills",
-                column: "BillId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_VoucherBills_UserId",
-                table: "VoucherBills",
+                name: "IX_VoucherUsers_UserId",
+                table: "VoucherUsers",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VoucherBills_VoucherId",
-                table: "VoucherBills",
+                name: "IX_VoucherUsers_VoucherId",
+                table: "VoucherUsers",
                 column: "VoucherId");
         }
 
@@ -800,7 +818,7 @@ namespace DATN_API.Migrations
                 name: "PromotionsProducts");
 
             migrationBuilder.DropTable(
-                name: "VoucherBills");
+                name: "VoucherUsers");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -815,9 +833,6 @@ namespace DATN_API.Migrations
                 name: "Promotions");
 
             migrationBuilder.DropTable(
-                name: "Vouchers");
-
-            migrationBuilder.DropTable(
                 name: "BillItems");
 
             migrationBuilder.DropTable(
@@ -828,6 +843,15 @@ namespace DATN_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "HistoryConsumerPoints");
+
+            migrationBuilder.DropTable(
+                name: "PaymentMethods");
+
+            migrationBuilder.DropTable(
+                name: "Vouchers");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Colors");
@@ -843,9 +867,6 @@ namespace DATN_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Formulas");
-
-            migrationBuilder.DropTable(
-                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

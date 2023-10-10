@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DATN_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231009153140_2")]
-    partial class _2
+    [Migration("20231010155358_update_database")]
+    partial class update_database
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -56,9 +56,8 @@ namespace DATN_API.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("WardCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("WardCode")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -73,20 +72,40 @@ namespace DATN_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CreateDate")
+                    b.Property<string>("BillCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("HistoryConsumerPointID")
+                    b.Property<int?>("Cash")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CompletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ConfirmationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CustomerPayment")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FinalAmount")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("HistoryConsumerPointID")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Note")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ShipCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("PaymentMethodId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ReducedAmount")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -94,17 +113,26 @@ namespace DATN_API.Migrations
                     b.Property<int>("TotalAmount")
                         .HasColumnType("int");
 
-                    b.Property<int>("Transport_Fee")
-                        .HasColumnType("int");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("VoucherId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("HistoryConsumerPointID");
 
+                    b.HasIndex("PaymentMethodId");
+
                     b.HasIndex("UserId");
+
+                    b.HasIndex("VoucherId");
 
                     b.ToTable("Bills");
                 });
@@ -145,7 +173,6 @@ namespace DATN_API.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
@@ -297,7 +324,7 @@ namespace DATN_API.Migrations
                     b.Property<Guid>("ProductItemId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ReviewId")
+                    b.Property<Guid?>("ReviewId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
@@ -312,6 +339,24 @@ namespace DATN_API.Migrations
                     b.ToTable("Images");
                 });
 
+            modelBuilder.Entity("DATN_Shared.Models.PaymentMethod", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PaymentMethods");
+                });
+
             modelBuilder.Entity("DATN_Shared.Models.ProductItems", b =>
                 {
                     b.Property<Guid>("Id")
@@ -321,7 +366,11 @@ namespace DATN_API.Migrations
                     b.Property<int>("AvaiableQuantity")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ColorId")
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ColorId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CostPrice")
@@ -333,13 +382,16 @@ namespace DATN_API.Migrations
                     b.Property<int>("PurchasePrice")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("SizeId")
+                    b.Property<Guid?>("SizeId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("ColorId");
 
@@ -356,9 +408,6 @@ namespace DATN_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -367,8 +416,6 @@ namespace DATN_API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
                 });
@@ -384,11 +431,9 @@ namespace DATN_API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Discount_Conditions")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndDate")
@@ -507,15 +552,15 @@ namespace DATN_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4cf9a30b-3ab9-4921-aa2f-b9c3f44f16ba"),
-                            ConcurrencyStamp = "62408949-9bf1-442b-a2d0-13d7a1b0c560",
+                            Id = new Guid("bbdf77a4-fd6d-4681-977b-d036515506bd"),
+                            ConcurrencyStamp = "6c1f36e8-f5e3-4941-9227-9e856084b3e5",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("493ef2c4-c651-4fa1-a046-11076487f5e6"),
-                            ConcurrencyStamp = "ef7c1fcb-55a1-4fa1-845f-926c62cc3d3f",
+                            Id = new Guid("5dac6ad2-0762-4df5-95bb-4947fd66a616"),
+                            ConcurrencyStamp = "1d73b14b-1fd2-40c3-82dc-b151a713e312",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -636,7 +681,6 @@ namespace DATN_API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Discount_Conditions")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndDate")
@@ -669,9 +713,6 @@ namespace DATN_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("BillId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -683,13 +724,11 @@ namespace DATN_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BillId");
-
                     b.HasIndex("UserId");
 
                     b.HasIndex("VoucherId");
 
-                    b.ToTable("VoucherBills");
+                    b.ToTable("VoucherUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -814,15 +853,31 @@ namespace DATN_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DATN_Shared.Models.PaymentMethod", "PaymentMethods")
+                        .WithMany("Bills")
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DATN_Shared.Models.User", "Users")
                         .WithMany("Bills")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DATN_Shared.Models.Voucher", "Vouchers")
+                        .WithMany("Bills")
+                        .HasForeignKey("VoucherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("HistoryConsumerPoints");
 
+                    b.Navigation("PaymentMethods");
+
                     b.Navigation("Users");
+
+                    b.Navigation("Vouchers");
                 });
 
             modelBuilder.Entity("DATN_Shared.Models.BillItems", b =>
@@ -915,8 +970,7 @@ namespace DATN_API.Migrations
                     b.HasOne("DATN_Shared.Models.Reviews", "Reviews")
                         .WithMany("Images")
                         .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("ProductItems");
 
@@ -925,6 +979,12 @@ namespace DATN_API.Migrations
 
             modelBuilder.Entity("DATN_Shared.Models.ProductItems", b =>
                 {
+                    b.HasOne("DATN_Shared.Models.Category", "Categorys")
+                        .WithMany("ProductItems")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DATN_Shared.Models.Color", "Colors")
                         .WithMany("ProductItems")
                         .HasForeignKey("ColorId")
@@ -943,22 +1003,13 @@ namespace DATN_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Categorys");
+
                     b.Navigation("Colors");
 
                     b.Navigation("Products");
 
                     b.Navigation("Size");
-                });
-
-            modelBuilder.Entity("DATN_Shared.Models.Products", b =>
-                {
-                    b.HasOne("DATN_Shared.Models.Category", "Categorys")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Categorys");
                 });
 
             modelBuilder.Entity("DATN_Shared.Models.PromotionsProduct", b =>
@@ -997,18 +1048,14 @@ namespace DATN_API.Migrations
 
             modelBuilder.Entity("DATN_Shared.Models.VoucherUser", b =>
                 {
-                    b.HasOne("DATN_Shared.Models.Bill", null)
-                        .WithMany("Voucher_Bills")
-                        .HasForeignKey("BillId");
-
                     b.HasOne("DATN_Shared.Models.User", "Users")
-                        .WithMany("VoucherBills")
+                        .WithMany("VoucherUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DATN_Shared.Models.Voucher", "Voucher")
-                        .WithMany("Voucher_Bills")
+                        .WithMany("Voucher_Users")
                         .HasForeignKey("VoucherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1072,8 +1119,6 @@ namespace DATN_API.Migrations
             modelBuilder.Entity("DATN_Shared.Models.Bill", b =>
                 {
                     b.Navigation("BillItems");
-
-                    b.Navigation("Voucher_Bills");
                 });
 
             modelBuilder.Entity("DATN_Shared.Models.BillItems", b =>
@@ -1088,7 +1133,7 @@ namespace DATN_API.Migrations
 
             modelBuilder.Entity("DATN_Shared.Models.Category", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("ProductItems");
                 });
 
             modelBuilder.Entity("DATN_Shared.Models.Color", b =>
@@ -1107,6 +1152,11 @@ namespace DATN_API.Migrations
                 });
 
             modelBuilder.Entity("DATN_Shared.Models.HistoryConsumerPoint", b =>
+                {
+                    b.Navigation("Bills");
+                });
+
+            modelBuilder.Entity("DATN_Shared.Models.PaymentMethod", b =>
                 {
                     b.Navigation("Bills");
                 });
@@ -1156,12 +1206,14 @@ namespace DATN_API.Migrations
 
                     b.Navigation("Reviews");
 
-                    b.Navigation("VoucherBills");
+                    b.Navigation("VoucherUsers");
                 });
 
             modelBuilder.Entity("DATN_Shared.Models.Voucher", b =>
                 {
-                    b.Navigation("Voucher_Bills");
+                    b.Navigation("Bills");
+
+                    b.Navigation("Voucher_Users");
                 });
 #pragma warning restore 612, 618
         }
