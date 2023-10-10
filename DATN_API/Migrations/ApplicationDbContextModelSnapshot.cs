@@ -74,29 +74,29 @@ namespace DATN_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Cash")
+                    b.Property<int?>("Cash")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CompletionDate")
+                    b.Property<DateTime?>("CompletionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ConfirmationDate")
+                    b.Property<DateTime?>("ConfirmationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CustomerPayment")
+                    b.Property<int?>("CustomerPayment")
                         .HasColumnType("int");
 
                     b.Property<int>("FinalAmount")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("HistoryConsumerPointID")
+                    b.Property<Guid?>("HistoryConsumerPointID")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Note")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("PaymentMethodId")
@@ -118,7 +118,8 @@ namespace DATN_API.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("VoucherId")
+                    b.Property<Guid?>("VoucherId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -170,7 +171,6 @@ namespace DATN_API.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
@@ -322,7 +322,7 @@ namespace DATN_API.Migrations
                     b.Property<Guid>("ProductItemId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ReviewId")
+                    b.Property<Guid?>("ReviewId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
@@ -367,7 +367,8 @@ namespace DATN_API.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ColorId")
+                    b.Property<Guid?>("ColorId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CostPrice")
@@ -379,7 +380,8 @@ namespace DATN_API.Migrations
                     b.Property<int>("PurchasePrice")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("SizeId")
+                    b.Property<Guid?>("SizeId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
@@ -427,11 +429,9 @@ namespace DATN_API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Discount_Conditions")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndDate")
@@ -550,15 +550,15 @@ namespace DATN_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ecdbe129-76cd-4f7f-83f7-0a589e2addae"),
-                            ConcurrencyStamp = "33db813e-fc25-4f08-9aff-9663a9b6b571",
+                            Id = new Guid("bbdf77a4-fd6d-4681-977b-d036515506bd"),
+                            ConcurrencyStamp = "6c1f36e8-f5e3-4941-9227-9e856084b3e5",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("590b0193-95ba-48ed-98d9-a7adb86dde73"),
-                            ConcurrencyStamp = "4227fdd4-84b4-4a6a-b5ed-b75df2173446",
+                            Id = new Guid("5dac6ad2-0762-4df5-95bb-4947fd66a616"),
+                            ConcurrencyStamp = "1d73b14b-1fd2-40c3-82dc-b151a713e312",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -679,7 +679,6 @@ namespace DATN_API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Discount_Conditions")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndDate")
@@ -969,8 +968,7 @@ namespace DATN_API.Migrations
                     b.HasOne("DATN_Shared.Models.Reviews", "Reviews")
                         .WithMany("Images")
                         .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("ProductItems");
 

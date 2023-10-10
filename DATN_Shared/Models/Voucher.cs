@@ -15,7 +15,7 @@ namespace DATN_Shared.Models
         public int Quantity { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string Discount_Conditions { get; set; }
+        public string? Discount_Conditions { get; set; }
         public int Status { get; set; }
         public virtual ICollection<VoucherUser> Voucher_Users { get; set; }
         public virtual ICollection<Bill> Bills { get; set; }

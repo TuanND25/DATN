@@ -15,8 +15,8 @@ namespace DATN_Shared.Models
         public int Quantity { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string Description { get; set; }
-        public string Discount_Conditions { get; set; }
+        public string? Description { get; set; }
+        public string? Discount_Conditions { get; set; }
         public int Status { get; set; }
         public ICollection<PromotionsProduct>  PromotionsProducts { get; set; }
         

@@ -17,10 +17,7 @@ namespace DATN_Shared.Models
         public string RefreshToken { get; set; } =string.Empty;
         public DateTime TokenCreated { get; set; } 
         public DateTime TokenExpires { get; set; }
-
         public int Status { get; set; } 
-      
-     
         public ConsumerPoint ConsumerPoint { get; set; }
         public Cart Cart { get; set; }  
         public virtual ICollection<Reviews> Reviews { get; set; }
