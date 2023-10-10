@@ -1,18 +1,17 @@
 ﻿using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DATN_API.Controllers
 {
-    public class BillController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class BillController : ControllerBase
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
         private readonly IBillService _billService;
-     
+
         public BillController(IBillService billService)
         {
             _billService = billService;
@@ -70,10 +69,10 @@ namespace DATN_API.Controllers
             try
             {
                 Bill bill = new Bill();
-               bill.Id = bill_vm.Id;
-                bill.UserId= bill_vm.UserId;
-                bill.TotalAmount= bill_vm.TotalAmount;
-                bill.Note=bill_vm.Note;
+                bill.Id = bill_vm.Id;
+                bill.UserId = bill_vm.UserId;
+                bill.TotalAmount = bill_vm.TotalAmount;
+                bill.Note = bill_vm.Note;
                 bill.HistoryConsumerPointID = bill_vm.HistoryConsumerPointID;
                 bill.Status = bill_vm.Status;
 

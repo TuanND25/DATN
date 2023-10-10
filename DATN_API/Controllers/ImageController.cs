@@ -1,23 +1,22 @@
 ﻿using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DATN_API.Controllers
 {
-    public class ImageController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ImageController : ControllerBase
     {
-       
         private readonly IImageService _iImageService;
         public ImageController(IImageService iImageService)
         {
             _iImageService = iImageService;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+
         [HttpGet]
         public async Task<ActionResult<Image>> GetAllImage()
         {
@@ -74,10 +73,10 @@ namespace DATN_API.Controllers
                 img.Id = Guid.NewGuid();
                 img.ReviewId = img_vm.ReviewId;
                 img.Name = img_vm.Name;
-                img.PathImage= img_vm.PathImage;
+                img.PathImage = img_vm.PathImage;
                 img.ProductItemId = img_vm.ProductItemId;
-                img.Status= img_vm.Status;
-                
+                img.Status = img_vm.Status;
+
                 await _iImageService.PostImage(img);
                 return Ok("Success");
             }
@@ -94,7 +93,7 @@ namespace DATN_API.Controllers
             try
             {
                 Image img = await _iImageService.GetImageById(img_vm.Id);
-                
+
                 img.ReviewId = img_vm.ReviewId;
                 img.Name = img_vm.Name;
                 img.PathImage = img_vm.PathImage;

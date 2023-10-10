@@ -1,21 +1,21 @@
 ﻿using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DATN_API.Controllers
 {
-    public class BillItemController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class BillItemController : ControllerBase
     {
         private readonly IBillItemService _iBillItemService;
         public BillItemController(IBillItemService iBillItemService)
         {
             _iBillItemService = iBillItemService;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
+       
         [HttpGet("get_alll_bill_item")]
         public async Task<ActionResult<BillItems>> GetAllBillItems()
         {
@@ -121,6 +121,5 @@ namespace DATN_API.Controllers
 
             }
         }
-       
     }
 }
