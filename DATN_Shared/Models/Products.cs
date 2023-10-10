@@ -10,11 +10,9 @@ namespace DATN_Shared.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public Guid CategoryId { get; set; }
         public int Status { get; set; }
 
         public virtual ICollection<ProductItems> ProductItems { get; set; }
-        public Category Categorys { get; set; }
 
     }
 }

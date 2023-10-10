@@ -13,14 +13,10 @@ namespace DATN_Shared.Models
     {
    
         public string Name { get; set; } = string.Empty;
-
-        //public byte[] PasswordSalt { get; set; }
-        //public byte[] PasswordHash1 { get; set; }
         public bool Sex { get; set; } 
         public string RefreshToken { get; set; } =string.Empty;
         public DateTime TokenCreated { get; set; } 
         public DateTime TokenExpires { get; set; }
-
 
         public int Status { get; set; } 
       
@@ -28,10 +24,9 @@ namespace DATN_Shared.Models
         public ConsumerPoint ConsumerPoint { get; set; }
         public Cart Cart { get; set; }  
         public virtual ICollection<Reviews> Reviews { get; set; }
-        //public virtual IList<Bill> Bills { get; set; }
         public virtual ICollection<Bill> Bills { get; set; }    
         public virtual ICollection<AddressShip> AddressShips { get; set; }
-        public virtual ICollection<VoucherBill> VoucherBills { get; set; }
+        public virtual ICollection<VoucherUser> VoucherUsers { get; set; }
       
 
     }
