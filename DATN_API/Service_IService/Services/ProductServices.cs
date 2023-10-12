@@ -60,6 +60,8 @@ namespace DATN_API.Service_IService.Services
             try
             {
                 var a = await _context.Products.FindAsync(item.Id);
+                a.Status = item.Status;
+                a.Name = item.Name;
                 _context.Products.Update(a);
                 _context.SaveChanges();
                 return item;

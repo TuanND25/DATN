@@ -59,6 +59,15 @@ namespace DATN_API.Service_IService.Services
             try
             {
                 var a = await _context.Promotions.FindAsync(item.Id);
+                a.Status=item.Status;
+                a.StartDate=item.StartDate;
+                a.EndDate=item.EndDate;
+                a.Description=item.Description;
+                a.Discount_Conditions=item.Discount_Conditions;
+                a.Code=item.Code;
+                a.Name=item.Name;
+                a.Quantity=item.Quantity;
+                a.Percent=item.Percent;               
                 _context.Promotions.Update(a);
                 _context.SaveChanges();
                 return item;
