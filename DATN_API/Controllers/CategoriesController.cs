@@ -55,7 +55,7 @@ namespace DATN_API.Controllers
             try
             {
                 Category category = new Category();
-                category.Id = Guid.NewGuid();
+                category.Id = c.Id;
                 category.Name = c.Name;
                 category.Status = c.Status;
                 await _categoryService.PostCategory(category);

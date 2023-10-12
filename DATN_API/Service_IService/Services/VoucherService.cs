@@ -47,14 +47,15 @@ namespace DATN_API.Service_IService.Services
         {
             var a = await _context.Vouchers.FindAsync(voucher.Id);
             if (a == null) return voucher;
-            a.Name = voucher.Name;
-            a.Code = voucher.Code;
-            a.Reduced_Value = voucher.Reduced_Value;
-            a.Quantity = voucher.Quantity;
-            a.StartDate = voucher.StartDate;
-            a.EndDate = voucher.EndDate;
-            a.Discount_Conditions = voucher.Discount_Conditions;
-            a.Status = voucher.Status;
+            a = voucher;
+            //a.Name = voucher.Name;
+            //a.Code = voucher.Code;
+            //a.Reduced_Value = voucher.Reduced_Value;
+            //a.Quantity = voucher.Quantity;
+            //a.StartDate = voucher.StartDate;
+            //a.EndDate = voucher.EndDate;
+            //a.Discount_Conditions = voucher.Discount_Conditions;
+            //a.Status = voucher.Status;
             _context.Vouchers.Update(a);
             await _context.SaveChangesAsync();
             return voucher;

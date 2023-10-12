@@ -33,12 +33,12 @@ namespace DATN_API.Controllers
             Promotions promotions1 = new Promotions();
             promotions1.Id = promotions.Id;
             promotions1.Name = promotions.Name;
-            promotions1.Description = promotions.Description;
             promotions1.Code = promotions.Code;
             promotions1.Percent = promotions.Percent;
             promotions1.Quantity = promotions.Quantity;
             promotions1.StartDate = promotions.StartDate;
             promotions1.EndDate = promotions.EndDate;
+            promotions1.Description = promotions.Description;
             promotions1.Discount_Conditions = promotions.Discount_Conditions;
             promotions1.Status = promotions.Status;
 
@@ -51,12 +51,12 @@ namespace DATN_API.Controllers
             Promotions promotions1 = new Promotions();
             promotions1.Id = promotions.Id;
             promotions1.Name = promotions.Name;
-            promotions1.Description = promotions.Description;
             promotions1.Code = promotions.Code;
             promotions1.Percent = promotions.Percent;
             promotions1.Quantity = promotions.Quantity;
             promotions1.StartDate = promotions.StartDate;
             promotions1.EndDate = promotions.EndDate;
+            promotions1.Description = promotions.Description;
             promotions1.Discount_Conditions = promotions.Discount_Conditions;
             promotions1.Status = promotions.Status;
             var a = await _promotionsServices.UpdatePromotions(promotions1);

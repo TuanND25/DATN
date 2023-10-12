@@ -65,8 +65,10 @@ namespace DATN_API.Service_IService.Services
             {
                 var a = await _context.Categories.FindAsync(category.Id);
                 if (a == null) return category;
-                a.Name = category.Name;
-                a.Status = category.Status;
+                a = category;
+                //a.Name = category.Name;
+                //a.Status = category.Status;
+                _context.Categories.Update(a);
                 await _context.SaveChangesAsync();
                 return category;
             }

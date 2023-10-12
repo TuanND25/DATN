@@ -41,7 +41,7 @@ namespace DATN_API.Controllers
 		public async Task<ActionResult<Reviews>> PostReviews(Reviews_VM rvm)
 		{
 			Reviews Reviews = new Reviews();
-			Reviews.Id = Guid.NewGuid();
+			Reviews.Id = =rvm.Id;
 			Reviews.UserId = rvm.UserId;
 			Reviews.Rating = rvm.Rating;
 			Reviews.Comment = rvm.Comment;

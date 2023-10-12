@@ -36,7 +36,7 @@ namespace DATN_API.Controllers
 		public async Task<ActionResult<HistoryConsumerPoint>> PostHistoryConsumerPoint(HistoryConsumerPoint_VM rvm)
 		{
 			HistoryConsumerPoint HistoryConsumerPoint = new HistoryConsumerPoint();
-			HistoryConsumerPoint.Id = Guid.NewGuid();
+			HistoryConsumerPoint.Id = rvm.Id;
 			HistoryConsumerPoint.ConsumerPointId = rvm.ConsumerPointId;
 			HistoryConsumerPoint.FormulaId = rvm.FormulaId;
 			HistoryConsumerPoint.Status = rvm.Status;

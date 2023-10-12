@@ -56,7 +56,7 @@ namespace DATN_API.Controllers
             try
             {
                 Voucher voucher = new Voucher();
-                voucher.Id = Guid.NewGuid();
+                voucher.Id = a.Id;
                 voucher.Name = a.Name;
                 voucher.Code = a.Code;
                 voucher.Reduced_Value = a.Reduced_Value;

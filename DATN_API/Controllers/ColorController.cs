@@ -55,7 +55,7 @@ namespace DATN_API.Controllers
             try
             {
                 Color color = new Color();
-                color.Id = Guid.NewGuid();
+                color.Id = =colorView.Id;
                 color.Name = colorView.Name;
                 color.Status = colorView.Status;
                 await _colorS.PostColor(color);

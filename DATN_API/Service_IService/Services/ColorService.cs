@@ -47,8 +47,9 @@ namespace DATN_API.Service_IService.Services
         {
             var a = await _context.Colors.FindAsync (color.Id);
             if (a == null ) return color;
-            a.Name = color.Name;
-            a.Status = color.Status;
+            a = color;
+            //a.Name = color.Name;
+            //a.Status = color.Status;
             _context.Colors.Update (a);
             await _context.SaveChangesAsync();
             return color;

@@ -64,11 +64,12 @@ namespace DATN_API.Service_IService.Services
 			try
 			{
 				var a = await context.CartItems.FindAsync(CartItems.Id);
-				a.UserId = CartItems.UserId;
-				a.ProductItemId = CartItems.ProductItemId;
-				a.Price = CartItems.Price;
-				a.Quantity = CartItems.Quantity;
-				a.Status = CartItems.Status;
+				a = CartItems;
+				//a.UserId = CartItems.UserId;
+				//a.ProductItemId = CartItems.ProductItemId;
+				//a.Price = CartItems.Price;
+				//a.Quantity = CartItems.Quantity;
+				//a.Status = CartItems.Status;
 				context.CartItems.Update(a);
 				context.SaveChanges();
 				return a;

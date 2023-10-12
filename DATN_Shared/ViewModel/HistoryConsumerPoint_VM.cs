@@ -8,9 +8,9 @@ namespace DATN_Shared.ViewModel
 {
 	public class HistoryConsumerPoint_VM
 	{
-		public Guid Id { get; set; }
-		public Guid ConsumerPointId { get; set; }
-		public Guid FormulaId { get; set; }
-		public int Status { get; set; }
-	}
+        public Guid Id { get; set; }
+        public Guid ConsumerPointId { get; set; }
+        public Guid FormulaId { get; set; }
+        public int Status { get; set; }
+    }
 }

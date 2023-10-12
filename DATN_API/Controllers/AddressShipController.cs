@@ -69,7 +69,7 @@ namespace DATN_API.Controllers
             try
             {
                 AddressShip addressShip = new AddressShip();
-                addressShip.Id = Guid.NewGuid();
+                addressShip.Id = avm.Id;
                 addressShip.UserId = avm.UserId;
                 addressShip.Recipient = avm.Recipient;
                 addressShip.DistrictID = avm.DistrictID;

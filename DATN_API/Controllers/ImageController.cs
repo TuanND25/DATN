@@ -70,7 +70,7 @@ namespace DATN_API.Controllers
             try
             {
                 Image img = new Image();
-                img.Id = Guid.NewGuid();
+                img.Id = img_vm.Id;
                 img.ReviewId = img_vm.ReviewId;
                 img.Name = img_vm.Name;
                 img.PathImage = img_vm.PathImage;
