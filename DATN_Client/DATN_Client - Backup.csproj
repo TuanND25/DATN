@@ -10,7 +10,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.22" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.1" />
   </ItemGroup>
 
@@ -19,14 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-	  
-    <Folder Include="Areas\Customer\Controllers\" />
-	  
-    <Folder Include="Areas\Customer\Data\" />
-	  
-    <Folder Include="Areas\Customer\Models\" />
-	  
-    <Folder Include="Areas\Customer\Views\" />
 	  
     <Folder Include="Views\Login\" />
   </ItemGroup>
