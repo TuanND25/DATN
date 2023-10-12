@@ -46,9 +46,10 @@ namespace DATN_API.Service_IService.Services
         {
             var put = await _context.Sizes.FindAsync(size.Id);
             if (put == null) return put;
+            put = size;
             //_context.Update(put);
-            put.Name = size.Name;
-            put.Status = size.Status;
+            //put.Name = size.Name;
+            //put.Status = size.Status;
             await _context.SaveChangesAsync();
             return put;
         }

@@ -67,8 +67,9 @@ namespace DATN_API.Service_IService.Services
 			try
 			{
 				var a = await context.Carts.FindAsync(Cart.UserId);
-				a.Description = Cart.Description;
-				a.Status = Cart.Status;
+				a = Cart;
+				//a.Description = Cart.Description;
+				//a.Status = Cart.Status;
 				context.Carts.Update(a);
 				context.SaveChanges();
 				return a;

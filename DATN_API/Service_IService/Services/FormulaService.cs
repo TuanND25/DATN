@@ -47,8 +47,9 @@ namespace DATN_API.Service_IService.Services
         {
             var a = await _context.Formulas.FindAsync(formula.Id);
             if (a == null) return formula;
-            a.Coefficient = formula.Coefficient;
-            a.Status = formula.Status;
+            a = formula;
+            //a.Coefficient = formula.Coefficient;
+            //a.Status = formula.Status;
             _context.Update(formula);
             await _context.SaveChangesAsync();
             return formula;

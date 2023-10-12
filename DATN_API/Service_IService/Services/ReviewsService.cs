@@ -72,12 +72,13 @@ namespace DATN_API.Service_IService.Services
 			try
 			{
 				var a = await context.Reviews.FindAsync(Reviews.Id);
-				a.UserId = Reviews.UserId;
-				a.Rating = Reviews.Rating;
-				a.Comment = Reviews.Comment;
-				a.CreateAt = Reviews.CreateAt;
-				a.UpdateAt = Reviews.UpdateAt;
-				a.Status = Reviews.Status;
+				a = Reviews;
+				//a.UserId = Reviews.UserId;
+				//a.Rating = Reviews.Rating;
+				//a.Comment = Reviews.Comment;
+				//a.CreateAt = Reviews.CreateAt;
+				//a.UpdateAt = Reviews.UpdateAt;
+				//a.Status = Reviews.Status;
 				context.Reviews.Update(a);
 				context.SaveChanges();
 				return a;

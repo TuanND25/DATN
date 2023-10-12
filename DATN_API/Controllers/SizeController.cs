@@ -53,7 +53,7 @@ namespace DATN_API.Controllers
             try
             {
                 Size size = new Size();
-                size.Id = Guid.NewGuid();
+                size.Id = sizeview.Id;
                 size.Name = sizeview.Name;
                 size.Status = sizeview.Status;
                 await _sizeService.PostSize(size);

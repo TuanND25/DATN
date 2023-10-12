@@ -55,7 +55,7 @@ namespace DATN_API.Controllers
             try
             {
                 Formula formula = new Formula();
-                formula.Id = Guid.NewGuid();
+                formula.Id = b.Id;
                 formula.Coefficient = b.Coefficient;
                 formula.Status = b.Status;
                 await _formulaService.PostFormula(formula);

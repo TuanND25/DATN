@@ -58,14 +58,14 @@ namespace DATN_API.Service_IService.Services
             {
                 var a = await _context.AddressShips.FindAsync(addressShip.Id);
                 if (a == null) return a;
-                addressShip.UserId = a.UserId;
-                addressShip.Recipient = a.Recipient;
-                addressShip.DistrictID = a.DistrictID;
-                addressShip.ProvinceID = a.ProvinceID;
-                addressShip.WardCode = a.WardCode;
-                addressShip.ToAddress = a.ToAddress;
-                addressShip.NumberPhone = a.NumberPhone;
-                addressShip.Status = a.Status;
+                addressShip = a;
+                //addressShip.Recipient = a.Recipient;
+                //addressShip.DistrictID = a.DistrictID;
+                //addressShip.ProvinceID = a.ProvinceID;
+                //addressShip.WardCode = a.WardCode;
+                //addressShip.ToAddress = a.ToAddress;
+                //addressShip.NumberPhone = a.NumberPhone;
+                //addressShip.Status = a.Status;
                 _context.AddressShips.Update(addressShip);
                 await _context.SaveChangesAsync();
                 return addressShip;

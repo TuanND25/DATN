@@ -68,9 +68,10 @@ namespace DATN_API.Service_IService.Services
 			try
 			{
 				var a = await context.HistoryConsumerPoints.FindAsync(HistoryConsumerPoint.Id);
-				a.ConsumerPointId = HistoryConsumerPoint.ConsumerPointId;
-				a.FormulaId = HistoryConsumerPoint.FormulaId;
-				a.Status = HistoryConsumerPoint.Status;
+				a = HistoryConsumerPoint;
+				//a.ConsumerPointId = HistoryConsumerPoint.ConsumerPointId;
+				//a.FormulaId = HistoryConsumerPoint.FormulaId;
+				//a.Status = HistoryConsumerPoint.Status;
 				context.HistoryConsumerPoints.Update(a);
 				context.SaveChanges();
 				return a;
