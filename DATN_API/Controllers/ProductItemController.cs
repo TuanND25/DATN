@@ -21,7 +21,13 @@ namespace DATN_API.Controllers
             var a = await _productItemServices.GetAllProductItems();
             return Ok(a);
         }
-        [HttpGet("get_all_productitem_byID/{Id}")]
+		[HttpGet("get_all_productitem_show")]
+		public async Task<IActionResult> GetAllProductItem_Show()
+		{
+			var a = await _productItemServices.GetAllProductItems_Show();
+			return Ok(a);
+		}
+		[HttpGet("get_all_productitem_byID/{Id}")]
         public async Task<IActionResult> GetAllProductItemById(Guid Id)
         {
             var a = await _productItemServices.GetAllProductItemById(Id);

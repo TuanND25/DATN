@@ -1,0 +1,418 @@
+﻿@inject IJSRuntime JsRuntime
+
+<style>
+	.a1 {
+		width: 100px;
+		height: 110px;
+		opacity: 0;
+		position: absolute;
+		z-index: -1;
+	}
+
+	.a2 {
+		width: 100px;
+		height: 110px;
+		background-image: url('/images/add.png');
+		background-size: cover;
+		background-position: center;
+		padding: 10px 15px;
+		color: #fff;
+		cursor: pointer;
+	}
+</style>
+
+<h1>Quản lý sản phẩm</h1>
+@* style="display:none" *@
+@* style="width:100px;height: 100px; "*@
+<div class="modal fade" id="Add_P">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<!-- Phần tiêu đề của popup -->
+			<div class="modal-header">
+				<h4 class="modal-title">Thêm sản phẩm</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+
+			<!-- Nội dung của popup -->
+			<EditForm Model="_P_VM">
+				<div class="modal-body">
+					Tên sản phẩm
+					<InputText class="form-control" @bind-Value="@_P_VM.Name" />					
+				</div>
+				<!-- Phần chân của popup -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+					<button type="button" class="btn btn-primary" @onclick="Add_P" data-dismiss="modal">Thêm</button>
+				</div>
+			</EditForm>
+
+
+
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="Add_Cate">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<!-- Phần tiêu đề của popup -->
+			<div class="modal-header">
+				<h4 class="modal-title">Thêm thể loại</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+
+			<!-- Nội dung của popup -->
+			<EditForm Model="_Cate_VM">
+				<div class="modal-body">
+					Tên thể loại
+					<InputText class="form-control" @bind-Value="@_Cate_VM.Name" />
+				</div>
+				<!-- Phần chân của popup -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+					<button type="button" class="btn btn-primary" @onclick="Add_Cate" data-dismiss="modal">Thêm</button>
+				</div>
+			</EditForm>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="Add_C">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<!-- Phần tiêu đề của popup -->
+			<div class="modal-header">
+				<h4 class="modal-title">Thêm màu sắc</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+
+			<!-- Nội dung của popup -->
+			<EditForm Model="_C_VM">
+				<div class="modal-body">
+					Tên màu sắc
+					<InputText class="form-control" @bind-Value="@_C_VM.Name" />
+				</div>
+				<!-- Phần chân của popup -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+					<button type="button" class="btn btn-primary" @onclick="Add_C" data-dismiss="modal">Thêm</button>
+				</div>
+			</EditForm>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="Add_S">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<!-- Phần tiêu đề của popup -->
+			<div class="modal-header">
+				<h4 class="modal-title">Thêm size</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+
+			<!-- Nội dung của popup -->
+			<EditForm Model="_S_VM">
+				<div class="modal-body">
+					Tên size
+					<InputText class="form-control" @bind-Value="@_S_VM.Name" />
+				</div>
+				<!-- Phần chân của popup -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+					<button type="button" class="btn btn-primary" @onclick="Add_S" data-dismiss="modal">Thêm</button>
+				</div>
+			</EditForm>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="Delete_Img_Tam">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<!-- Phần tiêu đề của popup -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+
+			<!-- Nội dung của popup -->
+			<img src="/images/@_pathImg" alt="" style="width:498px;height:547.8px" />
+			<!-- Phần chân của popup -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+				<button type="button" class="btn btn-danger" @onclick="Delete_Img_Tam" data-dismiss="modal">Xóa</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-5">
+		<div class="row">
+			<div class="col-md-2">
+
+				@{
+					if (_lstImg_Tam.Count < 3)
+					{
+						foreach (var x in _lstImg_Tam)
+						{
+							<div style="margin-bottom:30px;margin-top:30px">
+								<a @onclick="()=>LoadAnh(x.Id)">
+									<img src="/images/@x.PathImage" alt="" style="width: 100px;height: 110px;" />
+								</a>
+							</div>
+						}
+						<InputFile class="a1" id="customFile" OnChange="ChangeEv" />
+						<label class="a2" for="customFile"></label>
+					}
+					else
+					{
+						foreach (var x in _lstImg_Tam)
+						{
+							<div style="margin-bottom:30px;margin-top:30px">
+								<a @onclick="()=>LoadAnh(x.Id)">
+									<img src="/images/@x.PathImage" alt="" style="width: 100px;height: 110px;" />
+								</a>
+							</div>
+						}
+					}
+				}
+			</div>
+			<div class="col-md-10">
+				<center>
+					@* @if (_pathImg == null && _idPI.ToString() == "00000000-0000-0000-0000-000000000000")
+					{
+					} *@
+					@if (_pathImg != null)
+					{
+						<a data-toggle="modal" data-target="#Delete_Img_Tam">
+							<img src="/images/@_pathImg" alt="" style="width:393.6px;height:433px;margin-top:8.5px" />
+						</a>
+					}
+					else
+					{
+					}
+
+				</center>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-7">
+		<EditForm Model="_PI_VM">
+			<div>
+
+				<input @bind-value="_PI_VM.Id" style="display:none" />
+				<h4>Tên sản phẩm</h4>
+				<div style="display:flex">
+					<InputSelect class="form-select" @bind-Value="@_PI_VM.ProductId">
+						<option value="0" selected>--Chọn--</option>
+						@foreach (var x in _lstP)
+						{
+							<option value="@x.Id">@x.Name</option>
+						}
+					</InputSelect>
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add_P">
+						Thêm
+					</button>
+				</div><br />
+				<div class="row">
+					<div class="col-md-4">
+						<h4>Thể loại</h4>
+					</div>
+					<div class="col-md-4">
+						<h4>Màu sắc</h4>
+					</div>
+					<div class="col-md-4">
+						<h4>Size</h4>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4" style="display:flex">
+						<InputSelect class="form-select" @bind-Value="@_PI_VM.ColorId">
+							<option selected>--Chọn--</option>
+							@foreach (var x in _lstC)
+							{
+								<option value="@x.Id">@x.Name</option>
+							}
+						</InputSelect>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add_Cate">
+							Thêm
+						</button>
+					</div>
+					<div class="col-md-4" style="display:flex">
+						<InputSelect class="form-select" @bind-Value="@_PI_VM.ColorId">
+							<option selected>--Chọn--</option>
+							@foreach (var x in _lstC)
+							{
+								<option value="@x.Id">@x.Name</option>
+							}
+						</InputSelect>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add_C">
+							Thêm
+						</button>
+					</div>
+					<div class="col-md-4" style="display:flex">
+						<InputSelect class="form-select" @bind-Value="@_PI_VM.SizeId">
+							<option selected>--Chọn--</option>
+							@foreach (var x in _lstS)
+							{
+								<option value="@x.Id">@x.Name</option>
+							}
+						</InputSelect>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add_S">
+							Thêm
+						</button>
+					</div>
+				</div><br />
+				<div class="row">
+					<div class="col-md-6">
+						<h4>Giá nhập</h4>
+						<InputNumber class="form-control" @bind-Value="@_PI_VM.PurchasePrice" />
+					</div>
+					<div class="col-md-6">
+
+						<h4>Số lượng tồn</h4>
+						<InputNumber class="form-control" @bind-Value="@_PI_VM.AvaiableQuantity" />
+					</div>
+				</div><br />
+				<div class="row">
+					<div class="col-md-6">
+						<h4>Giá bán</h4>
+						<InputNumber class="form-control" @bind-Value="@_PI_VM.CostPrice" />
+					</div>
+					<div class="col-md-6">
+						<h4>Trạng thái</h4>
+						<InputSelect class="form-select" @bind-Value="@_PI_VM.Status">
+							<option value="0" selected>--Chọn--</option>
+							<option value="1">Còn hàng</option>
+							<option value="2">Hết hàng</option>
+							<option value="3">Ngừng kinh doanh</option>
+						</InputSelect>
+					</div>
+				</div><br />
+
+
+			</div>
+			<center>
+				<div style="margin-bottom:16.83px">
+					<button type="submit" class="btn btn-primary" @onclick="Add_PI">Add</button>
+					<button type="submit" class="btn btn-primary" @onclick="Update_PI">Update</button>
+				</div>
+			</center>
+		</EditForm>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-md-9">
+		<EditForm Model="_PM_S_VM">
+			<div class="row">
+				<div class="col-md-3">
+					<InputSelect class="form-select" @bind-Value="_PM_S_VM.CategoryName">
+						<option value="0" selected>--Chọn--</option>
+						@foreach (var x in _lstCate)
+						{
+							<option value="@x.Name">@x.Name</option>
+						}
+					</InputSelect>
+				</div>
+				<div class="col-md-3">
+					<InputSelect class="form-select" @bind-Value="_PM_S_VM.ColorName">
+						<option value="0" selected>--Chọn--</option>
+						@foreach (var x in _lstC)
+						{
+							<option value="@x.Name">@x.Name</option>
+						}
+					</InputSelect>
+				</div>
+				<div class="col-md-3">
+					<InputSelect class="form-select" @bind-Value="_PM_S_VM.SizeName">
+						<option value="0" selected>--Chọn--</option>
+						@foreach (var x in _lstS)
+						{
+							<option value="@x.Name">@x.Name</option>
+						}
+					</InputSelect>
+				</div>
+				<div class="col-md-3">
+					<button type="submit" class="btn btn-primary" @onclick="LocHangLoat">Lọc</button>
+				</div>
+			</div>
+		</EditForm>
+	</div>
+	<div class="col-md-3">
+		<EditForm Model="_PM_S_VM">
+			<div class="row">
+				<div class="col-md-8">
+					<InputText class="form-control" @bind-Value="_PM_S_VM.Name" placeholder="Tìm kiếm theo tên" />
+				</div>
+				<div class="col-md-4">
+					<button type="submit" class="btn btn-primary" @onclick="TimKiem">Tìm kiếm</button>
+				</div>
+			</div>
+		</EditForm>
+	</div>
+</div>
+
+@if (_lstPrI_show_VM == null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Ảnh minh họa</th>
+				<th>Tên</th>
+				<th>Thể loại</th>
+				<th>Màu sắc</th>
+				<th>Size</th>
+				<th>Số lượng tồn</th>
+				<th>Giá nhập</th>
+				<th>Giá bán</th>
+				<th>Trạng thái</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var x in _lstPrI_show_VM)
+			{
+				<tr>
+
+					@{
+						var img = _lstImg.Where(c => c.ProductItemId == x.Id).Select(c => c.PathImage).FirstOrDefault();
+						// var img2 = _lstImg.FirstOrDefault(c => c.ProductItemId == x.Id).PathImage;
+						if (img == null)
+						{
+							<td>Chưa có ảnh</td>
+						}
+						else
+						{
+							<td><img src="/images/@img" alt="" style="width:100px;height: 110px;"></td>
+						}
+					}
+					<td>@x.Name</td>
+					<td>@x.CategoryName</td>
+					<td>@x.ColorName</td>
+					<td>@x.SizeName</td>
+					<td>@x.AvaiableQuantity</td>
+					<td>@x.PurchasePrice</td>
+					<td>@x.CostPrice</td>
+					<td>@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
+					<td>
+						<button style="border: none;border-radius: 10px;" class="btn btn-primary" type="button" @onclick="()=>LoadUpdate(x)">
+							<i class="fa fa-gear"></i>
+						</button>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+
+<!-- Thư viện CSS Bootstrap -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
