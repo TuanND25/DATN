@@ -64,6 +64,14 @@ namespace DATN_API.Service_IService.Services
             try
             {
                 var a = await _context.ProductItems.FindAsync(item.Id);
+                a.AvaiableQuantity = item.AvaiableQuantity;
+                a.CategoryId = item.CategoryId;
+                a.ColorId= item.ColorId;
+                a.SizeId = item.SizeId;
+                a.ProductId= item.ProductId;
+                a.PurchasePrice = item.PurchasePrice;
+                a.CostPrice= item.CostPrice;
+                a.Status = item.Status;
                 _context.ProductItems.Update(a);
                 _context.SaveChanges();
                 return item;
