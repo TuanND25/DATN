@@ -28,6 +28,7 @@ builder.Services.AddSwaggerGen(options =>
     
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+
 builder.Services.AddIdentity<User, Role>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -97,7 +98,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors(options =>
+{
+	options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+});
 app.UseAuthentication();
 
 app.UseAuthorization();

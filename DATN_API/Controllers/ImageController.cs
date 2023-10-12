@@ -109,12 +109,12 @@ namespace DATN_API.Controllers
             }
         }
 
-        [HttpDelete("Delete-Address")]
-        public async Task<ActionResult<AddressShip>> DeleteAddressShip(Guid Id)
+        [HttpDelete("Delete-Image")]
+        public async Task<ActionResult<Image>> DeleteImage(Guid Id)
         {
             try
             {
-                await _iImageService.DeleteImage(Id);
+                var x = await _iImageService.DeleteImage(Id);
                 return Ok("Success");
             }
             catch (Exception ex)

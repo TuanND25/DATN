@@ -1,6 +1,7 @@
 ﻿using DATN_API.Data;
 using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
+using DATN_Shared.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace DATN_API.Service_IService.Services
@@ -59,7 +60,33 @@ namespace DATN_API.Service_IService.Services
             return a;
         }
 
-        public async Task<ProductItems> UpdateProductItem(ProductItems item)
+		public async Task<List<ProductItem_Show_VM>> GetAllProductItems_Show()
+		{
+			var list = (from prI in await _context.ProductItems.ToListAsync()
+						join pr in await _context.Products.ToListAsync() on prI.ProductId equals pr.Id
+						join s in await _context.Sizes.ToListAsync() on prI.SizeId equals s.Id
+						join c in await _context.Colors.ToListAsync() on prI.ColorId equals c.Id
+						join cate in await _context.Categories.ToListAsync() on prI.CategoryId equals cate.Id
+						select new ProductItem_Show_VM()
+						{
+							Id = prI.Id,
+							ProductId = prI.ProductId,
+							Name = pr.Name,
+							ColorId = prI.ColorId,
+							ColorName = c.Name,
+							SizeId = prI.SizeId,
+							SizeName = s.Name,
+							CategoryID = prI.CategoryId,
+							CategoryName = cate.Name,
+							AvaiableQuantity = prI.AvaiableQuantity,
+							PurchasePrice = prI.PurchasePrice,
+							CostPrice = prI.CostPrice,
+							Status = prI.Status,
+						}).ToList();
+			return list;
+		}
+
+		public async Task<ProductItems> UpdateProductItem(ProductItems item)
         {
             try
             {
