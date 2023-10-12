@@ -1,0 +1,64 @@
+﻿<div class="card">
+    <div class="card-body">
+        <h1 style="margin-top:20px">Promotion</h1>
+        <div class="pagetitle">
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item">Promotion</li>
+                </ol>
+            </nav>
+        </div>
+
+    </div>
+</div>
+
+@{
+    int count = 1;
+}
+<div class="card">
+    <div class="card-body">
+        <div class="pagetitle">
+        </div>
+        @if (_lstPromotion == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Tên</th>
+                        <th scope="col">Code</th>
+                        <th scope="col">Phần trăm giảm</th>
+                        <th scope="col">Số lượng</th>
+                        <th scope="col">Ngày bắt đầu</th>
+                        <th scope="col">Ngày kết thúc</th>
+                        <th scope="col">Mô tả</th>
+                        <th scope="col">Tình trạng</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var a in _lstPromotion)
+                    {
+                        <tr>
+                            <th>@(count++)</th>
+                            <th>@a.Name</th>
+                            <th>@a.Code</th>
+                            <th>@a.Percent</th>
+                            <th>@a.Quantity</th>
+                            <th>@a.StartDate</th>
+                            <th>@a.EndDate</th>
+                            <th>@a.Description</th>
+                            <th>@a.Status</th>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
