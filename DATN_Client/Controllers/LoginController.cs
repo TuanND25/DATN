@@ -1,10 +1,12 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -15,9 +17,9 @@ namespace DATN_Client.Controllers
         private readonly HttpClient _httpClient;
         public LoginController(HttpClient httpClient)
         {
-            _httpClient= httpClient;
+            _httpClient = httpClient;
         }
-      
+
         public IActionResult Login()
         {
             return View();
@@ -46,9 +48,13 @@ namespace DATN_Client.Controllers
                 var handler = new JwtSecurityTokenHandler();
                 var jwt = handler.ReadJwtToken(token);
 
-                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, jwt.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value));
-                identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role).Value));
+                // tạo đối tượng xác thực
+                var claims = new List<Claim>
+                {
+                new Claim(ClaimTypes.NameIdentifier, jwt.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value),
+                new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role).Value)
+                };
+                var identity = new ClaimsIdentity(claims, JwtBearerDefaults.AuthenticationScheme);
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(principal);
 
@@ -56,11 +62,10 @@ namespace DATN_Client.Controllers
 
 
 
-                var resquest = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7141/api/getuser");
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                // Thêm mã token vào tiêu đề HTTP của yêu cầu
-                resquest.Headers.Add("Authorization", $"Bearer {token}");
-                var reponse = await _httpClient.SendAsync(resquest);
+                var reponse = await _httpClient.GetAsync($"https://localhost:7141/api/getuser");
+        
 
                 // Kiểm tra phản hồi từ API
                 if (reponse.IsSuccessStatusCode)
