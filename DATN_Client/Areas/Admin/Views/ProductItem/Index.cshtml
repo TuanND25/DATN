@@ -1,7 +1,15 @@
 ﻿@using DATN_Client.Components;
+@* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/DATN_Client.styles.css" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> *@
 @using DATN_Client.Areas.Admin.Components
 @{
     Layout = @"~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 
 }
 @(await Html.RenderComponentAsync<ProductItemManager>(RenderMode.Server))
+
+@* <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script> *@

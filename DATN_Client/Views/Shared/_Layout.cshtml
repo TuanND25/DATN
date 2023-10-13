@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DATN_Client.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" />
 </head>
 <body>
     <header>
@@ -48,13 +48,6 @@
     <base href="~/" />
     <script src="_framework/blazor.server.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    <!-- Thư viện JavaScript Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script>
-        function OnScrollEvent() {
-            document.documentElement.scrollTop = 0;
-        }
-    </script>
-
 </body>
 </html>
