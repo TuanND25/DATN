@@ -304,7 +304,7 @@
 </div>
 
 
-<div class="row">
+<div class="row" style="margin-bottom:25px">
 	<div class="col-md-9">
 		<EditForm Model="_PM_S_VM">
 			<div class="row">
@@ -402,8 +402,8 @@ else
 					<td>@x.CostPrice</td>
 					<td>@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
 					<td>
-						<button style="border: none;border-radius: 10px;" class="btn btn-primary" type="button" @onclick="()=>LoadUpdate(x)">
-							<i class="fa fa-gear"></i>
+						<button style="border: none;border-radius: 15px;" class="btn btn-primary" type="button" @onclick="()=>LoadUpdate(x)">
+							<i class="fa fa-info"></i>
 						</button>
 					</td>
 				</tr>
