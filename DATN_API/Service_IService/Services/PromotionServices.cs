@@ -63,8 +63,6 @@ namespace DATN_API.Service_IService.Services
                 a.StartDate=item.StartDate;
                 a.EndDate=item.EndDate;
                 a.Description=item.Description;
-                a.Discount_Conditions=item.Discount_Conditions;
-                a.Code=item.Code;
                 a.Name=item.Name;
                 a.Quantity=item.Quantity;
                 a.Percent=item.Percent;               
