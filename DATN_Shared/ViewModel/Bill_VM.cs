@@ -22,7 +22,7 @@ namespace DATN_Shared.ViewModel
         public DateTime? CreateDate { get; set; }
         public DateTime? ConfirmationDate { get; set; }
         public DateTime? CompletionDate { get; set; }
-        public string Type { get; set; }
+        public int Type { get; set; }
         public string? Note { get; set; }
         public int Status { get; set; }
     }

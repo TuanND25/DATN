@@ -37,9 +37,9 @@ insert into HistoryConsumerPoints values('f170df48-4a56-48e8-9095-500cd4a562a3',
 insert into Vouchers values('e3855830-78e1-4e84-8341-9580fc938909','Voucher1','HN123',10,100,'2023-9-23','2024-1-1','',1)
 insert into Vouchers values('0e79b6cf-cba4-47cc-8736-48c1bd6b8f8c','Voucher2','BTL123',10,100,'2023-9-23','2024-1-1','',1)
 
-insert into Bills values('b735bab0-d9cb-40f7-8299-5de01854fcf1','e4ff175e-91ab-41ba-aa46-ba4e87fdb5bf','193b76c8-4b69-4663-adac-98e5de5225fc','261d402e-dfa8-4213-9e29-4fdd6fc6b95d','e3855830-78e1-4e84-8341-9580fc938909','HD01',300000,10000,290000,0,290000,'2023-9-20','2023-9-22','2023-9-23',N'Bán tại quầy',null,1)
-insert into Bills values('b76c143a-c3fe-4456-940c-7135cd925c7d','e4ff175e-91ab-41ba-aa46-ba4e87fdb5bf','f3477e0e-6c6c-4574-a77e-e99530ba4fb5','261d402e-dfa8-4213-9e29-4fdd6fc6b95d',null,'HD02',300000,0,300000,0,300000,'2023-9-20','2023-9-22','2023-9-23',N'Bán tại quầy',null,1)
-insert into Bills values('306b1e4d-8b6f-48f3-b3eb-956b524a3ef9','e4ff175e-91ab-41ba-aa46-ba4e87fdb5bf','f170df48-4a56-48e8-9095-500cd4a562a3','261d402e-dfa8-4213-9e29-4fdd6fc6b95d',null,'HD03',250000,0,250000,0,250000,'2023-9-20','2023-9-22','2023-9-23',N'Bán tại quầy',null,1)
+insert into Bills values('b735bab0-d9cb-40f7-8299-5de01854fcf1','e4ff175e-91ab-41ba-aa46-ba4e87fdb5bf','193b76c8-4b69-4663-adac-98e5de5225fc','261d402e-dfa8-4213-9e29-4fdd6fc6b95d','e3855830-78e1-4e84-8341-9580fc938909','HD01',300000,10000,290000,0,290000,'2023-9-20','2023-9-22','2023-9-23',1,null,1)
+insert into Bills values('b76c143a-c3fe-4456-940c-7135cd925c7d','e4ff175e-91ab-41ba-aa46-ba4e87fdb5bf','f3477e0e-6c6c-4574-a77e-e99530ba4fb5','261d402e-dfa8-4213-9e29-4fdd6fc6b95d',null,'HD02',300000,0,300000,0,300000,'2023-9-20','2023-9-22','2023-9-23',1,null,1)
+insert into Bills values('306b1e4d-8b6f-48f3-b3eb-956b524a3ef9','e4ff175e-91ab-41ba-aa46-ba4e87fdb5bf','f170df48-4a56-48e8-9095-500cd4a562a3','261d402e-dfa8-4213-9e29-4fdd6fc6b95d',null,'HD03',250000,0,250000,0,250000,'2023-9-20','2023-9-22','2023-9-23',1,null,1)
 
 
 insert into Carts values('e4ff175e-91ab-41ba-aa46-ba4e87fdb5bf',N'',1)
