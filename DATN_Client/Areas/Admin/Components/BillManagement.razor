@@ -1,0 +1,44 @@
+﻿
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ảnh minh họa</th>
+            <th>Tên</th>
+            <th>Thể loại</th>
+            <th>Màu sắc</th>
+            <th>Size</th>
+            <th>Số lượng tồn</th>
+            <th>Giá nhập</th>
+            <th>Giá bán</th>
+            <th>Trạng thái</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var x in _lstbill)
+        {
+            <tr>
+
+
+                <td>@x.BillCode</td>
+                <td>@x.UserName</td>
+                <td>@x.TotalAmount</td>
+                <td>@x.PaymentMethodName</td>
+                <td>@x.Reduced_Value</td>
+                <td>@x.Cash</td>
+                <td>@x.CustomerPayment</td>
+                <td>@x.FinalAmount</td>
+                <td>@x.CreateDate</td>
+                <td>@x.Type</td>
+                <td>@x.Note</td>               
+                <td>@(x.Status == 1 ? "Chưa xác nhận " : x.Status == 2 ? "Đang giao hàng" : "Hoàn thành")</td>
+                <td>
+                    <button @onclick="()=>ClickDetailBill(x)">
+                        Chi tiết
+                    </button>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

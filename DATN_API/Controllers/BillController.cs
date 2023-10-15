@@ -17,19 +17,10 @@ namespace DATN_API.Controllers
             _billService = billService;
         }
         [HttpGet("get_alll_bill")]
-        public async Task<ActionResult<Bill>> GetAllBill()
-        {
-            try
-            {
+        public async Task<ActionResult<List<Bill_ShowModel>>> GetAllBill1()
+        {                   
                 var lst = await _billService.GetAllBill();
-                return Ok(lst);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Liên hệ Thai để sửa 0349198240");
-
-            }
-
+                return lst;                 
         }
 
         // GET api/<AddressShipController>/5

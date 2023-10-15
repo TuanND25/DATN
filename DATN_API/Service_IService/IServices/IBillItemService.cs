@@ -1,4 +1,5 @@
 ﻿using DATN_Shared.Models;
+using DATN_Shared.ViewModel;
 
 namespace DATN_API.Service_IService.IServices
 {
@@ -8,7 +9,7 @@ namespace DATN_API.Service_IService.IServices
         public Task<BillItems> PutBillItems(BillItems billItems);
         public Task<BillItems> DeleteBillItems(Guid Id);
         public Task<BillItems> GetBillItemsById(Guid Id);
-        public Task<IEnumerable<BillItems>> GetBillItemsByBillId(Guid BillId);
+        public Task<List<BillDetailShow>> GetBillItemsByBillId(Guid BillId);
         public Task<IEnumerable<BillItems>> GetAllBillItems();
     }
 }
