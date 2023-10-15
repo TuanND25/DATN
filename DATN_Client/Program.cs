@@ -1,3 +1,4 @@
+using System.Configuration;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +23,18 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
               });
 
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddAuthentication()
+    .AddGoogle(googleOptions =>
+    {
 
+        IConfigurationSection googleAuthNSection = builder.Configuration.GetSection("Authentication:Google");
+        googleOptions.ClientId = googleAuthNSection["ClientId"];
+        googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+        googleOptions.CallbackPath = "/signin-google";
+
+        //googleOptions.CallbackPath = "/dang-nhap-tu-google";
+
+    });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

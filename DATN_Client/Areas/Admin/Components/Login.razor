@@ -1,0 +1,23 @@
+﻿<h3>Login</h3>
+
+
+<EditForm Model="loginUser">
+
+	<div class="form">
+		<label>Username:</label>
+		<InputText type="text" class="form-control"  @bind-Value="loginUser.UserName"/>
+	</div>
+	<div class="form">
+		<label>Password:</label>
+		<InputText type="password" class="form-control" @bind-Value="loginUser.Password" />
+	</div>
+
+	<button type="submit" class="btn btn-primary" @onclick="login">Login</button>
+
+</EditForm>
+<a href="/signin-google">Đăng nhập bằng Google</a>
+@if(Message!=null){
+	<p>@Message</p>
+}else{
+	<p>@Message</p>
+}

@@ -20,7 +20,7 @@ namespace DATN_Client.Controllers
             _httpClient = httpClient;
         }
 
-        public IActionResult Login()
+        public IActionResult loginuser()
         {
             return View();
         }
@@ -65,8 +65,7 @@ namespace DATN_Client.Controllers
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var reponse = await _httpClient.GetAsync($"https://localhost:7141/api/getuser");
-        
-
+              
                 // Kiểm tra phản hồi từ API
                 if (reponse.IsSuccessStatusCode)
                 {
