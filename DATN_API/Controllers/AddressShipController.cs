@@ -72,9 +72,9 @@ namespace DATN_API.Controllers
                 addressShip.Id = avm.Id;
                 addressShip.UserId = avm.UserId;
                 addressShip.Recipient = avm.Recipient;
-                addressShip.DistrictID = avm.DistrictID;
-                addressShip.ProvinceID = avm.ProvinceID;
-                addressShip.WardCode = avm.WardCode;
+                addressShip.District = avm.District;
+                addressShip.Province = avm.Province;
+                addressShip.WardName = avm.WardName;
                 addressShip.ToAddress = avm.ToAddress;
                 addressShip.NumberPhone = avm.NumberPhone;
                 addressShip.Status = avm.Status;
@@ -96,9 +96,9 @@ namespace DATN_API.Controllers
                 AddressShip addressShip = await _addressShipService.GetAddressShipById(avm.Id);
                 addressShip.UserId = avm.UserId;
                 addressShip.Recipient = avm.Recipient;
-                addressShip.DistrictID = avm.DistrictID;
-                addressShip.ProvinceID = avm.ProvinceID;
-                addressShip.WardCode = avm.WardCode;
+                addressShip.District = avm.District;
+                addressShip.Province = avm.Province;
+                addressShip.WardName = avm.WardName;
                 addressShip.ToAddress = avm.ToAddress;
                 addressShip.NumberPhone = avm.NumberPhone;
                 addressShip.Status = avm.Status;
