@@ -9,6 +9,6 @@ namespace DATN_API.Service_IService.IServices
         public Task<Bill> DeleteBill(Guid Id);
         public Task<Bill> GetBillById(Guid Id);
         public Task<IEnumerable<Bill>> GetBillByUserId(Guid UsedId);
-        public Task<IEnumerable<Bill>> GetAllBill();
+        public Task<List<Bill_ShowModel>> GetAllBill();
     }
 }

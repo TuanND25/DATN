@@ -33,19 +33,13 @@ namespace DATN_API.Controllers
         }
 
         // GET api/<AddressShipController>/5
-        [HttpGet("get_alll_bill_byId/{BillId}")]
-        public async Task<ActionResult<BillItems>> GetBillItemsByBillId(Guid BillId)
+        [HttpGet("getbilldetail/{BillId}")]
+        public async Task<ActionResult<List<BillDetailShow>>> GetBillItemsByBillId(Guid BillId)
         {
-            try
-            {
+           
                 var lstUsId = await _iBillItemService.GetBillItemsByBillId(BillId);
                 return Ok(lstUsId);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Liên hệ Thai để sửa 0349198240");
-
-            }
+          
         }
         [HttpGet("get_alll_billItem_byId")]
         public async Task<ActionResult<BillItems>> GetBillItemById(Guid Id)

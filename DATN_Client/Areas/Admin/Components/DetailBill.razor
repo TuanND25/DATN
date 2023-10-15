@@ -1,0 +1,159 @@
+﻿<style>
+    /* CSS */
+    .button-33 {
+        background-color: #c2fbd7;
+        border-radius: 100px;
+        box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
+        color: green;
+        cursor: pointer;
+        display: inline-block;
+        font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+        padding: 2px 20px;
+        text-align: center;
+        text-decoration: none;
+        transition: all 250ms;
+        border: 0;
+        font-size: 16px;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+    }
+
+        .button-33:hover {
+            box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
+            transform: scale(1.05) rotate(-1deg);
+        }
+
+    .button-34 {
+        background-color: #D74C4C;
+        border-radius: 100px;
+        box-shadow: rgba(215,76,76, .2) 0 -25px 18px -14px inset,rgba(215,76,76, .15) 0 1px 2px,rgba(215,76,76, .15) 0 2px 4px,rgba(215,76,76, .15) 0 4px 8px,rgba(215,76,76, .15) 0 8px 16px,rgba(215,76,76, .15) 0 16px 32px;
+        color: wheat;
+        cursor: pointer;
+        display: inline-block;
+        font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+        padding: 2px 20px;
+        text-align: center;
+        text-decoration: none;
+        transition: all 250ms;
+        border: 0;
+        font-size: 16px;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+    }
+
+        .button-34:hover {
+            box-shadow: rgba(215,76,76,.35) 0 -25px 18px -14px inset,rgba(215,76,76,.25) 0 1px 2px,rgba(215,76,76,.25) 0 2px 4px,rgba(215,76,76,.25) 0 4px 8px,rgba(215,76,76,.25) 0 8px 16px,rgba(215,76,76,.25) 0 16px 32px;
+            transform: scale(1.05) rotate(-1deg);
+        }
+
+    .cangiua {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center
+    }
+</style>
+
+<div class="row">
+
+    <EditForm Model="_billModel" class="col-4">
+        <div>
+
+            <label for="inputText" class="col-form-label">Mã HD</label>
+            <InputText class="form-control" @bind-Value="@_billModel.BillCode" readonly />
+        </div>
+        <div>
+            <label for="inputText" class="col-form-label">Tên khách hàng</label>
+            <InputText class="form-control" @bind-Value="@_billModel.UserName" readonly />
+        </div>
+        <div>
+            <label for="inputText" class="col-form-label">Số điện thoại</label>
+            <InputText class="form-control" @bind-Value="@_billModel.UserName" readonly />
+        </div>
+
+    </EditForm>
+    <EditForm Model="_billModel" class="col-4">
+        <div>
+            
+            <label for="inputText" class="col-form-label">Địa chỉ</label>
+            <InputText class="form-control" @bind-Value="@_billModel.UserName" readonly />
+        </div>
+        <div>
+            <label for="inputText" class="col-form-label">Tên người nhận</label>
+            <InputText class="form-control" @bind-Value="@_billModel.UserName" readonly />
+        </div>
+        <div>
+            <label for="inputText" class="col-form-label">Số điện thoại</label>
+            <InputText class="form-control" @bind-Value="@_billModel.UserName" readonly />
+        </div>
+    </EditForm>
+    <div class="col-4 cangiua">
+        <button class="button-33" style="margin-bottom:20px">
+            Xác nhận đơn hàng
+        </button>
+        <button class="button-34">
+            Hủy đơn hàng
+        </button>
+
+    </div>
+
+
+
+
+
+</div>
+
+
+
+
+@if (_lstBillDetail == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên</th>
+                <th>Thể loại</th>
+                <th>Màu sắc</th>
+                <th>Size</th>
+                <th>Số lượng </th>
+                <th>Giá</th>
+                <th>Giá khuyến mãi</th>
+                <th>Trạng thái</th>
+                <th></th>
+            </tr>
+        </thead>
+        @{
+            int count = 1;
+        }
+        <tbody>
+            @foreach (var x in _lstBillDetail)
+            {
+                <tr>
+                    <td>
+                        @(count++)
+                    </td>
+                    <td>@x.Name</td>
+                    <td>@x.CategoryName</td>
+                    <td>@x.ColorName</td>
+                    <td>@x.SizeName</td>
+                    <td>@x.Quantity</td>
+                    <td>@x.CostPrice</td>
+                    <td>@x.PriceAfter</td>
+                    <td>@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
+                    <td>
+                        <button style="border: none;border-radius: 15px;" class="btn btn-primary" type="button">
+                            <i class="fa fa-info"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
