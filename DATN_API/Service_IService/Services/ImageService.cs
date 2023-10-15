@@ -18,7 +18,7 @@ namespace DATN_API.Service_IService.Services
             {
                 var dte = await _context.Images.FirstOrDefaultAsync(x => x.Id == Id);
                 if (dte == null) return dte;
-                _context.Images.Remove(dte);
+                _context.Remove(dte);
                 await _context.SaveChangesAsync();
                 return dte;
             }

@@ -59,7 +59,7 @@ namespace DATN_API.Controllers
         public async Task<IActionResult> UpdateProductItem(ProductItem_VM productItems)
         {
             ProductItems product = new ProductItems();
-            //product.Id = productItems.Id;
+            product.Id = productItems.Id;
             product.ProductId = productItems.ProductId;
             product.ColorId = productItems.ColorId;
             product.SizeId = productItems.SizeId;
