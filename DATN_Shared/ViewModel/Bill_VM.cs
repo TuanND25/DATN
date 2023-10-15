@@ -13,6 +13,7 @@ namespace DATN_Shared.ViewModel
         public Guid? HistoryConsumerPointID { get; set; }
         public Guid PaymentMethodId { get; set; }
         public Guid? VoucherId { get; set; }
+        public Guid? AddressId { get; set; }
         public string BillCode { get; set; }
         public int TotalAmount { get; set; }
         public int ReducedAmount { get; set; }
