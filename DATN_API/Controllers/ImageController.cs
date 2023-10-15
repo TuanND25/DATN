@@ -109,7 +109,7 @@ namespace DATN_API.Controllers
             }
         }
 
-        [HttpDelete("Delete-Image")]
+        [HttpDelete("Delete-Image/{Id}")]
         public async Task<ActionResult<Image>> DeleteImage(Guid Id)
         {
             try

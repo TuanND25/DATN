@@ -18,6 +18,7 @@ namespace DATN_API.Service_IService.Services
             try
             {
                 var a = await _context.ProductItems.AddAsync(item);
+                _context.SaveChanges();
                 return item;
             }
             catch (Exception)

@@ -17,9 +17,9 @@ namespace DATN_Shared.ViewModel
 		public string SizeName { get; set; }
 		public Guid CategoryID { get; set; }
 		public string CategoryName { get; set; }
-		public int AvaiableQuantity { get; set; }
-		public int PurchasePrice { get; set; }
-		public int CostPrice { get; set; }
+		public int?AvaiableQuantity { get; set; }
+		public int? PurchasePrice { get; set; }
+		public int? CostPrice { get; set; }
 		public int Status { get; set; }
 	}
 }

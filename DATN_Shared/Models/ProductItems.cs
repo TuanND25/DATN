@@ -13,9 +13,9 @@ namespace DATN_Shared.Models
         public Guid? ColorId { get; set; }
         public Guid? SizeId { get; set; }
         public Guid CategoryId { get; set; }
-        public int AvaiableQuantity { get; set; }
-        public int PurchasePrice { get; set; }
-        public int CostPrice { get; set; }
+        public int? AvaiableQuantity { get; set; }
+        public int ?PurchasePrice { get; set; }
+        public int? CostPrice { get; set; }
         public int Status { get; set; }
 
         public Products Products { get; set; }
