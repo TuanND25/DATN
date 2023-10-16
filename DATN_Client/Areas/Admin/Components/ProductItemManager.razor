@@ -1,5 +1,5 @@
 ﻿@inject IJSRuntime JsRuntime
-
+<link rel="stylesheet" href="path/to/fontawesome/css/all.min.css">
 <style>
 	.a1 {
 		width: 100px;
@@ -154,34 +154,19 @@
 	<div class="col-md-6">
 		<div class="row">
 			<div class="col-md-2">
-
 				@{
-					// if (_lstImg_Tam.Count < 3)
-					// {
 					<div style="height: 500px; overflow-y: auto;width:120px">
 						@foreach (var x in _lstImg_Tam)
 						{
-						<div style="margin-bottom:30px;margin-top:30px">
-							<a @onclick="()=>LoadAnh(x.Id)">
-								<img src="/images/@x.PathImage" alt="" style="width: 100px;height: 110px;" />
-							</a>
-						</div>
+							<div style="margin-bottom:30px;margin-top:30px">
+								<a @onclick="()=>LoadAnh(x.Id)">
+									<img src="/images/@x.PathImage" alt="" style="width: 100px;height: 110px;" />
+								</a>
+							</div>
 						}
 						<InputFile class="a1" id="customFile" OnChange="ChangeEv" />
 						<label class="a2" for="customFile"></label>
 					</div>
-					// }
-					// else
-					// {
-					// 	foreach (var x in _lstImg_Tam)
-					// 	{
-					// 		<div style="margin-bottom:30px;margin-top:30px">
-					// 			<a @onclick="()=>LoadAnh(x.Id)">
-					// 				<img src="/images/@x.PathImage" alt="" style="width: 100px;height: 110px;" />
-					// 			</a>
-					// 		</div>
-					// 	}
-					// }
 				}
 			</div>
 			<div class="col-md-10">
@@ -194,8 +179,8 @@
 					}
 					else
 					{
+						<img src="/images/R.png" alt="" style="width:393.6px;height:433px;margin-top:8.5px" />
 					}
-
 				</center>
 			</div>
 		</div>
@@ -417,15 +402,15 @@ else
 	<table class="table">
 		<thead>
 			<tr>
-				<th>Ảnh minh họa</th>
-				<th>Tên</th>
-				<th>Thể loại</th>
-				<th>Màu sắc</th>
-				<th>Size</th>
-				<th>Số lượng tồn</th>
-				<th>Giá nhập</th>
-				<th>Giá bán</th>
-				<th>Trạng thái</th>
+				<th style="text-align:center">Ảnh minh họa</th>
+				<th style="text-align:center">Tên</th>
+				<th style="text-align:center">Thể loại</th>
+				<th style="text-align:center">Màu sắc</th>
+				<th style="text-align:center">Size</th>
+				<th style="text-align:center">Số lượng tồn</th>
+				<th style="text-align:center">Giá nhập</th>
+				<th style="text-align:center">Giá bán</th>
+				<th style="text-align:center">Trạng thái</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -439,22 +424,22 @@ else
 						// var img2 = _lstImg.FirstOrDefault(c => c.ProductItemId == x.Id).PathImage;
 						if (img == null)
 						{
-							<td>Chưa có ảnh</td>
+							<td style="text-align:center">Chưa có ảnh</td>
 						}
 						else
 						{
-							<td><img src="/images/@img" alt="" style="width:100px;height: 110px;"></td>
+							<td style="text-align:center"><img src="/images/@img" alt="" style="width:100px;height: 110px;"></td>
 						}
 					}
-					<td>@x.Name</td>
-					<td>@x.CategoryName</td>
-					<td>@x.ColorName</td>
-					<td>@x.SizeName</td>
-					<td>@x.AvaiableQuantity</td>
-					<td>@x.PurchasePrice</td>
-					<td>@x.CostPrice</td>
-					<td>@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
-					<td>
+					<td style="vertical-align:middle">@x.Name</td>
+					<td style="vertical-align:middle;text-align:center">@x.CategoryName</td>
+					<td style="vertical-align:middle;text-align:center">@x.ColorName</td>
+					<td style="vertical-align:middle;text-align:center">@x.SizeName</td>
+					<td style="vertical-align:middle;text-align:center">@x.AvaiableQuantity</td>
+					<td style="vertical-align:middle;text-align:center">@x.PurchasePrice</td>
+					<td style="vertical-align:middle;text-align:center">@x.CostPrice</td>
+					<td style="vertical-align:middle;text-align:center">@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
+					<td style="vertical-align:middle;text-align:center">
 						<button style="border: none;border-radius: 15px;" class="btn btn-primary" type="button" @onclick="()=>LoadUpdate(x)">
 							<i class="fa fa-info"></i>
 						</button>

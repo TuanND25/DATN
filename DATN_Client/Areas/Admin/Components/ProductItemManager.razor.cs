@@ -47,7 +47,6 @@ namespace DATN_Client.Areas.Admin.Components
 			_lstImg = await _client.GetFromJsonAsync<List<Image_VM>>("https://localhost:7141/api/Image");
 			_lstPrI_show_VM = await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
 			_idPI_Tam = Guid.NewGuid();
-
 		}
 		public async Task ChangeEv(InputFileChangeEventArgs e)
 		{
@@ -80,39 +79,38 @@ namespace DATN_Client.Areas.Admin.Components
 			_PI_VM.Id = _idPI_Tam;
 
 			var a = await _client.PostAsJsonAsync("https://localhost:7141/api/productitem/add_productitem", _PI_VM);
-			foreach (var x in _lstImg_Tam)
-			{
-				await _client.PostAsJsonAsync("https://localhost:7141/api/Image/Post-Image", x);
-			}
 			if (a.IsSuccessStatusCode)
-			{
-				_navigation.NavigateTo("Admin/ProductItem", true);
-			}
-		}
-		
-		public async Task Update_PI()
-		{
-			var lstbd = _lstImg.Where(c => c.ProductItemId == _idPI).ToList();
-			if (_lstImg_Tam_Them.Count > 0)
 			{
 				foreach (var x in _lstImg_Tam)
 				{
 					await _client.PostAsJsonAsync("https://localhost:7141/api/Image/Post-Image", x);
 				}
-			}
-			if (_lstImg_Tam_Xoa.Count > 0)
-			{
-				foreach (var x in _lstImg_Tam_Xoa)
-				{
-					await _client.DeleteAsync($"https://localhost:7141/api/Image/Delete-Image/{x.Id}");
-				}
-			}
-
-			var a= await _client.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", _PI_VM);
-			if (a.IsSuccessStatusCode)
-			{
 				_navigation.NavigateTo("Admin/ProductItem", true);
 			}
+		}
+
+		public async Task Update_PI()
+		{
+			var a = await _client.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", _PI_VM);
+			if (a.IsSuccessStatusCode)
+			{
+				var lstbd = _lstImg.Where(c => c.ProductItemId == _idPI).ToList();
+				if (_lstImg_Tam_Them.Count > 0)
+				{
+					foreach (var x in _lstImg_Tam)
+					{
+						await _client.PostAsJsonAsync("https://localhost:7141/api/Image/Post-Image", x);
+					}
+				}
+				if (_lstImg_Tam_Xoa.Count > 0)
+				{
+					foreach (var x in _lstImg_Tam_Xoa)
+					{
+						await _client.DeleteAsync($"https://localhost:7141/api/Image/Delete-Image/{x.Id}");
+					}
+				}
+				_navigation.NavigateTo("Admin/ProductItem", true);
+			}	
 		}
 		public async Task LoadUpdate(ProductItem_Show_VM pi)
 		{
