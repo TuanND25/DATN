@@ -48,7 +48,7 @@ namespace DATN_API.Service_IService.Services
 						   PaymentMethodId = a.PaymentMethodId,
 						   PaymentMethodName = d.Name,
 						   VoucherId = a.VoucherId,
-						   Reduced_Value = e.Reduced_Value,
+						   //Reduced_Value = e.Reduced_Value,
 						   BillCode = a.BillCode,
 						   TotalAmount = a.TotalAmount,
 						   ReducedAmount = a.ReducedAmount,
