@@ -16,6 +16,7 @@ namespace DATN_Shared.Models
         public Guid? VoucherId { get; set; }
         public Guid? AddressId { get; set; }
         public string BillCode { get; set; }
+        public int ShippingFee { get; set; }
         public int TotalAmount { get; set; }
         public int ReducedAmount { get; set; }
         public int? Cash { get; set; }  // tiền mặt
