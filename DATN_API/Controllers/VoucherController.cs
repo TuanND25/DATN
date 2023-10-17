@@ -59,12 +59,12 @@ namespace DATN_API.Controllers
                 voucher.Id = a.Id;
                 voucher.Name = a.Name;
                 voucher.Code = a.Code;
-                voucher.Reduced_Value = a.Reduced_Value;
+                voucher.Percent = a.Percent;
                 voucher.Quantity = a.Quantity;
                 voucher.StartDate = a.StartDate;
                 voucher.EndDate = a.EndDate;
-                voucher.Discount_Conditions
-                    = a.Discount_Conditions;
+                voucher.Discount_Conditions= a.Discount_Conditions;
+                voucher.Maximum_Reduction = a.Maximum_Reduction;
                 voucher.Status = a.Status;
                 await _voucherService.PostVoucher(voucher);
                 return Ok("Success");
@@ -85,12 +85,12 @@ namespace DATN_API.Controllers
                 Voucher voucher = await _voucherService.GetVoucherById(a.Id);
                 voucher.Name = a.Name;
                 voucher.Code = a.Code;
-                voucher.Reduced_Value = a.Reduced_Value;
+                voucher.Percent = a.Percent;
                 voucher.Quantity = a.Quantity;
                 voucher.StartDate = a.StartDate;
                 voucher.EndDate = a.EndDate;
-                voucher.Discount_Conditions
-                    = a.Discount_Conditions;
+                voucher.Discount_Conditions = a.Discount_Conditions;
+                voucher.Maximum_Reduction = a.Maximum_Reduction;
                 voucher.Status = a.Status;
                 await _voucherService.PutVoucher(voucher);
                 return Ok("Success");
