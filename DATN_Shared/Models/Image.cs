@@ -11,6 +11,7 @@ namespace DATN_Shared.Models
         public Guid Id { get; set; }
         public Guid? ReviewId { get; set; }
         public string Name { get; set; }      
+        public int STT { get; set; }      
         public string PathImage { get; set; }
         public Guid ProductItemId { get; set; }
         public int Status { get; set; }
