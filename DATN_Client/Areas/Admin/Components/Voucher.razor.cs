@@ -15,7 +15,29 @@ namespace DATN_Client.Areas.Admin.Components
         protected override async Task OnInitializedAsync()
         {
             vouchers = await httpClient.GetFromJsonAsync<List<Voucher_VM>>("https://localhost:7141/api/Voucher");
+
+            await AutoChangeStatusVoucher();
         }
+        public async IAsyncEnumerable<Voucher_VM> SelectOneVoucher()
+        {
+            foreach (var voucher in vouchers)
+            {
+                yield return voucher;
+            }
+        }
+        public async Task AutoChangeStatusVoucher()
+        {
+           await foreach (var voucher in  SelectOneVoucher())
+           {
+                if (voucher.EndDate <DateTime.Now)
+                {
+                    voucher.Status = 0;
+                    await httpClient.PutAsJsonAsync<Voucher_VM>("https://localhost:7141/api/Voucher/Put-Voucher", voucher);
+                }
+           }
+
+        }
+
         public async Task AddVoucher()
         {
             voucher_VM.Id = Guid.NewGuid();
@@ -25,6 +47,8 @@ namespace DATN_Client.Areas.Admin.Components
 
 
         }
+
+
         public async Task ChangeStatusVoucher(Voucher_VM voucher)
         {
             voucher.Status = 0;
