@@ -1,0 +1,35 @@
+﻿@using DATN_Client.Areas.Admin.Controllers;
+<div class="row">
+	@if (_lstPrI_show_VM == null)
+	{
+		<p><em>Loading...</em></p>
+	}
+	else
+	{
+		foreach (var x in TestController._pageList)
+		{
+			string img = _lstImg_PI.Where(c => c.ProductId == x.Id).OrderBy(c=>c.STT).Select(c => c.PathImage).FirstOrDefault();
+			var giamin = _lstPrI_show_VM.Where(c => c.ProductId == x.Id).Min(c => c.CostPrice);
+			var giamax = _lstPrI_show_VM.Where(c => c.ProductId == x.Id).Max(c => c.CostPrice);
+
+			<div class="col-md-3">
+				<a>
+					<img src="/images/@img" alt="" style="width:100%;height:483px">
+				</a>
+				@x.Name <br>
+				@{
+					if (giamin == giamax || giamin == null || giamax == null)
+					{
+						@(giamax?.ToString("#,##0") + " VND")
+					}
+					else
+					{
+						@(giamin?.ToString("#,##0") + " - " + giamax?.ToString("#,##0") + " VND")
+					}
+
+				}
+			</div>
+
+		}
+	}
+</div>

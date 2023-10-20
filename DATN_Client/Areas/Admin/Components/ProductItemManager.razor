@@ -23,6 +23,24 @@
 	.field-validation-error {
 		color: yellow;
 	}
+
+	.custom-file-upload {
+		display: inline-block;
+		padding: 6px 12px;
+		cursor: pointer;
+		background-color: #337ab7;
+		color: #fff;
+		border-radius: 4px;
+		border: none;
+	}
+
+	.custom-file-upload:hover {
+		background-color: #286090;
+	}
+
+	.custom-file-upload i {
+		margin-right: 5px;
+	}
 </style>
 
 <h1>Quản lý sản phẩm</h1>
@@ -145,6 +163,10 @@
 			<!-- Phần chân của popup -->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+				<label for="file-upload" class="custom-file-upload">
+					<i class="fa fa-cloud-upload"></i> Thay đổi
+				</label>
+				<InputFile id="file-upload" style="display:none;" OnChange="ChangeImg" />
 				<button type="button" class="btn btn-danger" @onclick="Delete_Img_Tam" data-dismiss="modal">Xóa</button>
 			</div>
 		</div>
@@ -156,7 +178,7 @@
 			<div class="col-md-2">
 				@{
 					<div style="height: 500px; overflow-y: auto;width:120px">
-						@foreach (var x in _lstImg_Tam)
+						@foreach (var x in _lstImg_Tam.OrderBy(c=>c.STT))
 						{
 							<div style="margin-bottom:30px;margin-top:30px">
 								<a @onclick="()=>LoadAnh(x.Id)">
@@ -346,7 +368,7 @@
 		<EditForm Model="_PM_S_VM">
 			<div class="row">
 				<div class="col-md-3">
-					<InputSelect class="form-select" @bind-Value="_PM_S_VM.CategoryName">
+					<InputSelect class="form-select" @bind-Value="_PM_S_VM.CategoryName" @onclick="LocHangLoat">
 						<option value="0" selected>--Chọn thể loại--</option>
 						@foreach (var x in _lstCate)
 						{
@@ -355,7 +377,7 @@
 					</InputSelect>
 				</div>
 				<div class="col-md-3">
-					<InputSelect class="form-select" @bind-Value="_PM_S_VM.ColorName">
+					<InputSelect class="form-select" @bind-Value="_PM_S_VM.ColorName" @onclick="LocHangLoat">
 						<option value="0" selected>--Chọn màu--</option>
 						@foreach (var x in _lstC)
 						{
@@ -364,7 +386,7 @@
 					</InputSelect>
 				</div>
 				<div class="col-md-3">
-					<InputSelect class="form-select" @bind-Value="_PM_S_VM.SizeName">
+					<InputSelect class="form-select" @bind-Value="_PM_S_VM.SizeName" @onclick="LocHangLoat">
 						<option value="0" selected>--Chọn size--</option>
 						@foreach (var x in _lstS)
 						{
@@ -420,8 +442,7 @@ else
 				<tr>
 
 					@{
-						var img = _lstImg.Where(c => c.ProductItemId == x.Id).Select(c => c.PathImage).FirstOrDefault();
-						// var img2 = _lstImg.FirstOrDefault(c => c.ProductItemId == x.Id).PathImage;
+						var img = _lstImg.Where(c => c.ProductItemId == x.Id).OrderBy(c=>c.STT).Select(c => c.PathImage).FirstOrDefault();
 						if (img == null)
 						{
 							<td style="text-align:center">Chưa có ảnh</td>
