@@ -54,6 +54,50 @@
         align-items: center;
         justify-content: center
     }
+    .inputtext{
+        appearance: none;
+        border: none;
+        outline: none;
+        border-bottom: .1em solid #454545;
+        background: rgba(#454545, .2);
+        border-radius: .1em .1em 0 0;
+        padding: 0px;
+        color: #454545;
+    }
+
+    <!-- HTML !-->
+
+
+/* CSS */
+.button-37 {
+  background-color: #13aa52;
+  border: 1px solid #13aa52;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  outline: none;
+  outline: 0;
+  padding: 10px 25px;
+  text-align: center;
+  transform: translateY(0);
+  transition: transform 150ms, box-shadow 150ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-37:hover {
+  box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
+  transform: translateY(-2px);
+}
+
+
+}
 </style>
 
 <div class="row">
@@ -70,44 +114,37 @@
         </div>
         <div>
             <label for="inputText" class="col-form-label">Số điện thoại</label>
-            <InputText class="form-control" @bind-Value="@_billModel.UserName" readonly />
+            <InputText class="form-control" @bind-Value="@_billModel.PhoneNumber" readonly />
         </div>
 
     </EditForm>
-    <EditForm Model="_billModel" class="col-4">
+    @{
+        var dc = addressShip.ToAddress + "," + addressShip.WardName + "," + addressShip.District + "," + addressShip.Province;
+    }
+    <EditForm Model="addressShip" class="col-4">
         <div>
-            
-            <label for="inputText" class="col-form-label">Địa chỉ</label>
-            <InputText class="form-control" @bind-Value="@_billModel.UserName" readonly />
-        </div>
-        <div>
+            <label for="inputText" class="col-form-label">Địa chỉ</label> 
+            <InputText class="form-control " @bind-Value="@(dc)" readonly />                         
+        </div> 
+        <div >
             <label for="inputText" class="col-form-label">Tên người nhận</label>
-            <InputText class="form-control" @bind-Value="@_billModel.UserName" readonly />
+            <InputText class="form-control " @bind-Value="addressShip.Recipient" readonly />
         </div>
         <div>
             <label for="inputText" class="col-form-label">Số điện thoại</label>
-            <InputText class="form-control" @bind-Value="@_billModel.UserName" readonly />
+            <InputText class="form-control" @bind-Value="addressShip.NumberPhone" readonly />
         </div>
     </EditForm>
-    <div class="col-4 cangiua">
-        <button class="button-33" style="margin-bottom:20px">
+    <div class="col-2 cangiua">
+        <button class="button-33" data-toggle="modal" data-target="#Update_Adress" style="margin-bottom:20px">
             Xác nhận đơn hàng
         </button>
+
         <button class="button-34">
             Hủy đơn hàng
         </button>
-
     </div>
-
-
-
-
-
 </div>
-
-
-
-
 @if (_lstBillDetail == null)
 {
     <p><em>Loading...</em></p>
@@ -125,16 +162,22 @@ else
                 <th>Số lượng </th>
                 <th>Giá</th>
                 <th>Giá khuyến mãi</th>
-                <th>Trạng thái</th>
+                <th>Tổng tiền</th>
                 <th></th>
             </tr>
         </thead>
         @{
             int count = 1;
+            //int tongtien = 0;
+            //foreach (var x in _lstBillDetail)
+            //{
+            //    tongtien += (x.Quantity * x.PriceAfter);
+            //};  
         }
         <tbody>
             @foreach (var x in _lstBillDetail)
             {
+
                 <tr>
                     <td>
                         @(count++)
@@ -146,14 +189,72 @@ else
                     <td>@x.Quantity</td>
                     <td>@x.CostPrice</td>
                     <td>@x.PriceAfter</td>
-                    <td>@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
+                    @*<td>@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>*@
+                    <td>@(x.Quantity * x.PriceAfter)</td>
+
                     <td>
                         <button style="border: none;border-radius: 15px;" class="btn btn-primary" type="button">
                             <i class="fa fa-info"></i>
                         </button>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="8" style="text-align: center; font-weight:600">
+                        Thành tiền
+                    </td>
+                    <td>@_tongtien.ToString("#,##0") VND</td>
+                </tr>
+               
+                <tr>
+                    <td colspan="8" >
+                       Số tiền viết bằng chữ : @texttongtien
+                    </td>
+                   
+                </tr>
             }
+
+            
         </tbody>
+       
     </table>
+   
 }
+<div class="modal fade" id="Update_Adress">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Phần tiêu đề của popup -->
+            <div class="modal-header">
+                <h4 class="modal-title">Thêm sản phẩm</h4>             
+                <i class="fa-solid fa-xmark close" style="cursor: pointer;" data-dismiss="modal"></i>
+            </div>
+            <!-- Nội dung của popup -->
+            <div class="container">
+                <div  class="row">
+                    <EditForm Model="b">
+                        <div style="display:flex;margin-bottom:20px">
+                            <label>
+                                Ghi chú
+                            </label>                            
+                            <input class="inputtext" @bind-value="Phiship" style="width:50%;margin-left:20px" />
+                        </div>
+
+                        <div style="display:flex;margin-bottom:20px">
+                            <label>
+                                Ghi chú
+                            </label>
+                            <input class="inputtext" @bind-value="Note" style="width:50%;margin-left:20px" />
+                        </div>
+                        <div style="display:flex; align-items:center; justify-content:center">
+                            <button type="submit" @onclick=UpdateConfirmShipping class="button-37 ">Xác nhận đơn hàng</button>
+                        </div>
+                   </EditForm>
+                </div>  
+            </div>
+
+
+            <!-- Phần chân của popup -->
+           
+        </div>
+    </div>
+</div>

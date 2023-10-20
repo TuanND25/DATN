@@ -26,5 +26,6 @@ namespace DATN_Shared.ViewModel
         public int Type { get; set; }
         public string? Note { get; set; }
         public int Status { get; set; }
+        public int ShippingFee { get; set; }
     }
 }

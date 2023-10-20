@@ -61,6 +61,8 @@ namespace DATN_API.Service_IService.Services
 						   Type = a.Type,
 						   Note = a.Note,
 						   Status = a.Status,
+						   AddressId= a.AddressId,
+						   PhoneNumber = b.PhoneNumber,
 					   }).ToList();
 			return lst;
 
@@ -90,7 +92,7 @@ namespace DATN_API.Service_IService.Services
 			{
 				var a = await _context.Bills.FindAsync(bill.Id);
 				if (a == null) return a;
-				a = bill;
+				//a = bill;
 				//addressShip.UserId = a.UserId;
 				//addressShip.Recipient = a.Recipient;
 				//addressShip.DistrictID = a.DistrictID;
@@ -99,6 +101,9 @@ namespace DATN_API.Service_IService.Services
 				//addressShip.ToAddress = a.ToAddress;
 				//addressShip.NumberPhone = a.NumberPhone;
 				//addressShip.Status = a.Status;
+				a.Note = bill.Note;
+				a.Status = bill.Status;
+				a.ShippingFee = bill.ShippingFee;
 				_context.Bills.Update(a);
 				await _context.SaveChangesAsync();
 				return a;

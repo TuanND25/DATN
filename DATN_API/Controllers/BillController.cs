@@ -105,13 +105,13 @@ namespace DATN_API.Controllers
                 bill.Note = bill_vm.Note;
                 bill.Type = bill_vm.Type;
                 bill.Status = bill_vm.Status;
+                bill.ShippingFee= bill_vm.ShippingFee;
                 await _billService.PutBill(bill);
                 return Ok("Success");
             }
             catch (Exception ex)
             {
                 return BadRequest("Liên hệ Thai để sửa 0349198240");
-
             }
         }
 
