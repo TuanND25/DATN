@@ -1,0 +1,43 @@
+﻿@using DATN_Client.Areas.Admin.Components;
+@using DATN_Shared.ViewModel;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model X.PagedList.IPagedList<Products_VM>
+
+@{
+	Layout = @"~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+
+}
+<style>
+	.pagination {
+		/* Các quy tắc CSS tùy chỉnh cho pager */
+		list-style-type: none;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+		.pagination li {
+			padding: 5px;
+		}
+
+			.pagination li a {
+				text-decoration: none;
+				color: #000;
+				border: 1px solid #ccc;
+				padding: 5px 10px;
+				border-radius: 3px;
+			}
+
+				.pagination li a:hover {
+					background-color: #f2f2f2;
+				}
+
+		.pagination .active a {
+			background-color: #337ab7;
+			color: #fff;
+		}
+</style>
+@(await Html.RenderComponentAsync<ShowProductItem>(RenderMode.Server))
+
+@Html.PagedListPager(Model, page => Url.Action("Show","Test",new { page }))

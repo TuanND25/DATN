@@ -1,3 +1,4 @@
+using DATN_Client.Areas.Admin.Controllers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
               });
 
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddTransient<TestController, TestController>();
 
 builder.Services.AddAuthentication()
     .AddGoogle(googleOptions =>

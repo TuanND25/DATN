@@ -27,6 +27,7 @@ namespace DATN_Client.Areas.Admin.Components
 		List<Image_VM> _lstImg_Tam = new List<Image_VM>();
 		List<Image_VM> _lstImg_Tam_Them = new List<Image_VM>();
 		List<Image_VM> _lstImg_Tam_Xoa = new List<Image_VM>();
+		List<Image_VM> _lstImg_Tam_Sua = new List<Image_VM>();
 		public Guid _idPI_Tam { get; set; }
 		public Guid _idImg_Tam { get; set; }
 		ProductItem_Show_VM _PM_S_VM = new ProductItem_Show_VM();
@@ -67,11 +68,37 @@ namespace DATN_Client.Areas.Admin.Components
 				imgTam.Id = Guid.NewGuid();
 				_idImg_Tam = imgTam.Id;
 				imgTam.Name = "";
+				imgTam.STT = _lstImg_Tam.Count == 0 
+							? _lstImg.Max(c => c.STT) + 1 
+							: (_lstImg.Max(c => c.STT) > _lstImg_Tam.Max(c => c.STT)
+							? _lstImg.Max(c => c.STT) + 1
+							: _lstImg_Tam.Max(c => c.STT) + 1);
 				if (_idPI.ToString() == "00000000-0000-0000-0000-000000000000") imgTam.ProductItemId = _idPI_Tam;
 				else imgTam.ProductItemId = _idPI;
 				imgTam.Status = 1;
 				_lstImg_Tam_Them.Add(imgTam);
 				_lstImg_Tam.Add(imgTam);
+			}
+		}
+		public async Task ChangeImg(InputFileChangeEventArgs e)
+		{
+			Image_VM imgTam = _lstImg.Where(c => c.Id == _idImg_Tam).FirstOrDefault();
+			if (imgTam == null) imgTam = _lstImg_Tam_Them.Where(c => c.Id == _idImg_Tam).FirstOrDefault();
+
+			_file = e.File;
+			if (_file != null)
+			{
+				// Trỏ tới thư mục wwwroot để lát nữa thực hiện việc copy sang
+				var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", _file.Name);
+				using (var stream = new FileStream(path, FileMode.Create))
+				{
+					// Thực hiện copy ảnh vừa chọn sang thư mục mới (wwwroot)
+					await _file.OpenReadStream().CopyToAsync(stream);
+				}
+				// Gán lại giá trị cho Description của đối tượng bằng tên file ảnh đã đưuọc sao chép
+				imgTam.PathImage = _file.Name;
+				_pathImg = _file.Name;
+				if (!_lstImg_Tam_Sua.Any(c=>c.Id==imgTam.Id)) _lstImg_Tam_Sua.Add(imgTam);
 			}
 		}
 		public async Task Add_PI()
@@ -109,8 +136,15 @@ namespace DATN_Client.Areas.Admin.Components
 						await _client.DeleteAsync($"https://localhost:7141/api/Image/Delete-Image/{x.Id}");
 					}
 				}
+				if (_lstImg_Tam_Sua.Count > 0)
+				{
+					foreach (var x in _lstImg_Tam_Sua)
+					{
+						await _client.PutAsJsonAsync($"https://localhost:7141/api/Image/Put-Image",x);
+					}
+				}
 				_navigation.NavigateTo("Admin/ProductItem", true);
-			}	
+			}
 		}
 		public async Task LoadUpdate(ProductItem_Show_VM pi)
 		{

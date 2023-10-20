@@ -1,4 +1,5 @@
 ﻿using DATN_Shared.Models;
+using DATN_Shared.ViewModel;
 
 namespace DATN_API.Service_IService.IServices
 {
@@ -10,5 +11,6 @@ namespace DATN_API.Service_IService.IServices
         public Task<Image> GetImageById(Guid Id);
         public Task<IEnumerable<Image>> GetAddressShipByProductItemId(Guid ProductItemId);
         public Task<IEnumerable<Image>> GetAllImage();
+        public Task<List<Image_Join_ProductItem>> GetAllImage_PrductItem();
     }
 }

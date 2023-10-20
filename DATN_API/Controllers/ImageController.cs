@@ -32,9 +32,24 @@ namespace DATN_API.Controllers
             }
 
         }
+		[HttpGet("GetAllImage_PrductItem")]
+		public async Task<ActionResult<Image>> GetAllImage_PrductItem()
+		{
+			try
+			{
+				var lst = await _iImageService.GetAllImage_PrductItem();
+				return Ok(lst);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest("Liên hệ Thai để sửa 0349198240");
 
-        // GET api/<AddressShipController>/5
-        [HttpGet("pro")]
+			}
+
+		}
+
+		// GET api/<AddressShipController>/5
+		[HttpGet("pro")]
         public async Task<ActionResult<Image>> GetImageByProductItemId(Guid pro)
         {
             try
@@ -73,6 +88,7 @@ namespace DATN_API.Controllers
                 img.Id = img_vm.Id;
                 img.ReviewId = img_vm.ReviewId;
                 img.Name = img_vm.Name;
+                img.STT = img_vm.STT;
                 img.PathImage = img_vm.PathImage;
                 img.ProductItemId = img_vm.ProductItemId;
                 img.Status = img_vm.Status;
@@ -88,7 +104,7 @@ namespace DATN_API.Controllers
         }
 
         [HttpPut("Put-Image")]
-        public async Task<ActionResult<Image>> PutAddressShip(Image_VM img_vm)
+        public async Task<ActionResult<Image>> PutImage(Image_VM img_vm)
         {
             try
             {
@@ -96,6 +112,7 @@ namespace DATN_API.Controllers
 
                 img.ReviewId = img_vm.ReviewId;
                 img.Name = img_vm.Name;
+                img.STT = img_vm.STT;
                 img.PathImage = img_vm.PathImage;
                 img.ProductItemId = img_vm.ProductItemId;
                 img.Status = img_vm.Status;
