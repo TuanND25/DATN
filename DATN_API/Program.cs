@@ -52,7 +52,7 @@ builder.Services.AddTransient<IPromotionProductItemServices, PromotionProductIte
 builder.Services.AddTransient<IReviewsService, ReviewsService>();
 builder.Services.AddScoped<ISizeService, SizeService>();
 builder.Services.AddScoped<IVoucherService, VoucherService>();
-
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
