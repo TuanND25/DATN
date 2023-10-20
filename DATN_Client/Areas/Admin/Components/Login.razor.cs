@@ -41,7 +41,7 @@ namespace DATN_Client.Areas.Admin.Components
                 var data = claims.Select(c => c.Value).ToArray();
                 var id = data[0];
 
-                _ihttpcontextaccessor.HttpContext.Session.SetString("Id",id);
+             
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var responseAuthorize = await _httpClient.GetAsync("https://localhost:7141/api/user/get-user");
                 if (responseAuthorize.IsSuccessStatusCode)

@@ -1,10 +1,12 @@
 ﻿using DATN_API.Data;
 using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
+using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DATN_API.Controllers
 {
@@ -25,37 +27,34 @@ namespace DATN_API.Controllers
     
 
 
-		[Authorize(Roles ="Admin")]
 		[Route("get-user")]	
 		[HttpGet]
         public async Task<IActionResult> GetUser()
         {
-            var users = _userManager.Users.ToList();
-            var address = _context.AddressShips.ToList();
-            var list_User_Address = from u in users
-                                    join a in address on u.Id equals a.UserId
-                                    select new
-                                    {
-                                        u.Id,
-                                        u.UserName,
-                                        u.PhoneNumberConfirmed,
-                                        u.EmailConfirmed,
-                                        u.AddressShips
-
-                                    };
+            var users = await _userManager.Users.ToListAsync();
+     
             return Ok(users);
         }
 
 
 
         [Route("update-user")]
-        [Authorize]
+      
         [HttpPut]
-        public async Task<IActionResult> UpdateUser(User user)
+        public async Task<IActionResult> UpdateUser(User_VM user)
         {
             await _userService.UpdateUser(user);
             return Ok(user);
         }
 
+
+        [Route("get-user-byusername")]
+        [Authorize(Roles ="Admin")]
+        [HttpGet]
+        public async Task<IActionResult> GetUserByUserName(string username)
+        {
+            var ListUserForUserName = await _userService.GetUserByUserName(username);
+            return Ok(ListUserForUserName);
+        } 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using DATN_API.Data;
 using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
+using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,19 +15,26 @@ namespace DATN_API.Service_IService.Services
 		{
 			_context= context;
 		}
-		
 
-		public async Task<User> UpdateUser(User user)
+	
+		public async Task<List<User>> GetUserByUserName(string username)
+		{
+			return await userManager.Users.Where(u=>u.UserName.Contains(username)).ToListAsync();
+		}
+
+		public async Task<User> UpdateUser(User_VM user)
 		{
 			var userupdate = await _context.Users.FirstOrDefaultAsync(p => p.Id == user.Id);
-			if (userupdate != null)
+			if (userupdate == null)
 			{
 				return null;
 			}
 			else
 			{
-			    await userManager.UpdateAsync(user);
-				return user;
+                userupdate.Status = user.Status;
+				 _context.Users.Update(userupdate);
+                await _context.SaveChangesAsync();
+				return userupdate;
 			}
 		}
 	}
