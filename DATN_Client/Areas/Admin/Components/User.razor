@@ -21,7 +21,16 @@
 			<div class="card">
 				<div class="card-body">
 					<h4 class="card-title">General Form Elements</h4>
-
+					<EditForm Model="user_VM">
+						<div class="row">
+							<div class="col-md-8">
+								<InputText class="form-control" @bind-Value="user_VM.UserName" placeholder="Tìm kiếm theo tên" />
+							</div>
+							<div class="col-md-4">
+								<button type="submit" class="btn btn-primary" @onclick="SearchByUsername">Tìm kiếm</button>
+							</div>
+						</div>
+					</EditForm>
 					<!-- General Form Elements -->
 					@*                    <EditForm Model="voucher_VM">
 
@@ -151,8 +160,8 @@
 										<td>@x.PhoneNumber</td>
 										<td>@x.Email</td>
 										<td>@(x.Status == 1 ? " Đang Hoạt động" : "Ngừng hoạt động")</td>
-										
-										
+
+
 										<td>
 											<div class="modal fade" id="Status">
 												<div class="modal-dialog">
@@ -169,12 +178,12 @@
 														<!-- Phần chân của popup -->
 														<div class="modal-footer">
 															<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-															<button type="button" class="btn btn-danger" @onclick="()=>ChangeStatusUser(x)" data-dismiss="modal">Xác nhận</button>
+															<button type="button" class="btn btn-danger" @onclick="ChangeStatusUser" data-dismiss="modal">Xác nhận</button>
 														</div>
 													</div>
 												</div>
 											</div>
-											<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Status">
+											<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Status" @onclick="()=> gandoituong(x)">
 												Ngừng hoạt động
 											</button>
 										</td>
