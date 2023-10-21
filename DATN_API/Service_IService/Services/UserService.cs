@@ -24,7 +24,7 @@ namespace DATN_API.Service_IService.Services
 
 		public async Task<User> UpdateUser(User_VM user)
 		{
-			var userupdate = await _context.Users.FirstOrDefaultAsync(p => p.Id == user.Id);
+			var userupdate =  _context.Users.Where(p => p.Id == user.Id).FirstOrDefault();
 			if (userupdate == null)
 			{
 				return null;

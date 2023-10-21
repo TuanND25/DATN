@@ -1,4 +1,5 @@
-﻿using DATN_API.Service_IService.IServices;
+﻿using System.Security.Cryptography;
+using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Identity;
@@ -55,6 +56,7 @@ namespace DATN_API.Service_IService.Services
             if (await _roleManager.RoleExistsAsync(role))
             {
                 var result = await _userManager.CreateAsync(newUser, user.Password);
+                
                 if (!result.Succeeded)
                 {
                     return new Response

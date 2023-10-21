@@ -18,7 +18,7 @@ namespace DATN_Shared.ViewModel
         
         public string Name { get; set; }
         public string ConfirmPassword { get; set; }
-       
 
+        public int Status { get; set; } = 1;
     }
 }
