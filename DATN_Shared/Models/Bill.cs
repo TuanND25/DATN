@@ -14,7 +14,6 @@ namespace DATN_Shared.Models
         public Guid? HistoryConsumerPointID { get; set; }
         public Guid PaymentMethodId { get; set; }
         public Guid? VoucherId { get; set; }
-        public Guid? AddressId { get; set; }
         public string BillCode { get; set; }
         public int ShippingFee { get; set; }
         public int TotalAmount { get; set; }
@@ -27,6 +26,12 @@ namespace DATN_Shared.Models
         public DateTime? CompletionDate { get; set; }
         public int Type { get; set; }
         public string? Note { get; set; }
+        public string Recipient { get; set; }
+        public string District { get; set; }
+        public string Province { get; set; }
+        public string WardName { get; set; }
+        public string ToAddress { get; set; }
+        public string NumberPhone { get; set; }
         public int Status { get; set; }
 
         public User Users { get; set; }

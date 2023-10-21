@@ -61,7 +61,6 @@ namespace DATN_API.Service_IService.Services
 						   Type = a.Type,
 						   Note = a.Note,
 						   Status = a.Status,
-						   AddressId= a.AddressId,
 						   PhoneNumber = b.PhoneNumber,
 					   }).ToList();
 			return lst;
