@@ -34,7 +34,6 @@ namespace DATN_API.Controllers
             promotions1.Id = promotions.Id;
             promotions1.Name = promotions.Name;
             promotions1.Percent = promotions.Percent;
-            promotions1.Quantity = promotions.Quantity;
             promotions1.StartDate = promotions.StartDate;
             promotions1.EndDate = promotions.EndDate;
             promotions1.Description = promotions.Description;
@@ -50,7 +49,6 @@ namespace DATN_API.Controllers
             promotions1.Id = promotions.Id;
             promotions1.Name = promotions.Name;
             promotions1.Percent = promotions.Percent;
-            promotions1.Quantity = promotions.Quantity;
             promotions1.StartDate = promotions.StartDate;
             promotions1.EndDate = promotions.EndDate;
             promotions1.Description = promotions.Description;

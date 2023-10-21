@@ -64,7 +64,6 @@ namespace DATN_API.Service_IService.Services
                 a.EndDate=item.EndDate;
                 a.Description=item.Description;
                 a.Name=item.Name;
-                a.Quantity=item.Quantity;
                 a.Percent=item.Percent;               
                 _context.Promotions.Update(a);
                 _context.SaveChanges();
