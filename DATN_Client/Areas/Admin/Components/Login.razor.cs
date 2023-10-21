@@ -12,11 +12,14 @@ namespace DATN_Client.Areas.Admin.Components
     public partial class Login
     {
 
-        [Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
-        HttpClient _httpClient = new HttpClient();
+
+		[Inject] Blazored.SessionStorage.ISessionStorageService _SessionStorageService { get; set; }
+		HttpClient _httpClient = new HttpClient();
         public string Message { get; set; } = null;
+        public string Message2 { get; set; } = null;
         public List<User> Users { get; set; }
         LoginUser loginUser = new LoginUser();
+        public string Idsession { get; set; } =string.Empty;
         public async Task login()
         {
             var response = await _httpClient.PostAsJsonAsync<LoginUser>("https://localhost:7141/api/user/login/", loginUser);
@@ -41,13 +44,22 @@ namespace DATN_Client.Areas.Admin.Components
                 var data = claims.Select(c => c.Value).ToArray();
                 var id = data[0];
 
-             
+                try
+                {
+                    _SessionStorageService.SetItemAsStringAsync("session",id);
+                }
+                catch(Exception ex)
+                {
+                     
+                }
+                
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var responseAuthorize = await _httpClient.GetAsync("https://localhost:7141/api/user/get-user");
                 if (responseAuthorize.IsSuccessStatusCode)
                 {
                     Message = "success";
-                }
+                    Message2 = await _SessionStorageService.GetItemAsync<string>("session");
+				}
                 else
                 {
                     Message = "fail";

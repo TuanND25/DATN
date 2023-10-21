@@ -1,6 +1,6 @@
 using DATN_Client.Areas.Admin.Controllers;
 using Microsoft.AspNetCore.Authentication.Cookies;
-
+using Blazored.SessionStorage;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,11 +8,13 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient();
+builder.Services.AddBlazoredSessionStorage();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromSeconds(1000); 
 });
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
               .AddCookie(options =>
               {
@@ -21,6 +23,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
                   options.LoginPath = "/Login/Login";
                   options.SlidingExpiration = true;
               });
+
 
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<TestController, TestController>();
