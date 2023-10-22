@@ -17,7 +17,12 @@ namespace DATN_Shared.Models
         public string PaymentMethodName { get; set; }
         public Guid? VoucherId { get; set; }
         public Guid? AddressId { get; set; }
-        
+        public string? Recipient { get; set; }
+        public string? District { get; set; }
+        public string? Province { get; set; }
+        public string? WardName { get; set; }
+        public string? ToAddress { get; set; }
+        public string? NumberPhone { get; set; }
         public int? Reduced_Value { get; set; }
         public string BillCode { get; set; }
         public int TotalAmount { get; set; }

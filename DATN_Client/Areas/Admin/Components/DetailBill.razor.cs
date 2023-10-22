@@ -19,14 +19,12 @@ namespace DATN_Client.Areas.Admin.Components
         public int _tongtien { get; set; }
         public string texttongtien { get; set; }
         public int Phiship { get; set; }
-        
         public string Note { get; set; }
         
         protected override async Task OnInitializedAsync()
         {
             _billModel = BillManagement._billModel;			
-			_lstBillDetail = await _client.GetFromJsonAsync<List<BillDetailShow>> ("https://localhost:7141/api/BillItem/getbilldetail/" + _billModel.Id);
-            addressShip = await _client.GetFromJsonAsync<AddressShip>("https://localhost:7141/api/AddressShip/Id?Id=" + _billModel.AddressId);
+			_lstBillDetail = await _client.GetFromJsonAsync<List<BillDetailShow>> ("https://localhost:7141/api/BillItem/getbilldetail/" + _billModel.Id);           
             
             foreach (var item in _lstBillDetail)
             {
@@ -42,10 +40,8 @@ namespace DATN_Client.Areas.Admin.Components
             b.ShippingFee = Phiship;
             b.Note = Note;
             b.Status = 1;
-            var status = await _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", b);
-           
+            var status = await _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", b);       
             nav.NavigateTo("https://localhost:7075/Admin/BillManagement/Details", true);
-
         }
         static string NumberToText(double inputNumber, bool suffix = true)
         {
@@ -62,8 +58,6 @@ namespace DATN_Client.Areas.Admin.Components
                 sNumber = number.ToString();
                 isNegative = true;
             }
-
-
             int ones, tens, hundreds;
 
             int positionDigit = sNumber.Length;   // last -> first

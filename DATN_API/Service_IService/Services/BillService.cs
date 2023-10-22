@@ -62,9 +62,14 @@ namespace DATN_API.Service_IService.Services
 						   Note = a.Note,
 						   Status = a.Status,
 						   PhoneNumber = b.PhoneNumber,
+						   Recipient = a.Recipient,
+						   District = a.District,
+						   Province= a.Province,
+						   WardName = a.WardName,
+						   ToAddress= a.ToAddress,
+						   NumberPhone = a.NumberPhone,
 					   }).ToList();
 			return lst;
-
 		}
 
 		public async Task<Bill> GetBillById(Guid Id)

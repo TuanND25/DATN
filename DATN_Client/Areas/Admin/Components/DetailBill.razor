@@ -104,7 +104,6 @@
 
     <EditForm Model="_billModel" class="col-4">
         <div>
-
             <label for="inputText" class="col-form-label">Mã HD</label>
             <InputText class="form-control" @bind-Value="@_billModel.BillCode" readonly />
         </div>
@@ -119,20 +118,20 @@
 
     </EditForm>
     @{
-        var dc = addressShip.ToAddress + "," + addressShip.WardName + "," + addressShip.District + "," + addressShip.Province;
+        var dc = _billModel.ToAddress + "," + _billModel.WardName + "," + _billModel.District + "," + _billModel.Province;
     }
-    <EditForm Model="addressShip" class="col-4">
+    <EditForm Model="_billModel" class="col-4">
         <div>
             <label for="inputText" class="col-form-label">Địa chỉ</label> 
             <InputText class="form-control " @bind-Value="@(dc)" readonly />                         
         </div> 
         <div >
             <label for="inputText" class="col-form-label">Tên người nhận</label>
-            <InputText class="form-control " @bind-Value="addressShip.Recipient" readonly />
+            <InputText class="form-control " @bind-Value="_billModel.Recipient" readonly />
         </div>
         <div>
             <label for="inputText" class="col-form-label">Số điện thoại</label>
-            <InputText class="form-control" @bind-Value="addressShip.NumberPhone" readonly />
+            <InputText class="form-control" @bind-Value="_billModel.NumberPhone" readonly />
         </div>
     </EditForm>
     <div class="col-2 cangiua">
@@ -159,8 +158,7 @@ else
                 <th>Thể loại</th>
                 <th>Màu sắc</th>
                 <th>Size</th>
-                <th>Số lượng </th>
-                <th>Giá</th>
+                <th>Số lượng </th>             
                 <th>Giá khuyến mãi</th>
                 <th>Tổng tiền</th>
                 <th></th>
@@ -187,7 +185,7 @@ else
                     <td>@x.ColorName</td>
                     <td>@x.SizeName</td>
                     <td>@x.Quantity</td>
-                    <td>@x.CostPrice</td>
+                    
                     <td>@x.PriceAfter</td>
                     @*<td>@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>*@
                     <td>@(x.Quantity * x.PriceAfter)</td>
