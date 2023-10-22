@@ -14,6 +14,8 @@ namespace DATN_Client.Areas.Admin.Controllers
 		List<Image_Join_ProductItem> _lstImg_PI = new List<Image_Join_ProductItem>();
 		List<Products_VM> _lstP = new List<Products_VM>();
 		List<Products_VM> _lstP_Tam1 = new List<Products_VM>();
+		Products_VM _P_Show = new Products_VM();
+		public static Guid _idP;
 		public static IPagedList<Products_VM> _pageList;
 		public IActionResult Index()
         {
@@ -48,6 +50,13 @@ namespace DATN_Client.Areas.Admin.Controllers
 			_pageList = pr.ToPagedList(pageNumber, pageSize);
 			// 5. Trả về các Link được phân trang theo kích thước và số trang.
 			return View(_pageList);
+		}
+		public async Task<IActionResult> DetailProduct(Guid id)
+		{
+			_lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
+			_P_Show = _lstP.Where(c => c.Id == id).FirstOrDefault();
+			_idP = _P_Show.Id;
+			return View(_P_Show);
 		}
     }
 }
