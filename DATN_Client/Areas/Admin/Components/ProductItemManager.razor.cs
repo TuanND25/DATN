@@ -198,6 +198,7 @@ namespace DATN_Client.Areas.Admin.Components
 			_lstImg_Tam_Xoa.Add(imgVuaXoa);
 			_lstImg_Tam.Remove(imgVuaXoa);
 			_lstImg_Tam_Them.Remove(imgVuaXoa);
+			_lstImg_Tam_Sua.Remove(imgVuaXoa); // Moi nhat
 			_idImg_Tam = _lstImg_Tam.Select(c => c.Id).FirstOrDefault();
 			if (_idPI.ToString() != "00000000-0000-0000-0000-000000000000")
 			{

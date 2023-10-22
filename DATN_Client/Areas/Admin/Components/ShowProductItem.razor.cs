@@ -22,5 +22,10 @@ namespace DATN_Client.Areas.Admin.Components
 			_lstImg_PI = await _client.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem");
 			_lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
 		}
+		public async Task Detail_P(Guid id)
+		{
+			_testCTRL.DetailProduct(id);
+			_navigation.NavigateTo($"https://localhost:7075/Admin/Test/DetailProduct?id={id}", true);
+		}
 	}
 }
