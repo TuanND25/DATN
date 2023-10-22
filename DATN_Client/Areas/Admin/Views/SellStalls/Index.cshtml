@@ -1,0 +1,6 @@
+﻿@using DATN_Client.Areas.Admin.Components
+@{
+    Layout = @"~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@(await Html.RenderComponentAsync<SellStalls>(RenderMode.Server))
+
