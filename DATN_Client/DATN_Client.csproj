@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Customer\Components\**" />
+    <Content Remove="Areas\Customer\Components\**" />
+    <EmbeddedResource Remove="Areas\Customer\Components\**" />
+    <None Remove="Areas\Customer\Components\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Blazored.SessionStorage" Version="2.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.23" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.22" />
@@ -22,21 +29,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DATN_Shared\DATN_Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-	  
-    <Folder Include="Areas\Customer\Controllers\" />
-	  
-    <Folder Include="Areas\Customer\Data\" />
-	  
-    <Folder Include="Areas\Customer\Models\" />
-	  
-    <Folder Include="Areas\Customer\Components\" />
-	  
-    <Folder Include="Areas\Customer\Views\" />
-	  
-    <Folder Include="Views\Login\" />
   </ItemGroup>
 
 </Project>
