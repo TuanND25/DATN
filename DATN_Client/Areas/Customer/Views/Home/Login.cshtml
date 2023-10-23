@@ -1,0 +1,12 @@
+﻿@using DATN_Client.Areas.Customer.Component
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
+}
+@(await Html.RenderComponentAsync<LoginSignup>(RenderMode.Server))
+
+
+
+
+
