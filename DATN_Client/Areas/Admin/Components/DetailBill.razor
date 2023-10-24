@@ -54,7 +54,8 @@
         align-items: center;
         justify-content: center
     }
-    .inputtext{
+
+    .inputtext {
         appearance: none;
         border: none;
         outline: none;
@@ -65,39 +66,38 @@
         color: #454545;
     }
 
-    <!-- HTML !-->
+    <!-- HTML ! -->
+    /* CSS */
+    .button-37 {
+        background-color: #13aa52;
+        border: 1px solid #13aa52;
+        border-radius: 4px;
+        box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
+        box-sizing: border-box;
+        color: #fff;
+        cursor: pointer;
+        font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 16px;
+        font-weight: 400;
+        outline: none;
+        outline: 0;
+        padding: 10px 25px;
+        text-align: center;
+        transform: translateY(0);
+        transition: transform 150ms, box-shadow 150ms;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+    }
 
+    .button-37:hover {
+        box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
+        transform: translateY(-2px);
+    }
 
-/* CSS */
-.button-37 {
-  background-color: #13aa52;
-  border: 1px solid #13aa52;
-  border-radius: 4px;
-  box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
-  box-sizing: border-box;
-  color: #fff;
-  cursor: pointer;
-  font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-  outline: none;
-  outline: 0;
-  padding: 10px 25px;
-  text-align: center;
-  transform: translateY(0);
-  transition: transform 150ms, box-shadow 150ms;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-}
-
-.button-37:hover {
-  box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
-  transform: translateY(-2px);
-}
-
-
-}
+    .abc{
+        display:none;
+    }
 </style>
 
 <div class="row">
@@ -122,10 +122,10 @@
     }
     <EditForm Model="_billModel" class="col-4">
         <div>
-            <label for="inputText" class="col-form-label">Địa chỉ</label> 
-            <InputText class="form-control " @bind-Value="@(dc)" readonly />                         
-        </div> 
-        <div >
+            <label for="inputText" class="col-form-label">Địa chỉ</label>
+            <InputText class="form-control " @bind-Value="@(dc)" readonly />
+        </div>
+        <div>
             <label for="inputText" class="col-form-label">Tên người nhận</label>
             <InputText class="form-control " @bind-Value="_billModel.Recipient" readonly />
         </div>
@@ -158,7 +158,7 @@ else
                 <th>Thể loại</th>
                 <th>Màu sắc</th>
                 <th>Size</th>
-                <th>Số lượng </th>             
+                <th>Số lượng </th>
                 <th>Giá khuyến mãi</th>
                 <th>Tổng tiền</th>
                 <th></th>
@@ -170,7 +170,7 @@ else
             //foreach (var x in _lstBillDetail)
             //{
             //    tongtien += (x.Quantity * x.PriceAfter);
-            //};  
+            //};
         }
         <tbody>
             @foreach (var x in _lstBillDetail)
@@ -185,7 +185,7 @@ else
                     <td>@x.ColorName</td>
                     <td>@x.SizeName</td>
                     <td>@x.Quantity</td>
-                    
+
                     <td>@x.PriceAfter</td>
                     @*<td>@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>*@
                     <td>@(x.Quantity * x.PriceAfter)</td>
@@ -202,20 +202,20 @@ else
                     </td>
                     <td>@_tongtien.ToString("#,##0") VND</td>
                 </tr>
-               
+
                 <tr>
-                    <td colspan="8" >
-                       Số tiền viết bằng chữ : @texttongtien
+                    <td colspan="8">
+                        Số tiền viết bằng chữ : @texttongtien
                     </td>
-                   
+
                 </tr>
             }
 
-            
+
         </tbody>
-       
+
     </table>
-   
+
 }
 <div class="modal fade" id="Update_Adress">
     <div class="modal-dialog">
@@ -223,20 +223,26 @@ else
 
             <!-- Phần tiêu đề của popup -->
             <div class="modal-header">
-                <h4 class="modal-title">Thêm sản phẩm</h4>             
+                <h4 class="modal-title">Thêm sản phẩm</h4>
                 <i class="fa-solid fa-xmark close" style="cursor: pointer;" data-dismiss="modal"></i>
             </div>
             <!-- Nội dung của popup -->
             <div class="container">
-                <div  class="row">
+                <div class="row">
                     <EditForm Model="b">
                         <div style="display:flex;margin-bottom:20px">
                             <label>
-                                Ghi chú
-                            </label>                            
-                            <input class="inputtext" @bind-value="Phiship" style="width:50%;margin-left:20px" />
+                                Phí ship
+                            </label>
+                            <input type="number" class="inputtext" @bind-value="Phiship" style="width:50%;margin-left:20px" @oninput="HandleInput"/>             </div>
+                        <div>
+                            <button @onclick="()=>{SubmitFeeShip_1(); HideButton();}" style="border-radius:30px">
+                                @Suggest_number_1
+                            </button>
+                            <button @onclick="SubmitFeeShip_2" style="border-radius:30px">
+                                @Suggest_number_2
+                            </button>
                         </div>
-
                         <div style="display:flex;margin-bottom:20px">
                             <label>
                                 Ghi chú
@@ -246,13 +252,15 @@ else
                         <div style="display:flex; align-items:center; justify-content:center">
                             <button type="submit" @onclick=UpdateConfirmShipping class="button-37 ">Xác nhận đơn hàng</button>
                         </div>
-                   </EditForm>
-                </div>  
+                    </EditForm>
+                </div>
             </div>
 
 
             <!-- Phần chân của popup -->
-           
+
         </div>
     </div>
 </div>
+
+
