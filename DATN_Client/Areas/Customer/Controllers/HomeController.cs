@@ -17,5 +17,10 @@ namespace DATN_Client.Areas.Customer.Controllers
         {
             return View();
         }
+        public IActionResult LoginSignUp()
+        {
+            return View();
+        }
+
     }
 }
