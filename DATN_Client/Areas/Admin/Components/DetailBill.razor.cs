@@ -2,6 +2,9 @@
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json.Linq;
+using System.Security.Cryptography;
+using System.Xml.Linq;
 
 namespace DATN_Client.Areas.Admin.Components
 {
@@ -20,7 +23,10 @@ namespace DATN_Client.Areas.Admin.Components
         public string texttongtien { get; set; }
         public int Phiship { get; set; }
         public string Note { get; set; }
-        
+        public string Suggest_number_1 { get; set; } = string.Empty;
+        public string Suggest_number_2 { get; set; } = string.Empty;
+        public bool displayButton { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
             _billModel = BillManagement._billModel;			
@@ -42,6 +48,32 @@ namespace DATN_Client.Areas.Admin.Components
             b.Status = 1;
             var status = await _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", b);       
             nav.NavigateTo("https://localhost:7075/Admin/BillManagement/Details", true);
+        }
+        private void HandleInput(ChangeEventArgs e)
+        {
+            var Phiship1 = e.Value.ToString();
+            Phiship = Convert.ToInt32(Phiship1);
+            Suggest_number_1 = RoundToNearestPowerOfTen(Phiship,100);
+            Suggest_number_2 = RoundToNearestPowerOfTen(Phiship, 1000);
+            // Thực hiện các xử lý ngay khi giá trị thay đổi
+        }
+        private void HideButton()
+        {
+            displayButton = false;
+        }
+        private void SubmitFeeShip_1()
+        {
+            Phiship = Convert.ToInt32(Suggest_number_1);
+        }
+        private void SubmitFeeShip_2()
+        {
+            Phiship = Convert.ToInt32(Suggest_number_2);
+        }
+        private string RoundToNearestPowerOfTen(int number,int chiso)
+        {
+            int roundedNumber = number * chiso;
+           var Suggest_number1 = roundedNumber.ToString();
+            return Suggest_number1;
         }
         static string NumberToText(double inputNumber, bool suffix = true)
         {

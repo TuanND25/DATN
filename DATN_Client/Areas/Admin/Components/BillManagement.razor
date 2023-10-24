@@ -66,8 +66,8 @@
                         <td>@x.PaymentMethodName</td>
                         <td>@(x.Status == 1 ? "Chưa xác nhận" : x.Status == 2 ? "Đang giao hàng" : "Hoàn thành")</td>
                         <td>
-                            <button style="padding: 5px 12px 5px 12px;display:flex;justify-content:center;align-items:center" class="button_details" @onclick="()=>ClickDetailBill(x)">
-                                <label style="padding: 5px 15px 5px 15px;"> Chi tiết</label>
+                            <button style="padding: 5px 12px 5px 12px;display:flex;justify-content:center;align-items:center;cursor:pointer" class="button_details" @onclick="()=>ClickDetailBill(x)">
+                                <label style="cursor:pointer"> Chi tiết</label>
                             </button>
                         </td>
                     </tr>
