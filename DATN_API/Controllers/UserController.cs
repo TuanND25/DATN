@@ -38,13 +38,28 @@ namespace DATN_API.Controllers
 
 
 
-        [Route("update-user")]
+        [Route("update-status-user")]
       
         [HttpPut]
-        public async Task<IActionResult> UpdateUser(User_VM user)
+        public async Task<IActionResult> UpdateStatusUser(User_VM user)
         {
-            await _userService.UpdateUser(user);
+            await _userService.UpdateStatusUser(user);
             return Ok(user);
+        }
+
+        [Route("update-user")]
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser(UpdateUser_VM updateUser)
+        {
+           var result = await _userService.UpdateUser(updateUser);
+            if (result.IsSuccess)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();    
+            }
         }
 
 
@@ -55,6 +70,26 @@ namespace DATN_API.Controllers
         {
             var ListUserForUserName = await _userService.GetUserByUserName(username);
             return Ok(ListUserForUserName);
-        } 
+        }
+
+
+        [Route("change-password")]
+       
+        [HttpPut] 
+        
+        
+        public async Task<IActionResult> ChangePassword(ChangePassword_VM changePassword)
+        {
+            var result = await _userService.ChangePassword(changePassword);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
     }
 }
