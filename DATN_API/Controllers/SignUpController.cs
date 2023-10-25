@@ -18,9 +18,9 @@ namespace DATN_API.Controllers
 
         [Route("signup")]
         [HttpPost]
-        public async Task<IActionResult> SignUp(SignUpUser user,string role)
+        public async Task<IActionResult> SignUp(SignUpUser user)
         {
-            var result =await _signUpServices.SignUpAsync(user,role);
+            var result =await _signUpServices.SignUpAsync(user);
             if (result.IsSuccess)
             {
                 return Ok(result);

@@ -1,37 +1,25 @@
-﻿<div class="Login full">
-        <div class="container container1">
-          <div class="form login">
-            <span class="title">Login</span>
-              <form action="#">
-                <div class="input-field">
-                  <input type="text" placeholder="Email">
-                  <i class="fa-regular fa-envelope icon"></i>
-                </div>
-                <div class="input-field">
-                  <input type="password" placeholder="Password">
-                  <i class="fa-solid fa-lock icon"></i>
-                  <i class="fa-regular fa-eye-slash showHidePW"></i>
-                </div>
+﻿
+<EditForm Model="loginUser">
 
-                <div class="checkbox-text">
-                  <div class="checkbox-content">
-                    <input type="checkbox" id="logCheck">
-                    <label for="logCheck" class="text">Remeber me</label>
-                  </div>
-                  <a href="Forgot.html" class="text">Quên mật khẩu?</a>
-                </div>
+	<div class="form">
+		<label>Username:</label>
+		<InputText type="text" class="form-control"  @bind-Value="loginUser.UserName"/>
+	</div>
+	<div class="form">
+		<label>Password:</label>
+		<InputText type="password" class="form-control" @bind-Value="loginUser.Password" />
+	</div>
 
-                <div class="input-field button">
-                  <input type="button" value="Đăng nhập">
-                </div>
-              </form>
+	<button type="submit" class="btn btn-primary" @onclick="login">Login</button>
 
-              <div class="login-signup">
-                <span class="text">Bạn chưa có tài khoản?
-                  <a href="SignUp.html" class="text signup-text">Đăng ký</a>
-                </span>
-              </div>
+</EditForm>
+<a href="/dang-nhap-tu-google">Đăng nhập bằng Google</a>
+@if (Message != null)
+{
+		<p>@Message</p>
 
-          </div>
-        </div>
-      </div>
+}
+else
+{
+		<p>@Message</p>
+}
