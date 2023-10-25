@@ -1,4 +1,6 @@
 ﻿using DATN_Client.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,11 +8,14 @@ namespace DATN_Client.Controllers
 {
     public class HomeController : Controller
     {
+      
+      
         private readonly ILogger<HomeController> _logger;
-
+   
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+            
         }
 
         public IActionResult Index()
@@ -23,6 +28,11 @@ namespace DATN_Client.Controllers
             return View();
         }
 
+        public IActionResult LogOut()
+        {
+            
+            return  RedirectToAction("Index");
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

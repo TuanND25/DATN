@@ -16,7 +16,7 @@ namespace DATN_Client.Areas.Admin.Components
 		[Inject] Blazored.SessionStorage.ISessionStorageService _SessionStorageService { get; set; }
 		HttpClient _httpClient = new HttpClient();
         public string Message { get; set; } = null;
-        public string Message2 { get; set; } = null;
+       
         public List<User> Users { get; set; }
         LoginUser loginUser = new LoginUser();
         public string Idsession { get; set; } =string.Empty;
@@ -58,7 +58,7 @@ namespace DATN_Client.Areas.Admin.Components
                 if (responseAuthorize.IsSuccessStatusCode)
                 {
                     Message = "success";
-                    Message2 = await _SessionStorageService.GetItemAsync<string>("session");
+                  
 				}
                 else
                 {
