@@ -98,10 +98,17 @@
     .abc{
         display:none;
     }
+    .button_price{
+        border:none;
+        padding:5px;
+        
+    }
 </style>
 
 <div class="row">
-
+    <div>
+        <button @onclick=ReturnBill style="border:none;border-radius:25px; padding:10px 25px 10px 25px; background-color:#fe9666;color:white"><i style="margin-right:15px" class="fa-solid fa-chevron-left"></i>Back</button>
+    </div>
     <EditForm Model="_billModel" class="col-4">
         <div>
             <label for="inputText" class="col-form-label">Mã HD</label>
@@ -229,28 +236,45 @@ else
             <!-- Nội dung của popup -->
             <div class="container">
                 <div class="row">
-                    <EditForm Model="b">
+                   
+                    <EditForm Model="b">                      
                         <div style="display:flex;margin-bottom:20px">
                             <label>
                                 Phí ship
                             </label>
-                            <input type="number" class="inputtext" @bind-value="Phiship" style="width:50%;margin-left:20px" @oninput="HandleInput"/>             </div>
-                        <div>
-                            <button @onclick="()=>{SubmitFeeShip_1(); HideButton();}" style="border-radius:30px">
-                                @Suggest_number_1
-                            </button>
-                            <button @onclick="SubmitFeeShip_2" style="border-radius:30px">
-                                @Suggest_number_2
-                            </button>
+                            <input type="number" class="inputtext" @bind-value="Phiship" style="width:50%;margin-left:20px" @oninput="HandleInput"/>                                      
+                        </div>
+                        <p style="color:red;" >@CheckFee</p>
+                        <div>                                                   
+                            @if (!displayButton)
+                            {
+                                <button @onclick="()=>{SubmitFeeShip_1(); HideButton();}" style="border-radius:30px;display:none" class="button_price">
+                                    @Suggest_number_1
+                                </button>
+                                <button @onclick="()=>{SubmitFeeShip_2(); HideButton();}" style="border-radius:30px;display:none" class="button_price">
+                                    @Suggest_number_2
+                                </button>
+                            }
+                            else
+                            {
+                                <button @onclick="()=>{SubmitFeeShip_1(); HideButton();}" style="border-radius:30px" class="button_price">
+                                    @Suggest_number_1
+                                </button>
+                                <button @onclick="()=>{SubmitFeeShip_2(); HideButton();}" style="border-radius:30px;" class="button_price">
+                                    @Suggest_number_2
+                                </button>
+                            }
                         </div>
                         <div style="display:flex;margin-bottom:20px">
                             <label>
                                 Ghi chú
                             </label>
-                            <input class="inputtext" @bind-value="Note" style="width:50%;margin-left:20px" />
+                            <input class="inputtext" @bind-value="Note" style="width:50%;margin-left:20px" @oninput="CheckNoteNull" />
+                            
                         </div>
+                        <p style="color:red;">@CheckNote</p>
                         <div style="display:flex; align-items:center; justify-content:center">
-                            <button type="submit" @onclick=UpdateConfirmShipping class="button-37 ">Xác nhận đơn hàng</button>
+                      <button type="submit" @onclick=UpdateConfirmShipping class="button-37 ">Xác nhận đơn hàng</button>
                         </div>
                     </EditForm>
                 </div>
