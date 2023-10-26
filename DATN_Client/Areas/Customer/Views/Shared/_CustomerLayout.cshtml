@@ -12,6 +12,10 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" integrity="sha512-ZnR2wlLbSbr8/c9AgLg3jQPAattCUImNsae6NHYnS9KrIwRdcY9DxFotXhNAKIKbAXlRnujIqUWoXXwqyFOeIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@200;300;400;500;600;700;800&display=swap" />
 	<link rel="stylesheet" href="~/css/login.css" />
+
+	<link href="~/css/style.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 <body>
 	<header>
@@ -60,6 +64,30 @@
 
 	<base href="~/" />
 	<script src="_framework/blazor.server.js"></script>
+	<!-- Thư viện JavaScript Bootstrap -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script>
+		function OnScrollEvent() {
+			document.documentElement.scrollTop = 0;
+		}
+
+
+		// Lấy tất cả các nút button có class "custom-button"
+		var buttons = document.getElementsByClassName('custom-button');
+
+		// Gán sự kiện click cho từng nút button
+		for (var i = 0; i < buttons.length; i++) {
+			buttons[i].addEventListener('click', function () {
+				// Xóa lớp CSS "focus" từ tất cả các nút button
+				for (var j = 0; j < buttons.length; j++) {
+					buttons[j].classList.remove('focus');
+				}
+
+				// Thêm lớp CSS "focus" cho nút button hiện tại
+				this.classList.add('focus');
+			});
+		}
+	</script>
 	@await RenderSectionAsync("Scripts", required: false)
 
 </body>

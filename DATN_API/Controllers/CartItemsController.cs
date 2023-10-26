@@ -44,7 +44,7 @@ namespace DATN_API.Controllers
 			CartItems.Price = rvm.Price;
 			CartItems.Quantity = rvm.Quantity;
 			CartItems.Status = rvm.Status;
-			await _CartItems.AddCartItems(CartItems);
+			var x = await _CartItems.AddCartItems(CartItems);
 			return Ok();
 		}
 		[HttpPut("update-CartItems")]

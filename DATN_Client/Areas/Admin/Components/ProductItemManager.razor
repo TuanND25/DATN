@@ -369,7 +369,7 @@
 			<div class="row">
 				<div class="col-md-3">
 					<InputSelect class="form-select" @bind-Value="_PM_S_VM.CategoryName" @onclick="LocHangLoat">
-						<option value="0" selected>--Chọn thể loại--</option>
+						<option value="0" selected>Thể loại</option>
 						@foreach (var x in _lstCate)
 						{
 							<option value="@x.Name">@x.Name</option>
@@ -378,7 +378,7 @@
 				</div>
 				<div class="col-md-3">
 					<InputSelect class="form-select" @bind-Value="_PM_S_VM.ColorName" @onclick="LocHangLoat">
-						<option value="0" selected>--Chọn màu--</option>
+						<option value="0" selected>Màu sắc</option>
 						@foreach (var x in _lstC)
 						{
 							<option value="@x.Name">@x.Name</option>
@@ -387,7 +387,7 @@
 				</div>
 				<div class="col-md-3">
 					<InputSelect class="form-select" @bind-Value="_PM_S_VM.SizeName" @onclick="LocHangLoat">
-						<option value="0" selected>--Chọn size--</option>
+						<option value="0" selected>Kích thước</option>
 						@foreach (var x in _lstS)
 						{
 							<option value="@x.Name">@x.Name</option>

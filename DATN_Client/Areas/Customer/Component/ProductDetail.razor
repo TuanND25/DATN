@@ -1,0 +1,118 @@
+﻿@inject IJSRuntime JsRuntime
+
+@using DATN_Client.Areas.Admin.Controllers;
+<style>
+	.number-input {
+		display: flex;
+		align-items: center;
+	}
+
+	.input-wrapper {
+		display: flex;
+		align-items: center;
+		border: 1px solid #ccc;
+		border-radius: 20px;
+		padding: 5px;
+	}
+
+	.input-field {
+		margin-left: 10px;
+		width: 50px;
+		text-align: center;
+		border: none;
+		background-color: transparent;
+		pointer-events: none;
+	}
+
+	.minus-button,
+	.plus-button {
+		width: 30px;
+		height: 30px;
+		border: none;
+		background-color: transparent;
+		color: #337ab7;
+		font-weight: bold;
+		cursor: pointer;
+	}
+
+		.minus-button:hover,
+		.plus-button:hover {
+			color: #286090;
+		}
+
+	.custom-button {
+		background-color: lightgray;
+		color: black;
+	}
+
+		.custom-button:focus {
+			background-color: blue;
+			color: white;
+		}
+
+</style>
+<h3>@_nameCate</h3>
+<br />
+<div>
+	<div class="row">
+		<div class="col-7" style="display:flex">
+			<div class="col-md-4" style="height: 550px; overflow-y: auto;width:120px">
+				@foreach (var x in _lstImg_PI_tam.OrderBy(c => c.STT))
+				{
+					<div style="margin-bottom:30px;margin-top:30px">
+						<a @onclick="()=>LoadAnh(x.Id)">
+							<img src="/images/@x.PathImage" alt="" style="width: 100px;height: 110px;" />
+
+							<div class="modal fade" id="Add_P">
+								<div class="modal-dialog">
+									<div class="modal-content">
+
+
+
+										<!-- Nội dung của popup -->
+										<img src="/images/@x.PathImage" />
+
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
+				}
+			</div>
+			<div class="col-md-10">
+				<center>
+					<a data-toggle="modal" data-target="#Add_P">
+						<img src="/images/@_path_Tam" alt="" style="width:500px;height:650px;margin-top:8.5px" />
+					</a>
+				</center>
+			</div>
+
+		</div>
+		<div class="col-5">
+			<h1>@_nameP</h1><br />
+			<p>@_gia</p><br /><br />
+			<p>Màu sắc: </p>
+			@foreach (var x in _lstColor)
+			{
+				
+				<button class="custom-button" @onclick="()=>ChonMau(x)">@x</button>
+			}
+
+			<br />
+			<p>Kích thước: </p>
+			@foreach (var x in _lstSize)
+			{
+				<button class="custom-button" @onclick="()=>ChonSize(x)">@x</button>
+			}
+			<div class="number-input">
+				<div class="input-wrapper">
+					<button class="minus-button" @onclick="SL_Tru">-</button>
+					<input type="number" class="input-field" readonly @bind-value="@_soLuong">
+					<button class="plus-button" @onclick="SL_Cong">+</button>
+				</div>
+			</div><br />
+
+			<button class="btn btn-primary" @onclick="ThemVaoGiohang">Thêm vào giỏ hàng</button>
+		</div>
+	</div>
+</div>

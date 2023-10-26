@@ -1,8 +1,0 @@
-﻿@using DATN_Client.Areas.Admin.Components;
-@using DATN_Shared.ViewModel;
-@model Products_VM
-@{
-	Layout = @"~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
-
-}
-@(await Html.RenderComponentAsync<ProductDetail>(RenderMode.Server))

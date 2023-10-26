@@ -1,6 +1,8 @@
 using DATN_Client.Areas.Admin.Controllers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Blazored.SessionStorage;
+using DATN_Client.Areas.Customer.Controllers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,12 +11,13 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient();
 builder.Services.AddBlazoredSessionStorage();
-builder.Services.AddHttpContextAccessor();
+
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromSeconds(1000); 
 });
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
               .AddCookie(options =>
               {
@@ -26,7 +29,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddTransient<TestController, TestController>();
+builder.Services.AddTransient<BanOnlineController, BanOnlineController>();
 
 builder.Services.AddAuthentication()
     .AddGoogle(googleOptions =>
@@ -73,6 +76,7 @@ app.UseEndpoints(endpoints =>
 
 
 });
+app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

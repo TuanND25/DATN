@@ -37,5 +37,5 @@ namespace DATN_Client.Areas.Customer.Controllers
         }
 
 
-    }
+	}
 }
