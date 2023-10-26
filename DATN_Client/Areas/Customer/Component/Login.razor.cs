@@ -13,6 +13,7 @@ namespace DATN_Client.Areas.Customer.Component
 		[Inject] Blazored.SessionStorage.ISessionStorageService _SessionStorageService { get; set; }
 		HttpClient _httpClient = new HttpClient();
 		public string Message { get; set; } = null;
+		HttpContext HttpContext { get; set; }
 		[Inject ] NavigationManager navigationManager { get; set; }
 		public List<User> Users { get; set; }
 		LoginUser loginUser = new LoginUser();
@@ -40,8 +41,9 @@ namespace DATN_Client.Areas.Customer.Component
 
 				var data = claims.Select(c => c.Value).ToArray();
 				var id = data[0];
-
-				try
+                
+                
+                try
 				{
 					_SessionStorageService.SetItemAsStringAsync("session", id);
 				}
