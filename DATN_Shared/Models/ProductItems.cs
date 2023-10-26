@@ -25,6 +25,6 @@ namespace DATN_Shared.Models
         public virtual ICollection<Image> Images { get; set; }
         public virtual ICollection<CartItems>  CartItems { get; set; }
         public virtual ICollection<BillItems>  BillItems { get; set; }
-        public virtual ICollection<PromotionsProduct> PromotionsProducts { get; set; }
+        public virtual ICollection<PromotionsItem> PromotionsProducts { get; set; }
     }
 }

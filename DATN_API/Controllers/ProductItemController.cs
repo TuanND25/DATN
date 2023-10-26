@@ -39,6 +39,15 @@ namespace DATN_API.Controllers
             var a = await _productItemServices.GetAllProductItemByProduct(ProductId);
             return Ok(a);
         }
+
+
+        [HttpGet("ProductItem_By_PromotionId/{Id}")]
+        public async Task<List<ProductItem_Show_VM>> GetAllProductItemPromotionItem_Show(Guid Id)
+        {
+            var x = await _productItemServices.GetAllProductItemPromotionItem_Show(Id);
+            return x;
+        }
+
         [HttpPost("add_productitem")]
         public async Task<IActionResult> AddProductItem(ProductItem_VM productItems)
         {
