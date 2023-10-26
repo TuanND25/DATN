@@ -53,5 +53,9 @@ namespace DATN_Client.Areas.Customer.Controllers
 			_idP = _P_Show.Id;
 			return View(_P_Show);
 		}
+		public async Task<IActionResult> ShowCart()
+		{
+			return View();
+		}
 	}
 }

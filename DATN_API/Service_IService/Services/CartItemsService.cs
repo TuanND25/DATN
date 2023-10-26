@@ -49,16 +49,13 @@ namespace DATN_API.Service_IService.Services
 			var a = await context.CartItems.ToListAsync();
 			return a;
 		}
-		public async Task<CartItems> GetCartItemsById(Guid Id)
+
+		public async Task<List<CartItems>> GetAllCartItemsByUserId(Guid UserID)
 		{
-			var x = await context.CartItems.FirstOrDefaultAsync(c => c.Id == Id);
-			return x;
+			var a = await context.CartItems.Where(c=>c.UserId==UserID).ToListAsync();
+			return a;
 		}
-		public async Task<List<CartItems>> GetAllCartItemsById(Guid Id)
-		{
-			var x = await context.CartItems.Where(c => c.Id == Id).ToListAsync();
-			return x;
-		}
+
 		public async Task<CartItems> UpdateCartItems(CartItems CartItems)
 		{
 			try
