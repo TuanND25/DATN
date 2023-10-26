@@ -1,12 +1,13 @@
-﻿@using DATN_Client.Areas.Admin.Components;
+﻿@using DATN_Client.Areas.Customer.Component;
 @using DATN_Shared.ViewModel;
 @using X.PagedList.Mvc.Core;
 @using X.PagedList;
+
 @model X.PagedList.IPagedList<Products_VM>
 
 @{
-	Layout = @"~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
-
+	ViewData["Title"] = "Index";
+	Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
 }
 <style>
 	.pagination {
@@ -38,6 +39,7 @@
 			color: #fff;
 		}
 </style>
-@(await Html.RenderComponentAsync<ShowProductItem>(RenderMode.Server))
+@(await Html.RenderComponentAsync<ShowProduct>(RenderMode.Server))
 
-@Html.PagedListPager(Model, page => Url.Action("Show","Test",new { page }))
+@Html.PagedListPager(Model, page => Url.Action("ShowProduct","BanOnline",new { page }))
+

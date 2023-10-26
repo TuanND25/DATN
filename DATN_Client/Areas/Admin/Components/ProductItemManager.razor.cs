@@ -222,7 +222,7 @@ namespace DATN_Client.Areas.Admin.Components
 								c.SizeName == _PM_S_VM.SizeName) &&
 								(_PM_S_VM.ColorName == null ||
 								_PM_S_VM.ColorName == "0" ||
-								c.ColorName == _PM_S_VM.ColorName)).ToList();
+								c.ColorName == _PM_S_VM.ColorName)).ToList().ToList();
 		}
 		public async Task TimKiem()
 		{
