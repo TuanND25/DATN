@@ -1,0 +1,131 @@
+﻿<div class="card">
+    <div class="card-body">
+        <h1 style="margin-top:20px">Promotion</h1>
+        <div class="pagetitle">
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item">Promotion</li>
+                </ol>
+            </nav>
+
+
+            <EditForm Model="_promotion_VM">
+                <div class="row mb-3">
+                    <label for="inputNumber" class="col-sm-1 col-form-label">Lọc theo</label>
+                    <div class="col-sm-2">
+                        <InputSelect id="inputState1" class="form-select" @bind-Value="selectedSort" @onclick="@Loc">
+                            <option value="0" selected>Phầm trăm giảm</option>
+                            <option value="1">Phần trăm: Cao tới thấp</option>
+                            <option value="2">Phần trăm: Thấp tới cao</option>
+                        </InputSelect>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <InputSelect id="inputState" class="form-select" @bind-Value="selectedValue" @onclick="@Loc">
+                            <option value="0" selected>Tình trạng</option>
+                            <option value="1">Hoạt động</option>
+                            <option value="2">Ngường hoạt động</option>
+                        </InputSelect>
+                    </div>
+
+                    <div class="col-sm-7">
+                        <div class="row mb-3">
+                            <div class="col-md-2"></div>
+                            <div class="col-sm-8">
+                                <InputText @bind-Value="_promotionName" class="form-control" placeholder="Search..." />
+                            </div>
+                            <button type="button" class="btn btn-info col-1" style="width:38px;height:38px;" @onclick="Search"><i class="fas fa-search fa-lg"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row mb-3">
+                    <label for="inputNumber" class="col-sm-1 col-form-label">Từ ngày</label>
+                    <div class="col-sm-2">
+                        <input type="date" class="form-control" @bind-value="StartDateValue" @oninput="@Loc">
+                    </div>
+                    <label for="inputNumber" class="col-sm-1 col-form-label" style="width:57px;height:40px;">Đến</label>
+                    <div class="col-sm-2">
+                        <input type="date" class="form-control" @bind-value="EndDateValue" @oninput="Loc">
+                    </div>
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-outline-success" style="float:right" @onclick="NavigationAddPromotion">Create Promotion</button>
+                    </div>
+                </div>
+            </EditForm>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+@{
+    int count = 1;
+}
+<style>
+    th {
+        font-size: 12pt;
+    }
+
+    td {
+        font-size: 11pt;
+    }
+
+</style>
+<div class="card">
+    <div class="card-body">
+        <div class="pagetitle">
+        </div>
+        @if (_lstPromotion == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Tên</th>
+                        <th scope="col">Phần trăm giảm</th>
+                        <th scope="col">Ngày bắt đầu</th>
+                        <th scope="col">Ngày kết thúc</th>
+                        <th scope="col">Mô tả</th>
+                        <th scope="col">Tình trạng</th>
+                        <th scope="col">Chức năng</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var a in _lstPromotion)
+                    {
+                        <tr>
+                            <td>@(count++)</td>
+                            <td>@a.Name</td>
+                            <td>@a.Percent</td>
+                            <td>@a.StartDate</td>
+                            <td>@a.EndDate</td>
+                            <td>@a.Description</td>
+                            <td>@(a.Status==1?"Hoạt động":"Ngừng hoạt động")</td>
+                            <td>
+                                <div class=row>
+                                    <button type="button" class="btn btn-outline-warning col-md-4" style="margin-right:5px;display: flex;justify-content: center;align-items: center;" @onclick="()=>NavigationUpdatePromotion(a)">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger col-md-4" style="display: flex;justify-content: center;align-items: center;" @onclick="()=>DeletePromotion(a)">
+                                        <i class="bi bi-slash-circle"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

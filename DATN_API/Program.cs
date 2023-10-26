@@ -48,7 +48,7 @@ builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddTransient<IProductItemServices, ProductItemServices>();
 builder.Services.AddTransient<IProductsServices, ProductServices>();
 builder.Services.AddTransient<IPromotionServices, PromotionServices>();
-builder.Services.AddTransient<IPromotionProductItemServices, PromotionProductItemServices>();
+builder.Services.AddTransient<IPromotionItemServices, PromotionItemServices>();
 builder.Services.AddTransient<IReviewsService, ReviewsService>();
 builder.Services.AddScoped<ISizeService, SizeService>();
 builder.Services.AddScoped<IVoucherService, VoucherService>();
