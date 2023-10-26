@@ -22,10 +22,10 @@ namespace DATN_API.Controllers
 			var CartItems = await _CartItems.GetAllCartItems();
 			return CartItems;
 		}
-		[HttpGet("{ID}")]
-		public async Task<CartItems> GetCartItemsById(Guid ID)
+		[HttpGet("{UserID}")]
+		public async Task<List<CartItems>> GetCartItemsByUserId(Guid UserID)
 		{
-			var x = await _CartItems.GetCartItemsById(ID);
+			var x = await _CartItems.GetAllCartItemsByUserId(UserID);
 			return x;
 		}
 		//public Guid Id { get; set; }
@@ -49,7 +49,7 @@ namespace DATN_API.Controllers
 		[HttpPut("update-CartItems")]
 		public async Task<ActionResult<CartItems>> PutCartItems(CartItems_VM rvm)
 		{
-			CartItems CartItems = await _CartItems.GetCartItemsById(rvm.Id);
+			CartItems CartItems = (await _CartItems.GetAllCartItems()).FirstOrDefault(c=>c.Id==rvm.Id);
 			CartItems.UserId = rvm.UserId;
 			CartItems.ProductItemId = rvm.ProductItemId;
 			CartItems.Quantity = rvm.Quantity;
@@ -57,10 +57,10 @@ namespace DATN_API.Controllers
 			await _CartItems.UpdateCartItems(CartItems);
 			return Ok();
 		}
-		[HttpDelete("delete-CartItems")]
-		public async Task<ActionResult<CartItems>> Delete(Guid id)
+		[HttpDelete("delete-CartItems/{Id}")]
+		public async Task<ActionResult<CartItems>> Delete(Guid Id)
 		{
-			await _CartItems.DeleteCartItems(id);
+			await _CartItems.DeleteCartItems(Id);
 			return Ok();
 		}
 	}

@@ -1,0 +1,7 @@
+﻿@using DATN_Client.Areas.Customer.Component;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
+}
+@(await Html.RenderComponentAsync<ShowCart>(RenderMode.Server))

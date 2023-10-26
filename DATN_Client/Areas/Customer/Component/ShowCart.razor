@@ -1,0 +1,78 @@
+﻿<style>
+	.number-input {
+		display: flex;
+		align-items: center;
+	}
+
+	.input-wrapper {
+		display: flex;
+		align-items: center;
+		border: 1px solid #ccc;
+		border-radius: 20px;
+		padding: 5px;
+	}
+
+	.input-field {
+		margin-left: 10px;
+		width: 40px;
+		text-align: center;
+		border: none;
+		background-color: transparent;
+		pointer-events: none;
+	}
+
+	.minus-button,
+	.plus-button {
+		width: 30px;
+		height: 30px;
+		border: none;
+		background-color: transparent;
+		color: #337ab7;
+		font-weight: bold;
+		cursor: pointer;
+	}
+
+		.minus-button:hover,
+		.plus-button:hover {
+			color: #286090;
+		}
+</style>
+<h1>Giỏ hàng</h1>
+<div>
+	<div class="col-md-8">
+		@foreach (var x in _lstCI)
+		{
+			var img = _lstImg.Where(c => c.ProductItemId == x.ProductItemId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
+			_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
+			<tr>
+				<td style="text-align:center">
+					<img src="/images/@img" alt="" style="width:100px;height: 110px;">
+				</td>
+				<td style="vertical-align:top">
+					@_pi_s_vm.Name
+					<br>
+					@(_pi_s_vm.SizeName)
+					<br>
+					@((_pi_s_vm.CostPrice)?.ToString("#,##0"))đ
+					<br>
+					<div style="display:flex">
+						<div class="number-input">
+							<div class="input-wrapper">
+								<button class="minus-button" @onclick="()=>SL_Tru(x)">-</button>
+								<input type="number" class="input-field" readonly @bind-value="@x.Quantity">
+								<button class="plus-button" @onclick="()=>SL_Cong(x)">+</button>
+							</div>
+						</div>
+						<p style="margin-top:15px;text-align:left">
+							@((x.Quantity * _pi_s_vm.CostPrice)?.ToString("#,##0"))đ
+						</p>
+						<button class="btn btn-danger" @onclick="()=>DeleteCI(x)">Xóa</button>
+					</div>
+				</td>
+			</tr>
+		}
+	</div>
+	<div class="col-md-4">
+
+	</div>
+</div>
