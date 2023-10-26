@@ -91,5 +91,20 @@ namespace DATN_API.Controllers
             }
         }
 
+        [Route("add-employee-admin")]
+        [HttpPost]
+        public async Task<IActionResult> AddEmployeeOrAdmin(SignUpUser user,string role)
+        {
+            var result = await _userService.AddEmployeeOrAdmin(user,role);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
     }
 }

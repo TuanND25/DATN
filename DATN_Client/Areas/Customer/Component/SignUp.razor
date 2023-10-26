@@ -1,48 +1,36 @@
-﻿      <div class="Login full fullsign">
-        <div class="container container1">
-          <div class="form login">
-            <span class="title">Sign Up</span>
-              <form action="#">
-                <div class="input-field">
-                  <input type="text" placeholder="Tên người dùng">
-                  <i class="fa-regular fa-user"></i>
-                </div>
+﻿<h3>SignUp</h3>
 
-                <div class="input-field">
-                  <input type="text" placeholder="Email">
-                  <i class="fa-regular fa-envelope icon"></i>
-                </div>
-                
-                <div class="input-field">
-                  <input type="password" placeholder="Mật khẩu">
-                  <i class="fa-solid fa-lock icon"></i>
-                  <i class="fa-regular fa-eye-slash showHidePW"></i>
-                </div>
-                <div class="input-field">
-                  <input type="password" placeholder="Xác nhận mật khẩu">
-                  <i class="fa-solid fa-lock icon"></i>
-                  <i class="fa-regular fa-eye-slash showHidePW"></i>
-                </div>
+<EditForm Model="signUp">
 
-                <div class="checkbox-text">
-                  <div class="checkbox-content">
-                    <input type="checkbox" id="logCheck">
-                    <label for="logCheck" class="text">Tôi không phải người máy</label>
-                  </div>
-                  <a href="Forgot.html" class="text">Quên mật khẩu?</a>
-                </div>
+	<div class="form">
+		<label>Username:</label>
+		<InputText type="text" class="form-control" @bind-Value="signUp.UserName" />
+	</div>
+	<div class="form">
+		<label>Password:</label>
+		<InputText type="password" class="form-control" @bind-Value="signUp.Password" />
+	</div>
+	<div class="form">
+		<label>ConfirmPassword</label>
+		<InputText type="password" class="form-control" @bind-Value="signUp.ConfirmPassword" />
+	</div>
+	<div class="form">
+		<label>PhoneNumber:</label>
+		<InputText type="text" class="form-control" @bind-Value="signUp.PhoneNumber" />
+	</div>
+	<div class="form">
+		<label>Email:</label>
+		<InputText type="email" class="form-control" @bind-Value="signUp.Email" />
+	</div>
+	<div class="form">
+		<label>Name:</label>
+		<InputText type="text" class="form-control" @bind-Value="signUp.Name" />
+	</div>
 
-                <div class="input-field button">
-                  <input type="button" value="Đăng ký">
-                </div>
-              </form>
-
-              <div class="login-signup">
-                <span class="text">Bạn đã có tài khoản? 
-                  <a href="Login.html" class="text signup-text">Đăng nhập</a>
-                </span>
-              </div>
-
-          </div>
-        </div>
-      </div>
+	<div class="form">
+		<label>Status:</label>
+		<InputNumber  class="form-control" @bind-Value="signUp.Status" />
+	</div>
+	
+	<button type="submit" class="btn btn-primary" @onclick="SignUpUser">Sign Up</button>
+</EditForm>

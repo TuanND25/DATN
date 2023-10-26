@@ -15,19 +15,20 @@
     <title>Form</title>
 </head>
 <body>
+   
     <div class="container">
         <div class="box">
             <div class="form sign_in">
-                <h3>Sign In</h3>
+                <h3>LogIn</h3>
                 <span>or use your account</span>
-
-                <form action="#" id="form_input">
+             
+                <form asp-action="LoginSignUp" method="post" id="form_input">
                     <div class="type">
-                        <input type="email" placeholder="Email" name="" id="email">
+                        <input type="text" placeholder="Username" asp-for="UserName" id="email" name="Model.UserName">
 
                     </div>
                     <div class="type">
-                        <input type="password" placeholder="Password" name="" id="password">
+                        <input type="password" placeholder="Password" asp-for="Password" id="password" name="Model.Password">
 
                     </div>
 
@@ -35,7 +36,7 @@
                         <span>Forgot your password?</span>
                     </div>
 
-                    <button class="btn bkg">Sign In</button>
+                    <button class="btn bkg" type="submit">LogIn</button>
                 </form>
             </div>
     

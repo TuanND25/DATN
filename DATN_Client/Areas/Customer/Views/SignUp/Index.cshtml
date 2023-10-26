@@ -1,8 +1,9 @@
-﻿@using DATN_Client.Areas.Customer.Component
+﻿@using DATN_Client.Areas.Customer.Component;
 
 @{
-    ViewData["Title"] = "SignUp";
+    ViewData["Title"] = "Index";
     Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
 }
 @(await Html.RenderComponentAsync<SignUp>(RenderMode.Server))
+<h1>Index</h1>
 

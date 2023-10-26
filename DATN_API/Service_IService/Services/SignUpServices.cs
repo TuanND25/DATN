@@ -15,7 +15,7 @@ namespace DATN_API.Service_IService.Services
             _roleManager = roleManager;
             _userManager = userManager;
         }
-        public async Task<Response> SignUpAsync(SignUpUser user, string role)
+        public async Task<Response> SignUpAsync(SignUpUser user)
         {
             if (await _userManager.FindByEmailAsync(user.Email) != null)
             {
@@ -53,7 +53,7 @@ namespace DATN_API.Service_IService.Services
                 Email = user.Email,
                 Name = user.Name,
             };
-            if (await _roleManager.RoleExistsAsync(role))
+            if (await _roleManager.RoleExistsAsync("user"))
             {
                 var result = await _userManager.CreateAsync(newUser, user.Password);
                 
@@ -68,7 +68,7 @@ namespace DATN_API.Service_IService.Services
                     };
 
                 }
-                await _userManager.AddToRoleAsync(newUser, role);
+                await _userManager.AddToRoleAsync(newUser, "user");
                 return new Response
                 {
                     IsSuccess = true,
