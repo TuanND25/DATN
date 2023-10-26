@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace DATN_Shared.ViewModel
 {
@@ -23,6 +25,8 @@ namespace DATN_Shared.ViewModel
         public DateTime? ConfirmationDate { get; set; }
         public DateTime? CompletionDate { get; set; }
         public int Type { get; set; }
+
+        [Required(ErrorMessage = "Trường này không được để trống.")]
         public string? Note { get; set; }
         public string Recipient { get; set; }
         public string District { get; set; }
@@ -31,6 +35,8 @@ namespace DATN_Shared.ViewModel
         public string ToAddress { get; set; }
         public string NumberPhone { get; set; }
         public int Status { get; set; }
+
+        [Range(1, int.MaxValue, ErrorMessage = "Số phải lớn hơn 0.")]
         public int ShippingFee { get; set; }
     }
 }

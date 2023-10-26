@@ -17,7 +17,8 @@
       return [...document.querySelectorAll(el)]
     } else {
       return document.querySelector(el)
-    }
+      }
+
   }
 
   /**
@@ -25,10 +26,12 @@
    */
   const on = (type, el, listener, all = false) => {
     if (all) {
-      select(el, all).forEach(e => e.addEventListener(type, listener))
+        select(el, all).forEach(e => e.addEventListener(type, listener))
+       
     } else {
       select(el, all).addEventListener(type, listener)
-    }
+      }
+  
   }
 
   /**
@@ -88,8 +91,9 @@
         selectHeader.classList.remove('header-scrolled')
       }
     }
-    window.addEventListener('load', headerScrolled)
-    onscroll(document, headerScrolled)
+      window.addEventListener('load', headerScrolled) 
+      onscroll(document, headerScrolled)
+      select('body').classList.toggle('toggle-sidebar')
   }
 
   /**
