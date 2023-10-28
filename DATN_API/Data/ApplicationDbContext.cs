@@ -28,7 +28,7 @@ namespace DATN_API.Data
 		public DbSet<Products> Products { get; set; }
 		public DbSet<Reviews> Reviews { get; set; }
 		public DbSet<Promotions> Promotions { get; set; }
-		public DbSet<PromotionsProduct> PromotionsProducts { get; set; }
+		public DbSet<PromotionsItem> PromotionsItem { get; set; }
 		public DbSet<Size> Sizes { get; set; }
 		public DbSet<User> Users { get; set; }
 		public DbSet<Voucher> Vouchers { get; set; }
@@ -50,8 +50,8 @@ namespace DATN_API.Data
 			builder.Entity<Image>().HasOne(pi => pi.ProductItems).WithMany(i => i.Images).HasForeignKey(i => i.ProductItemId);
 			builder.Entity<ProductItems>().HasOne(c => c.Colors).WithMany(pi => pi.ProductItems).HasForeignKey(pi => pi.ColorId);
 			builder.Entity<ProductItems>().HasOne(s => s.Size).WithMany(pi => pi.ProductItems).HasForeignKey(pi => pi.SizeId);
-			builder.Entity<PromotionsProduct>().HasOne(pi => pi.ProductItems).WithMany(pp => pp.PromotionsProducts).HasForeignKey(pp => pp.ProductItemsId);
-			builder.Entity<PromotionsProduct>().HasOne(p => p.Promotions).WithMany(pp => pp.PromotionsProducts).HasForeignKey(pp => pp.PromotionsId);
+			builder.Entity<PromotionsItem>().HasOne(pi => pi.ProductItems).WithMany(pp => pp.PromotionsProducts).HasForeignKey(pp => pp.ProductItemsId);
+			builder.Entity<PromotionsItem>().HasOne(p => p.Promotions).WithMany(pp => pp.PromotionsProducts).HasForeignKey(pp => pp.PromotionsId);
 			builder.Entity<ProductItems>().HasOne(p => p.Products).WithMany(pi => pi.ProductItems).HasForeignKey(pi => pi.ProductId);
 			builder.Entity<ProductItems>().HasOne(c => c.Categorys).WithMany(p => p.ProductItems).HasForeignKey(p => p.CategoryId);
 			builder.Entity<CartItems>().HasOne(pi => pi.ProductItems).WithMany(ci => ci.CartItems).HasForeignKey(ci => ci.ProductItemId);

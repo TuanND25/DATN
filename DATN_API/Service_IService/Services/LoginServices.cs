@@ -64,8 +64,8 @@ namespace DATN_API.Service_IService.Services
                     claims: claims,
                     expires: DateTime.Now.AddDays(1),
                     signingCredentials: creds
-
                     );
+      
                 return new Response
                 {
                     IsSuccess = true,

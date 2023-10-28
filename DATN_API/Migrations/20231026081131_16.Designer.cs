@@ -4,6 +4,7 @@ using DATN_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DATN_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231026081131_16")]
+    partial class _16
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -213,6 +215,9 @@ namespace DATN_API.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("ProductItemId")
                         .HasColumnType("uniqueidentifier");
@@ -478,7 +483,7 @@ namespace DATN_API.Migrations
                     b.ToTable("Promotions");
                 });
 
-            modelBuilder.Entity("DATN_Shared.Models.PromotionsItem", b =>
+            modelBuilder.Entity("DATN_Shared.Models.PromotionsProduct", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -569,15 +574,15 @@ namespace DATN_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0f4e6b25-7f30-4635-b7fc-5c12fc866106"),
-                            ConcurrencyStamp = "4ff3d14f-9e9d-4ea4-a63c-40c7a15f382d",
+                            Id = new Guid("8fe48042-32a6-4d96-8dc5-490371fbe942"),
+                            ConcurrencyStamp = "acc38b80-e7b1-4065-adba-01f5929a92bf",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("9fcb5e7c-ee74-4630-b0a8-45bb0535933e"),
-                            ConcurrencyStamp = "5edc1ded-ec65-4bc6-a5ef-d97af19a0a66",
+                            Id = new Guid("303973ee-f86b-4d0d-ba69-13bf9f681fb5"),
+                            ConcurrencyStamp = "725441a3-464f-437f-b21b-efe9f084edda",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -1032,7 +1037,7 @@ namespace DATN_API.Migrations
                     b.Navigation("Size");
                 });
 
-            modelBuilder.Entity("DATN_Shared.Models.PromotionsItem", b =>
+            modelBuilder.Entity("DATN_Shared.Models.PromotionsProduct", b =>
                 {
                     b.HasOne("DATN_Shared.Models.ProductItems", "ProductItems")
                         .WithMany("PromotionsProducts")

@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using DATN_API.Data;
 using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
@@ -10,10 +11,12 @@ namespace DATN_API.Service_IService.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
-        public SignUpServices(UserManager<User> userManager, RoleManager<Role> roleManager)
+        private readonly ApplicationDbContext _context;
+        public SignUpServices(UserManager<User> userManager, RoleManager<Role> roleManager, ApplicationDbContext context)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _context = context;
         }
         public async Task<Response> SignUpAsync(SignUpUser user)
         {
@@ -47,11 +50,16 @@ namespace DATN_API.Service_IService.Services
 
                 };
             }
+            var id = Guid.NewGuid();
             User newUser = new User
             {
+                Id = id,
                 UserName = user.UserName,
                 Email = user.Email,
                 Name = user.Name,
+                PhoneNumber = user.PhoneNumber,
+                Sex= user.Sex,               
+                Status = 1
             };
             if (await _roleManager.RoleExistsAsync("user"))
             {
@@ -69,6 +77,14 @@ namespace DATN_API.Service_IService.Services
 
                 }
                 await _userManager.AddToRoleAsync(newUser, "user");
+                Cart newCart = new Cart()
+                {
+                    UserId = id,
+                    Description = null,
+                    Status = 1
+                };
+                await _context.Carts.AddAsync(newCart);
+                await _context.SaveChangesAsync();
                 return new Response
                 {
                     IsSuccess = true,

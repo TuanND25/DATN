@@ -1,0 +1,307 @@
+﻿using ThucTapSavis_Shared.ViewModel;
+<div class="card">
+    <div class="card-body">
+        <h1 style="margin-top:20px">Update Promotion</h1>
+        <div class="pagetitle">
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item">Promotion</li>
+                    <li class="breadcrumb-item">Update Promotion</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+
+
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-6">
+
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">General Form Elements</h4>
+
+                    <!-- General Form Elements -->
+                    <EditForm Model="_promotion">
+                                                <DataAnnotationsValidator/>
+                        <div class="row mb-3">
+                            <label for="inputText" class="col-sm-4 col-form-label">Tên khuyến mãi</label>
+                            <div class="col-sm-8">
+                                <InputText class="form-control" @bind-Value="_promotion.Name" />
+                                <ValidationMessage  For="()=>_promotion.Name" />
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-3">
+                            <label for="inputNumber" class="col-sm-4 col-form-label">Phần trăm giảm</label>
+                            <div class="col-sm-8">
+                                <InputNumber class="form-control" @bind-Value="_promotion.Percent" />
+                                <ValidationMessage  For="()=>_promotion.Percent" />
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="inputDate" class="col-sm-4 col-form-label">Ngày bắt đầu</label>
+                            <div class="col-sm-8">
+                                <input type="datetime-local" class="form-control" @bind-value="@_promotion.StartDate" />
+                                <ValidationMessage  For="()=>_promotion.StartDate" />
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-3">
+                            <label for="inputDate" class="col-sm-4 col-form-label">Ngày kết thúc</label>
+                            <div class="col-sm-8">
+                                <input type="datetime-local" class="form-control" @bind-value="@_promotion.EndDate">
+                                <ValidationMessage  For="()=>_promotion.EndDate" />
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row mb-3">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Mô tả</label>
+                            <div class="col-sm-8">
+                                <InputTextArea class="form-control" style="height: 50px" @bind-Value="@_promotion.Description" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label">Tình trạng</label>
+                            <div class="col-sm-8">
+                                <div class="row">
+                                    <InputRadioGroup @bind-Value="@_promotion.Status" class="form-control">
+                                        <div class="col-sm-6">
+                                            <InputRadio Value="1" /> Hoạt động
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <InputRadio Value="0" /> Ngừng hoạt động
+                                        </div>
+                                    </InputRadioGroup>
+                                    <ValidationMessage  For="()=>_promotion.Status" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label">Submit </label>
+                            <div class="col-sm-4">
+                                <button type="submit" class="btn btn-primary" @onclick="Update">Update</button>
+                            </div>
+                            <div class="col-sm-4">                              
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ExtralargeModal" @onclick="()=>LoadPromotionItem(_promotion.Id)">
+                                    Apply product
+                                </button>
+
+                                <div class="modal fade" id="ExtralargeModal" tabindex="-1">
+                                    <div class="modal-dialog modal-xl">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Sản phẩm đang khuyến mãi </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                <div class="pagetitle">
+                                                </div>
+                                                @if (_productItemByPromotion == null)
+                                                {
+                                                    <p><em>Loading...</em></p>
+                                                }
+                                                else
+                                                {
+                                                    <div style="height: 500px; overflow-y: auto;">
+                                                        <table class="table">
+                                                            <thead>
+                                                                <tr style="position: sticky;top:0">
+                                                                    <th scope="col">
+                                                                        <input type="checkbox" style="transform: scale(1.5);" />
+                                                                    </th>
+                                                                    <th>Ảnh minh họa</th>
+                                                                    <th>Tên</th>
+                                                                    <th>Thể loại</th>
+                                                                    <th>Màu sắc</th>
+                                                                    <th>Size</th>
+                                                                    <th>Số lượng tồn</th>
+                                                                    <th>Giá nhập</th>
+                                                                    <th>Giá bán</th>
+                                                                    <th>Trạng thái</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (var x in _productItemByPromotion)
+                                                                {
+                                                                    <tr>
+                                                                        <th scope="col">
+                                                                            <input type="checkbox" style="transform: scale(1.5);" @onchange="()=>ToggleProductItemSelection(x.Id)" />
+                                                                        </th>
+
+                                                                        @{
+                                                                            var img = _lstImg.Where(c => c.ProductItemId == x.Id).Select(c => c.PathImage).FirstOrDefault();
+                                                                            // var img2 = _lstImg.FirstOrDefault(c => c.ProductItemId == x.Id).PathImage;
+                                                                            if (img == null)
+                                                                            {
+                                                                                <td>Chưa có ảnh</td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td><img src="/images/@img" alt="" style="width:100px;height: 110px;"></td>
+                                                                            }
+                                                                        }
+                                                                        <td>@x.Name</td>
+                                                                        <td>@x.CategoryName</td>
+                                                                        <td>@x.ColorName</td>
+                                                                        <td>@x.SizeName</td>
+                                                                        <td>@x.AvaiableQuantity</td>
+                                                                        <td>@x.PurchasePrice</td>
+                                                                        <td>@x.CostPrice</td>
+                                                                        <td>@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                }
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary">Save changes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- End Extra Large Modal-->
+                            </div>
+                        </div>
+                    </EditForm><!-- End General Form Elements -->
+                </div>
+            </div>
+
+        </div>
+
+
+
+        @{
+            int count = 0;
+        }
+
+
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Product</h4>
+
+                    <!-- Advanced Form Elements -->
+                    <form>
+                        <!-- Default Table -->
+                        <div style="height: 445px; overflow-y: auto;">
+                            <table class="table">
+                                <thead>
+                                    <tr style="position: sticky;top:0">
+                                        <th scope="col">
+                                            <input type="checkbox" style="transform: scale(1.5);"  @IsChecked=() />
+                                        </th>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Product Name</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var a in _lstProduct)
+                                    {
+                                        <tr>
+                                            <th scope="col">
+                                                <input type="checkbox" style="transform: scale(1.5);" value="@a.Id" checked="@_lstProductSelect.Contains(a.Id)" @onchange="()=>ToggleProductSelection(a.Id)" />
+                                            </th>
+                                            <td>@(count++)</td>
+                                            <td>Designe</td>
+                                            <td>@a.Name</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </form><!-- End General Form Elements -->
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h4 style="margin-top:20px">Product Item</h4>
+                <div class="pagetitle">
+                </div>
+                @if (_lstProductItem == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <div style="height: 500px; overflow-y: auto;">
+                        <table class="table">
+                            <thead>
+                                <tr style="position: sticky;top:0">
+                                    <th scope="col">
+                                        <input type="checkbox" style="transform: scale(1.5);" @onchange="ToggleAllItems" checked="@SelectAllChangedProductItem" />
+                                    </th>
+                                    <th>Ảnh minh họa</th>
+                                    <th>Tên</th>
+                                    <th>Thể loại</th>
+                                    <th>Màu sắc</th>
+                                    <th>Size</th>
+                                    <th>Số lượng tồn</th>
+                                    <th>Giá nhập</th>
+                                    <th>Giá bán</th>
+                                    <th>Trạng thái</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var x in _lstProductItem)
+                                {
+                                    <tr>
+                                        <th scope="col">
+                                            <input type="checkbox" value="@x.Id" style="transform: scale(1.5);" checked="@_lstProductItemSelect.Contains(x.Id)" @onchange="()=>ToggleProductItemSelection(x.Id)" />
+                                        </th>
+
+                                        @{
+                                            var img = _lstImg.Where(c => c.ProductItemId == x.Id).Select(c => c.PathImage).FirstOrDefault();
+                                            // var img2 = _lstImg.FirstOrDefault(c => c.ProductItemId == x.Id).PathImage;
+                                            if (img == null)
+                                            {
+                                                <td>Chưa có ảnh</td>
+                                            }
+                                            else
+                                            {
+                                                <td><img src="/images/@img" alt="" style="width:100px;height: 110px;"></td>
+                                            }
+                                        }
+                                        <td>@x.Name</td>
+                                        <td>@x.CategoryName</td>
+                                        <td>@x.ColorName</td>
+                                        <td>@x.SizeName</td>
+                                        <td>@x.AvaiableQuantity</td>
+                                        <td>@x.PurchasePrice</td>
+                                        <td>@x.CostPrice</td>
+                                        <td>@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+
+
+
+    </div>
+</section>

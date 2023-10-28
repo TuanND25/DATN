@@ -26,11 +26,11 @@
 		<label>Name:</label>
 		<InputText type="text" class="form-control" @bind-Value="signUp.Name" />
 	</div>
-
-	<div class="form">
-		<label>Status:</label>
-		<InputNumber  class="form-control" @bind-Value="signUp.Status" />
-	</div>
-	
+<label>Sex</label>
+	<InputSelect class="form-select" @bind-Value="@signUp.Sex">
+		<option value="true" selected>--Chọn--</option>
+		<option value="true">Nam</option>
+		<option value="false">Nữ</option>	
+	</InputSelect>
 	<button type="submit" class="btn btn-primary" @onclick="SignUpUser">Sign Up</button>
 </EditForm>

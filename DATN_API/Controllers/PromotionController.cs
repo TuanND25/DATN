@@ -10,57 +10,66 @@ namespace DATN_API.Controllers
     [ApiController]
     public class PromotionController : ControllerBase
     {
-        private readonly IPromotionServices _promotionsServices;
-        public PromotionController(IPromotionServices promotionsServices)
-        {
-            _promotionsServices = promotionsServices;
-        }
-        [HttpGet("get_all_promotion")]
-        public async Task<IActionResult> GetAllPromotion()
-        {
-            var a = await _promotionsServices.GetAllPromotions();
-            return Ok(a);
-        }
-        [HttpGet("get_all_promotion_byID/{Id}")]
-        public async Task<IActionResult> GetPromotionById(Guid Id)
-        {
-            var a = await _promotionsServices.GetAllPromotionsById(Id);
-            return Ok(a);
-        }
-        [HttpPost("add_promotion")]
-        public async Task<IActionResult> AddPromotion(Promotions_VM promotions)
-        {
-            Promotions promotions1 = new Promotions();
-            promotions1.Id = promotions.Id;
-            promotions1.Name = promotions.Name;
-            promotions1.Percent = promotions.Percent;
-            promotions1.StartDate = promotions.StartDate;
-            promotions1.EndDate = promotions.EndDate;
-            promotions1.Description = promotions.Description;
-            promotions1.Status = promotions.Status;
+		private readonly IPromotionServices _Promotion;
+		public PromotionController(IPromotionServices Promotion)
+		{
+			_Promotion = Promotion;
+		}
 
-            var a = await _promotionsServices.AddPromotions(promotions1);
-            return Ok(a);
-        }
-        [HttpPut("update_promotion")]
-        public async Task<IActionResult> UpdatePromotion(Promotions_VM promotions)
-        {
-            Promotions promotions1 = new Promotions();
-            promotions1.Id = promotions.Id;
-            promotions1.Name = promotions.Name;
-            promotions1.Percent = promotions.Percent;
-            promotions1.StartDate = promotions.StartDate;
-            promotions1.EndDate = promotions.EndDate;
-            promotions1.Description = promotions.Description;
-            promotions1.Status = promotions.Status;
-            var a = await _promotionsServices.UpdatePromotions(promotions1);
-            return Ok(a);
-        }
-        [HttpDelete("delete_promotion")]
-        public async Task<IActionResult> DeletePromotion(Guid Id)
-        {
-            var a = await _promotionsServices.DeletePromotions(Id);
-            return Ok(a);
-        }
-    }
+		[HttpGet]
+		public async Task<List<Promotions>> GetAllPromotion()
+		{
+			var Promotion = await _Promotion.GetAllPromotions();
+			return Promotion;
+		}
+		[HttpGet("{Id}")]
+		public async Task<Promotions> GetPromotionById(Guid Id)
+		{
+			var x = await _Promotion.GetAllPromotionsById(Id);
+			return x;
+		}
+		//public Guid Id { get; set; }
+		//public string Name { get; set; }
+		//public string Code { get; set; }
+		//public string Percent { get; set; }
+		//public int Quantity { get; set; }
+		//public DateTime StartDate { get; set; }
+		//public DateTime EndDate { get; set; }
+		//public string Description { get; set; }
+		//public string Discount_Conditions { get; set; }
+		//public int Status { get; set; }
+		[HttpPost("Add")]
+		public async Task<ActionResult<Promotions>> PostPromotion(Promotions_VM rvm)
+		{
+			Promotions Promotion = new Promotions();
+			Promotion.Id = rvm.Id;
+			Promotion.Name = rvm.Name;
+			Promotion.Percent = rvm.Percent;
+			Promotion.StartDate = rvm.StartDate;
+			Promotion.EndDate = rvm.EndDate;
+			Promotion.Description = rvm.Description;
+			Promotion.Status = rvm.Status;
+			await _Promotion.AddPromotions(Promotion);
+			return Ok();
+		}
+		[HttpPut("update")]
+		public async Task<ActionResult<Promotions>> PutPromotion(Promotions_VM rvm)
+		{
+			Promotions Promotion = await _Promotion.GetAllPromotionsById(rvm.Id);
+			Promotion.Name = rvm.Name;
+			Promotion.Percent = rvm.Percent;
+			Promotion.StartDate = rvm.StartDate;
+			Promotion.EndDate = rvm.EndDate;
+			Promotion.Description = rvm.Description;
+			Promotion.Status = rvm.Status;
+			await _Promotion.UpdatePromotions(Promotion);
+			return Ok();
+		}
+		[HttpDelete("Id")]
+		public async Task<ActionResult<Promotions>> Delete(Guid id)
+		{
+			await _Promotion.DeletePromotions(id);
+			return Ok();
+		}
+	}
 }
