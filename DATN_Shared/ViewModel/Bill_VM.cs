@@ -20,23 +20,22 @@ namespace DATN_Shared.ViewModel
         public int ReducedAmount { get; set; }
         public int? Cash { get; set; }  // tiền mặt
         public int? CustomerPayment { get; set; } // tiền khách đưa
-        public int FinalAmount { get; set; } // tiền khách đưa
+        public int? FinalAmount { get; set; } // tiền khách đưa
         public DateTime? CreateDate { get; set; }
         public DateTime? ConfirmationDate { get; set; }
         public DateTime? CompletionDate { get; set; }
         public int Type { get; set; }
-
         [Required(ErrorMessage = "Trường này không được để trống.")]
         public string? Note { get; set; }
-        public string Recipient { get; set; }
-        public string District { get; set; }
-        public string Province { get; set; }
-        public string WardName { get; set; }
-        public string ToAddress { get; set; }
-        public string NumberPhone { get; set; }
+        public string Recipient { get; set; } // Người nhận
+        public string District { get; set; } // Quận/Huyện
+        public string Province { get; set; } // Tỉnh/ TP
+        public string WardName { get; set; } // Phường/ Xã
+        public string ToAddress { get; set; } // Địa chỉ chi tiết
+        public string NumberPhone { get; set; } // SDT
         public int Status { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Số phải lớn hơn 0.")]
-        public int ShippingFee { get; set; }
+        public int? ShippingFee { get; set; }
     }
 }
