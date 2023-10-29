@@ -41,7 +41,6 @@ namespace DATN_Client.Areas.Admin.Components
             }
             texttongtien = NumberToText(Convert.ToDouble(_tongtien));
             displayButton = false;
-
         }
         public void ReturnBill()
         {
