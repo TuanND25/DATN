@@ -1,0 +1,80 @@
+﻿
+<div class=" row">
+	<div class="col-md-6">
+		<h3>Thông tin đơn hàng</h3>
+		<EditForm Model="_bill_vm">
+			<div class="col-12">
+				<input type="text" class="form-control" style="pointer-events: none;" readonly @bind-value="_UserName" placeholder="Họ và tên" />
+			</div>
+			<div class="row">
+				@* <div class="col-8">
+					<input type="text" class="form-control" @bind-value="_Email" placeholder="Email" />
+				</div> *@
+				<div class="col-4">
+					<input type="text" class="form-control" @bind-value="_sdt" placeholder="Số điện thoại" />
+				</div>
+			</div>
+			<div class="col-12">
+				<input type="text" class="form-control" @bind-value="_bill_vm.Recipient" placeholder="Tên người nhận" />
+			</div>
+			<div class="col-12">
+				<input type="text" class="form-control" @bind-value="_bill_vm.ToAddress" placeholder="Địa chỉ chi tiết" />
+			</div>
+			<div class="row">
+				<div class="col-4">
+					<InputSelect class="form-select" @bind-Value="@_bill_vm.Province">
+						<option value="Hà Nội" selected>--Tỉnh/Thành phố--</option>
+					</InputSelect>
+				</div>
+				<div class="col-4">
+					<InputSelect class="form-select" @bind-Value="@_bill_vm.District">
+						<option value="Hoài Đức" selected>--Quận/Huyện/Thị xã--</option>
+					</InputSelect>
+				</div>
+				<div class="col-4">
+					<InputSelect class="form-select" @bind-Value="@_bill_vm.WardName">
+						<option value="Đức Giang" selected>--Phường/Xã--</option>
+					</InputSelect>
+				</div>
+			</div>
+			<div>
+				<InputTextArea class="form-control" @bind-Value="_bill_vm.Note" placeholder="Ghi chú"/>
+			</div>
+			<h3>Phương thức thanh toán</h3>
+			<InputRadioGroup @bind-Value="_bill_vm.PaymentMethodId" class="form-control">
+				<InputRadio Value="@Guid.Parse("7485dc76-780a-4008-9ddf-f583ab97a30d")" />
+				<span>Thanh toán khi nhận hàng (COD)</span>
+				<InputRadio Value="@Guid.Parse("58431a43-d36b-4ab1-af0e-402238c87402")" />
+				<span>Momo</span>
+			</InputRadioGroup>
+		</EditForm>
+	</div>
+	<div class="col-md-6">
+		<h3>Giỏ hàng</h3>
+		@foreach (var x in _lstCI)
+		{
+			var img = _lstImg.Where(c => c.ProductItemId == x.ProductItemId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
+			_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
+			<div style="display: flex">
+				<div>
+					<img src="/images/@img" alt="" style="width:110px;height:110px;">
+					
+				</div>
+				<div>
+					<p>@_pi_s_vm.Name</p>
+					<p>@(_pi_s_vm.SizeName + ", " + _pi_s_vm.ColorName)</p>
+					<p>@("x"+x.Quantity)</p>
+				</div>
+				<div>
+					@((x.Quantity * _pi_s_vm.CostPrice)?.ToString("#,##0")) đ
+				</div>
+		</div>
+		}
+		<div>
+			Tạm tính @(_tongTienHang?.ToString("#,##0")) đ
+			Phí vận chuyển
+		</div>
+		<div><h4>Tổng cộng @(_tongTienHang?.ToString("#,##0")) đ</h4> </div>
+		<div><button @onclick="Btn_DatHang">Hoàn tất đơn hàng</button></div>
+	</div>
+</div>

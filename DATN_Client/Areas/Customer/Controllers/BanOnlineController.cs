@@ -1,5 +1,7 @@
 ﻿using DATN_Shared.ViewModel;
+using DATN_Shared.ViewModel.Momo;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using X.PagedList;
 
 namespace DATN_Client.Areas.Customer.Controllers
@@ -7,16 +9,21 @@ namespace DATN_Client.Areas.Customer.Controllers
 	[Area("Customer")]
 	public class BanOnlineController : Controller
 	{
-		HttpClient _client = new HttpClient();
-		List<ProductItem_Show_VM> _lstPrI_show_VM = new List<ProductItem_Show_VM>();
-		List<Image_Join_ProductItem> _lstImg_PI = new List<Image_Join_ProductItem>();
-		List<Products_VM> _lstP = new List<Products_VM>();
-		List<Products_VM> _lstP_Tam1 = new List<Products_VM>();
-		Products_VM _P_Show = new Products_VM();
+		private HttpClient _client = new HttpClient();
+		private List<ProductItem_Show_VM> _lstPrI_show_VM = new List<ProductItem_Show_VM>();
+		private List<Products_VM> _lstP = new List<Products_VM>();
+		private List<Products_VM> _lstP_Tam1 = new List<Products_VM>();
+		private Products_VM _P_Show = new Products_VM();
 		public static Guid _idP;
 		public static IPagedList<Products_VM> _pageList;
+		public static MomoExecuteResponseModel _momoExecuteResponseModel;
+		private readonly IOptions<MomoOptionModel> _options;
 
-		public async Task<IActionResult> ShowProduct(int? page)
+        public BanOnlineController()
+        {
+			_momoExecuteResponseModel = new MomoExecuteResponseModel();
+		}
+        public async Task<IActionResult> ShowProduct(int? page)
 		{
 			_lstPrI_show_VM = await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
 			_lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
@@ -46,6 +53,7 @@ namespace DATN_Client.Areas.Customer.Controllers
 			// 5. Trả về các Link được phân trang theo kích thước và số trang.
 			return View(_pageList);
 		}
+
 		public async Task<IActionResult> ProductDetail(Guid id)
 		{
 			_lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
@@ -53,9 +61,27 @@ namespace DATN_Client.Areas.Customer.Controllers
 			_idP = _P_Show.Id;
 			return View(_P_Show);
 		}
+
 		public async Task<IActionResult> ShowCart()
 		{
 			return View();
+		}
+
+		[Route("bill-info")]
+		public async Task<IActionResult> Create_Bill_With_Info()
+		{
+			return View();
+		}
+		[Route("results-after-payment")]
+		public IActionResult CallBackAfterPayment()
+		{
+			var collection = HttpContext.Request.Query;
+			_momoExecuteResponseModel.Amount = collection.First(s => s.Key == "amount").Value;
+			_momoExecuteResponseModel.OrderInfo = collection.First(s => s.Key == "orderInfo").Value;
+			_momoExecuteResponseModel.OrderId = collection.First(s => s.Key == "orderId").Value;
+			_momoExecuteResponseModel.Message = collection.First(s => s.Key == "message").Value;
+			_momoExecuteResponseModel.MessageLocal = collection.First(s => s.Key == "localMessage").Value;
+			return View(_momoExecuteResponseModel);
 		}
 	}
 }

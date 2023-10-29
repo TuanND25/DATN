@@ -1,0 +1,7 @@
+﻿@using DATN_Client.Areas.Customer.Component;
+@model DATN_Shared.ViewModel.Momo.MomoExecuteResponseModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
+}
+@(await Html.RenderComponentAsync<PaymentCallBack_Blazor>(RenderMode.Server))
