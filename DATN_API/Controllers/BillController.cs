@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DATN_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Bill")]
     [ApiController]
     public class BillController : ControllerBase
     {
@@ -57,6 +57,30 @@ namespace DATN_API.Controllers
         [HttpPost("Post-Bill")]
         public async Task<ActionResult<Bill>> PostAddressShip(Bill_VM bill_vm)
         {
+            //public Guid Id { get; set; }
+            //public Guid UserId { get; set; }
+            //public Guid? HistoryConsumerPointID { get; set; }
+            //public Guid PaymentMethodId { get; set; }
+            //public Guid? VoucherId { get; set; }
+            //public string BillCode { get; set; }
+            //public int? TotalAmount { get; set; }
+            //public int? ReducedAmount { get; set; }
+            //public int? Cash { get; set; }  // tiền mặt
+            //public int? CustomerPayment { get; set; } // tiền khách đưa
+            //public int? FinalAmount { get; set; } // tiền khách đưa
+            //public DateTime? CreateDate { get; set; }
+            //public DateTime? ConfirmationDate { get; set; }
+            //public DateTime? CompletionDate { get; set; }
+            //public int Type { get; set; }
+            //public string? Note { get; set; }
+            //public string Recipient { get; set; } // Người nhận
+            //public string District { get; set; } // Quận/Huyện
+            //public string Province { get; set; } // Tỉnh/ TP
+            //public string WardName { get; set; } // Phường/ Xã
+            //public string ToAddress { get; set; } // Địa chỉ chi tiết
+            //public string NumberPhone { get; set; } // SDT
+            //public int Status { get; set; }
+            //public int? ShippingFee { get; set; }
             try
             {
                 Bill bill = new Bill();
@@ -71,11 +95,20 @@ namespace DATN_API.Controllers
                 bill.Cash = bill_vm.Cash;
                 bill.CustomerPayment = bill_vm.CustomerPayment;
                 bill.FinalAmount= bill_vm.FinalAmount;
+                bill.CreateDate = bill_vm.CreateDate;
+                bill.ConfirmationDate = bill_vm.ConfirmationDate;
+                bill.CompletionDate = bill_vm.CompletionDate;
                 bill.Note = bill_vm.Note;
-                bill.Type = bill_vm.Type;
+                bill.Recipient = bill_vm.Recipient;
+                bill.District = bill_vm.District;
+                bill.Province = bill_vm.Province;
+                bill.WardName = bill_vm.WardName;
+                bill.ToAddress = bill_vm.ToAddress;
+                bill.NumberPhone = bill_vm.NumberPhone;
                 bill.Status = bill_vm.Status;
+                bill.ShippingFee = bill_vm.ShippingFee;
 
-                await _billService.PostBill(bill);
+                 var x = await _billService.PostBill(bill);
                 return Ok("Success");
             }
             catch (Exception ex)

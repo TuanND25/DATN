@@ -38,7 +38,7 @@ namespace DATN_API.Service_IService.Services
 					   join b in _context.Users on a.UserId equals b.Id
 					   join c in _context.HistoryConsumerPoints on a.HistoryConsumerPointID equals c.Id
 					   join d in _context.PaymentMethods on a.PaymentMethodId equals d.Id
-					   join e in _context.Vouchers on a.VoucherId equals e.Id
+					   //join e in _context.Vouchers on a.VoucherId equals e.Id
 					   select new Bill_ShowModel
 					   {
 						   Id = a.Id,
@@ -47,7 +47,7 @@ namespace DATN_API.Service_IService.Services
 						   HistoryConsumerPointID = a.HistoryConsumerPointID,
 						   PaymentMethodId = a.PaymentMethodId,
 						   PaymentMethodName = d.Name,
-						   VoucherId = a.VoucherId,
+						   //VoucherId = a.VoucherId,
 						   //Reduced_Value = e.Reduced_Value,
 						   BillCode = a.BillCode,
 						   TotalAmount = a.TotalAmount,
@@ -72,7 +72,7 @@ namespace DATN_API.Service_IService.Services
 			return lst;
 		}
 
-		public async Task<Bill> GetBillById(Guid Id)
+        public async Task<Bill> GetBillById(Guid Id)
 		{
 			return await _context.Bills.FindAsync(Id);
 		}
@@ -85,9 +85,16 @@ namespace DATN_API.Service_IService.Services
 
 		public async Task<Bill> PostBill(Bill bill)
 		{
-			await _context.Bills.AddAsync(bill);
-			await _context.SaveChangesAsync();
-			return bill;
+			try
+			{
+                await _context.Bills.AddAsync(bill);
+                await _context.SaveChangesAsync();
+                return bill;
+            }
+			catch (Exception e)
+			{
+				throw;
+			}
 		}
 
 		public async Task<Bill> PutBill(Bill bill)
@@ -117,5 +124,5 @@ namespace DATN_API.Service_IService.Services
 				return null;
 			}
 		}
-	}
+    }
 }
