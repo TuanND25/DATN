@@ -20,15 +20,15 @@
 				@{
 					if (giamin == giamax || giamin == null || giamax == null)
 					{
-						@(giamax?.ToString("#,##0") + " VND")
+						@(giamax?.ToString("#,##0") + " VND" + DateTime.UtcNow.Ticks.ToString() )
+
 					}
 					else
 					{
 						@(giamin?.ToString("#,##0") + " - " + giamax?.ToString("#,##0") + " VND")
 					}
 				}
-			</div>
-
+			</div> 
 		}
 	}
 </div>
