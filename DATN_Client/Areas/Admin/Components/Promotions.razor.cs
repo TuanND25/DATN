@@ -27,14 +27,14 @@ namespace DATN_Client.Areas.Admin.Components
 
         public async Task NavigationAddPromotion()
         {
-            //_navigationManager.NavigateTo("https://localhost:7022/Admin/Promotion/Add", true);
+            _navigationManager.NavigateTo("https://localhost:7075/Admin/Promotion/Add", true);
         }
 
 
         public async Task NavigationUpdatePromotion(Promotions_VM promotionVM)
         {
             _promotion_VM = promotionVM;
-            //_navigationManager.NavigateTo("https://localhost:7022/Admin/Promotion/Update", true);
+            _navigationManager.NavigateTo("https://localhost:7075/Admin/Promotion/Update", true);
         }
         public async Task DeletePromotion(Promotions_VM promotionVM)
         {
