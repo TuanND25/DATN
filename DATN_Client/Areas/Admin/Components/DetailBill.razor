@@ -95,13 +95,62 @@
         transform: translateY(-2px);
     }
 
-    .abc{
-        display:none;
+    .abc {
+        display: none;
     }
-    .button_price{
-        border:none;
-        padding:5px;
-        
+
+    .button_price {
+        border: none;
+        padding: 5px;
+    }
+
+    .btnSucces {
+        padding: 10px 15px 10px 15px;
+        width: 100px;
+        border: 1px solid #D15555;
+        border-radius: 25px;
+        color: #D15555;
+    }
+
+        .btnSucces:hover {
+            border: 1px solid #D15555;
+            background-color: #D15555;
+            border-radius: 25px;
+            color: wheat;
+        }
+
+    .btnCancel {
+        margin-left: 20px;
+        padding: 10px 15px 10px 15px;
+        width: 100px;
+        border: 1px solid #797878;
+        border-radius: 25px;
+        color: #797878;
+    }
+
+        .btnCancel:hover {
+            background-color: #797878;
+            border: 1px solid #797878;
+            border-radius: 25px;
+            color: white;
+        }
+
+    .divCancelOrder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 30px;
+    }
+
+    .TitleYesOrNo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #454545;
+        font-size: 20px;
+        align-items: center;
+        font-weight: 500;
+        margin-bottom: 30px;
     }
 </style>
 
@@ -142,13 +191,21 @@
         </div>
     </EditForm>
     <div class="col-2 cangiua">
-        <button class="button-33" data-toggle="modal" data-target="#Update_Adress" style="margin-bottom:20px">
-            Xác nhận đơn hàng
-        </button>
+        @if (_billModel.Status == 1)
+        {
+            <button class="button-33" data-toggle="modal" data-target="#Update_Adress" style="margin-bottom:20px">
+                Xác nhận đơn hàng
+            </button>
 
-        <button class="button-34">
-            Hủy đơn hàng
-        </button>
+            <button class="button-34" data-toggle="modal" data-target="#CancelOrder" style="margin-bottom:20px">
+                Hủy đơn hàng
+            </button>
+        }
+        else
+        {
+            <div>
+            </div>
+        }
     </div>
 </div>
 @if (_lstBillDetail == null)
@@ -236,16 +293,16 @@ else
             <!-- Nội dung của popup -->
             <div class="container">
                 <div class="row">
-                   
-                    <EditForm Model="b">                      
+
+                    <EditForm Model="b">
                         <div style="display:flex;margin-bottom:20px">
                             <label>
                                 Phí ship
                             </label>
-                            <input type="number" class="inputtext" @bind-value="Phiship" style="width:50%;margin-left:20px" @oninput="HandleInput"/>                                      
+                            <input type="number" class="inputtext" @bind-value="Phiship" style="width:50%;margin-left:20px" @oninput="HandleInput" />
                         </div>
-                        <p style="color:red;" >@CheckFee</p>
-                        <div>                                                   
+                        <p style="color:red;">@CheckFee</p>
+                        <div>
                             @if (!displayButton)
                             {
                                 <button @onclick="()=>{SubmitFeeShip_1(); HideButton();}" style="border-radius:30px;display:none" class="button_price">
@@ -270,13 +327,37 @@ else
                                 Ghi chú
                             </label>
                             <input class="inputtext" @bind-value="Note" style="width:50%;margin-left:20px" @oninput="CheckNoteNull" />
-                            
+
                         </div>
                         <p style="color:red;">@CheckNote</p>
                         <div style="display:flex; align-items:center; justify-content:center">
-                      <button type="submit" @onclick=UpdateConfirmShipping class="button-37 ">Xác nhận đơn hàng</button>
+                            <button type="submit" @onclick=UpdateConfirmShipping class="button-37 ">Xác nhận đơn hàng</button>
                         </div>
                     </EditForm>
+                </div>
+            </div>
+
+
+            <!-- Phần chân của popup -->
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="CancelOrder">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Phần tiêu đề của popup -->
+            <div class="modal-header">
+                <h6 class="modal-title">Hủy đơn hàng</h6>
+                <i class="fa-solid fa-xmark close" style="cursor: pointer;" data-dismiss="modal"></i>
+            </div>
+            <!-- Nội dung của popup -->
+            <div class="container">
+                <label class="TitleYesOrNo">Bạn có đồng ý hủy đơn hàng không?</label>
+                <div class="divCancelOrder">
+                    <button class="btnSucces" @onclick=CancelOrder>Đồng ý</button>
+                    <button class="btnCancel close">Không</button>
                 </div>
             </div>
 
