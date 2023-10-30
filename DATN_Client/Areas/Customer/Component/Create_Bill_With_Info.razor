@@ -57,7 +57,7 @@
                 <div style="display:flex;">
                     <img src="/img/avartar_user.png" style="width:8%;margin-right:20px" />
                     <div>
-                        <label>@_UserName (Cho them cai email vao day)</label><br />
+                        <label>@_user_vm.UserName (@_user_vm.Email)</label><br />
                         <a href="facebook.com">Đăng xuất</a>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                 </div>
 
                 <div style="margin-top:15px">
-                    <input type="text" class="form-control" @bind-value="_sdt" placeholder="Số điện thoại" />
+                    <input type="text" class="form-control" @bind-value="_user_vm.PhoneNumber" placeholder="Số điện thoại" />
                 </div>
 
                 <div class="col-12" style="margin-top:15px">
@@ -118,9 +118,9 @@
                 </div>
                 <div style="display:flex;justify-content:space-between;align-items:center">
                     <div>
-                        <a style="color:#7dccff;cursor:pointer;">Giỏ hàng</a>
+                        <a style="color:#7dccff;cursor:pointer;" @onclick="ReturnCart">Giỏ hàng</a>
                     </div>
-                    <button class="btnSuccesBill">
+                    <button class="btnSuccesBill" @onclick="Btn_DatHang">
                         Hoàn tất đơn hàng
                     </button>
                 </div>

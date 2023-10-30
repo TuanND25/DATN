@@ -20,8 +20,7 @@
 				@{
 					if (giamin == giamax || giamin == null || giamax == null)
 					{
-						@(giamax?.ToString("#,##0") + " VND" + DateTime.UtcNow.Ticks.ToString() )
-
+						@(giamax?.ToString("#,##0") + " VND")
 					}
 					else
 					{

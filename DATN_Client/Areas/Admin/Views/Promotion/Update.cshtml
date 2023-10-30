@@ -1,0 +1,8 @@
+﻿@using DATN_Client.Areas.Admin.Components
+
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@(await Html.RenderComponentAsync<UpdatePromotion>(RenderMode.Server))
+

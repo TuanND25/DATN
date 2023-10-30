@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
 
 namespace DATN_Shared.ViewModel
 {
@@ -16,8 +15,8 @@ namespace DATN_Shared.ViewModel
         public Guid PaymentMethodId { get; set; }
         public Guid? VoucherId { get; set; }
         public string BillCode { get; set; }
-        public int TotalAmount { get; set; }
-        public int ReducedAmount { get; set; }
+        public int? TotalAmount { get; set; }
+        public int? ReducedAmount { get; set; }
         public int? Cash { get; set; }  // tiền mặt
         public int? CustomerPayment { get; set; } // tiền khách đưa
         public int? FinalAmount { get; set; } // tiền khách đưa
