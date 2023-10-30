@@ -15,12 +15,12 @@ namespace DATN_Shared.Models
         public Guid PaymentMethodId { get; set; }
         public Guid? VoucherId { get; set; }
         public string BillCode { get; set; }
-        public int ShippingFee { get; set; }
+        public int? ShippingFee { get; set; }
         public int TotalAmount { get; set; }
         public int ReducedAmount { get; set; }
         public int? Cash { get; set; }  // tiền mặt
         public int? CustomerPayment { get; set; } // tiền khách đưa
-        public int FinalAmount { get; set; } // tiền khách đưa
+        public int? FinalAmount { get; set; } // tiền khách đưa
         public DateTime? CreateDate { get; set; }
         public DateTime? ConfirmationDate { get; set; }
         public DateTime? CompletionDate { get; set; }

@@ -3,6 +3,7 @@ using DATN_API.Data;
 using DATN_API.Service_IService.IServices;
 using DATN_API.Service_IService.Services;
 using DATN_Shared.Models;
+using DATN_Shared.ViewModel.Momo;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -53,6 +54,8 @@ builder.Services.AddTransient<IReviewsService, ReviewsService>();
 builder.Services.AddScoped<ISizeService, SizeService>();
 builder.Services.AddScoped<IVoucherService, VoucherService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.Configure<MomoOptionModel>(builder.Configuration.GetSection("MomoAPI"));
+builder.Services.AddScoped<IMomoService, MomoService>();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {

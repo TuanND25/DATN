@@ -68,8 +68,8 @@ namespace DATN_Client.Areas.Admin.Components
 				imgTam.Id = Guid.NewGuid();
 				_idImg_Tam = imgTam.Id;
 				imgTam.Name = "";
-				imgTam.STT = _lstImg_Tam.Count == 0 
-							? _lstImg.Max(c => c.STT) + 1 
+				imgTam.STT = _lstImg_Tam.Count == 0
+							? _lstImg.Max(c => c.STT) + 1
 							: (_lstImg.Max(c => c.STT) > _lstImg_Tam.Max(c => c.STT)
 							? _lstImg.Max(c => c.STT) + 1
 							: _lstImg_Tam.Max(c => c.STT) + 1);
@@ -98,7 +98,7 @@ namespace DATN_Client.Areas.Admin.Components
 				// Gán lại giá trị cho Description của đối tượng bằng tên file ảnh đã đưuọc sao chép
 				imgTam.PathImage = _file.Name;
 				_pathImg = _file.Name;
-				if (!_lstImg_Tam_Sua.Any(c=>c.Id==imgTam.Id)) _lstImg_Tam_Sua.Add(imgTam);
+				if (!_lstImg_Tam_Sua.Any(c => c.Id == imgTam.Id)) _lstImg_Tam_Sua.Add(imgTam);
 			}
 		}
 		public async Task Add_PI()
@@ -140,7 +140,7 @@ namespace DATN_Client.Areas.Admin.Components
 				{
 					foreach (var x in _lstImg_Tam_Sua)
 					{
-						await _client.PutAsJsonAsync($"https://localhost:7141/api/Image/Put-Image",x);
+						await _client.PutAsJsonAsync($"https://localhost:7141/api/Image/Put-Image", x);
 					}
 				}
 				_navigation.NavigateTo("Admin/ProductItem", true);

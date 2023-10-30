@@ -7,7 +7,6 @@ namespace DATN_Client.Areas.Customer.Component
 	{
 		HttpClient _client = new HttpClient();
 		[Inject] NavigationManager _navigation { get; set; }
-		[Inject] Blazored.SessionStorage.ISessionStorageService _SessionStorageService { get; set; }
 		List<ProductItem_Show_VM> _lstPrI_show_VM = new List<ProductItem_Show_VM>();
 		List<Image_Join_ProductItem> _lstImg_PI = new List<Image_Join_ProductItem>();
 		List<Products_VM> _lstP = new List<Products_VM>();
