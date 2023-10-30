@@ -48,7 +48,7 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public async Task UpdateConfirmShipping()
         {
-            if (CheckNote ==null && CheckFee== null)
+            if (Phiship == null && Note == null)
             {
                 CheckFee = "Không được để trống số tiền";
                 CheckNote = "Không được bỏ trống ghi chú";
@@ -58,7 +58,7 @@ namespace DATN_Client.Areas.Admin.Components
                 Bill_VM b = await _client.GetFromJsonAsync<Bill_VM>($"https://localhost:7141/api/Bill/get_bill_by_id/{_billModel.Id}");
                 b.ShippingFee = Phiship;
                 b.Note = Note;
-                b.Status = 1;
+                b.Status = 2;
                 var status = await _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", b);
                 if (status.IsSuccessStatusCode)
                 {
@@ -66,20 +66,31 @@ namespace DATN_Client.Areas.Admin.Components
                 }
             }
         }
+        public async Task CancelOrder()
+        {
+            Bill_VM b = await _client.GetFromJsonAsync<Bill_VM>($"https://localhost:7141/api/Bill/get_bill_by_id/{_billModel.Id}");
+           
+            b.Status = 0;
+            var status = await _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", b);
+            if (status.IsSuccessStatusCode)
+            {
+                nav.NavigateTo("https://localhost:7075/Admin/BillManagement/Details", true);
+            }
+        }
         private void HandleInput(ChangeEventArgs e)
         {
             var Phiship1 = e.Value.ToString();
 
-            if (Phiship1 == null || Phiship1==string.Empty)
+            if (Phiship1 == null || Phiship1 == string.Empty)
             {
                 HideButton();
                 CheckFee = "Không được để trống số tiền";
             }
-            else if (Convert.ToInt32(Phiship1) <0)
+            else if (Convert.ToInt32(Phiship1) < 0)
             {
                 CheckFee = "Vui lòng nhập số lớn hơn 0";
             }
-            else if (Phiship1 !=  string.Empty)
+            else if (Phiship1 != string.Empty)
             {
                 CheckFee = null;
                 Phiship = Convert.ToInt32(Phiship1);
@@ -93,21 +104,21 @@ namespace DATN_Client.Areas.Admin.Components
             else
             {
                 displayButton = false;
-            }    
-            
+            }
+
             // Thực hiện các xử lý ngay khi giá trị thay đổi
         }
         private void CheckNoteNull(ChangeEventArgs e)
         {
             var Note = e.Value.ToString();
-            if (Note.Trim() == null|| Note.Trim() == string.Empty)
+            if (Note.Trim() == null || Note.Trim() == string.Empty)
             {
                 CheckNote = "Không được bỏ trống ghi chú";
             }
             else
             {
                 CheckNote = null;
-            }    
+            }
         }
         private void HideButton()
         {
@@ -121,10 +132,10 @@ namespace DATN_Client.Areas.Admin.Components
         {
             Phiship = Convert.ToInt32(Suggest_number_2);
         }
-        private string RoundToNearestPowerOfTen(int number,int chiso)
+        private string RoundToNearestPowerOfTen(int number, int chiso)
         {
             int roundedNumber = number * chiso;
-           var Suggest_number1 = roundedNumber.ToString();
+            var Suggest_number1 = roundedNumber.ToString();
             return Suggest_number1;
         }
         static string NumberToText(double inputNumber, bool suffix = true)
