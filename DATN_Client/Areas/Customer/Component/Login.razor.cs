@@ -10,7 +10,7 @@ namespace DATN_Client.Areas.Customer.Component
 {
 	public partial class Login
 	{
-		[Inject] Blazored.SessionStorage.ISessionStorageService _SessionStorageService { get; set; }
+		[Inject] Blazored.SessionStorage .ISessionStorageService _SessionStorageService { get; set; }
 		HttpClient _httpClient = new HttpClient();
 		public string Message { get; set; } = null;
 		HttpContext HttpContext { get; set; }
@@ -23,12 +23,9 @@ namespace DATN_Client.Areas.Customer.Component
 			var response = await _httpClient.PostAsJsonAsync<LoginUser>("https://localhost:7141/api/user/login/", loginUser);
 			if (response.IsSuccessStatusCode)
 			{
-
 				var token = await response.Content.ReadAsStringAsync();
-
 				var handler = new JwtSecurityTokenHandler();
 				var jwt = handler.ReadJwtToken(token);
-
 				// tạo đối tượng xác thực
 				var claims = new List<Claim>
 				{
