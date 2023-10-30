@@ -16,8 +16,8 @@ namespace DATN_Shared.Models
         public Guid? VoucherId { get; set; }
         public string BillCode { get; set; }
         public int? ShippingFee { get; set; }
-        public int TotalAmount { get; set; }
-        public int ReducedAmount { get; set; }
+        public int? TotalAmount { get; set; }
+        public int? ReducedAmount { get; set; }
         public int? Cash { get; set; }  // tiền mặt
         public int? CustomerPayment { get; set; } // tiền khách đưa
         public int? FinalAmount { get; set; } // tiền khách đưa
@@ -30,7 +30,7 @@ namespace DATN_Shared.Models
         public string District { get; set; }
         public string Province { get; set; }
         public string WardName { get; set; }
-        public string ToAddress { get; set; }
+        public string? ToAddress { get; set; }
         public string NumberPhone { get; set; }
         public int Status { get; set; }
 

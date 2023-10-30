@@ -19,7 +19,7 @@ namespace DATN_Client.Areas.Admin.Components
         NavigationManager nav { get; set; }
 
         Bill bil = new Bill();
-        public int _tongtien { get; set; }
+        public int? _tongtien { get; set; }
         public string texttongtien { get; set; }
         public int Phiship { get; set; }
         public string Note { get; set; }

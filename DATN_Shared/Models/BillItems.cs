@@ -12,7 +12,7 @@ namespace DATN_Shared.Models
         public Guid BillId { get; set; }
         public Guid ProductItemsId { get; set; }
         public int Quantity { get; set; }
-        public int Price { get; set; }
+        public int? Price { get; set; }
         public int Status { get; set; }
 
 
