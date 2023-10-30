@@ -17,7 +17,7 @@ namespace DATN_API.Controllers
         {
             _formulaService = formulaService;
         }
-        [HttpGet]
+        [HttpGet("get_formula")]
         public async Task<ActionResult<Formula>> GetAllFormula()
         {
             try
