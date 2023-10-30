@@ -65,10 +65,16 @@ namespace DATN_API.Data
 			builder.Entity<HistoryConsumerPoint>().HasOne(c => c.ConsumerPoints).WithMany(h => h.HistoryConsumerPoints).HasForeignKey(h => h.ConsumerPointId);
 			builder.Entity<ConsumerPoint>().HasOne(c => c.Users).WithOne(u => u.ConsumerPoint).HasForeignKey<ConsumerPoint>(u => u.UserID).OnDelete(DeleteBehavior.NoAction);
 
+
 			base.OnModelCreating(builder);
 			builder.Entity<User>().ToTable("AspNetUsers");
 			builder.Entity<Role>().ToTable("AspNetRoles");
 			CreateRoles(builder);
+
+
+
+
+			builder.Entity<Bill>().Property(x=>x.HistoryConsumerPointID).IsRequired(false);
 
 		}
 		protected void CreateRoles(ModelBuilder builder)

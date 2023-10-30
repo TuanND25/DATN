@@ -238,6 +238,41 @@
             <div class="card-body">
                 <h4 style="margin-top:20px">Product Item</h4>
                 <div class="pagetitle">
+                    <EditForm Model="_PM_S_VM">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <InputSelect class="form-select" @bind-Value="_PM_S_VM.CategoryName" @onclick="LocHangLoat">
+                                    <option value="0" selected>Thể loại</option>
+                                    @foreach (var x in _lstCate)
+                                    {
+                                        <option value="@x.Name">@x.Name</option>
+                                    }
+                                </InputSelect>
+                            </div>
+                            <div class="col-md-2">
+                                <InputSelect class="form-select" @bind-Value="_PM_S_VM.ColorName" @onclick="LocHangLoat">
+                                    <option value="0" selected>Màu sắc</option>
+                                    @foreach (var x in _lstC)
+                                    {
+                                        <option value="@x.Name">@x.Name</option>
+                                    }
+                                </InputSelect>
+                            </div>
+                            <div class="col-md-2">
+                                <InputSelect class="form-select" @bind-Value="_PM_S_VM.SizeName" @onclick="LocHangLoat">
+                                    <option value="0" selected>Kích thước</option>
+                                    @foreach (var x in _lstS)
+                                    {
+                                        <option value="@x.Name">@x.Name</option>
+                                    }
+                                </InputSelect>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary" @onclick="LocHangLoat">Lọc</button>
+                            </div>
+                        </div>
+
+                    </EditForm>
                 </div>
                 @if (_lstProductItem == null)
                 {
