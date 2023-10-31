@@ -20,15 +20,19 @@ namespace DATN_API.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpUser user)
         {
+            if (user == null)
+            {
+                return BadRequest("fail");
+            }
             var result =await _signUpServices.SignUpAsync(user);
             if (result.IsSuccess)
             {
-                return Ok(result);
+                return StatusCode(result.StatusCode,result.Message);
 
             }
             else
             {
-                return BadRequest(result);
+                return StatusCode(result.StatusCode,result.Message);
             }
         }
     }
