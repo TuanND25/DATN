@@ -16,7 +16,7 @@ namespace DATN_Client.Areas.Customer.Component
 		List<CartItems_VM> _lstCI = new List<CartItems_VM>();
 		List<Image_VM> _lstImg = new List<Image_VM>();
 		List<ProductItem_Show_VM> _lstPrI_show_VM = new List<ProductItem_Show_VM>();
-	    public static Bill_VM _bill_vm = new Bill_VM();
+	    public static Bill_VM _bill_vm;
 		User_VM _user_vm = new User_VM();
 		ProductItem_Show_VM _pi_s_vm = new ProductItem_Show_VM();
 		OrderInfoModel _ord = new OrderInfoModel();
@@ -25,6 +25,7 @@ namespace DATN_Client.Areas.Customer.Component
 		public int? _tongTienHang { get; set; } = 0;
 		protected override async Task OnInitializedAsync()
 		{
+			_bill_vm = new Bill_VM();
 			_bill_vm.UserId = Guid.Parse(await _SessionStorageService.GetItemAsStringAsync("session"));
 			_lstUser = await _httpClient.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
 			_user_vm = _lstUser.Where(c => c.Id == _bill_vm.UserId).FirstOrDefault();
@@ -33,7 +34,9 @@ namespace DATN_Client.Areas.Customer.Component
 			_lstPrI_show_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
 			_bill_vm.NumberPhone = _user_vm.PhoneNumber;
 			_bill_vm.PaymentMethodId = Guid.Parse("58431a43-d36b-4ab1-af0e-402238c87402");
-			_bill_vm.Note = string.Empty;
+			_bill_vm.Note = ShowCart._note;
+			_bill_vm.Recipient = string.Empty;
+			_bill_vm.ToAddress = string.Empty;
 			foreach (var x in _lstCI)
 			{
 				_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
@@ -76,6 +79,7 @@ namespace DATN_Client.Areas.Customer.Component
 			_bill_vm.WardName = "Đức Giang";
 			_bill_vm.Status = 1;
 			_bill_vm.HistoryConsumerPointID = Guid.Parse("F170DF48-4A56-48E8-9095-500CD4A562A3");
+			if (_bill_vm.Recipient == string.Empty) _bill_vm.Recipient = _user_vm.UserName;
 			// Order
 			_ord.OrderId = Guid.NewGuid().ToString();
 			_ord.FullName = _user_vm.UserName;
