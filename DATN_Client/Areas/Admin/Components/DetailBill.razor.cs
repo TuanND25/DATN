@@ -19,7 +19,7 @@ namespace DATN_Client.Areas.Admin.Components
         NavigationManager nav { get; set; }
 
         Bill bil = new Bill();
-        public int? _tongtien { get; set; }
+        public int? _tongtien { get; set; } = 0;
         public string texttongtien { get; set; }
         public int Phiship { get; set; }
         public string Note { get; set; }
@@ -69,7 +69,7 @@ namespace DATN_Client.Areas.Admin.Components
         public async Task CancelOrder()
         {
             Bill_VM b = await _client.GetFromJsonAsync<Bill_VM>($"https://localhost:7141/api/Bill/get_bill_by_id/{_billModel.Id}");
-           
+
             b.Status = 0;
             var status = await _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", b);
             if (status.IsSuccessStatusCode)

@@ -168,8 +168,9 @@
             <div style="display:flex">
                 <div style="margin-right:25px">
                     <div style="position:relative" class="relativeContent">
-                        <img src="/img/user.svg" class="imgUserHeader" />
-                        <div class="absoluteContent">
+                        
+                        <a asp-area="Customer" asp-controller="UserManagement" asp-action="Index"><img src="/img/user.svg" class="imgUserHeader" /></a>
+                   @*     <div class="absoluteContent">
                             <div class="contentUser">
                                 <label style="margin-right:10px;">Đăng xuất</label>
                                 <img src="/img/iconLogOut.svg" style="transform: rotate(3.142rad);" />
@@ -178,7 +179,7 @@
                                 <label style="margin-right:10px;">Hóa đơn</label>
                                 <img src="/img/iconBill.svg" />
                             </div>
-                        </div>
+                        </div>*@
                     </div>
                 </div>
                 <div style=" position: relative">
