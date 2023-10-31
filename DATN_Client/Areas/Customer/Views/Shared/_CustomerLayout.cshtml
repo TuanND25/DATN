@@ -7,6 +7,7 @@
     <title>@ViewData["Title"] - DATN_Client</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/ShowInfoUser.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DATN_Client.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" integrity="sha512-ZnR2wlLbSbr8/c9AgLg3jQPAattCUImNsae6NHYnS9KrIwRdcY9DxFotXhNAKIKbAXlRnujIqUWoXXwqyFOeIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -134,11 +135,11 @@
                     color: #000;
                     text-align: left;
                     padding: 10px;
-                    align-items:flex-start;
+                    align-items: flex-start;
                 }
 
     .absoluteContent {
-        display:none;
+        display: none;
         position: absolute;
         right: -10px;
         z-index: 98;
@@ -153,8 +154,8 @@
         padding: 10px 5px 10px 5px;
     }
 
-    .relativeContent:hover .absoluteContent{
-        display:block;
+    .relativeContent:hover .absoluteContent {
+        display: block;
     }
 </style>
 <body>
@@ -168,17 +169,17 @@
             <div style="display:flex">
                 <div style="margin-right:25px">
                     <div style="position:relative" class="relativeContent">
-                        
+
                         <a asp-area="Customer" asp-controller="UserManagement" asp-action="Index"><img src="/img/user.svg" class="imgUserHeader" /></a>
-                   @*     <div class="absoluteContent">
-                            <div class="contentUser">
-                                <label style="margin-right:10px;">Đăng xuất</label>
-                                <img src="/img/iconLogOut.svg" style="transform: rotate(3.142rad);" />
-                            </div>
-                            <div class="contentUser">
-                                <label style="margin-right:10px;">Hóa đơn</label>
-                                <img src="/img/iconBill.svg" />
-                            </div>
+                        @*     <div class="absoluteContent">
+                        <div class="contentUser">
+                        <label style="margin-right:10px;">Đăng xuất</label>
+                        <img src="/img/iconLogOut.svg" style="transform: rotate(3.142rad);" />
+                        </div>
+                        <div class="contentUser">
+                        <label style="margin-right:10px;">Hóa đơn</label>
+                        <img src="/img/iconBill.svg" />
+                        </div>
                         </div>*@
                     </div>
                 </div>

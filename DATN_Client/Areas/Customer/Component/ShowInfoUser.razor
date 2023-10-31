@@ -1,3 +1,228 @@
-﻿<div>
-    <h1>Xin chao</h1>
+﻿<style>
+    .OpenComponent {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 15px 10px 15px;
+        background-color: #fff;
+        border-radius: 8px;
+        align-items: center;
+        margin-bottom: 10px;
+        width: 100%;
+        border: 2px solid #BCBFBF;
+    }
+
+    .OpenComponent_child {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 15px 10px 15px;
+        background-color: #BCBFBF;
+        border-radius: 8px;
+        align-items: center;
+        margin-bottom: 10px;
+        width: 100%;
+        border: none;
+    }
+
+    .OpenComponent:hover {
+        background-color: #BCBFBF;
+    }
+</style>
+<div class="row">
+    <div class="col-3">
+        @foreach (var item in listDetail)
+        {
+            <button class="@((ChangeColorBtn == item.Id) ? "OpenComponent_child" : "OpenComponent")" @onclick="() => elActiveTab(item.Id)">
+                <div>
+                    <i class="@item.ImagePath" style="color: #000000;"></i>
+                    <label style="margin-left:5px;cursor:pointer">@item.Name</label>
+                </div>
+                <img src="/img/iconArrowRight.svg" />
+            </button>
+        }
+    </div>
+    <div class="col-9">
+        <div class="contentShowInfo">
+            @if (ChangeColorBtn == 1)
+            {
+                <div>
+                    <label style="font-size:31px;font-weight:500; margin-bottom:20px;">Thông tin tài khoản</label>
+                    <div class="nameUser" style="width:70%">
+                        <label style="width:55%">Họ và Tên</label>
+                        <label style="text-align:left" class="col-6">Để tên User vào đây</label>
+                    </div>
+                    <div class="nameUser" style="width:70%">
+                        <label style="width:55%">Số điện thoại</label>
+                        <label style="text-align:left" class="col-6">Để số vào đây</label>
+                    </div>
+                    <div class="nameUser" style="width:70%">
+                        <label style="width:55%">Giới tính</label>
+                        <label style="text-align:left" class="col-6">thẳng hay cong </label>
+                    </div>
+                    <div class="nameUser" style="width:70%">
+                        <label style="width:55%">Ngày sinh (ngày/tháng/năm)</label>
+                        <label style="text-align:left" class="col-6">1/5/20003</label>
+                    </div>
+                    <div class="nameUser" style="width:70%">
+                        <button class="btnUpdateInfo" data-bs-toggle="modal" data-bs-target="#popupUpdateUser">
+                            CẬP NHẬT
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <label style="font-size:31px;font-weight:500; margin-bottom:20px;">
+                        Thông tin đăng nhập
+                    </label>
+                    <div class="nameUser" style="width:70%">
+                        <label style="width:55%">Email</label>
+                        <label style="text-align:left" class="col-6">Để emmail vào đây</label>
+                    </div>
+                    <div class="nameUser" style="width:70%">
+                        <label style="width:55%">Mật khẩu</label>
+                        <label style="text-align:left" class="col-6">**********</label>
+                    </div>
+                    <div class="nameUser" style="width:70%">
+                        <button class="btnUpdateInfo" data-bs-toggle="modal" data-bs-target="#popupUpdatePassword">
+                            CẬP NHẬT
+                        </button>
+                    </div>
+                </div>
+            }
+            else if (ChangeColorBtn == 2)
+            {
+
+            }
+            else if (ChangeColorBtn == 3)
+            {
+                <div style="display:flex;justify-content:space-between">
+                    <label style="font-size:31px;font-weight:500; margin-bottom:20px;">Địa chỉ của tôi</label>
+                    <div>
+                        <button class="btnUpdateInfo">
+                            THÊM ĐỊA CHỈ MỚI
+                        </button>
+                    </div><link href="~/css/showinfouser.css" rel="stylesheet" />
+                </div>
+                <hr>
+                @foreach (var item in _lstAddressGetById)
+                {
+                    <div style="display:flex;justify-content:space-between">
+                        <div>
+                            <div style="display:flex;">
+                                <label style="color:#231f20;font-size:20px;font-weight:400">@item.Recipient</label>
+                                @if (item.Status == 1)
+                                {
+                                    <div class="showdefault">
+                                        Mặc định
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div>
+                                    </div>
+                                }
+                            </div>
+                            <br>
+                            <label style="color:#676969;font-size:14px">@item.NumberPhone</label><br>
+                            <label style="color:#676969;font-size:14px">@(item.WardName + item.District + item.Province)</label><br>
+                        </div>
+                        <div style="display:flex;flex-direction:column;justify-content:space-between">
+                            <div style="margin-left:auto;color:#469DF5">
+                                <a style="cursor:pointer">Cập nhật</a> | <a style="cursor:pointer">Xóa</a>
+                            </div>
+                            <button class="btnUpdateĐefault">
+                                Đặt làm mặc định
+                            </button>
+                        </div>
+                    </div>
+                    <hr />
+                }
+            }
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="popupUpdateUser" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="width:150%">
+        <div class="modal-content">
+            <div class="modal-body">
+                <label style="font-size:22px;font-weight:600;padding:15px 50px 15px 15px">Chỉnh sửa thông tin tài khoản</label>
+                <div style=" display: flex;flex-direction:column;">
+                    <div class="inputName">
+                        <i class="fa-solid fa-user-pen fa-l" style="color: #a1a1a1"></i>
+                        <div style="display:flex;flex-direction:column;margin-left:10px;width:90%">
+                            <input type="text" class="form_field" name="name" id='name' required placeholder="Tên của bạn" />
+                        </div>
+                    </div>
+                    <div style="display:flex;width:100%;align-items:center;margin-bottom:20px;">
+                        <div style="display:flex;flex-direction:column; width:40%;margin-right:20px;">
+                            <label style="font-size:14px">Ngày sinh</label>
+                            <input type="date" required="required" class="inputDate">
+                        </div>
+                        <div style="display:flex;flex-direction:column;justify-content:space-between">
+                            <label style="font-size:15px">Giới tính</label>
+                            <div style="display:flex">
+                                <div class="form-check" style="margin-right:20px;">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Nam
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Nữ
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="inputName">
+                    <i class="fa-solid fa-phone fa-l" style="color: #a1a1a1"></i>
+                    <div style="display:flex;flex-direction:column;margin-left:10px;width:90%">
+                        <input type="number" class="form_field" name="name" id='name' required placeholder="Số điện thoại" />
+                    </div>
+                </div>
+                <button class="btnSuccesUpDateInfo">
+                    CẬP NHẬT TÀI KHOẢN
+                    <i class="fa-sharp fa-solid fa-arrow-right-long" style="margin-left:20px;"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="popupUpdatePassword" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="width:150%">
+        <div class="modal-content">
+            <div class="modal-body">
+                <label style="font-size:22px;font-weight:600;padding:15px 50px 15px 15px">Thay đổi mật khẩu</label>
+                <div class="inputName">
+                    <i class="fa-solid fa-lock"></i>
+                    <div style="display:flex;flex-direction:column;margin-left:10px;width:90%">
+                        <input type="@TypeInput_Pass" class="form_field" name="name" id='name' required placeholder="Mật khẩu cũ" />
+                    </div>
+                    <i class="@Icon_Pass" @onclick=ShowPass></i>
+                </div>
+                <div class="inputName">
+                    <i class="fa-solid fa-lock"></i>
+                    <div style="display:flex;flex-direction:column;margin-left:10px;width:90%">
+                        <input type="@TypeInput_New" class="form_field" name="name" id='name' required placeholder="Mật khẩu mới" />
+                    </div>
+                    <i class="@Icon_New" @onclick=ShowNewPass></i>
+                </div>
+                <div class="inputName">
+                    <i class="fa-solid fa-lock"></i>
+                    <div style="display:flex;flex-direction:column;margin-left:10px;width:90%">
+                        <input type="@TypeInput_CheckNew" class="form_field" name="name" id='name' required placeholder="Nhập lại mật khẩu mới" />
+                    </div>
+                    <i class="@Icon_CheckNew" @onclick=ShowCheckNewPass></i>
+                </div>
+                <button class="btnSuccesUpDateInfo">
+                    CẬP NHẬT TÀI KHOẢN
+                    <i class="fa-sharp fa-solid fa-arrow-right-long" style="margin-left:20px;"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>

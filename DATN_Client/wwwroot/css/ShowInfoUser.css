@@ -1,0 +1,154 @@
+﻿
+.contentShowInfo{
+    background-color:#fff;
+    padding:30px 30px;
+    border-radius:20px;
+}
+.nameUser {
+    display: flex;
+    align-items: center;    
+    font-size: 18px;
+    color: #848585;
+    margin-bottom:20px;
+}
+.btnUpdateInfo {
+    padding: 10px 30px 10px 30px;
+    border: 1px solid #000;
+    background-color: #fff;
+    border-radius:30px;
+    font-weight:500;
+}
+    .btnUpdateInfo:hover {
+        border: 1px solid #BCBFBF;
+        background-color: #BCBFBF;
+        color:#fff
+    }
+.btnUpdateĐefault {
+    padding: 5px 10px 5px 10px;
+    border: 1px solid #000;
+    background-color: #fff;
+    border-radius: 30px;
+    font-weight: 500;
+    font-size:14px;
+}
+    .btnUpdateĐefault:hover {
+        border: 1px solid #BCBFBF;
+        background-color: #BCBFBF;
+        color: #fff
+    }
+.showdefault{
+    padding:3px 5px 3px 5px;
+    text-align:center;
+    display:flex;
+    align-items:center;
+    border:1px solid #000;
+    border-radius:15px;
+    width:fit-content;
+    font-size:12px;
+    margin-left:10px;
+
+}
+@media screen and (min-width: 676px) {
+    .modal-dialog {
+        max-width: 600px; /* New width for default modal */
+        border-radius:30px;
+    }
+}
+.inputName {
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    border: 1px solid #929394;
+    border-radius:35px;
+    padding-left:25px;
+    padding-top:3px;
+    padding-bottom:3px;
+    margin-bottom:15px;
+}
+
+.form_group {
+    position: relative;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.form_field {
+    
+    font-family: inherit;
+    width: 100%;
+    border: 0;
+    /*border: 2px solid #000;*/
+    outline: 0;
+    font-size: 14px;   
+    padding: 7px 0;
+    background: transparent;
+    transition: border-color 0.2s;
+}
+
+
+
+input[type="date"]::-webkit-clear-button {
+    display: none;
+}
+
+/* Removes the spin button */
+input[type="date"]::-webkit-inner-spin-button {
+    display: none;
+}
+
+/* Always display the drop down caret */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: #2c3e50;
+}
+
+/* A few custom styles for date inputs */
+input[type="date"] {
+    appearance: none;
+    -webkit-appearance: none;
+    color: #95a5a6;
+    font-family: "Helvetica", arial, sans-serif;
+    font-size: 18px;
+    border: 1px solid #ecf0f1;
+    background: #ecf0f1;
+    padding: 5px;
+    display: inline-block !important;
+    visibility: visible !important;
+}
+
+input[type="date"], focus {
+    color: #95a5a6;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+}
+.inputDate {
+    border-radius: 15px;
+    width: 100%;
+    background-color: #fff;
+}
+.btnSuccesUpDateInfo {
+    width: 100%;
+    margin-top: 40px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding: 10px 0 10px 0;
+    border: none;
+    border-radius: 25px;
+    background-color: #242424;
+    color:#fff;
+}
+    .btnSuccesUpDateInfo:hover {
+        background-color: #5F6262;
+        color: #fff;
+    }
+
+
+    
+
+
+
+
+
+
