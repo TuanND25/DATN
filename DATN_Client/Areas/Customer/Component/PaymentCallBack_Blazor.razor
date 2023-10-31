@@ -1,11 +1,20 @@
 ﻿<div class="text-center">
-    <h1 class="display-4">Thanh toán Momo với .NET Core, C#</h1>
-
-    <div class="container">
-        <h1 class="text-success">Thanh Toán Thành Công</h1>
-        <p>Order ID: <strong>@_responseModel.OrderId</strong></p>
-        <p>Amount: <strong>@_responseModel.Amount</strong></p>
-        <p>Order Info: <strong>@_responseModel.OrderInfo</strong></p>
-    </div>
+    <h1 class="display-4">Thanh toán Momo</h1>
+   
+    @if (_responseModel.Message.ToLower() == "success")
+    {
+        <div class="container">
+            <h1 class="text-success">Thanh Toán Thành Công</h1>
+            <p>Order ID: <strong>@_responseModel.OrderId</strong></p>
+            <p>Amount: <strong>@(int.Parse(_responseModel.Amount).ToString("#,##0")) đ</strong></p>
+            <p>Order Info: <strong>@_responseModel.OrderInfo</strong></p>
+        </div>
+    }
+    else
+    {
+        <div class="container">
+            <h1 class="text-danger">Thanh Toán Thất Bại</h1>
+        </div>
+    }
 </div>
 @* <button @onclick="CLDATA">CLDATA</button> *@
