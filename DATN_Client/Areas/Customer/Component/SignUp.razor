@@ -1,36 +1,67 @@
 ﻿<h3>SignUp</h3>
 
 <EditForm Model="signUp">
-
+	<DataAnnotationsValidator />
 	<div class="form">
 		<label>Username:</label>
 		<InputText type="text" class="form-control" @bind-Value="signUp.UserName" />
+		<ValidationMessage For="()=>signUp.UserName" style="color:red;" />
 	</div>
 	<div class="form">
 		<label>Password:</label>
 		<InputText type="password" class="form-control" @bind-Value="signUp.Password" />
+		<ValidationMessage For="()=>signUp.Password" style="color:red;" />
 	</div>
 	<div class="form">
 		<label>ConfirmPassword</label>
 		<InputText type="password" class="form-control" @bind-Value="signUp.ConfirmPassword" />
+		<ValidationMessage For="()=>signUp.ConfirmPassword"style="color:red;" />
 	</div>
 	<div class="form">
 		<label>PhoneNumber:</label>
-		<InputText type="text" class="form-control" @bind-Value="signUp.PhoneNumber" />
+		<InputText type="number" class="form-control" @bind-Value="signUp.PhoneNumber" />
+		<ValidationMessage For="()=>signUp.PhoneNumber"style="color:red;" />
 	</div>
 	<div class="form">
 		<label>Email:</label>
 		<InputText type="email" class="form-control" @bind-Value="signUp.Email" />
+		<ValidationMessage For="()=>signUp.Email" style="color:red;" />
 	</div>
 	<div class="form">
 		<label>Name:</label>
 		<InputText type="text" class="form-control" @bind-Value="signUp.Name" />
+		<ValidationMessage For="()=>signUp.Name" style="color:red;" />
 	</div>
-<label>Sex</label>
+	<label>Sex</label>
 	<InputSelect class="form-select" @bind-Value="@signUp.Sex">
 		<option value="true" selected>--Chọn--</option>
 		<option value="true">Nam</option>
-		<option value="false">Nữ</option>	
+		<option value="false">Nữ</option>
 	</InputSelect>
-	<button type="submit" class="btn btn-primary" @onclick="SignUpUser">Sign Up</button>
+	<ValidationMessage For="()=>signUp.Sex" style="color:red;"/>
+	<button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal" @onclick="SignUpUser">Sign Up</button>
+
 </EditForm>
+
+
+
+<!-- Basic Modal -->
+
+
+<div class="modal fade" id="basicModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Thông báo</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				@Message
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+
+			</div>
+		</div>
+	</div>
+</div><!-- End Basic Modal-->

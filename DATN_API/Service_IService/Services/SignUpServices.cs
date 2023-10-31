@@ -25,7 +25,7 @@ namespace DATN_API.Service_IService.Services
                 return new Response
                 {
                     IsSuccess = false,
-                    StatusCode = 400,
+                    StatusCode = 403,
                     Message = "Email da ton tai"
 
                 };
@@ -35,7 +35,7 @@ namespace DATN_API.Service_IService.Services
                 return new Response
                 {
                     IsSuccess = false,
-                    StatusCode = 400,
+                    StatusCode = 403,
                     Message = "UserName da ton tai"
 
                 };
@@ -45,7 +45,7 @@ namespace DATN_API.Service_IService.Services
                 return new Response
                 {
                     IsSuccess = false,
-                    StatusCode = 400,
+                    StatusCode = 403,
                     Message = "xac nhan mat khau sai"
 
                 };
@@ -70,7 +70,7 @@ namespace DATN_API.Service_IService.Services
                     return new Response
                     {
                         IsSuccess = false,
-                        StatusCode = 500,
+                        StatusCode = 403,
                         Message = "mat khau khong du dai"
 
                     };
