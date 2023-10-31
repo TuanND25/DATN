@@ -3,7 +3,7 @@
 namespace DATN_Client.Areas.Customer.Controllers
 {
     [Area("Customer")]
-    public class ShowInfoUser : Controller
+    public class UserManagementController : Controller
     {
         public IActionResult Index()
         {
