@@ -47,6 +47,7 @@ namespace DATN_Client.Areas.Customer.Controllers
 				//var id = data[0];
 				await HttpContext.SignInAsync(principal);
                 HttpContext.Session.SetString("UserId", jwt.Claims.FirstOrDefault(u => u.Type == "Id").Value);
+                HttpContext.Session.SetString("Token", token);
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 				var responseAuthorize = await _httpClient.GetAsync("https://localhost:7141/api/user/get-user");
 				if (principal.IsInRole("Admin"))
