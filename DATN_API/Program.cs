@@ -52,6 +52,7 @@ builder.Services.AddTransient<IPromotionServices, PromotionServices>();
 builder.Services.AddTransient<IPromotionItemServices, PromotionItemServices>();
 builder.Services.AddTransient<IReviewsService, ReviewsService>();
 builder.Services.AddScoped<ISizeService, SizeService>();
+builder.Services.AddScoped<IPaymentMethodServices, PaymentMethodServices>();
 builder.Services.AddScoped<IVoucherService, VoucherService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.Configure<MomoOptionModel>(builder.Configuration.GetSection("MomoAPI"));
