@@ -74,18 +74,30 @@
                 </div>
                 <div class="row" style="margin-top:15px">
                     <div class="col-4">
-                        <InputSelect class="form-select" @bind-Value="@_bill_vm.Province">
-                            <option value="Hà Nội" selected>--Tỉnh/Thành phố--</option>
+                        <InputSelect class="form-select" @bind-Value="@_bill_vm.Province" @onclick="ChonTinhTP">
+                            <option value="@string.Empty" selected>--Tỉnh/Thành phố--</option>
+                            @foreach(var x in _lstTinhTp)
+                            {
+                                <option value="@x.Name">@x.Name</option>
+                            }
                         </InputSelect>
                     </div>
                     <div class="col-4">
-                        <InputSelect class="form-select" @bind-Value="@_bill_vm.District">
-                            <option value="Hoài Đức" selected>--Quận/Huyện/Thị xã--</option>
+                        <InputSelect class="form-select" @bind-Value="@_bill_vm.District" @onclick="@ChonQuanHuyen">
+                            <option value="@string.Empty" selected>--Quận/Huyện/Thị xã--</option>
+                            @foreach (var x in _lstQuanHuyen)
+                            {
+                                <option value="@x.Name">@x.Name</option>
+                            }
                         </InputSelect>
                     </div>
                     <div class="col-4">
                         <InputSelect class="form-select" @bind-Value="@_bill_vm.WardName">
-                            <option value="Đức Giang" selected>--Phường/Xã--</option>
+                            <option value="@string.Empty" selected>--Phường/Xã--</option>
+                            @foreach (var x in _lstXaPhuong)
+                            {
+                                <option value="@x.Name">@x.Name</option>
+                            }
                         </InputSelect>
                     </div>
 
@@ -95,30 +107,34 @@
                 </div>
                 <div class="paymentMethods" style="margin-top:15px">
                     <InputRadioGroup @bind-Value="_bill_vm.PaymentMethodId" class="form-control">
-                        <InputRadio Value="@Guid.Parse("7485dc76-780a-4008-9ddf-f583ab97a30d")" />
-                        <span>Thanh toán khi nhận hàng (COD)</span>
-                        <br />
-                        @if (_bill_vm.PaymentMethodId == @Guid.Parse("7485dc76-780a-4008-9ddf-f583ab97a30d"))
+                        @foreach (var a in _lstPayM)
                         {
-                            <div>
-                                <p class="titleCOD">
-                                    1. Khi click vào nút hoàn tất đơn hàng thì đơn hàng sẽ được hệ thống tự động xác nhận mà không cần phải gọi qua điện thoại, nếu điền thông tin địa chỉ và số điện thoại chính xác thì đơn hàng sẽ được vận chuyển từ 3-4-5 ngày tùy vùng miền.
-                                    2. Trường hợp đặt hàng xong nhưng muốn HỦY ĐƠN, vui lòng soạn tin nhắn theo cú pháp: SĐT ĐÃ ĐẶT ĐƠN (hoặc MÃ ĐƠN hoặc GMAIL ĐƠN HÀNG) + TÊN NGƯỜI NHẬN sau đó gửi qua các kênh online: Page Facebook, Intagram. Nhân viên check tin nhắn sẽ xử lý hủy giúp Quý KH.
-                                </p>
-                            </div>
+                            <InputRadio Value="@a.Id" />
+                            <span>@a.Name</span>
+                            <br />
+                            @if (_bill_vm.PaymentMethodId == Guid.Parse("7485dc76-780a-4008-9ddf-f583ab97a30d") && a.Id == Guid.Parse("7485dc76-780a-4008-9ddf-f583ab97a30d"))
+                            {
+                                <div>
+                                    <p class="titleCOD">
+                                        1. Khi click vào nút <b>Hoàn tất đơn hàng</b> thì đơn hàng sẽ được hệ thống tự động xác nhận mà không cần phải gọi qua điện thoại, nếu điền thông tin địa chỉ và số điện thoại chính xác thì đơn hàng sẽ được vận chuyển từ 3-4-5 ngày tùy vùng miền.<br>
+                                        2. Trường hợp đặt hàng xong nhưng muốn HỦY ĐƠN, vui lòng soạn tin nhắn theo cú pháp: SĐT ĐÃ ĐẶT ĐƠN (hoặc MÃ ĐƠN hoặc GMAIL ĐƠN HÀNG) + TÊN NGƯỜI NHẬN sau đó gửi qua các kênh online: Page Facebook, Intagram. Nhân viên check tin nhắn sẽ xử lý hủy giúp Quý KH.
+                                    </p>
+                                </div>
+                            }
+                            @if (_bill_vm.PaymentMethodId == Guid.Parse("58431A43-D36B-4AB1-AF0E-402238C87402") && a.Id ==Guid.Parse("58431A43-D36B-4AB1-AF0E-402238C87402"))
+                            {
+                                <div>
+                                    <p class="titleCOD">
+                                        Sau khi bấm nút <b>Hoàn tất đơn hàng</b> bạn sẽ được chuyển hướng đến trang thanh toán của Momo. Vui lòng thanh toán để hoàn tất đơn hàng
+                                    </p>
+                                </div>
+                            }
                         }
-                        else
-                        {
-                            <div>
-                            </div>
-                        }
-                        <InputRadio Value="@Guid.Parse("58431a43-d36b-4ab1-af0e-402238c87402")" />
-                        <span>Momo</span>
                     </InputRadioGroup>
                 </div>
                 <div style="display:flex;justify-content:space-between;align-items:center">
                     <div>
-                        <a style="color:#7dccff;cursor:pointer;" @onclick="ReturnCart">Giỏ hàng</a>
+                        <a style="color:#7dccff;cursor:pointer;" @onclick="BackToCart">Giỏ hàng</a>
                     </div>
                     <button class="btnSuccesBill" @onclick="Btn_DatHang">
                         Hoàn tất đơn hàng

@@ -12,7 +12,7 @@ namespace DATN_API.Controllers
     public class PaymentMethodController : ControllerBase
     {
         private readonly IPaymentMethodServices _PaymentMethodService;
-        public PaymentMethodController(PaymentMethodServices PaymentMethodService)
+        public PaymentMethodController(IPaymentMethodServices PaymentMethodService)
         {
             _PaymentMethodService = PaymentMethodService;
         }

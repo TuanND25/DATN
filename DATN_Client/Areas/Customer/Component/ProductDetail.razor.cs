@@ -1,5 +1,4 @@
-﻿using Blazored.SessionStorage;
-using DATN_Client.Areas.Customer.Controllers;
+﻿using DATN_Client.Areas.Customer.Controllers;
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Components;
 
@@ -7,18 +6,18 @@ namespace DATN_Client.Areas.Customer.Component
 {
     public partial class ProductDetail
     {
-        HttpClient _client = new HttpClient();
-        [Inject] NavigationManager _navigation { get; set; }
-        [Inject] Blazored.SessionStorage.ISessionStorageService _SessionStorageService { get; set; }
-        List<ProductItem_Show_VM> _lstPrI_show_VM = new List<ProductItem_Show_VM>();
-        List<Image_Join_ProductItem> _lstImg_PI = new List<Image_Join_ProductItem>();
-        List<Image_Join_ProductItem> _lstImg_PI_tam = new List<Image_Join_ProductItem>();
-        List<Products_VM> _lstP = new List<Products_VM>();
-        List<CartItems_VM> _lstCI = new List<CartItems_VM>();
-        List<string> _lstColor = new List<string>();
-        List<string> _lstSize = new List<string>();
-        ProductItem_Show_VM _pi_S_VM = new ProductItem_Show_VM();
-        User_VM _user = new User_VM();
+        private HttpClient _client = new HttpClient();
+        [Inject] private NavigationManager _navigation { get; set; }
+        [Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
+        private List<ProductItem_Show_VM> _lstPrI_show_VM = new List<ProductItem_Show_VM>();
+        private List<Image_Join_ProductItem> _lstImg_PI = new List<Image_Join_ProductItem>();
+        private List<Image_Join_ProductItem> _lstImg_PI_tam = new List<Image_Join_ProductItem>();
+        private List<Products_VM> _lstP = new List<Products_VM>();
+        private List<CartItems_VM> _lstCI = new List<CartItems_VM>();
+        private List<string> _lstColor = new List<string>();
+        private List<string> _lstSize = new List<string>();
+        private ProductItem_Show_VM _pi_S_VM = new ProductItem_Show_VM();
+        private User_VM _user = new User_VM();
         public string _path_Tam { get; set; }
         public string _nameP { get; set; }
         public string _nameCate { get; set; }
@@ -29,9 +28,10 @@ namespace DATN_Client.Areas.Customer.Component
         public string _chonMau { get; set; }
         public string _chonSize { get; set; }
         public string? _iduser { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
-            _iduser = await _SessionStorageService.GetItemAsStringAsync("session");
+            _iduser = (_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
             _lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
             _lstPrI_show_VM = (await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show")).Where(c => c.ProductId == BanOnlineController._idP).ToList();
             _lstImg_PI = (await _client.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem")).Where(c => c.ProductId == BanOnlineController._idP).ToList();
@@ -45,21 +45,25 @@ namespace DATN_Client.Areas.Customer.Component
             _lstColor = _lstPrI_show_VM.Select(c => c.ColorName).Distinct().ToList();
             _lstSize = _lstPrI_show_VM.Select(c => c.SizeName).Distinct().ToList();
         }
+
         public async Task LoadAnh(Guid ID)
         {
             _path_Tam = _lstImg_PI.FirstOrDefault(c => c.Id == ID).PathImage;
         }
+
         public async Task SL_Cong()
         {
             if (_soLuong == 99) return;
             _soLuong += 1;
         }
+
         public async Task SL_Tru()
         {
             if (_soLuong == 1) return;
 
             _soLuong -= 1;
         }
+
         public async Task ChonMau(string mau)
         {
             _chonMau = mau;
@@ -76,12 +80,14 @@ namespace DATN_Client.Areas.Customer.Component
             _chonSize = string.Empty;
             _lstSize = lst_chonmau.Select(c => c.SizeName).Distinct().ToList();
         }
+
         public async Task ChonSize(string size)
         {
             _chonSize = size;
             _pi_S_VM = _lstPrI_show_VM.Where(c => c.ColorName == _chonMau && c.SizeName == _chonSize).FirstOrDefault();
             _gia = _pi_S_VM.CostPrice?.ToString("#,##0") + "đ";
         }
+
         public async Task ThemVaoGiohang()
         {
             _lstCI = await _client.GetFromJsonAsync<List<CartItems_VM>>($"https://localhost:7141/api/CartItems/{_iduser}");
