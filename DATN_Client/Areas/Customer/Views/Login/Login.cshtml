@@ -1,0 +1,17 @@
+﻿@model DATN_Shared.ViewModel.LoginUser
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
+}
+<form asp-action="Login" method="post">
+    <div class="form">
+        <label>Username:</label>
+        <input type="text" class="form-control" asp-for="UserName" name="UserName" />
+    </div>
+    <div class="form">
+        <label>Password:</label>
+        <input type="password" class="form-control" asp-for="Password" name="Password" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>

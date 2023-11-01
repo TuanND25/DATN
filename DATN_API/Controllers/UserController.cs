@@ -24,9 +24,7 @@ namespace DATN_API.Controllers
 			_userManager = userManager;
 		}
 
-    
-
-
+        [Authorize]         
 		[Route("get-user")]	
 		[HttpGet]
         public async Task<IActionResult> GetUser()

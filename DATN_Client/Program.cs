@@ -18,6 +18,7 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromSeconds(1000); 
 });
 builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
               .AddCookie(options =>
               {
@@ -57,7 +58,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
 
 
@@ -76,9 +77,10 @@ app.UseEndpoints(endpoints =>
 
 
 });
-app.UseSession();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapBlazorHub();
+
 app.Run();
