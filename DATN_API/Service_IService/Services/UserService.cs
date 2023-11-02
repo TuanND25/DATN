@@ -188,5 +188,11 @@ namespace DATN_API.Service_IService.Services
                 };
             }
         }
+
+        public async Task<User> GetUserById(Guid Id)
+        {
+            var a= await _context.Users.FindAsync(Id);
+			return a;
+        }
     }
 }
