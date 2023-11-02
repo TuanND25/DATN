@@ -112,7 +112,7 @@
                             <InputRadio Value="@a.Id" />
                             <span>@a.Name</span>
                             <br />
-                            @if (_bill_vm.PaymentMethodId == Guid.Parse("7485dc76-780a-4008-9ddf-f583ab97a30d") && a.Id == Guid.Parse("7485dc76-780a-4008-9ddf-f583ab97a30d"))
+                            @if (a.Name == "Thanh toán khi nhận hàng (COD)" && _lstPayM.Where(c => c.Id == _bill_vm.PaymentMethodId).FirstOrDefault().Name == "Thanh toán khi nhận hàng (COD)")
                             {
                                 <div>
                                     <p class="titleCOD">
@@ -121,7 +121,7 @@
                                     </p>
                                 </div>
                             }
-                            @if (_bill_vm.PaymentMethodId == Guid.Parse("58431A43-D36B-4AB1-AF0E-402238C87402") && a.Id ==Guid.Parse("58431A43-D36B-4AB1-AF0E-402238C87402"))
+                            @if (a.Name == "Thanh toán Momo" && _lstPayM.Where(c => c.Id == _bill_vm.PaymentMethodId).FirstOrDefault().Name == "Thanh toán Momo")
                             {
                                 <div>
                                     <p class="titleCOD">

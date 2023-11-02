@@ -33,7 +33,8 @@ namespace DATN_Client.Areas.Customer.Component
         public string _TinhTp { get; set; }
         public string _QuanHuyen { get; set; }
         public string _XaPhuong { get; set; }
-
+        public string _ptttbill1 { get; set; }
+        public string _ptttbill2 { get; set; }
         protected override async Task OnInitializedAsync()
         {
             var token = _ihttpcontextaccessor.HttpContext.Session.GetString("Token"); // Gọi token
