@@ -1,4 +1,12 @@
-﻿<div class="text-center">
+﻿@using Blazored.Toast.Configuration
+<BlazoredToasts Position="ToastPosition.BottomRight"
+                Timeout="10"
+                IconType="IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fa-solid fa-check"
+                ErrorIcon="fa-solid fa-triangle-exclamation" />
+
+<div class="text-center">
     <h1 class="display-4">Thanh toán Momo</h1>
    
     @if (_responseModel.Message.ToLower() == "success")

@@ -1,6 +1,7 @@
 ﻿using DATN_Client.Areas.Customer.Controllers;
 using DATN_Shared.ViewModel;
 using DATN_Shared.ViewModel.Momo;
+using Microsoft.AspNetCore.Components;
 
 namespace DATN_Client.Areas.Customer.Component
 {
@@ -15,8 +16,8 @@ namespace DATN_Client.Areas.Customer.Component
 
         private ProductItem_Show_VM _pi_s_vm = new ProductItem_Show_VM();
         private ProductItem_VM _pi_vm = new ProductItem_VM();
-
-        protected override async Task OnInitializedAsync()
+		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
+		protected override async Task OnInitializedAsync()
         {
             _responseModel = BanOnlineController._momoExecuteResponseModel;
             _lstPrI_show_VM = await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
@@ -44,6 +45,7 @@ namespace DATN_Client.Areas.Customer.Component
                     var b = await _client.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", _pi_vm);
                     var c = await _client.DeleteAsync($"https://localhost:7141/api/CartItems/delete-CartItems/{x.Id}");
                 }
+                _toastService.ShowSuccess("Đơn hàng đã được tạo thành công, để theo dõi đơn hàng hãy vào mục Lịch sử đơn hàng");
             }
         }
     }

@@ -28,8 +28,9 @@ namespace DATN_Client.Areas.Customer.Component
         public string _chonMau { get; set; }
         public string _chonSize { get; set; }
         public string? _iduser { get; set; }
+		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
 
-        protected override async Task OnInitializedAsync()
+		protected override async Task OnInitializedAsync()
         {
             _iduser = (_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
             _lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
@@ -97,7 +98,8 @@ namespace DATN_Client.Areas.Customer.Component
                 CartItems_VM ci = _lstCI.FirstOrDefault(c => c.ProductItemId == _pi_S_VM.Id);
                 ci.Quantity += _soLuong;
                 var request1 = await _client.PutAsJsonAsync("https://localhost:7141/api/CartItems/update-CartItems", ci);
-                return;
+				if (request1.IsSuccessStatusCode) _toastService.ShowSuccess("Sản phẩm đã được thêm vào giỏ hàng của bạn");
+				return;
             }
             CartItems_VM cartItems = new CartItems_VM();
             cartItems.Id = Guid.NewGuid();
@@ -106,6 +108,7 @@ namespace DATN_Client.Areas.Customer.Component
             cartItems.Quantity = _soLuong;
             cartItems.Status = 1;
             var request2 = await _client.PostAsJsonAsync("https://localhost:7141/api/CartItems/add-CartItems", cartItems);
+            if (request2.IsSuccessStatusCode) _toastService.ShowSuccess("Sản phẩm đã được thêm vào giỏ hàng của bạn");
         }
     }
 }

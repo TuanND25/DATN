@@ -1,4 +1,11 @@
-﻿<style>
+﻿@using Blazored.Toast.Configuration
+<BlazoredToasts Position="ToastPosition.BottomRight"
+				Timeout="10"
+				IconType="IconType.FontAwesome"
+				SuccessClass="success-toast-override"
+				SuccessIcon="fa-solid fa-check"
+				ErrorIcon="fa-solid fa-triangle-exclamation" />
+<style>
     .paymentMethods {
         border: 1px solid #A09F9E;
         padding: 20px 30px 20px 30px;
@@ -172,7 +179,7 @@
         }
         <div class="countPrice">
             <label>Tạm tính </label>
-            <label>@(_tongTienHang?.ToString("#,##0")) đ</label>         
+            <label>@(_tongTienHang?.ToString("#,##0")) đ</label>
         </div>
         <div><h4>Tổng cộng @(_tongTienHang?.ToString("#,##0")) đ</h4> </div>       
     </div>
