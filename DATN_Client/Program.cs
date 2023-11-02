@@ -2,6 +2,7 @@ using DATN_Client.Areas.Admin.Controllers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Blazored.SessionStorage;
 using DATN_Client.Areas.Customer.Controllers;
+using Blazored.Toast;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,7 @@ builder.Services.AddAuthentication()
         //googleOptions.CallbackPath = "/dang-nhap-tu-google";
 
     });
+builder.Services.AddBlazoredToast();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
