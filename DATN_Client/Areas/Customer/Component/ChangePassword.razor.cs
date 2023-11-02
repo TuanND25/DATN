@@ -7,11 +7,13 @@ namespace DATN_Client.Areas.Customer.Component
     public partial class ChangePassword
     {
         [Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
-        HttpClient _httpClient  = new HttpClient(); 
+        HttpClient _httpClient  = new HttpClient();
+        [Inject] NavigationManager NavigationManager { get; set; }
+
         public ChangePassword_VM changePassword = new ChangePassword_VM();
         public string Message { get; set; } = string.Empty;
     
-        [Inject] NavigationManager NavigationManager { get; set; }
+
         public async Task ChangePasswordMethor()
         {
             changePassword.UserId = Guid.Parse( _ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));

@@ -34,6 +34,12 @@ namespace DATN_API.Controllers
             return Ok(users);
         }
 
+        [HttpGet("get_user_by_id/{Id}")]
+        public async Task<IActionResult> GetUser(Guid Id)
+        {
+            var a = await _userService.GetUserById(Id);
+            return Ok(a);
+        }
 
 
         [Route("update-status-user")]

@@ -33,7 +33,7 @@ namespace DATN_API.Controllers
         }
 
         // GET api/<AddressShipController>/5
-        [HttpGet("UserId")]
+        [HttpGet("get_address_by_UserID/{UserId}")]
         public async Task<ActionResult<AddressShip>> GetAddressShipByUserId(Guid UserId)
         {
             try
@@ -47,7 +47,7 @@ namespace DATN_API.Controllers
 
             }
         }
-        [HttpGet("Id")]
+        [HttpGet("get_address_by_id/{Id}")]
         public async Task<ActionResult<AddressShip>> GetAddressShipById(Guid Id)
         {
             try
@@ -112,7 +112,7 @@ namespace DATN_API.Controllers
             }
         }
 
-        [HttpDelete("Delete-Address")]
+        [HttpDelete("Delete-Address/{Id}")]
         public async Task<ActionResult<AddressShip>> DeleteAddressShip(Guid Id)
         {
             try
