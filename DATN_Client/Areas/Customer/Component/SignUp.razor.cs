@@ -22,7 +22,7 @@ namespace DATN_Client.Areas.Customer.Component
             if (respone.IsSuccessStatusCode)
             {
                 Message = "success";
-                navigationManager.NavigateTo("https://localhost:7075/Customer/Login",true);
+                navigationManager.NavigateTo("https://localhost:7075/Customer/Login/Login",true);
             }
             else
             {
