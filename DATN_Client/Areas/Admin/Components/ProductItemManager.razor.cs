@@ -9,6 +9,7 @@ namespace DATN_Client.Areas.Admin.Components
 	{
 		HttpClient _client = new HttpClient();
 		[Inject] NavigationManager _navigation { get; set; }
+		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
 		List<ProductItem_Show_VM> _lstPrI_show_VM = new List<ProductItem_Show_VM>();
 		List<Image_VM> _lstImg = new List<Image_VM>();
 		List<Products_VM> _lstP = new List<Products_VM>();
@@ -78,6 +79,7 @@ namespace DATN_Client.Areas.Admin.Components
 				imgTam.Status = 1;
 				_lstImg_Tam_Them.Add(imgTam);
 				_lstImg_Tam.Add(imgTam);
+				_toastService.ShowSuccess("Ảnh đã được tải lên thành công");
 			}
 		}
 		public async Task ChangeImg(InputFileChangeEventArgs e)
@@ -99,6 +101,7 @@ namespace DATN_Client.Areas.Admin.Components
 				imgTam.PathImage = _file.Name;
 				_pathImg = _file.Name;
 				if (!_lstImg_Tam_Sua.Any(c => c.Id == imgTam.Id)) _lstImg_Tam_Sua.Add(imgTam);
+				_toastService.ShowSuccess("Thay đổi ảnh thành công");
 			}
 		}
 		public async Task Add_PI()
@@ -159,30 +162,74 @@ namespace DATN_Client.Areas.Admin.Components
 			_PI_VM.PurchasePrice = pi.PurchasePrice;
 			_PI_VM.CostPrice = pi.CostPrice;
 			_PI_VM.Status = pi.Status;
-			_lstImg_Tam = _lstImg.Where(c => c.ProductItemId == _idPI).ToList();
+			_lstImg_Tam = _lstImg.Where(c => c.ProductItemId == _idPI).OrderBy(c=>c.STT).ToList();
 			_idImg_Tam = _lstImg_Tam.Select(c => c.Id).FirstOrDefault();
-			_pathImg = _lstImg.Where(c => c.ProductItemId == pi.Id).Select(c => c.PathImage).FirstOrDefault();
+			_pathImg = _lstImg.Where(c => c.Id == _idImg_Tam).Select(c => c.PathImage).FirstOrDefault();
 			await JsRuntime.InvokeVoidAsync("OnScrollEvent");
 		}
 		public async Task Add_P()
 		{
+			if (_P_VM.Name==string.Empty || _P_VM.Name==null)
+			{
+				_toastService.ShowError("Không được để trống");
+				return;
+			}
+			if (_lstP.Any(c=>c.Name==_P_VM.Name))
+			{
+				_toastService.ShowError("Tên đã tồn tại");
+				return;
+			}
 			var x = await _client.PostAsJsonAsync("https://localhost:7141/api/product/add_product", _P_VM);
 			_lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
+			_navigation.NavigateTo("https://localhost:7075/Admin/ProductItem",true);
 		}
 		public async Task Add_Cate()
 		{
+			if (_Cate_VM.Name == string.Empty || _Cate_VM.Name == null)
+			{
+				_toastService.ShowError("Không được để trống");
+				return;
+			}
+			if (_lstCate.Any(c => c.Name == _Cate_VM.Name))
+			{
+				_toastService.ShowError("Thể loại đã tồn tại");
+				return;
+			}
 			var x = await _client.PostAsJsonAsync("https://localhost:7141/api/Categories/PostCategory", _Cate_VM);
 			_lstCate = await _client.GetFromJsonAsync<List<Categories_VM>>("https://localhost:7141/api/Categories");
+			_navigation.NavigateTo("https://localhost:7075/Admin/ProductItem", true);
 		}
 		public async Task Add_C()
 		{
+			if (_C_VM.Name == string.Empty || _C_VM.Name == null)
+			{
+				_toastService.ShowError("Không được để trống");
+				return;
+			}
+			if (_lstC.Any(c => c.Name == _C_VM.Name))
+			{
+				_toastService.ShowError("Màu sắc đã tồn tại");
+				return;
+			}
 			var x = await _client.PostAsJsonAsync("https://localhost:7141/api/Color/PostColor", _C_VM);
 			_lstC = await _client.GetFromJsonAsync<List<Color_VM>>("https://localhost:7141/api/Color");
+			_navigation.NavigateTo("https://localhost:7075/Admin/ProductItem", true);
 		}
 		public async Task Add_S()
 		{
+			if (_S_VM.Name == string.Empty || _S_VM.Name == null)
+			{
+				_toastService.ShowError("Không được để trống");
+				return;
+			}
+			if (_lstS.Any(c => c.Name == _S_VM.Name))
+			{
+				_toastService.ShowError("Màu sắc đã tồn tại");
+				return;
+			}
 			var x = await _client.PostAsJsonAsync("https://localhost:7141/api/Size/PostSize", _S_VM);
 			_lstS = await _client.GetFromJsonAsync<List<Size_VM>>("https://localhost:7141/api/Size");
+			_navigation.NavigateTo("https://localhost:7075/Admin/ProductItem", true);
 		}
 
 		public async Task LoadAnh(Guid id)
@@ -208,6 +255,7 @@ namespace DATN_Client.Areas.Admin.Components
 			{
 				_pathImg = _lstImg_Tam.Select(c => c.PathImage).FirstOrDefault();
 			}
+			_toastService.ShowSuccess("Ảnh đã được xóa thành công");
 		}
 		public async Task LocHangLoat()
 		{
@@ -232,6 +280,22 @@ namespace DATN_Client.Areas.Admin.Components
 								_PM_S_VM.Name == null ||
 								_PM_S_VM.Name == string.Empty ||
 								c.Name.Trim().ToLower().Contains(_PM_S_VM.Name.Trim().ToLower())).ToList();
+		}
+		public async Task LoadAddP()
+		{
+			_P_VM.Name = string.Empty;
+		}
+		public async Task LoadAddCate()
+		{
+			_Cate_VM.Name = string.Empty;
+		}
+		public async Task LoadAddC()
+		{
+			_C_VM.Name = string.Empty;
+		}
+		public async Task LoadAddS()
+		{
+			_S_VM.Name = string.Empty;
 		}
 	}
 }
