@@ -51,8 +51,8 @@ namespace DATN_Client.Areas.Customer.Component
 
         protected override async Task OnInitializedAsync()
         {
-            //var token = _ihttpcontextaccessor.HttpContext.Session.GetString("Token"); // Gọi token
-            //_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token); // Xác thực
+            var token = _ihttpcontextaccessor.HttpContext.Session.GetString("Token"); // Gọi token
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token); // Xác thực
 
             listDetail = new List<ObjectMenu>
                     {
@@ -66,8 +66,8 @@ namespace DATN_Client.Areas.Customer.Component
             elActivity = true;
 
 
-            //var a = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
-            var a = Guid.Parse("a4c10abe-eec2-40e6-9b6c-cf1221e9da78");
+            var a = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
+            //var a = Guid.Parse("a4c10abe-eec2-40e6-9b6c-cf1221e9da78");
             User_VM = await _client.GetFromJsonAsync<User>($"https://localhost:7141/api/user/get_user_by_id/{a}");
 
             _lstAddressGetById = await _client.GetFromJsonAsync<List<AddressShip_VM>>($"https://localhost:7141/api/AddressShip/get_address_by_UserID/{a}");
