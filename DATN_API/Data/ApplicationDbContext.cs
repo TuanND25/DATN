@@ -75,7 +75,7 @@ namespace DATN_API.Data
 
 
 			builder.Entity<Bill>().Property(x=>x.HistoryConsumerPointID).IsRequired(false);
-
+			builder.Entity<Bill>().Property(x=>x.ReducedAmount).IsRequired(false);
 		}
 		protected void CreateRoles(ModelBuilder builder)
 		{
