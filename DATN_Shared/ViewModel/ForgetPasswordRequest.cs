@@ -14,6 +14,8 @@ namespace DATN_Shared.ViewModel
         public string Email { get; set; }
         [Required]
         public string PhoneNumber { get; set; }
+        [Required]
+        public string Username { get; set; }
      
     }
     

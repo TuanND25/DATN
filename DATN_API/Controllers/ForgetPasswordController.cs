@@ -30,7 +30,7 @@ namespace DATN_API.Controllers
         [HttpPost("request")]
         public async Task<IActionResult> RequestPasswordReset(ForgetPasswordRequest request)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(p=>p.Email==request.Email && p.PhoneNumber==request.PhoneNumber);
+            var user = await _context.Users.FirstOrDefaultAsync(p=>p.Email==request.Email && p.PhoneNumber==request.PhoneNumber && p.UserName== request.Username);
             if (user!= null)
             {
 
@@ -45,7 +45,7 @@ namespace DATN_API.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { error = "Failed to send SMS." });
+                    return Ok(new { Message = "Success" });
                 }
 
             }
