@@ -1,4 +1,19 @@
-﻿<style>
+﻿@using Blazored.Toast.Configuration
+
+<BlazoredToasts Position="ToastPosition.TopRight"
+                            Timeout="5"
+                            IconType="IconType.FontAwesome"
+                            SuccessClass="success-toast-override"
+                            SuccessIcon="fas fa-check-circle"
+                            ErrorIcon="fa-solid fa-triangle-exclamation" />
+
+<BlazoredToasts Position="ToastPosition.TopRight"
+				Timeout="5"
+				IconType="IconType.FontAwesome"
+				SuccessClass="success-toast-override"
+				SuccessIcon="fa-solid fa-check"
+				ErrorIcon="fa-solid fa-triangle-exclamation" />
+<style>
     .OpenComponent {
         display: flex;
         justify-content: space-between;
@@ -35,6 +50,28 @@
         font-size: 15px;
         font-weight: 500;
     }
+        .btnTrongSuot2 {
+        background-color: transparent;
+        border: none;
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 500;
+    }
+
+    .btnTrongSuot1 {
+        background-color: transparent;
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 500;
+    }
+
+    .btne:disabled {
+        opacity: .7;
+        cursor: not-allowed;
+    }
+    .back{
+    background-color:rgba(0,0,0,0.7);}
+
 </style>
 <div class="row">
     <div class="col-3">
@@ -43,7 +80,7 @@
             <button class="@((ChangeColorBtn == item.Id) ? "OpenComponent_child" : "OpenComponent")" @onclick="() => elActiveTab(item.Id)">
                 <div>
                     <i class="@item.ImagePath" style="color: #000000;"></i>
-                    <label style="margin-left:5px;cursor:pointer">@item.Name</label>
+                    <label style="margin-left:5px;cursor:pointer;">@item.Name</label>
                 </div>
                 <img src="/img/iconArrowRight.svg" />
             </button>
@@ -59,6 +96,7 @@
                         <div class="nameUser" style="width:70%">
                             <label style="width:55% ; font-size:15px;">Tên đăng nhập</label>
                             <label style="text-align:left; font-size:15px;" class="col-6">@User_VM.UserName</label>
+
                         </div>
 
                         <div class="nameUser" style="width:70%">
@@ -95,7 +133,7 @@
                 <div style="display:flex;justify-content:space-between">
                     <label style="font-size:25px;font-weight:500; margin-bottom:20px;">Địa chỉ của tôi</label>
                     <div>
-                        <button class="btnUpdateInfo" data-bs-toggle="modal" data-bs-target="#popupAddAdress" @onclick="Load">
+                        <button class="btnUpdateInfo" data-bs-toggle="modal"  @onclick="Load">
                             THÊM ĐỊA CHỈ MỚI
                         </button>
                     </div><link href="~/css/showinfouser.css" rel="stylesheet" />
@@ -105,14 +143,39 @@
                 {
                     <div class="row">
                         <div class="row col-md-4">
-                            <div class="col-md-8" style="font-family:inherit;font-size:15px">@item.Recipient</div>
-                            <div class="col-md-4" style="font-family:inherit;font-size:14px">@item.NumberPhone</div>
+                            <div class="col-md-12" style="font-family:inherit;font-size:15px;display:flex; ">
+                                <label style="border-right: 2px solid black;padding-right:10px;">
+                                    @item.Recipient
+                                </label>
+                                <label style="padding-left:10px;font-family:inherit;font-size:14px">
+                                    @item.NumberPhone
+                                </label>
+                            </div>
                         </div>
                         <div class="col-md-4"></div>
                         <div class="row col-md-4">
                             <div class="col-md-5"></div>
-                            <div class="col-md-5"><button class="btnTrongSuot" data-bs-toggle="modal" data-bs-target="#popupUpdateAdress" @onclick="()=>LoadUpdate(item.Id)">Cập nhật</button></div>
-                            <div class="col-md-2"><button class="btnTrongSuot" @onclick="()=>DeleteAddress(item.Id)">Xoá</button></div>
+                            <div class="col-md-7" style="display:flex;">
+                                <button class="btnTrongSuot" data-bs-toggle="modal" style="padding-right:10px;"
+                                data-bs-target="#popupUpdateAdress" @onclick="()=>LoadUpdate(item.Id)">
+                                    Cập nhật
+                                </button>
+                                @if (item.Status == 1)
+                                {
+                                    <button class="btnTrongSuot btne" disabled @onclick="()=>DeleteAddress(item.Id)"
+                                style="border-left: 2px solid black;padding-left:10px;">
+                                        Xoá
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="btnTrongSuot" @onclick="()=>DeleteAddress(item.Id)"
+                                style="border-left: 2px solid black;padding-left:10px;">
+                                        Xoá
+                                    </button>
+                                }
+
+                            </div>
                         </div>
                     </div>
                     <div class="row" style="margin-top:10px">
@@ -120,7 +183,14 @@
                         <div class="col-md-5" style="">
                             <div class="col-md-6"></div>
                             <div class="col-md-6" style="font-family:inherit;font-size:15px;margin-left:161px">
-                                <button class="btnTrongSuot"  @onclick="()=>SetDefaultAddress(item.Id)">Thiết lập mặc định</button>
+                                @if (item.Status == 1)
+                                {
+                                    <button class="btnTrongSuot1 btne " disabled @onclick="()=>SetDefaultAddress(item.Id)">Thiết lập mặc định</button>
+                                }
+                                else
+                                {
+                                    <button class="btnTrongSuot1" @onclick="()=>SetDefaultAddress(item.Id)">Đặt làm mặc định</button>
+                                }
                             </div>
                         </div>
                     </div>
@@ -129,11 +199,12 @@
                         <div class="col-md-5" style="">
                         </div>
                     </div>
-                    @if (item.Status==1)
+                    @if (item.Status == 1)
                     {
-                         <button style="border-color:red;color:red;background-color: transparent;margin-top:5px;">Mặc định</button>
+                        <button style="border-color:red;color:red;background-color: transparent;margin-top:5px;">Mặc định</button>
                     }
                     <hr />
+                    
 
                 }
 
@@ -179,7 +250,7 @@
                                 <div style="display:flex;flex-direction:column;margin-left:10px;width:84%">
                                     <InputText class="form_field" name="name" id='name' required @bind-Value="@changePassword.NewPassword" />
                                 </div>
-                                <i class="@Icon_Pass" @onclick=ShowPass></i>
+                                <i class="@Icon_New" @onclick=ShowNewPass></i>
                             </div>
                             <ValidationMessage For="()=>changePassword.NewPassword" style="color:red;margin-top:-15px;margin-left:25px;font-size:11pt;" />
                         </div>
@@ -197,7 +268,7 @@
                                 <div style="display:flex;flex-direction:column;margin-left:10px;width:84%">
                                     <InputText class="form_field" name="name" id='name' required @bind-Value="@changePassword.ConfirmNewPassword" />
                                 </div>
-                                <i class="@Icon_Pass" @onclick=ShowPass></i>
+                                <i class="@Icon_CheckNew" @onclick=ShowCheckNewPass></i>
                             </div>
                             <ValidationMessage For="()=>changePassword.ConfirmNewPassword" style="color:red;margin-top:-15px;margin-left:25px;font-size:11pt;" />
                         </div>
@@ -213,14 +284,18 @@
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="popupAddAdress" tabindex="-1">
+<EditForm Model="AddressShip">  @*add address*@
+    <div class="modal fade @(isModalOpenAddAddress ? "show back" : "")" 
+            id="popupAddAdress" tabindex="-1" 
+            aria-hidden="@(isModalOpenAddAddress ? "" : "true")"
+            style="display: @(isModalOpenAddAddress ? "block" : "none")"
+            aria-modal="@(isModalOpenAddAddress ? "true" : "none")"
+            role="@(isModalOpenAddAddress ? "dialog" : "none")"  >
     <div class="modal-dialog modal-dialog-centered" style="width:150%">
         <div class="modal-content">
-            <div class="modal-body">
-
-                <EditForm Model="AddressShip">
+            <div class="modal-body">               
                     <label style="font-size:22px;font-weight:600;padding:15px 50px 15px 15px">Thêm địa chỉ mới</label>
+                    <button class="col-md-1 btnTrongSuot2" style="margin-left:230px;" @onclick="ClosePopupAddAddress"><i class="fas fa-times" style="font-size:16pt;"></i></button>
                     <div style=" display: flex;flex-direction:column;">
                         <div class="row">
                             <div class="col-md-6">
@@ -296,21 +371,29 @@
                     <button class="btnSuccesUpDateInfo" @onclick="AddAdress">
                         THÊM ĐỊA CHỈ MỚI
                         <i class="fa-sharp fa-solid fa-arrow-right-long" style="margin-left:20px;"></i>
-                    </button>
-                </EditForm>
+                    </button>             
             </div>
         </div>
-    </div>
+    </div> 
 </div>
+</EditForm>
 
 
-<div class="modal fade" id="popupUpdateAdress" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered" style="width:150%">
-        <div class="modal-content">
-            <div class="modal-body">
-
-                <EditForm Model="AddressShip">
-                    <label style="font-size:22px;font-weight:600;padding:15px 50px 15px 15px">Thêm địa chỉ mới</label>
+<EditForm Model="AddressShip"> @*update address*@
+    <div class="modal fade @(isModalOpenUpdateAddress ? "show back" : "")" 
+            id="popupUpdateAdress" tabindex="-1" 
+            aria-hidden="@(isModalOpenUpdateAddress ? "" : "true")"
+            style="display: @(isModalOpenUpdateAddress ? "block" : "none")"
+            aria-modal="@(isModalOpenUpdateAddress ? "true" : "none")"
+            role="@(isModalOpenUpdateAddress ? "dialog" : "none")"  >
+        <div class="modal-dialog modal-dialog-centered" style="width:150%">
+            <div class="modal-content">       
+                <div class="modal-body">
+                    <DataAnnotationsValidator />
+                    <div class="row">
+                    <label class="col-md-6" style="font-size:22px;font-weight:600;padding:15px 50px 15px 15px">Thêm địa chỉ mới</label>           
+                    <button class="col-md-1 btnTrongSuot2" style="margin-left:230px;" @onclick="ClosePopupUpdateAddress"><i class="fas fa-times" style="font-size:16pt;"></i></button>
+                    </div>
                     <div style=" display: flex;flex-direction:column;">
                         <div class="row">
                             <div class="col-md-6">
@@ -326,6 +409,7 @@
                                     <i class="fa-solid fa-user-pen fa-l" style="color: #a1a1a1"></i>
                                     <div style="display:flex;flex-direction:column;margin-left:10px;">
                                         <InputText class="form_field" name="name" id='name' @bind-Value="@addressShip_VM.NumberPhone" required placeholder="Số điện thoại" />
+                                        <ValidationMessage style="color:red;" For="()=>addressShip_VM.NumberPhone" />
                                     </div>
                                 </div>
                             </div>
@@ -334,7 +418,7 @@
                             <div class="col-md-4">
                                 <div class="inputName" style="padding-left:15px;">
                                     <div style="display:flex;flex-direction:column;">
-                                        <InputSelect class="form_field" @bind-Value="@addressShip_VM.Province" @onclick="@ChonTinhTP">
+                                        <InputSelect class="form_field" @bind-Value="@addressShip_VM.Province" @onclick="@ChonTinhTP" required>
                                             <option value="@string.Empty" selected>--Tỉnh/Thành phố--</option>
                                             @foreach (var x in _lstTinhTp)
                                             {
@@ -347,7 +431,7 @@
                             <div class="col-md-4">
                                 <div class="inputName" style="padding-left:15px;">
                                     <div style="display:flex;flex-direction:column;">
-                                        <InputSelect class="form_field" @bind-Value="@addressShip_VM.District" @onclick="@ChonQuanHuyen">
+                                        <InputSelect class="form_field" @bind-Value="@addressShip_VM.District" @onclick="@ChonQuanHuyen" required>
                                             <option value="@string.Empty" selected>--Quận/Huyện--</option>
                                             @foreach (var x in _lstQuanHuyen)
                                             {
@@ -360,9 +444,9 @@
                             <div class="col-md-4">
                                 <div class="inputName" style="padding-left:15px;">
                                     <div style="display:flex;flex-direction:column;">
-                                        <InputSelect class="form_field" @bind-Value="@addressShip_VM.WardName" @onclick="@ChonXaPhuong">
+                                        <InputSelect class="form_field" @bind-Value="@addressShip_VM.WardName" @onclick="@ChonXaPhuong" required>
                                             <option value="@string.Empty" selected>--Xã/Phường--</option>
-                                            @foreach (var x in _lstXaPhuong)
+                  font              @foreach (var x in _lstXaPhuong)
                                             {
                                                 <option value="@x.Name">@x.Name</option>
                                             }
@@ -374,25 +458,27 @@
                         <div class="inputName" style="width:100%;">
                             <i class="fa-solid fa-phone fa-l" style="color: #a1a1a1"></i>
                             <div style="display:flex;flex-direction:column;margin-left:10px; width:90%;">
-                                <InputText class="form_field" name="name" id='name' @bind-Value="@addressShip_VM.ToAddress" required placeholder="Địa chỉ cụ thể" />
+                                <InputText class="form_field" name="name" id='name'
+                                           @bind-Value="@addressShip_VM.ToAddress" required placeholder="Địa chỉ cụ thể" />
                             </div>
                         </div>
                         <div>
-                            <InputCheckbox @bind-Value="@IsDefaultAddress" style="transform: scale(1.7);margin-left:5px;margin-right:10px;" />
-                            <label style="font-family:inherit;font-size:15px"> Đặt làm địa chỉ mặc định</label>
+                            @if (addressShip_VM.Status != 1)
+                            {
+                                <InputCheckbox @bind-Value="@IsDefaultAddress" style="transform: scale(1.7);margin-left:5px;margin-right:10px;" />
+                                <label style="font-family:inherit;font-size:15px"> Đặt làm địa chỉ mặc định</label>
+                            }
                         </div>
-
                     </div>
                     <button class="btnSuccesUpDateInfo" @onclick="UpdateAdress">
                         CẬP NHẬT ĐỊA CHỈ
                         <i class="fa-sharp fa-solid fa-arrow-right-long" style="margin-left:20px;"></i>
                     </button>
-                </EditForm>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
+</EditForm>
 
 
 <EditForm Model="User_VM">

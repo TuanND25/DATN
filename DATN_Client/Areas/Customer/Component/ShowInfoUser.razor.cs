@@ -33,7 +33,7 @@ namespace DATN_Client.Areas.Customer.Component
 
 
         private List<AddressShip_VM> _lstAddressGetById = new List<AddressShip_VM>();
-        AddressShip AddressShip=new AddressShip();
+        AddressShip AddressShip = new AddressShip();
         AddressShip_VM addressShip_VM = new AddressShip_VM();
         private List<Province_VM> _lstTinhTp = new List<Province_VM>();
         private List<District_VM> _lstQuanHuyen = new List<District_VM>();
@@ -46,13 +46,13 @@ namespace DATN_Client.Areas.Customer.Component
             get { return addressShip_VM.Status == 1; }
             set { addressShip_VM.Status = value ? 1 : 0; }
         }
-
-
-
+        [Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
+        bool isModalOpenAddAddress = false; // dùng để check đóng  popup
+        bool isModalOpenUpdateAddress = false; // dùng để check đóng  popup
         protected override async Task OnInitializedAsync()
         {
-            var token = _ihttpcontextaccessor.HttpContext.Session.GetString("Token"); // Gọi token
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token); // Xác thực
+            //var token = _ihttpcontextaccessor.HttpContext.Session.GetString("Token"); // Gọi token
+            //_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token); // Xác thực
 
             listDetail = new List<ObjectMenu>
                     {
@@ -66,15 +66,12 @@ namespace DATN_Client.Areas.Customer.Component
             elActivity = true;
 
 
-            var a = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
-            //var a = Guid.Parse("a4c10abe-eec2-40e6-9b6c-cf1221e9da78");
-            User_VM = await _client.GetFromJsonAsync<User>($"https://localhost:7141/api/user/get_user_by_id/{a}");
-
-            _lstAddressGetById = await _client.GetFromJsonAsync<List<AddressShip_VM>>($"https://localhost:7141/api/AddressShip/get_address_by_UserID/{a}");
-            _lstAddressGetById = _lstAddressGetById.OrderByDescending(x => x.Status).ToList();
-            _lstTinhTp = await _client.GetFromJsonAsync<List<Province_VM>>("https://api.npoint.io/ac646cb54b295b9555be"); //
-
-
+            //var a = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
+            var a = Guid.Parse("a4c10abe-eec2-40e6-9b6c-cf1221e9da78");
+            User_VM= await _client.GetFromJsonAsync<User>($"https://localhost:7141/api/user/get_user_by_id/{a}");
+            var d = await _client.GetFromJsonAsync<List<AddressShip_VM>>($"https://localhost:7141/api/AddressShip/get_address_by_UserID/{a}");
+            _lstAddressGetById = d.OrderByDescending(x => x.Status).ToList();
+            //_lstTinhTp = await _client.GetFromJsonAsync<List<Province_VM>>("https://provinces.open-api.vn/api/"); 
         }
         public async Task UpdateUser()
         {
@@ -84,17 +81,177 @@ namespace DATN_Client.Areas.Customer.Component
 
         public async Task ChangePasswordMethor()
         {
-            changePassword.UserId = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
+            //changePassword.UserId = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
+            //if(changePassword.OldPassword!=null || changePassword.NewPassword!=null || changePassword.ConfirmNewPassword != null)
+            //{
+            changePassword.UserId = User_VM.Id;
             var response = await _client.PutAsJsonAsync<ChangePassword_VM>("https://localhost:7141/api/user/change-password/", changePassword);
             if (response.IsSuccessStatusCode)
             {
-                Message = "success";
+                _navigationManager.NavigateTo("https://localhost:7075/Customer/UserManagement", true);
+            }
+            //}      
+
+        }
+
+
+
+
+
+        public async Task AddAdress()
+        {
+            addressShip_VM.Id = Guid.NewGuid();
+            addressShip_VM.UserId = User_VM.Id;
+            if (addressShip_VM.Status == 1)
+            {
+                foreach (var item in _lstAddressGetById)
+                {
+                    item.Status = 0;
+                    var d = await _client.PutAsJsonAsync("https://localhost:7141/api/AddressShip/Put-Address", item);
+                }
+            }
+            var a = await _client.PostAsJsonAsync("https://localhost:7141/api/AddressShip/Post-Address", addressShip_VM);
+            if (a.IsSuccessStatusCode)
+            {
+                await LoadAddress();
+                ClosePopupAddAddress();
+                _toastService.ShowSuccess("Thêm địa chỉ thành công");          
             }
             else
             {
-                Message = "error";
+                _toastService.ShowError("Thêm mới địa chỉ thất bại");
             }
         }
+        public async Task Load()  // khi nhấn ra ngoài popup thì popup sẽ tắt và dữ liệu sẽ bị clear
+        {
+            addressShip_VM.Recipient = String.Empty;
+            addressShip_VM.NumberPhone = String.Empty;
+            addressShip_VM.ToAddress = String.Empty;
+            addressShip_VM.Province = String.Empty;
+            addressShip_VM.District = String.Empty;
+            addressShip_VM.WardName = String.Empty;
+            OpenPopupAddAddress();
+        }
+        public async Task LoadAddress()
+        {
+            var d = await _client.GetFromJsonAsync<List<AddressShip_VM>>($"https://localhost:7141/api/AddressShip/get_address_by_UserID/a4c10abe-eec2-40e6-9b6c-cf1221e9da78");// sau khi xong phải đổi qua session
+            _lstAddressGetById = d.OrderByDescending(x => x.Status).ToList();
+        }
+        public async Task UpdateAdress() //update-address
+        {
+            if (addressShip_VM.Status == 1)
+            {
+                foreach (var item in _lstAddressGetById)
+                {
+                    item.Status = 0;
+                    var d = await _client.PutAsJsonAsync("https://localhost:7141/api/AddressShip/Put-Address", item);
+                }
+            }
+            addressShip_VM.UserId = User_VM.Id;
+            var a = await _client.PutAsJsonAsync("https://localhost:7141/api/AddressShip/Put-Address", addressShip_VM);
+            if (a.IsSuccessStatusCode)
+            {
+                await LoadAddress();
+                _toastService.ShowSuccess("Cập nhật địa chỉ thành công");
+            }
+            else
+            {
+                _toastService.ShowError("Cập nhật địa chỉ thất bại");
+            }
+        }
+
+        public async Task LoadUpdate(Guid Id)  // load dữ liệu lên popup
+        {
+            var b = await _client.GetFromJsonAsync<AddressShip_VM>($"https://localhost:7141/api/AddressShip/get_address_by_id/{Id}");
+            addressShip_VM.Id = b.Id;
+            addressShip_VM.Recipient = b.Recipient;
+            addressShip_VM.Province = b.Province;
+            await ChonTinhTP();
+            addressShip_VM.District = b.District;
+            addressShip_VM.WardName = b.WardName;
+            await ChonQuanHuyen();
+            await ChonXaPhuong();
+            addressShip_VM.ToAddress = b.ToAddress;
+            addressShip_VM.NumberPhone = b.NumberPhone;
+            addressShip_VM.Status = b.Status;
+        }
+        public async Task DeleteAddress(Guid Id)
+        {
+            var a = await _client.DeleteAsync($"https://localhost:7141/api/AddressShip/Delete-Address/{Id}");
+            if (a.IsSuccessStatusCode)
+            {
+                await LoadAddress();
+                _toastService.ShowSuccess("Xoá địa chỉ thành công");
+            }
+            else
+            {
+                _toastService.ShowError("Xoá địa chỉ thất bại");
+            }
+        }
+
+        public async Task SetDefaultAddress(Guid Id)
+        {
+            foreach (var item in _lstAddressGetById)
+            {
+                item.Status = 0;
+                var d = await _client.PutAsJsonAsync("https://localhost:7141/api/AddressShip/Put-Address", item);
+            }
+            addressShip_VM = await _client.GetFromJsonAsync<AddressShip_VM>($"https://localhost:7141/api/AddressShip/get_address_by_id/{Id}");
+            addressShip_VM.Status = 1;
+            var a = await _client.PutAsJsonAsync("https://localhost:7141/api/AddressShip/Put-Address", addressShip_VM);
+            if (a.IsSuccessStatusCode)
+            {
+                await LoadAddress();
+                _toastService.ShowSuccess("Đặt địa chỉ thành mặc định thành công");
+            }
+            else
+            {
+                _toastService.ShowError("Đặt địa chỉ thành mặc định thất bại");
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         public async Task ChonTinhTP()
@@ -132,127 +289,6 @@ namespace DATN_Client.Areas.Customer.Component
         {
             _XaPhuong = addressShip_VM.WardName;
         }
-
-
-        public async Task AddAdress()
-        {
-
-            addressShip_VM.Id=Guid.NewGuid();
-            addressShip_VM.UserId = User_VM.Id;
-            var a = await _client.PostAsJsonAsync("https://localhost:7141/api/AddressShip/Post-Address",addressShip_VM);
-            if (a.IsSuccessStatusCode)
-            {
-                _navigationManager.NavigateTo("https://localhost:7075/Customer/UserManagement", true);
-
-
-            }
-
-        }
-        public async Task Load()
-        {
-            addressShip_VM.Recipient = String.Empty;
-            addressShip_VM.NumberPhone = String.Empty;
-            addressShip_VM.ToAddress = String.Empty;
-            addressShip_VM.Province = String.Empty;
-            addressShip_VM.District = String.Empty;
-            addressShip_VM.WardName = String.Empty;
-        }
-        public async Task UpdateAdress()
-        {
-            addressShip_VM.UserId = User_VM.Id;
-            var a = await _client.PutAsJsonAsync("https://localhost:7141/api/AddressShip/Put-Address", addressShip_VM);
-            if (a.IsSuccessStatusCode)
-            {
-                _navigationManager.NavigateTo("https://localhost:7075/Customer/UserManagement", true);
-            }
-        }
-
-        public async Task LoadUpdate(Guid Id)
-        {
-            var b = await _client.GetFromJsonAsync<AddressShip_VM>($"https://localhost:7141/api/AddressShip/get_address_by_id/{Id}");
-            addressShip_VM.Id=b.Id;
-            addressShip_VM.Recipient = b.Recipient;
-            addressShip_VM.Province = b.Province;
-            await ChonTinhTP();
-            addressShip_VM.District = b.District;
-            await ChonQuanHuyen();
-            addressShip_VM.WardName = b.WardName;
-            await ChonXaPhuong();
-            addressShip_VM.ToAddress = b.ToAddress;
-            addressShip_VM.NumberPhone = b.NumberPhone;
-
-
-        }
-        public async Task DeleteAddress(Guid Id)
-        {
-            var a = await _client.DeleteAsync($"https://localhost:7141/api/AddressShip/Delete-Address/{Id}");
-            if (a.IsSuccessStatusCode)
-            {
-                _navigationManager.NavigateTo("https://localhost:7075/Customer/UserManagement", true);
-            }
-        }
-
-        public async Task SetDefaultAddress(Guid Id)
-        {            
-            foreach (var item in _lstAddressGetById)
-            {
-                item.Status = 0;
-                var d = await _client.PutAsJsonAsync("https://localhost:7141/api/AddressShip/Put-Address", item);
-            }
-            addressShip_VM = await _client.GetFromJsonAsync<AddressShip_VM>($"https://localhost:7141/api/AddressShip/get_address_by_id/{Id}");
-            addressShip_VM.Status = 1;
-            var a = await _client.PutAsJsonAsync("https://localhost:7141/api/AddressShip/Put-Address", addressShip_VM);
-            if (a.IsSuccessStatusCode)
-            {
-                _navigationManager.NavigateTo("https://localhost:7075/Customer/UserManagement", true);
-            }
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         private void elActiveTab(int Id)
         {
@@ -297,6 +333,24 @@ namespace DATN_Client.Areas.Customer.Component
                 Icon_CheckNew = "fa-regular fa-eye";
 
             }
+        }
+        private void OpenPopupAddAddress()
+        {
+            isModalOpenAddAddress = true;
+        }
+
+        private void ClosePopupAddAddress()
+        {
+            isModalOpenAddAddress = false;
+        }
+        private void OpenPopupUpdateAddress()
+        {
+            isModalOpenUpdateAddress = true;
+        }
+
+        private void ClosePopupUpdateAddress()
+        {
+            isModalOpenUpdateAddress = false;
         }
         public class ObjectMenu
         {

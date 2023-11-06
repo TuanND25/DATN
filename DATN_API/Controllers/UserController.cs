@@ -35,7 +35,7 @@ namespace DATN_API.Controllers
         }
 
         [HttpGet("get_user_by_id/{Id}")]
-        public async Task<IActionResult> GetUser(Guid Id)
+        public async Task<IActionResult> GetUserById(Guid Id)
         {
             var a = await _userService.GetUserById(Id);
             return Ok(a);
