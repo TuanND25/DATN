@@ -1,5 +1,4 @@
-﻿@inject IJSRuntime JsRuntime
-@using Blazored.Toast.Configuration
+﻿@using Blazored.Toast.Configuration
 <BlazoredToasts Position="ToastPosition.BottomRight"
 				Timeout="10"
 				IconType="IconType.FontAwesome"
@@ -53,37 +52,37 @@
 <h1>Quản lý sản phẩm</h1>
 @* style="display:none" *@
 @* style="width:100px;height: 100px; "*@
-<div class="modal fade" id="Add_P">
-	<div class="modal-dialog">
-		<div class="modal-content">
+	<div class="modal fade" id="Add_P">
+		<div class="modal-dialog">
+			<div class="modal-content">
 
-			<!-- Phần tiêu đề của popup -->
-			<div class="modal-header">
-				<h4 class="modal-title">Thêm sản phẩm</h4>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
+				<!-- Phần tiêu đề của popup -->
+				<div class="modal-header">
+					<h4 class="modal-title">Thêm sản phẩm</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
 
-			<!-- Nội dung của popup -->
-			<EditForm Model="_P_VM">
-				<div class="modal-body">
-					Tên sản phẩm
+				<!-- Nội dung của popup -->
+				<EditForm Model="_P_VM">
+					<div class="modal-body">
+						Tên sản phẩm
 					<InputText class="form-control" @bind-Value="@_P_VM.Name" />
-				</div>
-				<!-- Phần chân của popup -->
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+					</div>
+					<!-- Phần chân của popup -->
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
 					<button type="button" class="btn btn-primary" @onclick="Add_P">Thêm</button>
-				</div>
-			</EditForm>
+					</div>
+				</EditForm>
+			</div>
 		</div>
+		<BlazoredToasts Position="ToastPosition.BottomRight"
+						Timeout="10"
+						IconType="IconType.FontAwesome"
+						SuccessClass="success-toast-override"
+						SuccessIcon="fa-solid fa-check"
+						ErrorIcon="fa-solid fa-triangle-exclamation" />
 	</div>
-	<BlazoredToasts Position="ToastPosition.BottomRight"
-					Timeout="10"
-					IconType="IconType.FontAwesome"
-					SuccessClass="success-toast-override"
-					SuccessIcon="fa-solid fa-check"
-					ErrorIcon="fa-solid fa-triangle-exclamation" />
-</div>
 <div class="modal fade" id="Add_Cate">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -470,14 +469,23 @@ else
 				<tr>
 
 					@{
-						var img = _lstImg.Where(c => c.ProductItemId == x.Id).OrderBy(c=>c.STT).Select(c => c.PathImage).FirstOrDefault();
-						if (img == null)
+						// var img = _lstImg.Where(c => c.ProductItemId == x.Id).OrderBy(c=>c.STT).Select(c => c.PathImage).FirstOrDefault();
+						var lst_chonmau = _lstPrI_show_VM.Where(c => c.ColorId == x.ColorId).ToList();
+						_lstImg_PI_tam.Clear();
+						foreach (var mau in lst_chonmau)
+						{
+							var a = _lstImg_PI.Where(c => c.ProductItemId == mau.Id);
+							_lstImg_PI_tam.AddRange(a);
+						}
+
+						var img1 = _lstImg_PI_tam.Where(c => c.ProductId == x.ProductId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
+						if (img1 == null)
 						{
 							<td style="text-align:center">Chưa có ảnh</td>
 						}
 						else
 						{
-							<td style="text-align:center"><img src="/images/@img" alt="" style="width:100px;height: 110px;"></td>
+							<td style="text-align:center"><img src="/images/@img1" alt="" style="width:100px;height: 110px;"></td>
 						}
 					}
 					<td style="vertical-align:middle">@x.Name</td>

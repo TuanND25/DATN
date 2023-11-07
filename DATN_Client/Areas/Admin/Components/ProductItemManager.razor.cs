@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using DATN_Client.Areas.Customer.Controllers;
 
 namespace DATN_Client.Areas.Admin.Components
 {
@@ -9,6 +10,7 @@ namespace DATN_Client.Areas.Admin.Components
 	{
 		HttpClient _client = new HttpClient();
 		[Inject] NavigationManager _navigation { get; set; }
+		[Inject] IJSRuntime JsRuntime { get; set; }
 		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
 		List<ProductItem_Show_VM> _lstPrI_show_VM = new List<ProductItem_Show_VM>();
 		List<Image_VM> _lstImg = new List<Image_VM>();
@@ -16,12 +18,13 @@ namespace DATN_Client.Areas.Admin.Components
 		List<Color_VM> _lstC = new List<Color_VM>();
 		List<Size_VM> _lstS = new List<Size_VM>();
 		List<Categories_VM> _lstCate = new List<Categories_VM>();
+		private List<Image_Join_ProductItem> _lstImg_PI = new List<Image_Join_ProductItem>();
+		private List<Image_Join_ProductItem> _lstImg_PI_tam = new List<Image_Join_ProductItem>();
 		ProductItem_VM _PI_VM = new ProductItem_VM();
 		Products_VM _P_VM = new Products_VM();
 		Categories_VM _Cate_VM = new Categories_VM();
 		Color_VM _C_VM = new Color_VM();
 		Size_VM _S_VM = new Size_VM();
-		Image_VM _I_VM = new Image_VM();
 		IBrowserFile _file { get; set; }
 		public Guid _idPI { get; set; }
 		public string _pathImg { get; set; }
@@ -47,6 +50,7 @@ namespace DATN_Client.Areas.Admin.Components
 			_lstC = await _client.GetFromJsonAsync<List<Color_VM>>("https://localhost:7141/api/Color");
 			_lstS = await _client.GetFromJsonAsync<List<Size_VM>>("https://localhost:7141/api/Size");
 			_lstImg = await _client.GetFromJsonAsync<List<Image_VM>>("https://localhost:7141/api/Image");
+			_lstImg_PI = await _client.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem");
 			_lstPrI_show_VM = await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
 			_idPI_Tam = Guid.NewGuid();
 		}
@@ -69,7 +73,8 @@ namespace DATN_Client.Areas.Admin.Components
 				imgTam.Id = Guid.NewGuid();
 				_idImg_Tam = imgTam.Id;
 				imgTam.Name = "";
-				imgTam.STT = _lstImg_Tam.Count == 0
+				if (_lstImg_Tam.Count == 0) imgTam.STT = 1;
+				else imgTam.STT = _lstImg_Tam.Count == 0
 							? _lstImg.Max(c => c.STT) + 1
 							: (_lstImg.Max(c => c.STT) > _lstImg_Tam.Max(c => c.STT)
 							? _lstImg.Max(c => c.STT) + 1
@@ -149,6 +154,13 @@ namespace DATN_Client.Areas.Admin.Components
 				_navigation.NavigateTo("Admin/ProductItem", true);
 			}
 		}
+		//public Guid Id { get; set; }
+		//public Guid? ReviewId { get; set; }
+		//public string Name { get; set; }
+		//public int STT { get; set; }
+		//public string PathImage { get; set; }
+		//public Guid ProductItemId { get; set; }
+		//public int Status { get; set; }
 		public async Task LoadUpdate(ProductItem_Show_VM pi)
 		{
 			_pathImg = null;
@@ -162,26 +174,48 @@ namespace DATN_Client.Areas.Admin.Components
 			_PI_VM.PurchasePrice = pi.PurchasePrice;
 			_PI_VM.CostPrice = pi.CostPrice;
 			_PI_VM.Status = pi.Status;
-			_lstImg_Tam = _lstImg.Where(c => c.ProductItemId == _idPI).OrderBy(c=>c.STT).ToList();
-			_idImg_Tam = _lstImg_Tam.Select(c => c.Id).FirstOrDefault();
+			//_lstImg_PI = (await _client.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem")).Where(c => c.ProductId == _PI_VM.ProductId).ToList();
+			var lst_chonmau = _lstPrI_show_VM.Where(c => c.ColorId == _PI_VM.ColorId && c.ProductId == _PI_VM.ProductId).ToList();
+			_lstImg_PI_tam.Clear();
+			foreach (var x in lst_chonmau)
+			{
+				var a = _lstImg_PI.Where(c => c.ProductItemId == x.Id);
+				_lstImg_PI_tam.AddRange(a);
+			}
+			_lstImg_Tam.Clear();
+			foreach (var item in _lstImg_PI_tam)
+			{
+				Image_VM image_VM = new Image_VM();
+				image_VM.Id = item.Id;
+				image_VM.ReviewId = item.ReviewId;
+				image_VM.Name = item.Name;
+				image_VM.STT = item.STT;
+				image_VM.PathImage = item.PathImage;
+				image_VM.ProductItemId = item.ProductItemId;
+				image_VM.Status = item.Status;
+				_lstImg_Tam.Add(image_VM);
+			}
+			//_lstImg_Tam = _lstImg.Where(c => c.ProductItemId == _idPI).OrderBy(c => c.STT).ToList();
+			_idImg_Tam = _lstImg_Tam.OrderBy(c => c.STT).Select(c => c.Id).FirstOrDefault();
 			_pathImg = _lstImg.Where(c => c.Id == _idImg_Tam).Select(c => c.PathImage).FirstOrDefault();
 			await JsRuntime.InvokeVoidAsync("OnScrollEvent");
 		}
 		public async Task Add_P()
 		{
-			if (_P_VM.Name==string.Empty || _P_VM.Name==null)
+			if (_P_VM.Name == string.Empty || _P_VM.Name == null)
 			{
 				_toastService.ShowError("Không được để trống");
 				return;
 			}
-			if (_lstP.Any(c=>c.Name==_P_VM.Name))
+			if (_lstP.Any(c => c.Name == _P_VM.Name))
 			{
 				_toastService.ShowError("Tên đã tồn tại");
 				return;
 			}
 			var x = await _client.PostAsJsonAsync("https://localhost:7141/api/product/add_product", _P_VM);
 			_lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
-			_navigation.NavigateTo("https://localhost:7075/Admin/ProductItem",true);
+			//_navigation.NavigateTo("https://localhost:7075/Admin/ProductItem",true);
+			_toastService.ShowSuccess("Thêm thành công");
 		}
 		public async Task Add_Cate()
 		{
@@ -224,7 +258,7 @@ namespace DATN_Client.Areas.Admin.Components
 			}
 			if (_lstS.Any(c => c.Name == _S_VM.Name))
 			{
-				_toastService.ShowError("Màu sắc đã tồn tại");
+				_toastService.ShowError("Kích thước đã tồn tại");
 				return;
 			}
 			var x = await _client.PostAsJsonAsync("https://localhost:7141/api/Size/PostSize", _S_VM);

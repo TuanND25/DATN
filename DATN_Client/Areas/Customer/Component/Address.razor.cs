@@ -39,8 +39,8 @@ namespace DATN_Client.Areas.Customer.Component
             //var token = _ihttpcontextaccessor.HttpContext.Session.GetString("Token"); // Gọi token
             //_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token); // Xác thực
 
-            //var a = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
-            var a = Guid.Parse("a4c10abe-eec2-40e6-9b6c-cf1221e9da78");
+            var a = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
+            //var a = Guid.Parse("a4c10abe-eec2-40e6-9b6c-cf1221e9da78");
             User_VM = await _client.GetFromJsonAsync<User>($"https://localhost:7141/api/user/get_user_by_id/{a}");
             var d = await _client.GetFromJsonAsync<List<AddressShip_VM>>($"https://localhost:7141/api/AddressShip/get_address_by_UserID/{a}");
             _lstAddressGetById = d.OrderByDescending(x => x.Status).ToList();
@@ -86,7 +86,8 @@ namespace DATN_Client.Areas.Customer.Component
         }
         public async Task LoadAddress()
         {
-            var d = await _client.GetFromJsonAsync<List<AddressShip_VM>>($"https://localhost:7141/api/AddressShip/get_address_by_UserID/a4c10abe-eec2-40e6-9b6c-cf1221e9da78");// sau khi xong phải đổi qua session
+			var a = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
+			var d = await _client.GetFromJsonAsync<List<AddressShip_VM>>($"https://localhost:7141/api/AddressShip/get_address_by_UserID/{a}");// sau khi xong phải đổi qua session
             _lstAddressGetById = d.OrderByDescending(x => x.Status).ToList();
         }
         public async Task UpdateAdress() //update-address
