@@ -117,7 +117,7 @@
                             <label style="text-align:left; font-size:15px;" class="col-6">@(User_VM.Sex==true?"Nam":"Nữ")</label>
                         </div>
                         <div class="nameUser" style="width:70%;">
-                            <button class="btnUpdateInfo" data-bs-toggle="modal" data-bs-target="#popupUpdateUser" style="font-size:13px;font-weight:450;">
+                            <button class="btnUpdateInfo" data-bs-toggle="modal" @onclick="()=>LoadUser(User_VM.Id)" style="font-size:13px;font-weight:450;">
                                 CẬP NHẬT
                             </button>
                         </div>
@@ -157,7 +157,7 @@
                             <div class="col-md-5"></div>
                             <div class="col-md-7" style="display:flex;">
                                 <button class="btnTrongSuot" data-bs-toggle="modal" style="padding-right:10px;"
-                                data-bs-target="#popupUpdateAdress" @onclick="()=>LoadUpdate(item.Id)">
+                                 @onclick="()=>LoadUpdate(item.Id)">
                                     Cập nhật
                                 </button>
                                 @if (item.Status == 1)
@@ -295,14 +295,14 @@
         <div class="modal-content">
             <div class="modal-body">               
                     <label style="font-size:22px;font-weight:600;padding:15px 50px 15px 15px">Thêm địa chỉ mới</label>
-                    <button class="col-md-1 btnTrongSuot2" style="margin-left:230px;" @onclick="ClosePopupAddAddress"><i class="fas fa-times" style="font-size:16pt;"></i></button>
+                    <button class="col-md-1 btnTrongSuot2" style="margin-left:265px;" @onclick='()=>ClosePopup("AddAddress")'><i class="fas fa-times" style="font-size:16pt;"></i></button>
                     <div style=" display: flex;flex-direction:column;">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="inputName">
                                     <i class="fa-solid fa-user-pen fa-l" style="color: #a1a1a1"></i>
                                     <div style="display:flex;flex-direction:column;margin-left:10px;">
-                                        <InputText class="form_field" name="name" id='name' @bind-Value="@addressShip_VM.Recipient" required placeholder="Họ và tên" />
+                                        <InputText class="form_field" name="name" id='name' @bind-Value="@addressShip_VM.Recipient" required placeholder="Họ và tên" />                                       
                                     </div>
                                 </div>
                             </div>
@@ -319,7 +319,7 @@
                             <div class="col-md-4">
                                 <div class="inputName" style="padding-left:15px;">
                                     <div style="display:flex;flex-direction:column;">
-                                        <InputSelect class="form_field" @bind-Value="@addressShip_VM.Province" @onclick="@ChonTinhTP">
+                                        <InputSelect class="form_field" @bind-Value="@addressShip_VM.Province" @onclick="@ChonTinhTP" required>
                                             <option value="@string.Empty" selected>--Tỉnh/Thành phố--</option>
                                             @foreach (var x in _lstTinhTp)
                                             {
@@ -332,7 +332,7 @@
                             <div class="col-md-4">
                                 <div class="inputName" style="padding-left:15px;">
                                     <div style="display:flex;flex-direction:column;">
-                                        <InputSelect class="form_field" @bind-Value="@addressShip_VM.District" @onclick="@ChonQuanHuyen">
+                                        <InputSelect class="form_field" @bind-Value="@addressShip_VM.District" @onclick="@ChonQuanHuyen" required>
                                             <option value="@string.Empty" selected>--Quận/Huyện--</option>
                                             @foreach (var x in _lstQuanHuyen)
                                             {
@@ -345,7 +345,7 @@
                             <div class="col-md-4">
                                 <div class="inputName" style="padding-left:15px;">
                                     <div style="display:flex;flex-direction:column;">
-                                        <InputSelect class="form_field" @bind-Value="@addressShip_VM.WardName" @onclick="@ChonXaPhuong">
+                                        <InputSelect class="form_field" @bind-Value="@addressShip_VM.WardName" @onclick="@ChonXaPhuong" required>
                                             <option value="@string.Empty" selected>--Xã/Phường--</option>
                                             @foreach (var x in _lstXaPhuong)
                                             {
@@ -392,7 +392,7 @@
                     <DataAnnotationsValidator />
                     <div class="row">
                     <label class="col-md-6" style="font-size:22px;font-weight:600;padding:15px 50px 15px 15px">Thêm địa chỉ mới</label>           
-                    <button class="col-md-1 btnTrongSuot2" style="margin-left:230px;" @onclick="ClosePopupUpdateAddress"><i class="fas fa-times" style="font-size:16pt;"></i></button>
+                    <button class="col-md-1 btnTrongSuot2" style="margin-left:230px;" @onclick='()=>ClosePopup("UpdateAddress")'><i class="fas fa-times" style="font-size:16pt;"></i></button>
                     </div>
                     <div style=" display: flex;flex-direction:column;">
                         <div class="row">
@@ -482,7 +482,13 @@
 
 
 <EditForm Model="User_VM">
-    <div class="modal fade" id="popupUpdateUser" tabindex="-1">
+    <div class="modal fade @(isModalOpenUpdateUser ? "show back" : "")" 
+            id="popupAddAdress" tabindex="-1" 
+            aria-hidden="@(isModalOpenUpdateUser ? "" : "true")"
+            style="display: @(isModalOpenUpdateUser ? "block" : "none")"
+            aria-modal="@(isModalOpenUpdateUser ? "true" : "none")"
+            role="@(isModalOpenUpdateUser ? "dialog" : "none")"  >
+            <DataAnnotationsValidator/>
         <div class="modal-dialog modal-dialog-centered" style="width:150%">
             <div class="modal-content">
                 <div class="modal-body">
@@ -493,12 +499,14 @@
                             <i class="fa-solid fa-user-pen fa-l" style="color: #a1a1a1"></i>
                             <div style="display:flex;flex-direction:column;margin-left:10px;width:90%">
                                 <InputText class="form_field" name="name" id='name' @bind-Value="@User_VM.Name" required placeholder="Tên của bạn" />
+                                <ValidationMessage For="()=>User_VM.Name" />
                             </div>
                         </div>
                         <div class="inputName">
                             <i class="fa-solid fa-phone fa-l" style="color: #a1a1a1"></i>
                             <div style="display:flex;flex-direction:column;margin-left:10px;width:90%">
                                 <InputText class="form_field" name="name" id='name' @bind-Value="@User_VM.PhoneNumber" required placeholder="Số điện thoại" />
+                                <ValidationMessage For="()=>User_VM.PhoneNumber" />
                             </div>
                         </div>
 

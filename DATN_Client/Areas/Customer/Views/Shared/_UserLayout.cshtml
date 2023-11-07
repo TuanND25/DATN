@@ -1,0 +1,61 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<style>
+.sidebar1{
+    width:300px;
+    transform: all 0.3s;
+    padding:20px;
+    overflow-y:auto;
+    box-shadow:0px 0px 20px rgba(1,41,112,0.1);
+    background-color:#fff;
+}
+
+</style>
+<div class="row">
+    <div class="col-md-3" style="margin-right:30px" >
+        <aside id="sidebar" class="sidebar1" >
+            <ul class="sidebar-nav" id="sidebar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link " asp-controller="Home" asp-action="Privacy">
+                        <i class="fa-solid fa-user-pen"></i>
+                        <span>Thông tin tài khoản</span>
+                    </a>
+                </li>
+               <li class="nav-item">
+                    <a class="nav-link collapsed" asp-area="Customer" asp-controller="Login" asp-action="Login">
+                        <i class="fa-regular fa-chart-bar"></i>
+                        <span>Lịch sử đơn hàng</span>
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-area="Customer" asp-controller="SignUp" asp-action="Index">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>Sổ địa chỉ</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-area="Customer" asp-controller="SignUp" asp-action="Index">
+                        <i class="fas fa-lock"></i>
+                        <span>Đổi mật khẩu</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-area="Customer" asp-controller="SignUp" asp-action="Index">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Đăng xuất</span>
+                    </a>
+                </li>
+            </ul>
+
+        </aside>
+    </div>
+    <div class="col-md-8">
+        @RenderBody()
+    </div>
+</div>
