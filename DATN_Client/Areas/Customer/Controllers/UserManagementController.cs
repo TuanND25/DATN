@@ -9,5 +9,15 @@ namespace DATN_Client.Areas.Customer.Controllers
         {
             return View();
         }
+
+        public IActionResult Address()
+        {
+            return View();
+        }
+
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
     }
 }
