@@ -13,7 +13,6 @@ namespace DATN_Client.Areas.Admin.Components
     {
 
 
-		[Inject] Blazored.SessionStorage.ISessionStorageService _SessionStorageService { get; set; }
 		HttpClient _httpClient = new HttpClient();
         public string Message { get; set; } = null;
        
@@ -46,7 +45,7 @@ namespace DATN_Client.Areas.Admin.Components
 
                 try
                 {
-                    _SessionStorageService.SetItemAsStringAsync("session",id);
+                    
                 }
                 catch(Exception ex)
                 {
