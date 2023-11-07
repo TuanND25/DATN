@@ -79,8 +79,16 @@ namespace DATN_API.Service_IService.Services
 
 		public async Task<IEnumerable<Bill>> GetBillByUserId(Guid UsedId)
 		{
-			var a = await _context.Bills.Where(x => x.UserId == UsedId).ToListAsync();
-			return a;
+            try
+            {
+                var a = await _context.Bills.Where(x => x.UserId == UsedId).ToListAsync();
+                return a;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 		}
 
 		public async Task<Bill> PostBill(Bill bill)
