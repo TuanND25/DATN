@@ -1,0 +1,8 @@
+﻿@using DATN_Client.Areas.Customer.Component
+
+@{
+    ViewData["Title"] = "Address";
+    Layout = "~/Areas/Customer/Views/Shared/_UserLayout.cshtml";
+}
+@(await Html.RenderComponentAsync<Address>(RenderMode.Server))
+
