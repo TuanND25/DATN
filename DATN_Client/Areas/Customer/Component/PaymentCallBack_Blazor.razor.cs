@@ -1,4 +1,5 @@
 ﻿using DATN_Client.Areas.Customer.Controllers;
+using DATN_Client.SessionService;
 using DATN_Shared.ViewModel;
 using DATN_Shared.ViewModel.Momo;
 using Microsoft.AspNetCore.Components;
@@ -17,11 +18,18 @@ namespace DATN_Client.Areas.Customer.Component
         private ProductItem_Show_VM _pi_s_vm = new ProductItem_Show_VM();
         private ProductItem_VM _pi_vm = new ProductItem_VM();
 		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
+		[Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
+		public string? _iduser { get; set; }
 		protected override async Task OnInitializedAsync()
         {
-            _responseModel = BanOnlineController._momoExecuteResponseModel;
+			_iduser = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
+			_responseModel = BanOnlineController._momoExecuteResponseModel;
             _lstPrI_VM = await _client.GetFromJsonAsync<List<ProductItem_VM>>("https://localhost:7141/api/productitem/get_all_productitem");
-            _lstCI = await _client.GetFromJsonAsync<List<CartItems_VM>>($"https://localhost:7141/api/CartItems/{Create_Bill_With_Info._bill_vm.UserId}");
+			if (_iduser == null)
+			{
+				_lstCI = SessionServices.GetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai");
+			}
+			else _lstCI = await _client.GetFromJsonAsync<List<CartItems_VM>>($"https://localhost:7141/api/CartItems/{Create_Bill_With_Info._bill_vm.UserId}");
             if (_responseModel.Message.ToLower() == "success")
             {
 				var codeToday = "B" + DateTime.Now.ToString().Substring(0, 10).Replace("/", "") + ".";
@@ -50,6 +58,7 @@ namespace DATN_Client.Areas.Customer.Component
 						var b = await _client.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", _pi_vm);
 						var c = await _client.DeleteAsync($"https://localhost:7141/api/CartItems/delete-CartItems/{x.Id}");
 					}
+					_ihttpcontextaccessor.HttpContext.Session.Remove("_lstCI_Vanglai");
 					_toastService.ShowSuccess("Đơn hàng đã được tạo thành công, để theo dõi đơn hàng hãy vào mục Lịch sử đơn hàng");
                     return;
 				}

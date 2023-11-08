@@ -43,6 +43,10 @@ namespace DATN_Client.Areas.Admin.Components
 		//public int PurchasePrice { get; set; }
 		//public int CostPrice { get; set; }
 		//public int Status { get; set; }
+		bool isModalOpenAddProduct = false;
+		bool isModalOpenAddCate = false;
+		bool isModalOpenAddColor = false;
+		bool isModalOpenAddSize = false;
 		protected override async Task OnInitializedAsync()
 		{
 			_lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
@@ -207,15 +211,20 @@ namespace DATN_Client.Areas.Admin.Components
 				_toastService.ShowError("Không được để trống");
 				return;
 			}
-			if (_lstP.Any(c => c.Name == _P_VM.Name))
+			if (_lstP.Any(c => c.Name.ToLower() == _P_VM.Name.ToLower()))
 			{
 				_toastService.ShowError("Tên đã tồn tại");
 				return;
 			}
+			_P_VM.Status = 1;
 			var x = await _client.PostAsJsonAsync("https://localhost:7141/api/product/add_product", _P_VM);
 			_lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
-			//_navigation.NavigateTo("https://localhost:7075/Admin/ProductItem",true);
-			_toastService.ShowSuccess("Thêm thành công");
+			if (x.IsSuccessStatusCode)
+			{
+				_toastService.ShowSuccess("Thêm thành công");
+				ClosePopup("AddProduct");
+			}
+			else _toastService.ShowError("Thêm không thành công");
 		}
 		public async Task Add_Cate()
 		{
@@ -224,14 +233,20 @@ namespace DATN_Client.Areas.Admin.Components
 				_toastService.ShowError("Không được để trống");
 				return;
 			}
-			if (_lstCate.Any(c => c.Name == _Cate_VM.Name))
+			if (_lstCate.Any(c => c.Name.ToLower() == _Cate_VM.Name.ToLower()))
 			{
 				_toastService.ShowError("Thể loại đã tồn tại");
 				return;
 			}
+			_Cate_VM.Status = 1;
 			var x = await _client.PostAsJsonAsync("https://localhost:7141/api/Categories/PostCategory", _Cate_VM);
 			_lstCate = await _client.GetFromJsonAsync<List<Categories_VM>>("https://localhost:7141/api/Categories");
-			_navigation.NavigateTo("https://localhost:7075/Admin/ProductItem", true);
+			if (x.IsSuccessStatusCode)
+			{
+				_toastService.ShowSuccess("Thêm thành công");
+				ClosePopup("AddCate");
+			}
+			else _toastService.ShowError("Thêm không thành công");
 		}
 		public async Task Add_C()
 		{
@@ -240,14 +255,20 @@ namespace DATN_Client.Areas.Admin.Components
 				_toastService.ShowError("Không được để trống");
 				return;
 			}
-			if (_lstC.Any(c => c.Name == _C_VM.Name))
+			if (_lstC.Any(c => c.Name.ToLower() == _C_VM.Name.ToLower()))
 			{
 				_toastService.ShowError("Màu sắc đã tồn tại");
 				return;
 			}
+			_C_VM.Status = 1;
 			var x = await _client.PostAsJsonAsync("https://localhost:7141/api/Color/PostColor", _C_VM);
 			_lstC = await _client.GetFromJsonAsync<List<Color_VM>>("https://localhost:7141/api/Color");
-			_navigation.NavigateTo("https://localhost:7075/Admin/ProductItem", true);
+			if (x.IsSuccessStatusCode)
+			{
+				_toastService.ShowSuccess("Thêm thành công");
+				ClosePopup("AddColor");
+			}
+			else _toastService.ShowError("Thêm không thành công");
 		}
 		public async Task Add_S()
 		{
@@ -256,14 +277,21 @@ namespace DATN_Client.Areas.Admin.Components
 				_toastService.ShowError("Không được để trống");
 				return;
 			}
-			if (_lstS.Any(c => c.Name == _S_VM.Name))
+			if (_lstS.Any(c => c.Name.ToLower() == _S_VM.Name.ToLower()))
 			{
 				_toastService.ShowError("Kích thước đã tồn tại");
 				return;
 			}
+			_S_VM.Status = 1;
+			_S_VM.Name = _S_VM.Name.ToUpper();
 			var x = await _client.PostAsJsonAsync("https://localhost:7141/api/Size/PostSize", _S_VM);
 			_lstS = await _client.GetFromJsonAsync<List<Size_VM>>("https://localhost:7141/api/Size");
-			_navigation.NavigateTo("https://localhost:7075/Admin/ProductItem", true);
+			if (x.IsSuccessStatusCode)
+			{
+				_toastService.ShowSuccess("Thêm thành công");
+				ClosePopup("AddSize");
+			}
+			else _toastService.ShowError("Thêm không thành công");
 		}
 
 		public async Task LoadAnh(Guid id)
@@ -315,21 +343,55 @@ namespace DATN_Client.Areas.Admin.Components
 								_PM_S_VM.Name == string.Empty ||
 								c.Name.Trim().ToLower().Contains(_PM_S_VM.Name.Trim().ToLower())).ToList();
 		}
-		public async Task LoadAddP()
+		private void SetModalState(bool isOpen, string modalType)
+		{
+			switch (modalType)
+			{
+				case "AddProduct":
+					isModalOpenAddProduct = isOpen;
+					break;
+				case "AddCate":
+					isModalOpenAddCate = isOpen;
+					break;
+				case "AddColor":
+					isModalOpenAddColor = isOpen;
+					break;
+				case "AddSize":
+					isModalOpenAddSize = isOpen;
+					break;
+				default:
+					break;
+			}
+		}
+
+		private void OpenPopup(string modalType)
+		{
+			SetModalState(true, modalType);
+		}
+
+		private void ClosePopup(string modalType)
+		{
+			SetModalState(false, modalType);
+		}
+		public async Task MoAddP()
 		{
 			_P_VM.Name = string.Empty;
+			OpenPopup("AddProduct");
 		}
-		public async Task LoadAddCate()
+		public async Task MoAddCate()
 		{
 			_Cate_VM.Name = string.Empty;
+			OpenPopup("AddCate");
 		}
-		public async Task LoadAddC()
+		public async Task MoAddColor()
 		{
 			_C_VM.Name = string.Empty;
+			OpenPopup("AddColor");
 		}
-		public async Task LoadAddS()
+		public async Task MoAddSize()
 		{
 			_S_VM.Name = string.Empty;
+			OpenPopup("AddSize");
 		}
 	}
 }
