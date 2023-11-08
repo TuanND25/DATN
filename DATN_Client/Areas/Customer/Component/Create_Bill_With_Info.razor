@@ -68,9 +68,17 @@
 
 			<!-- Nội dung của popup -->
 			<div class="modal-body">
-				@foreach (var item in _lst_adrS_User.OrderBy(c=>c.Status))
+				@foreach (var item in _lst_adrS_User.OrderByDescending(c => c.Status))
 				{
-					
+					<div class="row" style="height:60px">
+						<div class="col-md-10">
+							@item.Recipient | @item.NumberPhone <br>
+							@(item.ToAddress + ", " + item.WardName + ", " + item.District + ", " + item.Province)
+						</div>
+						<div class="col-md-2" style="text-align:center;vertical-align:middle;">
+							<button class="btn btn-primary" data-dismiss="modal" @onclick="()=>ChonDiaChiTuList(item)">Chọn</button>
+						</div>
+					</div>
 				}
 			</div>
 			<!-- Phần chân của popup -->
@@ -95,20 +103,30 @@
 			<div class="col-12" style="padding-left:100px;margin-top:20px">
 				<div style="display:flex;">
 					<img src="/img/avartar_user.png" style="width:8%;margin-right:20px" />
-					<div>
-						<label>@_user_vm.Name (@_user_vm.Email)</label><br />
-						<a href="facebook.com">Đăng xuất</a>
-					</div>
-					<div>
-						<a data-toggle="modal" data-target="#ChonDiaChi">Địa chỉ khác</a>
-					</div>
+					@if (_user_vm.Name!=null)
+					{
+						<div>
+							<label>@_user_vm.Name (@_user_vm.Email)</label><br />
+							<a href="facebook.com">Đăng xuất</a>
+						</div>
+						<div>
+							<a data-toggle="modal" data-target="#ChonDiaChi">Địa chỉ khác</a>
+						</div>
+					}
+					else
+					{
+						<div>
+							<label>Không có thông tin người dùng</label><br />
+							<a href="facebook.com">Đăng nhập</a>
+						</div>
+					}
 				</div>
 				<div style="margin-top:15px">
 					<input type="text" class="form-control" @bind-value="_bill_vm.Recipient" placeholder="Tên người nhận" />
 				</div>
 
 				<div style="margin-top:15px">
-					<input type="text" class="form-control" @bind-value="_user_vm.PhoneNumber" placeholder="Số điện thoại" />
+					<input type="text" class="form-control" @bind-value="_bill_vm.NumberPhone" placeholder="Số điện thoại" />
 				</div>
 
 				<div class="col-12" style="margin-top:15px;display:flex">
@@ -188,8 +206,15 @@
 	<div class="col-md-6">
 		@foreach (var x in _lstCI)
 		{
-			var img = _lstImg.Where(c => c.ProductItemId == x.ProductItemId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
 			_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
+			var lst_chonmau = _lstPrI_show_VM.Where(c => c.ColorId == _pi_s_vm.ColorId).ToList();
+			_lstImg_PI_tam.Clear();
+			foreach (var mau in lst_chonmau)
+			{
+				var a = _lstImg_PI.Where(c => c.ProductItemId == mau.Id);
+				_lstImg_PI_tam.AddRange(a);
+			}
+			var img = _lstImg_PI_tam.Where(c => c.ProductId == _pi_s_vm.ProductId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
 			<div style="display:flex;">
 				<div style="display:flex;">
 					<div style="position:relative">

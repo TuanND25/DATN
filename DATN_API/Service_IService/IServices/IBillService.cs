@@ -1,8 +1,9 @@
 ﻿using DATN_Shared.Models;
+using DATN_Shared.ViewModel;
 
 namespace DATN_API.Service_IService.IServices
 {
-    public interface IBillService
+	public interface IBillService
     {
         public Task<Bill> PostBill(Bill bill);
         public Task<Bill> PutBill(Bill bill);

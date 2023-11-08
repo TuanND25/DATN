@@ -40,60 +40,69 @@
 		border: none;
 	}
 
-	.custom-file-upload:hover {
-		background-color: #286090;
-	}
+		.custom-file-upload:hover {
+			background-color: #286090;
+		}
 
-	.custom-file-upload i {
-		margin-right: 5px;
+		.custom-file-upload i {
+			margin-right: 5px;
+		}
+
+	.back {
+		background-color: rgba(0,0,0,0.7);
 	}
 </style>
 
 <h1>Quản lý sản phẩm</h1>
 @* style="display:none" *@
 @* style="width:100px;height: 100px; "*@
-	<div class="modal fade" id="Add_P">
-		<div class="modal-dialog">
-			<div class="modal-content">
 
-				<!-- Phần tiêu đề của popup -->
-				<div class="modal-header">
-					<h4 class="modal-title">Thêm sản phẩm</h4>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-				</div>
-
-				<!-- Nội dung của popup -->
-				<EditForm Model="_P_VM">
-					<div class="modal-body">
-						Tên sản phẩm
-					<InputText class="form-control" @bind-Value="@_P_VM.Name" />
-					</div>
-					<!-- Phần chân của popup -->
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-					<button type="button" class="btn btn-primary" @onclick="Add_P">Thêm</button>
-					</div>
-				</EditForm>
-			</div>
-		</div>
-		<BlazoredToasts Position="ToastPosition.BottomRight"
-						Timeout="10"
-						IconType="IconType.FontAwesome"
-						SuccessClass="success-toast-override"
-						SuccessIcon="fa-solid fa-check"
-						ErrorIcon="fa-solid fa-triangle-exclamation" />
-	</div>
-<div class="modal fade" id="Add_Cate">
-	<div class="modal-dialog">
+@* popup add product *@
+<div class="modal fade @(isModalOpenAddProduct ? "show back" : "")"
+	 tabindex="-1"
+	 aria-hidden="@(isModalOpenAddProduct ? "" : "true")"
+	 style="display: @(isModalOpenAddProduct ? "block" : "none")"
+	 aria-modal="@(isModalOpenAddProduct ? "true" : "none")"
+	 role="@(isModalOpenAddProduct ? "dialog" : "none")">
+	<div class="modal-dialog modal-dialog-centered" style="width:150%">
 		<div class="modal-content">
-
-			<!-- Phần tiêu đề của popup -->
+			<div class="modal-header">
+				<h4 class="modal-title">Thêm sản phẩm</h4>
+				<button type="button" class="close" @onclick='()=>ClosePopup("AddProduct")'>&times;</button>
+			</div>
+			<EditForm Model="_P_VM">
+				<div class="modal-body">
+					Tên sản phẩm
+					<InputText class="form-control" @bind-Value="@_P_VM.Name" />
+				</div>
+				<!-- Phần chân của popup -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" @onclick='()=>ClosePopup("AddProduct")'>Đóng</button>
+					<button type="button" class="btn btn-primary" @onclick="Add_P">Thêm</button>
+				</div>
+			</EditForm>
+		</div>
+	</div>
+	<BlazoredToasts Position="ToastPosition.BottomRight"
+					Timeout="10"
+					IconType="IconType.FontAwesome"
+					SuccessClass="success-toast-override"
+					SuccessIcon="fa-solid fa-check"
+					ErrorIcon="fa-solid fa-triangle-exclamation" />
+</div>
+@* popup add cate *@
+<div class="modal fade @(isModalOpenAddCate ? "show back" : "")"
+	 tabindex="-1"
+	 aria-hidden="@(isModalOpenAddCate ? "" : "true")"
+	 style="display: @(isModalOpenAddCate ? "block" : "none")"
+	 aria-modal="@(isModalOpenAddCate ? "true" : "none")"
+	 role="@(isModalOpenAddCate ? "dialog" : "none")">
+	<div class="modal-dialog modal-dialog-centered" style="width:150%">
+		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title">Thêm thể loại</h4>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<button type="button" class="close" @onclick='()=>ClosePopup("AddCate")'>&times;</button>
 			</div>
-
-			<!-- Nội dung của popup -->
 			<EditForm Model="_Cate_VM">
 				<div class="modal-body">
 					Tên thể loại
@@ -101,7 +110,7 @@
 				</div>
 				<!-- Phần chân của popup -->
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+					<button type="button" class="btn btn-secondary" @onclick='()=>ClosePopup("AddCate")'>Đóng</button>
 					<button type="button" class="btn btn-primary" @onclick="Add_Cate">Thêm</button>
 				</div>
 			</EditForm>
@@ -114,25 +123,27 @@
 					SuccessIcon="fa-solid fa-check"
 					ErrorIcon="fa-solid fa-triangle-exclamation" />
 </div>
-<div class="modal fade" id="Add_C">
-	<div class="modal-dialog">
+@* popup add color *@
+<div class="modal fade @(isModalOpenAddColor ? "show back" : "")"
+	 tabindex="-1"
+	 aria-hidden="@(isModalOpenAddColor ? "" : "true")"
+	 style="display: @(isModalOpenAddColor ? "block" : "none")"
+	 aria-modal="@(isModalOpenAddColor ? "true" : "none")"
+	 role="@(isModalOpenAddColor ? "dialog" : "none")">
+	<div class="modal-dialog modal-dialog-centered" style="width:150%">
 		<div class="modal-content">
-
-			<!-- Phần tiêu đề của popup -->
 			<div class="modal-header">
 				<h4 class="modal-title">Thêm màu sắc</h4>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<button type="button" class="close" @onclick='()=>ClosePopup("AddColor")'>&times;</button>
 			</div>
-
-			<!-- Nội dung của popup -->
 			<EditForm Model="_C_VM">
 				<div class="modal-body">
 					Tên màu sắc
-					<InputText class="form-control" @bind-Value="@_C_VM.Name"/>
+					<InputText class="form-control" @bind-Value="@_C_VM.Name" />
 				</div>
 				<!-- Phần chân của popup -->
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+					<button type="button" class="btn btn-secondary" @onclick='()=>ClosePopup("AddColor")'>Đóng</button>
 					<button type="button" class="btn btn-primary" @onclick="Add_C">Thêm</button>
 				</div>
 			</EditForm>
@@ -145,25 +156,27 @@
 					SuccessIcon="fa-solid fa-check"
 					ErrorIcon="fa-solid fa-triangle-exclamation" />
 </div>
-<div class="modal fade" id="Add_S">
-	<div class="modal-dialog">
+@* popup add size *@
+<div class="modal fade @(isModalOpenAddSize ? "show back" : "")"
+	 tabindex="-1"
+	 aria-hidden="@(isModalOpenAddSize ? "" : "true")"
+	 style="display: @(isModalOpenAddSize ? "block" : "none")"
+	 aria-modal="@(isModalOpenAddSize ? "true" : "none")"
+	 role="@(isModalOpenAddSize ? "dialog" : "none")">
+	<div class="modal-dialog modal-dialog-centered" style="width:150%">
 		<div class="modal-content">
-
-			<!-- Phần tiêu đề của popup -->
 			<div class="modal-header">
-				<h4 class="modal-title">Thêm size</h4>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Thêm kích thước</h4>
+				<button type="button" class="close" @onclick='()=>ClosePopup("AddSize")'>&times;</button>
 			</div>
-
-			<!-- Nội dung của popup -->
 			<EditForm Model="_S_VM">
 				<div class="modal-body">
-					Tên size
+					Tên kích thước
 					<InputText class="form-control" @bind-Value="@_S_VM.Name" />
 				</div>
 				<!-- Phần chân của popup -->
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+					<button type="button" class="btn btn-secondary" @onclick='()=>ClosePopup("AddSize")'>Đóng</button>
 					<button type="button" class="btn btn-primary" @onclick="Add_S">Thêm</button>
 				</div>
 			</EditForm>
@@ -176,6 +189,7 @@
 					SuccessIcon="fa-solid fa-check"
 					ErrorIcon="fa-solid fa-triangle-exclamation" />
 </div>
+
 <div class="modal fade" id="Delete_Img_Tam">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -205,7 +219,7 @@
 			<div class="col-md-2">
 				@{
 					<div style="height: 500px; overflow-y: auto;width:120px">
-						@foreach (var x in _lstImg_Tam.OrderBy(c=>c.STT))
+						@foreach (var x in _lstImg_Tam.OrderBy(c => c.STT))
 						{
 							<div style="margin-bottom:30px;margin-top:30px">
 								<a @onclick="()=>LoadAnh(x.Id)">
@@ -249,7 +263,7 @@
 								<option value="@x.Id">@x.Name</option>
 							}
 						</InputSelect>
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add_P" @onclick="LoadAddP">
+						<button type="button" class="btn btn-primary" @onclick="MoAddP">
 							Thêm
 						</button>
 					</div>
@@ -277,7 +291,7 @@
 									<option value="@x.Id">@x.Name</option>
 								}
 							</InputSelect>
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add_Cate" @onclick="LoadAddCate">
+							<button type="button" class="btn btn-primary" @onclick="MoAddCate">
 								Thêm
 							</button>
 						</div>
@@ -290,7 +304,7 @@
 									<option value="@x.Id">@x.Name</option>
 								}
 							</InputSelect>
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add_C" @onclick="LoadAddC">
+							<button type="button" class="btn btn-primary" @onclick="MoAddColor">
 								Thêm
 							</button>
 						</div>
@@ -303,7 +317,7 @@
 									<option value="@x.Id">@x.Name</option>
 								}
 							</InputSelect>
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add_S" @onclick="LoadAddS">
+							<button type="button" class="btn btn-primary" @onclick="MoAddSize">
 								Thêm
 							</button>
 						</div>
@@ -420,9 +434,6 @@
 							<option value="@x.Name">@x.Name</option>
 						}
 					</InputSelect>
-				</div>
-				<div class="col-md-3">
-					<button type="submit" class="btn btn-primary" @onclick="LocHangLoat">Lọc</button>
 				</div>
 			</div>
 
