@@ -1,0 +1,84 @@
+﻿@using Blazored.Toast.Configuration
+
+<BlazoredToasts Position="ToastPosition.TopRight"
+                Timeout="5"
+                IconType="IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fas fa-check-circle"
+                ErrorIcon="fa-solid fa-triangle-exclamation" />
+
+<BlazoredToasts Position="ToastPosition.TopRight"
+                Timeout="5"
+                IconType="IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fa-solid fa-check"
+                ErrorIcon="fa-solid fa-triangle-exclamation" />
+
+<style>
+    .nav-tabs {
+        position: sticky;
+        top: 0;
+        background-color: white;
+        z-index: 1;
+    }
+
+    .notpoundimg {
+        height: 550px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+</style>
+
+
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Danh sách đơn hàng</h5>
+        <!-- Default Table -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Mã đơn hàng</th>
+                    <th scope="col">Ngày đặt</th>
+                    <th scope="col" style="text-align:center;">Thành tiền</th>
+                    <th scope="col" style="text-align:center;">Tình trạng</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (_lstBills.Count() == 0)
+                {
+                    <tr>
+                        <td colspan="4">
+                            <div class="notpoundimg">
+                                <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/orderlist/5fafbb923393b712b96488590b8f781f.png"
+                                 style="width: 100px; height: 100px;" alt="Bức ảnh">
+                                <h6 style="margin-top: 20px;">Chưa có đơn hàng nào</h6>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var a in _lstBills)
+                    {
+                        <tr>
+                            <th scope="row">
+                                <a @onclick="()=>NavBillItem(a)" style="color:#fff">#@a.BillCode</a>
+                            </th>
+                            <td style="width:220px;">@a.CreateDate</td>
+                            <td style="text-align:right;padding-right:30px;">@a.TotalAmount₫</td>
+                            <td style="text-align:center;">
+                                <span class="@(a.Status==0?"badge bg-danger":a.Status==1?"badge bg-warning":a.Status==2?"badge bg-info":"badge bg-success")">
+                                    @(a.Status==0?"Đã huỷ":a.Status==1?"Chờ xác nhận":a.Status==2?"Đang vận chuyển":"Hoàn thành")
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

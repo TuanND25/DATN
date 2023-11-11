@@ -19,6 +19,7 @@ namespace DATN_Shared.ViewModel
 		public Guid CategoryID { get; set; }
 		public int? PriceAfter { get; set; }
 		public string CategoryName { get; set; }
+		public string PaymentMethod { get; set; }
 		public int Quantity { get; set; }
 		public int? CostPrice { get; set; }
 		public int Status { get; set; }

@@ -19,5 +19,13 @@ namespace DATN_Client.Areas.Customer.Controllers
         {
             return View();
         }
+        public IActionResult BillByUser()
+        {
+            return View();
+        }
+        public IActionResult BilllItemByUser()
+        {
+            return View();
+        }
     }
 }

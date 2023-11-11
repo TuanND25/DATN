@@ -1,0 +1,96 @@
+﻿@using Blazored.Toast.Configuration
+
+<BlazoredToasts Position="ToastPosition.TopRight"
+                Timeout="5"
+                IconType="IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fas fa-check-circle"
+                ErrorIcon="fa-solid fa-triangle-exclamation" />
+
+<BlazoredToasts Position="ToastPosition.TopRight"
+                Timeout="5"
+                IconType="IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fa-solid fa-check"
+                ErrorIcon="fa-solid fa-triangle-exclamation" />
+
+@{
+    int? tong=0;
+}
+
+<div class="card">
+    <div class="card-body">
+        <EditForm Model="_bill_ShowModel">
+        <h5 class="card-title">Danh sách đơn hàng</h5>
+        <div>
+            <h6 class="card-title">ĐƠN HÀNG: #286384, Đặt lúc — 09/11/2023, 02:21SA</h6>
+        </div>
+        <div class="row">
+            <h5 class="card-title col-md-6" style="margin-left:15px;margin-right:30px;">Chi tiết đơn hàng</h5>
+            <h5 class="card-title col-md-5" style="text-align:right; color:red;">@(_bill_ShowModel.Status==0?"Đã huỷ":_bill_ShowModel.Status==1?"Chờ xác nhận":_bill_ShowModel.Status==2?"Đang vận chuyển":"Hoàn thành")</h5>
+        </div>
+        <hr />
+        <!-- Default Table -->
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Sản phẩm</th>
+                    <th scope="col" style="vertical-align:middle;">Đơn giá</th>
+                    <th scope="col" style="vertical-align:middle;">Số lượng</th>
+                    <th scope="col" style="vertical-align:middle; text-align:right;width:110px;">Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var a in _lstBillItems)
+                {
+                    <tr>
+                        <th style="width:115px;">
+                            <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/orderlist/5fafbb923393b712b96488590b8f781f.png"
+                             style="width: 90px; height: 90px;" alt="Bức ảnh">
+                        </th>
+                        <td style="vertical-align:middle;max-width:300px;">
+                            <a>@a.Name</a> <br />
+                            <span>@a.SizeName / @a.ColorName</span>
+                        </td>
+                        <td style="vertical-align:middle;">@(a.CostPrice?.ToString("#,##0"))₫</td>
+                        <td style="vertical-align:middle;text-align:center;">@a.Quantity</td>
+                        <td style="vertical-align:middle; text-align:right;">@((a.CostPrice*a.Quantity)?.ToString("#,##0"))₫</td>
+                    </tr>
+                   tong += (a.CostPrice*a.Quantity);
+                }
+                <tr style="border-top:1px solid #ededed">
+                    <td style="text-align:right;" colspan="3">Giá sản phẩm</td>
+                    <td style="text-align:right;font-weight:600;" colspan="5">@(tong?.ToString("#,##0"))₫</td>
+                </tr>
+                <tr>
+                    <td style="text-align:right;" colspan="3">Tổng tiền</td>
+                    <td style="text-align:right;font-weight:600;" colspan="5">@(_bill_ShowModel.TotalAmount?.ToString("#,##0"))₫</td>
+                </tr>
+                <tr>
+                    <td style="text-align:right;" colspan="3">Phương thức thanh toán</td>
+                    <td style="text-align:right;font-weight:600;" colspan="5">@_bill_ShowModel.PaymentMethodName</td>
+                </tr>
+            </tbody>
+        </table>
+        <h5 class="card-title">Địa chỉ nhận hàng</h5>
+        <div class="row">
+            <div class="row col-md-5">
+                <div class="col-md-12" style="font-family:inherit;font-size:15px;display:flex; ">
+                    <label style="border-right: 2px solid black;padding-right:10px;">
+                        @_bill_ShowModel.Recipient
+                    </label>
+                    <label style="padding-left:10px;font-family:inherit;font-size:14px">
+                         @_bill_ShowModel.NumberPhone
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7" style="font-family:inherit;font-size:14px">@(_bill_ShowModel.ToAddress +", " + _bill_ShowModel.WardName+", " +_bill_ShowModel.District+", " +_bill_ShowModel.Province)</div>
+            <div class="col-md-5" style="">
+            </div>
+        </div>
+        </EditForm>
+    </div>
+</div>

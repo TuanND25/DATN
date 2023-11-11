@@ -54,20 +54,30 @@ namespace DATN_Client.Areas.Customer.Component
         {
             addressShip_VM.Id = Guid.NewGuid();
             addressShip_VM.UserId = User_VM.Id;
-            if (addressShip_VM.Status == 1)
+            if (addressShip_VM.Recipient != null && addressShip_VM.Recipient != String.Empty ||
+                addressShip_VM.NumberPhone != null && addressShip_VM.NumberPhone != String.Empty ||
+                addressShip_VM.ToAddress != null && addressShip_VM.ToAddress != String.Empty
+                )
             {
-                foreach (var item in _lstAddressGetById)
+                if (addressShip_VM.Status == 1)
                 {
-                    item.Status = 0;
-                    var d = await _client.PutAsJsonAsync("https://localhost:7141/api/AddressShip/Put-Address", item);
+                    foreach (var item in _lstAddressGetById)
+                    {
+                        item.Status = 0;
+                        var d = await _client.PutAsJsonAsync("https://localhost:7141/api/AddressShip/Put-Address", item);
+                    }
                 }
-            }
-            var a = await _client.PostAsJsonAsync("https://localhost:7141/api/AddressShip/Post-Address", addressShip_VM);
-            if (a.IsSuccessStatusCode)
-            {
-                await LoadAddress();
-                ClosePopup("AddAddress");
-                _toastService.ShowSuccess("Thêm địa chỉ thành công");
+                var a = await _client.PostAsJsonAsync("https://localhost:7141/api/AddressShip/Post-Address", addressShip_VM);
+                if (a.IsSuccessStatusCode)
+                {
+                    await LoadAddress();
+                    ClosePopup("AddAddress");
+                    _toastService.ShowSuccess("Thêm địa chỉ thành công");
+                }
+                else
+                {
+                    _toastService.ShowError("Thêm mới địa chỉ thất bại");
+                }
             }
             else
             {
