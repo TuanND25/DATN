@@ -15,7 +15,7 @@
 
 </style>
 <div class="row">
-    <div class="col-md-3" style="margin-right:10px" >
+    <div class="col-md-3" >
         <aside id="sidebar" class="sidebar1" >
             <ul class="sidebar-nav" id="sidebar-nav">
 
@@ -26,7 +26,7 @@
                     </a>
                 </li>
                <li class="nav-item">
-                    <a class="nav-link collapsed" asp-area="Customer" asp-controller="UserManagement" asp-action="Login">
+                    <a class="nav-link collapsed" asp-area="Customer" asp-controller="UserManagement" asp-action="BillByUser">
                         <i class="fa-regular fa-chart-bar"></i>
                         <span>Lịch sử đơn hàng</span>
                     </a>
@@ -53,7 +53,7 @@
 
         </aside>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-9">
         @RenderBody()
     </div>
 </div>

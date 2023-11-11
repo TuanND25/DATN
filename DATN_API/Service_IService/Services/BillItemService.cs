@@ -53,6 +53,7 @@ namespace DATN_API.Service_IService.Services
 						join d in _context.Colors on c.ColorId equals d.Id
 						join e in _context.Sizes on c.SizeId equals e.Id
 						join f in _context.Categories on c.CategoryId equals f.Id
+						join g in _context.PaymentMethods on b.PaymentMethodId equals g.Id
 						where a.BillId == BillId
 						select new BillDetailShow()
 						{
@@ -70,6 +71,7 @@ namespace DATN_API.Service_IService.Services
 							PriceAfter = a.Price,
 							CostPrice = c.CostPrice,
 							Status = a.Status,
+							PaymentMethod=g.Name
 						}).ToList();
 			return _lst;
 		}

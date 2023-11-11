@@ -40,17 +40,7 @@ namespace DATN_API.Controllers
 			}
 		}
 
-		[HttpGet("get_bill_by_id/{Id}")]
-		public async Task<ActionResult<Bill>> GetBillById(Guid Id)
-		{
-			try
-			{
-				var lstId = await _billService.GetBillById(Id);
-				return Ok(lstId);
-			}
-			catch (Exception ex)
-			{
-				return BadRequest("Liên hệ Thai để sửa 0349198240");
+
 
 			}
 
