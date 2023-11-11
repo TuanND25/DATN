@@ -41,39 +41,11 @@ namespace DATN_API.Controllers
 		}
 
 
-
-			}
-
-		}
-
 		// POST api/<AddressShipController>
 		[HttpPost("Post-Bill")]
 		public async Task<ActionResult<Bill>> PostAddressShip(Bill_VM bill_vm)
 		{
-			//public Guid Id { get; set; }
-			//public Guid UserId { get; set; }
-			//public Guid? HistoryConsumerPointID { get; set; }
-			//public Guid PaymentMethodId { get; set; }
-			//public Guid? VoucherId { get; set; }
-			//public string BillCode { get; set; }
-			//public int? TotalAmount { get; set; }
-			//public int? ReducedAmount { get; set; }
-			//public int? Cash { get; set; }  // tiền mặt
-			//public int? CustomerPayment { get; set; } // tiền khách đưa
-			//public int? FinalAmount { get; set; } // tiền khách đưa
-			//public DateTime? CreateDate { get; set; }
-			//public DateTime? ConfirmationDate { get; set; }
-			//public DateTime? CompletionDate { get; set; }
-			//public int Type { get; set; }
-			//public string? Note { get; set; }
-			//public string Recipient { get; set; } // Người nhận
-			//public string District { get; set; } // Quận/Huyện
-			//public string Province { get; set; } // Tỉnh/ TP
-			//public string WardName { get; set; } // Phường/ Xã
-			//public string ToAddress { get; set; } // Địa chỉ chi tiết
-			//public string NumberPhone { get; set; } // SDT
-			//public int Status { get; set; }
-			//public int? ShippingFee { get; set; }
+			
 			try
 			{
 				Bill bill = new Bill();
@@ -110,8 +82,21 @@ namespace DATN_API.Controllers
 
 			}
 		}
+		[HttpGet("get_bill_by_id/{Id}")]
+		public async Task<ActionResult<Bill>> GetBillById(Guid Id)
+		{
+			try
+			{
+				var lstId = await _billService.GetBillById(Id);
+				return Ok(lstId);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest("Liên hệ Thai để sửa 0349198240");
+			}
+		}
 
-		[HttpPut("Put-Bill")]
+				[HttpPut("Put-Bill")]
 		public async Task<ActionResult<Bill>> PutBill(Bill_VM bill_vm)
 		{
 			try

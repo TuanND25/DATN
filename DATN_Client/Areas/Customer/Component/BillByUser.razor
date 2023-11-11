@@ -69,7 +69,7 @@
                                 <a @onclick="()=>NavBillItem(a)" style="color:#fff">#@a.BillCode</a>
                             </th>
                             <td style="width:220px;">@a.CreateDate</td>
-                            <td style="text-align:right;padding-right:30px;">@a.TotalAmount₫</td>
+                            <td style="text-align:right;padding-right:30px;">@(a.TotalAmount?.ToString("#,##0"))₫</td>
                             <td style="text-align:center;">
                                 <span class="@(a.Status==0?"badge bg-danger":a.Status==1?"badge bg-warning":a.Status==2?"badge bg-info":"badge bg-success")">
                                     @(a.Status==0?"Đã huỷ":a.Status==1?"Chờ xác nhận":a.Status==2?"Đang vận chuyển":"Hoàn thành")
