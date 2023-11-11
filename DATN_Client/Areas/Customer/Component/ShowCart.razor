@@ -1,4 +1,5 @@
 ﻿@using Blazored.Toast.Configuration
+@using DATN_Shared.Models;
 <BlazoredToasts Position="ToastPosition.BottomRight"
 				Timeout="10"
 				IconType="IconType.FontAwesome"
@@ -87,8 +88,15 @@
 		<p style="font-size:21px;font-weight:500;font-family:Futura;margin-bottom:10px">Giỏ hàng</p>
 		@foreach (var x in _lstCI)
 		{
-			var img = _lstImg.Where(c => c.ProductItemId == x.ProductItemId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
-			_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
+			_pi_s_vm = _lstPrI_show_VM.FirstOrDefault(c => c.Id == x.ProductItemId);
+			var lst_chonmau = _lstPrI_show_VM.Where(c => c.ColorId == _pi_s_vm.ColorId).ToList();
+			_lstImg_PI_tam.Clear();
+			foreach (var mau in lst_chonmau)
+			{
+				var a = _lstImg_PI.Where(c => c.ProductItemId == mau.Id);
+				_lstImg_PI_tam.AddRange(a);
+			}
+			var img = _lstImg_PI_tam.Where(c => c.ProductId == _pi_s_vm.ProductId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
 			<div style="display:flex;justify-content:space-between;font-family:'Times New Roman'">
 				<div style="display:flex;justify-content:center;align-items:center">
 					<img src="/images/@img" alt="" style="width:110px;height:110px;">

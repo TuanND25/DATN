@@ -1,6 +1,7 @@
 ﻿using DATN_API.Data;
 using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
+using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,9 +37,9 @@ namespace DATN_API.Service_IService.Services
 		{
 			var lst = (from a in _context.Bills
 					   join b in _context.Users on a.UserId equals b.Id
-					   join c in _context.HistoryConsumerPoints on a.HistoryConsumerPointID equals c.Id
+					   //join c in _context.HistoryConsumerPoints on a.HistoryConsumerPointID equals c.Id // không join được vì HistoryConsumerPointID có thể null
 					   join d in _context.PaymentMethods on a.PaymentMethodId equals d.Id
-					   //join e in _context.Vouchers on a.VoucherId equals e.Id
+					   //join e in _context.Vouchers on a.VoucherId equals e.Id // không join được vì VoucherID có thể null
 					   select new Bill_ShowModel
 					   {
 						   Id = a.Id,

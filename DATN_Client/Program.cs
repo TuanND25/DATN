@@ -1,6 +1,5 @@
 using DATN_Client.Areas.Admin.Controllers;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Blazored.SessionStorage;
 using DATN_Client.Areas.Customer.Controllers;
 using Blazored.Toast;
 
@@ -11,7 +10,6 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient();
-builder.Services.AddBlazoredSessionStorage();
 
 
 builder.Services.AddSession(options =>

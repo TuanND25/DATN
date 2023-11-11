@@ -6,181 +6,241 @@
 				SuccessIcon="fa-solid fa-check"
 				ErrorIcon="fa-solid fa-triangle-exclamation" />
 <style>
-    .paymentMethods {
-        border: 1px solid #A09F9E;
-        padding: 20px 30px 20px 30px;
-        border-radius: 5px;
-    }
+	.paymentMethods {
+		border: 1px solid #A09F9E;
+		padding: 20px 30px 20px 30px;
+		border-radius: 5px;
+	}
 
-    .titleCOD {
-        font-size: 14px;
-        padding: 10px 5px 10px 5px;
-        border: 1px solid #A09F9E;
-        background-color: #fdf4ed;
-        border-radius: 5px;
-    }
+	.titleCOD {
+		font-size: 14px;
+		padding: 10px 5px 10px 5px;
+		border: 1px solid #A09F9E;
+		background-color: #fdf4ed;
+		border-radius: 5px;
+	}
 
-    .btnSuccesBill {
-        background-color: #7dccff;
-        color: #f2faff;
-        padding: 15px 20px;
-        border: none;
-        border-radius: 5px;
-        margin-top: 25px;
-    }
+	.btnSuccesBill {
+		background-color: #7dccff;
+		color: #f2faff;
+		padding: 15px 20px;
+		border: none;
+		border-radius: 5px;
+		margin-top: 25px;
+	}
 
-        .btnSuccesBill:hover {
-            background-color: #64a3cc;
-            color: #fff;
-        }
+		.btnSuccesBill:hover {
+			background-color: #64a3cc;
+			color: #fff;
+		}
 
-    .img_Ab {
-        position: absolute;
-        background-color: #949491;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        text-align: center;
-        top: -10px;
-        right: -10px;
-        color: #fff;
-        opacity:0.8;
-    }
+	.img_Ab {
+		position: absolute;
+		background-color: #949491;
+		border-radius: 50%;
+		width: 20px;
+		height: 20px;
+		text-align: center;
+		top: -10px;
+		right: -10px;
+		color: #fff;
+		opacity: 0.8;
+	}
 
-    .countPrice{
-        width:70%;
-        display:flex;
-        justify-content:space-between;
-        margin-top:auto;
-        margin-bottom:auto;
-
-    }
+	.countPrice {
+		width: 70%;
+		display: flex;
+		justify-content: space-between;
+		margin-top: auto;
+		margin-bottom: auto;
+	}
 </style>
+
+<div class="modal fade" id="ChonDiaChi">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<!-- Phần tiêu đề của popup -->
+			<div class="modal-header">
+				<h4 class="modal-title">Chọn địa chỉ</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+
+			<!-- Nội dung của popup -->
+			<div class="modal-body">
+				@foreach (var item in _lst_adrS_User.OrderByDescending(c => c.Status))
+				{
+					<div class="row" style="height:60px">
+						<div class="col-md-10">
+							@item.Recipient | @item.NumberPhone <br>
+							@(item.ToAddress + ", " + item.WardName + ", " + item.District + ", " + item.Province)
+						</div>
+						<div class="col-md-2" style="text-align:center;vertical-align:middle;">
+							<button class="btn btn-primary" data-dismiss="modal" @onclick="()=>ChonDiaChiTuList(item)">Chọn</button>
+						</div>
+					</div>
+				}
+			</div>
+			<!-- Phần chân của popup -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+			</div>
+
+		</div>
+	</div>
+	<BlazoredToasts Position="ToastPosition.BottomRight"
+					Timeout="10"
+					IconType="IconType.FontAwesome"
+					SuccessClass="success-toast-override"
+					SuccessIcon="fa-solid fa-check"
+					ErrorIcon="fa-solid fa-triangle-exclamation" />
+</div>
+
 <div class=" row">
-    <div class="col-md-6">
-        <h4 style="padding-left:100px">Thông tin giao hàng</h4>
-        <EditForm Model="_bill_vm">
-            <div class="col-12" style="padding-left:100px;margin-top:20px">
-                <div style="display:flex;">
-                    <img src="/img/avartar_user.png" style="width:8%;margin-right:20px" />
-                    <div>
-                        <label>@_user_vm.UserName (@_user_vm.Email)</label><br />
-                        <a href="facebook.com">Đăng xuất</a>
-                    </div>
-                </div>
-                <div style="margin-top:15px">
-                    <input type="text" class="form-control" @bind-value="_bill_vm.Recipient" placeholder="Tên người nhận" />
-                </div>
+	<div class="col-md-6">
+		<h4 style="padding-left:100px">Thông tin giao hàng</h4>
+		<EditForm Model="_bill_vm">
+			<div class="col-12" style="padding-left:100px;margin-top:20px">
+				<div style="display:flex;">
+					<img src="/img/avartar_user.png" style="width:8%;margin-right:20px" />
+					@if (_user_vm.Name!=null)
+					{
+						<div>
+							<label>@_user_vm.Name (@_user_vm.Email)</label><br />
+							<a href="facebook.com">Đăng xuất</a>
+						</div>
+						<div>
+							<a data-toggle="modal" data-target="#ChonDiaChi">Địa chỉ khác</a>
+						</div>
+					}
+					else
+					{
+						<div>
+							<label>Không có thông tin người dùng</label><br />
+							<a href="facebook.com">Đăng nhập</a>
+						</div>
+					}
+				</div>
+				<div style="margin-top:15px">
+					<input type="text" class="form-control" @bind-value="_bill_vm.Recipient" placeholder="Tên người nhận" />
+				</div>
 
-                <div style="margin-top:15px">
-                    <input type="text" class="form-control" @bind-value="_user_vm.PhoneNumber" placeholder="Số điện thoại" />
-                </div>
+				<div style="margin-top:15px">
+					<input type="text" class="form-control" @bind-value="_bill_vm.NumberPhone" placeholder="Số điện thoại" />
+				</div>
 
-                <div class="col-12" style="margin-top:15px">
-                    <input type="text" class="form-control" @bind-value="_bill_vm.ToAddress" placeholder="Địa chỉ chi tiết" />
-                </div>
-                <div class="row" style="margin-top:15px">
-                    <div class="col-4">
-                        <InputSelect class="form-select" @bind-Value="@_bill_vm.Province" @onclick="ChonTinhTP">
-                            <option value="@string.Empty" selected>--Tỉnh/Thành phố--</option>
-                            @foreach(var x in _lstTinhTp)
-                            {
-                                <option value="@x.Name">@x.Name</option>
-                            }
-                        </InputSelect>
-                    </div>
-                    <div class="col-4">
-                        <InputSelect class="form-select" @bind-Value="@_bill_vm.District" @onclick="@ChonQuanHuyen">
-                            <option value="@string.Empty" selected>--Quận/Huyện/Thị xã--</option>
-                            @foreach (var x in _lstQuanHuyen)
-                            {
-                                <option value="@x.Name">@x.Name</option>
-                            }
-                        </InputSelect>
-                    </div>
-                    <div class="col-4">
-                        <InputSelect class="form-select" @bind-Value="@_bill_vm.WardName">
-                            <option value="@string.Empty" selected>--Phường/Xã--</option>
-                            @foreach (var x in _lstXaPhuong)
-                            {
-                                <option value="@x.Name">@x.Name</option>
-                            }
-                        </InputSelect>
-                    </div>
+				<div class="col-12" style="margin-top:15px;display:flex">
+					<input type="text" class="form-control" @bind-value="_bill_vm.ToAddress" placeholder="Địa chỉ chi tiết" />
+				</div>
+				<div class="row" style="margin-top:15px">
+					<div class="col-4">
+						<InputSelect class="form-select" @bind-Value="@_bill_vm.Province" @onclick="ChonTinhTP">
+							<option value="@string.Empty" selected>--Tỉnh/Thành phố--</option>
+							@foreach (var x in _lstTinhTp)
+							{
+								<option value="@x.Name">@x.Name</option>
+							}
+						</InputSelect>
+					</div>
+					<div class="col-4">
+						<InputSelect class="form-select" @bind-Value="@_bill_vm.District" @onclick="@ChonQuanHuyen">
+							<option value="@string.Empty" selected>--Quận/Huyện/Thị xã--</option>
+							@foreach (var x in _lstQuanHuyen)
+							{
+								<option value="@x.Name">@x.Name</option>
+							}
+						</InputSelect>
+					</div>
+					<div class="col-4">
+						<InputSelect class="form-select" @bind-Value="@_bill_vm.WardName">
+							<option value="@string.Empty" selected>--Phường/Xã--</option>
+							@foreach (var x in _lstXaPhuong)
+							{
+								<option value="@x.Name">@x.Name</option>
+							}
+						</InputSelect>
+					</div>
 
-                </div>
-                <div style="margin-top:15px">
-                    <InputTextArea class="form-control" @bind-Value="_bill_vm.Note" placeholder="Ghi chú" />
-                </div>
-                <div class="paymentMethods" style="margin-top:15px">
-                    <InputRadioGroup @bind-Value="_bill_vm.PaymentMethodId" class="form-control">
-                        @foreach (var a in _lstPayM)
-                        {
-                            <InputRadio Value="@a.Id" />
-                            <span>@a.Name</span>
-                            <br />
-                            @if (a.Name == "Thanh toán khi nhận hàng (COD)" && _lstPayM.Where(c => c.Id == _bill_vm.PaymentMethodId).FirstOrDefault().Name == "Thanh toán khi nhận hàng (COD)")
-                            {
-                                <div>
-                                    <p class="titleCOD">
-                                        1. Khi click vào nút <b>Hoàn tất đơn hàng</b> thì đơn hàng sẽ được hệ thống tự động xác nhận mà không cần phải gọi qua điện thoại, nếu điền thông tin địa chỉ và số điện thoại chính xác thì đơn hàng sẽ được vận chuyển từ 3-4-5 ngày tùy vùng miền.<br>
-                                        2. Trường hợp đặt hàng xong nhưng muốn HỦY ĐƠN, vui lòng soạn tin nhắn theo cú pháp: SĐT ĐÃ ĐẶT ĐƠN (hoặc MÃ ĐƠN hoặc GMAIL ĐƠN HÀNG) + TÊN NGƯỜI NHẬN sau đó gửi qua các kênh online: Page Facebook, Intagram. Nhân viên check tin nhắn sẽ xử lý hủy giúp Quý KH.
-                                    </p>
-                                </div>
-                            }
-                            @if (a.Name == "Thanh toán Momo" && _lstPayM.Where(c => c.Id == _bill_vm.PaymentMethodId).FirstOrDefault().Name == "Thanh toán Momo")
-                            {
-                                <div>
-                                    <p class="titleCOD">
-                                        Sau khi bấm nút <b>Hoàn tất đơn hàng</b> bạn sẽ được chuyển hướng đến trang thanh toán của Momo. Vui lòng thanh toán để hoàn tất đơn hàng
-                                    </p>
-                                </div>
-                            }
-                        }
-                    </InputRadioGroup>
-                </div>
-                <div style="display:flex;justify-content:space-between;align-items:center">
-                    <div>
-                        <a style="color:#7dccff;cursor:pointer;" @onclick="BackToCart">Giỏ hàng</a>
-                    </div>
-                    <button class="btnSuccesBill" @onclick="Btn_DatHang">
-                        Hoàn tất đơn hàng
-                    </button>
-                </div>
-            </div>
-        </EditForm>
-    </div>
-    <div class="col-md-6">
-        @foreach (var x in _lstCI)
-        {
-            var img = _lstImg.Where(c => c.ProductItemId == x.ProductItemId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
-            _pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
-            <div style="display:flex;">
-                <div style="display:flex;">
-                    <div style="position:relative">
-                        <img src="/images/@img" alt="" style="width:90px;height:90px;border-radius:8px">
-                        <div class="img_Ab">@x.Quantity</div>
-                    </div>
-                    <div style="display:flex; justify-content:space-between;flex-direction:column;height:60%;margin-top:auto;margin-bottom:auto;margin-left:20px">
-                        <label>@_pi_s_vm.Name</label>
-                        <div style="display:flex; justify-content:space-between;flex-direction:column;font-size:12px">
-                            <label>@_pi_s_vm.SizeName</label>
-                            <label>@_pi_s_vm.ColorName</label>
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-top:auto;margin-bottom:auto;font-size:14px;margin-left:80px">
-                    @((x.Quantity * _pi_s_vm.CostPrice)?.ToString("#,##0")) đ
-                </div>
-            </div>
-            <div style="width:70%;height:1px;background-color:#000;margin-top:10px ">
-            </div>
+				</div>
+				<div style="margin-top:15px">
+					<InputTextArea class="form-control" @bind-Value="_bill_vm.Note" placeholder="Ghi chú" />
+				</div>
+				<div class="paymentMethods" style="margin-top:15px">
+					<InputRadioGroup @bind-Value="_bill_vm.PaymentMethodId" class="form-control">
+						@foreach (var a in _lstPayM)
+						{
+							<InputRadio Value="@a.Id" />
+							<span>@a.Name</span>
+							<br />
+							@if (a.Name == "Thanh toán khi nhận hàng (COD)" && _lstPayM.Where(c => c.Id == _bill_vm.PaymentMethodId).FirstOrDefault().Name == "Thanh toán khi nhận hàng (COD)")
+							{
+								<div>
+									<p class="titleCOD">
+										1. Khi click vào nút <b>Hoàn tất đơn hàng</b> thì đơn hàng sẽ được hệ thống tự động xác nhận mà không cần phải gọi qua điện thoại, nếu điền thông tin địa chỉ và số điện thoại chính xác thì đơn hàng sẽ được vận chuyển từ 3-4-5 ngày tùy vùng miền.<br>
+										2. Trường hợp đặt hàng xong nhưng muốn HỦY ĐƠN, vui lòng soạn tin nhắn theo cú pháp: SĐT ĐÃ ĐẶT ĐƠN (hoặc MÃ ĐƠN hoặc GMAIL ĐƠN HÀNG) + TÊN NGƯỜI NHẬN sau đó gửi qua các kênh online: Page Facebook, Intagram. Nhân viên check tin nhắn sẽ xử lý hủy giúp Quý KH.
+									</p>
+								</div>
+							}
+							@if (a.Name == "Thanh toán Momo" && _lstPayM.Where(c => c.Id == _bill_vm.PaymentMethodId).FirstOrDefault().Name == "Thanh toán Momo")
+							{
+								<div>
+									<p class="titleCOD">
+										Sau khi bấm nút <b>Hoàn tất đơn hàng</b> bạn sẽ được chuyển hướng đến trang thanh toán của Momo. Vui lòng thanh toán để hoàn tất đơn hàng
+									</p>
+								</div>
+							}
+						}
+					</InputRadioGroup>
+				</div>
+				<div style="display:flex;justify-content:space-between;align-items:center">
+					<div>
+						<a style="color:#7dccff;cursor:pointer;" @onclick="BackToCart">Giỏ hàng</a>
+					</div>
+					<button class="btnSuccesBill" @onclick="Btn_DatHang">
+						Hoàn tất đơn hàng
+					</button>
+				</div>
+			</div>
+		</EditForm>
+	</div>
+	<div class="col-md-6">
+		@foreach (var x in _lstCI)
+		{
+			_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
+			var lst_chonmau = _lstPrI_show_VM.Where(c => c.ColorId == _pi_s_vm.ColorId).ToList();
+			_lstImg_PI_tam.Clear();
+			foreach (var mau in lst_chonmau)
+			{
+				var a = _lstImg_PI.Where(c => c.ProductItemId == mau.Id);
+				_lstImg_PI_tam.AddRange(a);
+			}
+			var img = _lstImg_PI_tam.Where(c => c.ProductId == _pi_s_vm.ProductId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
+			<div style="display:flex;">
+				<div style="display:flex;">
+					<div style="position:relative">
+						<img src="/images/@img" alt="" style="width:90px;height:90px;border-radius:8px">
+						<div class="img_Ab">@x.Quantity</div>
+					</div>
+					<div style="display:flex; justify-content:space-between;flex-direction:column;height:60%;margin-top:auto;margin-bottom:auto;margin-left:20px">
+						<label>@_pi_s_vm.Name</label>
+						<div style="display:flex; justify-content:space-between;flex-direction:column;font-size:12px">
+							<label>@_pi_s_vm.SizeName</label>
+							<label>@_pi_s_vm.ColorName</label>
+						</div>
+					</div>
+				</div>
+				<div style="margin-top:auto;margin-bottom:auto;font-size:14px;margin-left:80px">
+					@((x.Quantity * _pi_s_vm.CostPrice)?.ToString("#,##0")) đ
+				</div>
+			</div>
+			<div style="width:70%;height:1px;background-color:#000;margin-top:10px ">
+			</div>
 
-        }
-        <div class="countPrice">
-            <label>Tạm tính </label>
-            <label>@(_tongTienHang?.ToString("#,##0")) đ</label>
-        </div>
-        <div><h4>Tổng cộng @(_tongTienHang?.ToString("#,##0")) đ</h4> </div>       
-    </div>
+		}
+		<div class="countPrice">
+			<label>Tạm tính </label>
+			<label>@(_tongTienHang?.ToString("#,##0")) đ</label>
+		</div>
+		<div><h4>Tổng cộng @(_tongTienHang?.ToString("#,##0")) đ</h4> </div>
+	</div>
 </div>

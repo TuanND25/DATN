@@ -1,4 +1,5 @@
-﻿using DATN_Shared.ViewModel;
+﻿using DATN_Client.SessionService;
+using DATN_Shared.ViewModel;
 using DATN_Shared.ViewModel.DiaChi;
 using DATN_Shared.ViewModel.Momo;
 using DATN_Shared.ViewModel.Momo.Order;
@@ -15,11 +16,12 @@ namespace DATN_Client.Areas.Customer.Component
 		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
 		private List<User_VM> _lstUser = new List<User_VM>();
 		private List<CartItems_VM> _lstCI = new List<CartItems_VM>();
-		private List<Image_VM> _lstImg = new List<Image_VM>();
+		private List<Image_Join_ProductItem> _lstImg_PI = new List<Image_Join_ProductItem>();
+		private List<Image_Join_ProductItem> _lstImg_PI_tam = new List<Image_Join_ProductItem>();
 		private List<ProductItem_Show_VM> _lstPrI_show_VM = new List<ProductItem_Show_VM>();
 		private List<PaymentMethod_VM> _lstPayM = new List<PaymentMethod_VM>();
 		public static Bill_VM _bill_vm;
-		private User_VM _user_vm = new User_VM();
+		private User_VM? _user_vm = new User_VM();
 		private ProductItem_Show_VM _pi_s_vm = new ProductItem_Show_VM();
 		private OrderInfoModel _ord = new OrderInfoModel();
 		private PaymentMethod_VM _payM = new PaymentMethod_VM();
@@ -35,43 +37,70 @@ namespace DATN_Client.Areas.Customer.Component
 		private List<Bill_VM> _lstBill = new List<Bill_VM>();
 		private List<ProductItem_VM> _lstPrI_VM = new List<ProductItem_VM>();
 		private List<HistoryConsumerPoint_VM> _lstHCP_VM = new List<HistoryConsumerPoint_VM>();
+		private List<AddressShip_VM> _lst_adrS_User = new List<AddressShip_VM>();
+		private AddressShip_VM? _adrS_User = new AddressShip_VM();
 		public string _TinhTp { get; set; }
 		public string _QuanHuyen { get; set; }
 		public string _XaPhuong { get; set; }
 		public string _ptttbill1 { get; set; }
 		public string _ptttbill2 { get; set; }
-		protected override async Task OnInitializedAsync()
+		public int STT { get; set; } = 0;
+		public string? _iduser { get; set; }
+        protected override async Task OnInitializedAsync()
 		{
-			var token = _ihttpcontextaccessor.HttpContext.Session.GetString("Token"); // Gọi token
-			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token); // Xác thực
+			_iduser = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
+			//var token = _ihttpcontextaccessor.HttpContext.Session.GetString("Token"); // Gọi token
+			//_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token); // Xác thực
 			_bill_vm = new Bill_VM();
-			_bill_vm.UserId = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
-			_lstUser = await _httpClient.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
-			_user_vm = _lstUser.Where(c => c.Id == _bill_vm.UserId).FirstOrDefault();
-			_lstImg = (await _httpClient.GetFromJsonAsync<List<Image_VM>>("https://localhost:7141/api/Image")).OrderBy(c => c.STT).ToList();
-			_lstCI = await _httpClient.GetFromJsonAsync<List<CartItems_VM>>($"https://localhost:7141/api/CartItems/{_bill_vm.UserId}");
 			_lstPrI_show_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
+			if (_iduser == null)
+			{
+				_bill_vm.UserId = Guid.Parse("ff68aafb-dfdd-45cd-a21d-bd293d04b9a1");
+				_lstCI = SessionServices.GetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai");
+			}
+			else
+			{
+				_bill_vm.UserId = Guid.Parse(_iduser);
+				_lstUser = await _httpClient.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
+				_user_vm = _lstUser.Where(c => c.Id == _bill_vm.UserId).FirstOrDefault();
+				_lstCI = await _httpClient.GetFromJsonAsync<List<CartItems_VM>>($"https://localhost:7141/api/CartItems/{_bill_vm.UserId}");
+				_lst_adrS_User = await _httpClient.GetFromJsonAsync<List<AddressShip_VM>>($"https://localhost:7141/api/AddressShip/get_address_by_UserID/{_user_vm.Id}");
+				_adrS_User = _lst_adrS_User.FirstOrDefault(c => c.Status == 1);
+			}
+			
+			_lstImg_PI = (await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem")).OrderBy(c => c.STT).ToList();
 			_lstTinhTp_Data = await _httpClient.GetFromJsonAsync<List<Province_VM>>("https://api.npoint.io/ac646cb54b295b9555be"); // api tỉnh tp
 			_lstTinhTp = _lstTinhTp_Data;
 			_lstQuanHuyen_Data = await _httpClient.GetFromJsonAsync<List<District_VM>>("https://api.npoint.io/34608ea16bebc5cffd42");
 			_lstXaPhuong_Data = await _httpClient.GetFromJsonAsync<List<Ward_VM>>("https://api.npoint.io/dd278dc276e65c68cdf5");
 			_lstPayM = (await _httpClient.GetFromJsonAsync<List<PaymentMethod_VM>>("https://localhost:7141/api/paymentMethod/get_all_paymentMethod")).Where(c => c.Status == 1).ToList();
-			_lstBill = await _httpClient.GetFromJsonAsync<List<Bill_VM>>("https://localhost:7141/api/Bill/get_alll_bill");
 			_lstPrI_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_VM>>("https://localhost:7141/api/productitem/get_all_productitem");
-			_lstHCP_VM = await _httpClient.GetFromJsonAsync<List<HistoryConsumerPoint_VM>>("https://localhost:7141/api/HistoryConsumerPoint/get-HistoryConsumerPoint");
+			_lstHCP_VM = await _httpClient.GetFromJsonAsync<List<HistoryConsumerPoint_VM>>("https://localhost:7141/api/HistoryConsumerPoint/get-HistoryConsumerPoint");	
+			if (_adrS_User != null)
+			{
+				_bill_vm.NumberPhone = _adrS_User.NumberPhone;
+				_bill_vm.Recipient = _adrS_User.Recipient;
+				_bill_vm.ToAddress = _adrS_User.ToAddress;
+				// Tự gen
+				_bill_vm.Province = _adrS_User.Province;
+				await ChonTinhTP();
+				_bill_vm.District = _adrS_User.District;
+				await ChonQuanHuyen();
+				_bill_vm.WardName = _adrS_User.WardName;
+				await ChonXaPhuong();
+			}
+			if (_adrS_User == null)
+			{
+				_bill_vm.NumberPhone = string.Empty;
+				_bill_vm.Recipient = string.Empty;
+				_bill_vm.ToAddress = string.Empty;
+				_bill_vm.Province = string.Empty;
+				_bill_vm.District = string.Empty;
+				_bill_vm.WardName = string.Empty;
+			}
 			_payM = _lstPayM.FirstOrDefault(c => c.Name == "Thanh toán khi nhận hàng (COD)");
-			_bill_vm.NumberPhone = _user_vm.PhoneNumber;
 			_bill_vm.PaymentMethodId = _payM.Id;
 			_bill_vm.Note = ShowCart._note;
-			_bill_vm.Recipient = string.Empty;
-			_bill_vm.ToAddress = string.Empty;
-			// Tự gen
-			_bill_vm.Province = "Hà Nội";
-			await ChonTinhTP();
-			_bill_vm.District = "Huyện Hoài Đức";
-			await ChonQuanHuyen();
-			_bill_vm.WardName = "Xã Đức Giang";
-			await ChonXaPhuong();
 			//_bill_vm.Province = string.Empty;
 			//_bill_vm.District = string.Empty;
 			//_bill_vm.WardName = string.Empty;
@@ -121,12 +150,13 @@ namespace DATN_Client.Areas.Customer.Component
 				_bill_vm.Type = 1;
 				_bill_vm.Status = 1;
 				if (_bill_vm.Note == string.Empty) _bill_vm.Note = "Không có ghi chú";
-				_bill_vm.HistoryConsumerPointID = _lstHCP_VM.FirstOrDefault().Id;
-				if (_bill_vm.Recipient == string.Empty) _bill_vm.Recipient = _user_vm.UserName;
+				//_bill_vm.HistoryConsumerPointID = _lstHCP_VM.FirstOrDefault().Id;
+				if (_bill_vm.Recipient == string.Empty) _bill_vm.Recipient = _user_vm.Name;
 				// Order
 				_ord.OrderId = Guid.NewGuid().ToString();
-				_ord.FullName = _user_vm.UserName;
-				_ord.OrderInfo = _bill_vm.Note;
+				if (_user_vm.Name == null) _ord.FullName = _bill_vm.Recipient;
+				else _ord.FullName = _user_vm.Name;
+				_ord.OrderInfo =_bill_vm.Note;
 				_ord.Amount = _tongTienHang;
 				var reponse = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/Momo/CreatePaymentAsync", _ord);
 				var reponse2 = await reponse.Content.ReadFromJsonAsync<MomoCreatePaymentResponseModel>();
@@ -134,16 +164,21 @@ namespace DATN_Client.Areas.Customer.Component
 			}
 			if (_lstPayM.FirstOrDefault(c => c.Id == _bill_vm.PaymentMethodId).Name == "Thanh toán khi nhận hàng (COD)")
 			{
+				var codeToday = "B" + DateTime.Now.ToString().Substring(0, 10).Replace("/", "") + ".";
+				_lstBill = (await _httpClient.GetFromJsonAsync<List<Bill_VM>>("https://localhost:7141/api/Bill/get_alll_bill")).Where(c => c.BillCode.StartsWith(codeToday)).ToList();
 				_bill_vm.Id = Guid.NewGuid();
 				_bill_vm.TotalAmount = _tongTienHang;
 				_bill_vm.Type = 1;
 				_bill_vm.Status = 1;
 				if (_bill_vm.Note == string.Empty) _bill_vm.Note = "Không có ghi chú";
-				_bill_vm.HistoryConsumerPointID = _lstHCP_VM.FirstOrDefault().Id;
-				if (_bill_vm.Recipient == string.Empty) _bill_vm.Recipient = _user_vm.UserName;
-				_bill_vm.BillCode = "HD" + _lstBill.Max(c => Convert.ToInt32(c.BillCode.Substring(2)) + 1).ToString();
+				//_bill_vm.HistoryConsumerPointID = _lstHCP_VM.FirstOrDefault().Id;
+				if (_bill_vm.Recipient == string.Empty) _bill_vm.Recipient = _user_vm.Name;
+				// Tạo mã bill dạng: B + ngày tháng năm tạo bill + số lớn nhất +1
+				if (_lstBill.Count == 0) _bill_vm.BillCode = codeToday + "1";
+				else _bill_vm.BillCode = codeToday + _lstBill.Max(c => int.Parse(c.BillCode.Substring(10)) + 1).ToString();
+				// Ngày tạo
 				_bill_vm.CreateDate = DateTime.Now;
-				var addBill = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/Bill/Post-Bill", Create_Bill_With_Info._bill_vm);
+				var addBill = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/Bill/Post-Bill",_bill_vm);
 				if (addBill.IsSuccessStatusCode)
 				{
 					foreach (var x in _lstCI)
@@ -151,7 +186,7 @@ namespace DATN_Client.Areas.Customer.Component
 						_pi_vm = _lstPrI_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
 						BillItem_VM billItem_VM = new BillItem_VM();
 						billItem_VM.Id = Guid.NewGuid();
-						billItem_VM.BillId = Create_Bill_With_Info._bill_vm.Id;
+						billItem_VM.BillId = _bill_vm.Id;
 						billItem_VM.ProductItemsId = x.ProductItemId;
 						billItem_VM.Quantity = x.Quantity;
 						billItem_VM.Price = _pi_vm.CostPrice;
@@ -161,8 +196,11 @@ namespace DATN_Client.Areas.Customer.Component
 						var b = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", _pi_vm);
 						var c = await _httpClient.DeleteAsync($"https://localhost:7141/api/CartItems/delete-CartItems/{x.Id}");
 					}
+					_ihttpcontextaccessor.HttpContext.Session.Remove("_lstCI_Vanglai");
 					_toastService.ShowSuccess("Đơn hàng đã được tạo thành công, để theo dõi đơn hàng hãy vào mục Lịch sử đơn hàng");
+					return;
 				}
+				_toastService.ShowError("Tạo đơn hàng thất bại");
 			}
 		}
 
@@ -199,6 +237,19 @@ namespace DATN_Client.Areas.Customer.Component
 		public async Task ChonXaPhuong()
 		{
 			_XaPhuong = _bill_vm.WardName;
+		}
+		public async Task ChonDiaChiTuList(AddressShip_VM adrShip)
+		{
+			_bill_vm.Recipient = adrShip.Recipient;
+			_bill_vm.NumberPhone = adrShip.NumberPhone;
+			_bill_vm.ToAddress = adrShip.ToAddress;		
+			_bill_vm.Province = adrShip.Province;
+			await ChonTinhTP();			
+			_bill_vm.District = adrShip.District;
+			await ChonQuanHuyen();			
+			_bill_vm.WardName = adrShip.WardName;
+			await ChonXaPhuong();
+			_toastService.ShowSuccess("Thay đổi địa chỉ thành công");
 		}
 	}
 }

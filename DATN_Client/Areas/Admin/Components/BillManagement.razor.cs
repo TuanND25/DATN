@@ -1,5 +1,4 @@
-﻿using DATN_Shared.Models;
-using DATN_Shared.ViewModel;
+﻿using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Globalization;

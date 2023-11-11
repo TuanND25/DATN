@@ -10,7 +10,6 @@ namespace DATN_Client.Areas.Customer.Component
 {
 	public partial class Login
 	{
-		[Inject] Blazored.SessionStorage .ISessionStorageService _SessionStorageService { get; set; }
 		HttpClient _httpClient = new HttpClient();
 		public string Message { get; set; } = null;
 		HttpContext HttpContext { get; set; }
@@ -40,14 +39,7 @@ namespace DATN_Client.Areas.Customer.Component
 				var id = data[0];
                 
                 
-                try
-				{
-					_SessionStorageService.SetItemAsStringAsync("session", id);
-				}
-				catch (Exception ex)
-				{
-
-				}
+                
 
 				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 				var responseAuthorize = await _httpClient.GetAsync("https://localhost:7141/api/user/get-user");

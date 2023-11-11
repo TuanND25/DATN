@@ -1,4 +1,5 @@
-﻿using DATN_Shared.ViewModel;
+﻿using DATN_Client.SessionService;
+using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Components;
 
 namespace DATN_Client.Areas.Customer.Component
@@ -10,9 +11,10 @@ namespace DATN_Client.Areas.Customer.Component
 		[Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
 		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
 		private List<CartItems_VM> _lstCI = new List<CartItems_VM>();
-		private List<Image_VM> _lstImg = new List<Image_VM>();
+		private List<Image_Join_ProductItem> _lstImg_PI = new List<Image_Join_ProductItem>();
+		private List<Image_Join_ProductItem> _lstImg_PI_tam = new List<Image_Join_ProductItem>();
 		private List<ProductItem_Show_VM> _lstPrI_show_VM = new List<ProductItem_Show_VM>();
-		private ProductItem_Show_VM _pi_s_vm = new ProductItem_Show_VM();
+		private ProductItem_Show_VM? _pi_s_vm = new ProductItem_Show_VM();
 		public int? _tongTien { get; set; } = 0;
 		public string? _idUser { get; set; } = string.Empty;
 		public static string? _note { get; set; } = string.Empty;
@@ -20,10 +22,10 @@ namespace DATN_Client.Areas.Customer.Component
 		protected override async Task OnInitializedAsync()
 		{
 			_idUser = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
-			if (_idUser == null) return;
-			_lstCI = await _client.GetFromJsonAsync<List<CartItems_VM>>($"https://localhost:7141/api/CartItems/{_idUser}");
-			_lstImg = (await _client.GetFromJsonAsync<List<Image_VM>>("https://localhost:7141/api/Image")).OrderBy(c => c.STT).ToList();
 			_lstPrI_show_VM = await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
+			if (_idUser == null) _lstCI = SessionServices.GetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai");
+			else _lstCI = await _client.GetFromJsonAsync<List<CartItems_VM>>($"https://localhost:7141/api/CartItems/{_idUser}");
+			_lstImg_PI = (await _client.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem")).OrderBy(c => c.STT).ToList();
 			foreach (var x in _lstCI)
 			{
 				_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
@@ -34,9 +36,21 @@ namespace DATN_Client.Areas.Customer.Component
 
 		public async Task SL_Cong(CartItems_VM ci)
 		{
-			if (ci.Quantity == 99) return;
-			ci.Quantity += 1;
-			await _client.PutAsJsonAsync("https://localhost:7141/api/CartItems/update-CartItems", ci);
+			
+			if (_idUser == null)
+			{
+				if (ci.Quantity == 99) return;
+				_lstCI.Remove(ci);
+				ci.Quantity += 1;
+				_lstCI.Add(ci);
+				SessionServices.SetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai", _lstCI);
+			}
+			else
+			{
+				if (ci.Quantity == 99) return;
+				ci.Quantity += 1;
+				await _client.PutAsJsonAsync("https://localhost:7141/api/CartItems/update-CartItems", ci);
+			}
 			_tongTien = 0;
 			foreach (var x in _lstCI)
 			{
@@ -47,8 +61,20 @@ namespace DATN_Client.Areas.Customer.Component
 
 		public async Task SL_Tru(CartItems_VM ci)
 		{
-			if (ci.Quantity == 1) return;
-			ci.Quantity -= 1;
+			if (_idUser == null)
+			{
+				if (ci.Quantity == 1) return;
+				_lstCI.Remove(ci);
+				ci.Quantity -= 1;
+				_lstCI.Add(ci);
+				SessionServices.SetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai",_lstCI);
+			}
+			else
+			{
+				if (ci.Quantity == 1) return;
+				ci.Quantity -= 1;
+				await _client.PutAsJsonAsync("https://localhost:7141/api/CartItems/update-CartItems", ci);
+			}
 			await _client.PutAsJsonAsync("https://localhost:7141/api/CartItems/update-CartItems", ci);
 			_tongTien = 0;
 			foreach (var x in _lstCI)
@@ -60,9 +86,16 @@ namespace DATN_Client.Areas.Customer.Component
 
 		public async Task DeleteCI(CartItems_VM ci)
 		{
-			var delete = await _client.DeleteAsync($"https://localhost:7141/api/CartItems/delete-CartItems/{ci.Id}");
-			string id = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
-			_lstCI = await _client.GetFromJsonAsync<List<CartItems_VM>>($"https://localhost:7141/api/CartItems/{id}");
+			if (_idUser==null)
+			{
+				_lstCI.Remove(ci);
+				SessionServices.SetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai", _lstCI);
+			}
+			else
+			{
+				var delete = await _client.DeleteAsync($"https://localhost:7141/api/CartItems/delete-CartItems/{ci.Id}");
+				_lstCI = await _client.GetFromJsonAsync<List<CartItems_VM>>($"https://localhost:7141/api/CartItems/{_idUser}");
+			}
 			_tongTien = 0;
 			foreach (var x in _lstCI)
 			{
