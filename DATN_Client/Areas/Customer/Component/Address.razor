@@ -67,17 +67,17 @@
         </div><link href="~/css/showinfouser.css" rel="stylesheet" />
     </div>
     <hr>
-    @foreach (var item in _lstAddressGetById)
+    @if (_lstAddressGetById.Count() == 0)
     {
-        @if (_lstAddressGetById.Count() == 0)
-        {
-            <div class="notpoundimg">
-                <img src="/images/address-not-found.png"
+        <div class="notpoundimg">
+            <img src="/images/address-not-found.png"
              style="width: 260px; height: 200px;" alt="Bức ảnh">
-                <h6 style="margin-top: 20px;">Bạn chưa có địa chỉ</h6>
-            </div>
-        }
-        else
+            <h6 style="margin-top: 20px;">Bạn chưa có địa chỉ</h6>
+        </div>
+    }
+    else
+    {
+        @foreach (var item in _lstAddressGetById)
         {
             <div class="row">
                 <div class="row col-md-5">
@@ -132,7 +132,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-7" style="font-family:inherit;font-size:14px">@(item.Province +", "+item.District + ", "+item.WardName)</div>
+                <div class="col-md-7" style="font-family:inherit;font-size:14px">@(item.WardName +", "+item.District + ", "+item.Province)</div>
                 <div class="col-md-5" style="">
                 </div>
             </div>
