@@ -4,6 +4,7 @@ using DATN_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DATN_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231115142824_21")]
+    partial class _21
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,6 +108,7 @@ namespace DATN_API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("PaymentMethodId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Province")
@@ -561,15 +564,15 @@ namespace DATN_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("cb84a0c4-e9e9-4abb-b7cf-6ffd9e6c259f"),
-                            ConcurrencyStamp = "73f4f4d2-e5df-4015-99a5-4d6b88770d58",
+                            Id = new Guid("3eecae25-283b-40d2-9ecd-6209178bbaf6"),
+                            ConcurrencyStamp = "9178a81c-c2be-42b0-8016-ac970dca02cc",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("f97f4bf2-9d5d-49b0-80d8-46c736c6172c"),
-                            ConcurrencyStamp = "f023cb54-f4aa-4512-a9ed-bae92fba89d8",
+                            Id = new Guid("a75f67b8-014c-4c9e-bd3e-4e8100e21188"),
+                            ConcurrencyStamp = "8739c2b7-cb2e-43fd-8976-0c153009c7cd",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -865,7 +868,9 @@ namespace DATN_API.Migrations
 
                     b.HasOne("DATN_Shared.Models.PaymentMethod", "PaymentMethods")
                         .WithMany("Bills")
-                        .HasForeignKey("PaymentMethodId");
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DATN_Shared.Models.User", "Users")
                         .WithMany("Bills")

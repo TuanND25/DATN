@@ -1,30 +1,50 @@
-﻿<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Pills Tabs</h5>
+﻿<div class="row">
+    <div class="col-4" style="background-color:#e9f2f0">
+        <div>
+            <input class="input_Search" type="text" placeholder="Tìm kiếm theo tên" />
+        </div>
+        <div>
+            <p class="title_Product">Danh sách sản phẩm</p>
+        </div>
+        <div class="row" style="margin-bottom:20px">
+            @foreach (var item in _lstP)
+            {
+                string img = _lstImg_PI.Where(c => c.ProductId == item.Id).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
 
-        <!-- Pills Tabs -->
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Home</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Profile</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Contact</button>
-            </li>
-        </ul>
-        <div class="tab-content pt-2" id="myTabContent">
-            <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
-                a
-            </div>
-            <div class="tab-pane fade" id="pills-profile" role="tabpanel">
-                b
-            </div>
-            <div class="tab-pane fade" id="pills-contact" role="tabpanel">
-                c
-            </div>
-        </div><!-- End Pills Tabs -->
+                var giamin = _lstPrI_show_VM.Where(c => c.ProductId == item.Id).Min(c => c.CostPrice);
+                var giamax = _lstPrI_show_VM.Where(c => c.ProductId == item.Id).Max(c => c.CostPrice);
+                <div class="col-4">
+                    <div class="image_showProduct">
+                        <img src="/images/@img" style="width:100%;height:100%" />
+                        <p class="show_Price">
+                        @{
+					if (giamin == giamax || giamin == null || giamax == null)
+					{
+						@(giamax?.ToString("#,##0") + " VND")
+					}
+					else
+					{
+						@(giamin?.ToString("#,##0") + " - " + giamax?.ToString("#,##0") + " VND")
+					}
+				        }
+                        </p>
+                    </div>
+                    <div style="overflow:hidden">
+                        <label class="name_Product">@item.Name</label>
+                    </div>
+                    <hr />
+                </div>
 
+            }
+        </div>
+    </div>
+    <div class="col-8">
+        <div>          
+            @foreach (var x in _lstBill_Vm_show)
+            {
+                <button>@x.BillCode</button>
+            }
+            <i class="fa-solid fa-circle-plus" style="font-size:35px" @onclick="()=>addBill()"></i>
+        </div>
     </div>
 </div>

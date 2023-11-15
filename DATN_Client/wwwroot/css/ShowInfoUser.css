@@ -143,6 +143,23 @@ input[type="date"], focus {
         background-color: #5F6262;
         color: #fff;
     }
+.closePopup {
+    position: absolute;
+    top:120px;
+    right: -20px; 
+    height:50px;
+    width:50px;
+    text-align:center;
+    display:flex;
+    align-items:center;
+    border-radius: 50%;
+    background-color: #5F6262;
+    color:#fff; 
+    z-index:99;
+    opacity:1;
+    cursor:pointer;
+
+}
 
 
     
