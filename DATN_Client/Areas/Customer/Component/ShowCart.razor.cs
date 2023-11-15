@@ -40,9 +40,7 @@ namespace DATN_Client.Areas.Customer.Component
 			if (_idUser == null)
 			{
 				if (ci.Quantity == 99) return;
-				_lstCI.Remove(ci);
 				ci.Quantity += 1;
-				_lstCI.Add(ci);
 				SessionServices.SetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai", _lstCI);
 			}
 			else
@@ -64,9 +62,7 @@ namespace DATN_Client.Areas.Customer.Component
 			if (_idUser == null)
 			{
 				if (ci.Quantity == 1) return;
-				_lstCI.Remove(ci);
 				ci.Quantity -= 1;
-				_lstCI.Add(ci);
 				SessionServices.SetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai",_lstCI);
 			}
 			else

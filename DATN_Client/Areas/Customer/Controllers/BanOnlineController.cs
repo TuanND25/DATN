@@ -17,7 +17,6 @@ namespace DATN_Client.Areas.Customer.Controllers
         public static Guid _idP;
         public static IPagedList<Products_VM> _pageList;
         public static MomoExecuteResponseModel _momoExecuteResponseModel;
-        private readonly IOptions<MomoOptionModel> _options;
 
         public BanOnlineController()
         {
