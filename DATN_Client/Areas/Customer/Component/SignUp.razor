@@ -1,5 +1,62 @@
 ﻿<h3>SignUp</h3>
 
+
+
+<div class="Login full fullsign" >
+        <div class=" container1" style="width:600px;margin: 0 auto;  margin-top: 120px;
+  margin-bottom: 40px;">
+          <div class="form login" >
+            <span class="title">SignUp</span>
+              <form asp-action="SignUp">
+                <div class="input-field">
+                  <input type="text"  placeholder="UserName">
+                  <i class="fa-regular fa-user"></i>
+                </div>
+
+                <div class="input-field">
+                  <input type="text"  placeholder="NumberPhone">
+                  <i class="fa-regular fa-envelope icon"></i>
+                </div>
+                
+                <div class="input-field">
+                  <input type="password"  placeholder="Password">
+                  <i class="fa-solid fa-lock icon"></i>
+                  <i class="fa-regular fa-eye-slash showHidePW"></i>
+                </div>
+                <div class="input-field">
+                  <input type="password" placeholder="ConfirmPassWord">
+                  <i class="fa-solid fa-lock icon"></i>
+                  <i class="fa-regular fa-eye-slash showHidePW"></i>
+                </div>
+
+                <div class="checkbox-text">
+                  <div class="checkbox-content">
+                    <input type="checkbox" id="logCheck">
+                    <label for="logCheck" class="text">Tôi không phải người máy</label>
+                  </div>
+                  <a href="Forgot.html" class="text">Quên mật khẩu?</a>
+                </div>
+
+                <div class="input-field button">
+                  <input type="submit"  value="Đăng ký">
+                </div>
+              </form>
+
+              <div class="login-signup">
+                <span class="text">Bạn đã có tài khoản? 
+                  <a >Đăng nhập</a>
+                </span>
+              </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
 <EditForm Model="signUp">
 	<DataAnnotationsValidator />
 	<div class="form">
