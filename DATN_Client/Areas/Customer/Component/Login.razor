@@ -1,25 +1,38 @@
 ﻿
-<EditForm Model="loginUser">
 
-	<div class="form">
-		<label>Username:</label>
-		<InputText type="text" class="form-control"  @bind-Value="loginUser.UserName"/>
-	</div>
-	<div class="form">
-		<label>Password:</label>
-		<InputText type="password" class="form-control" @bind-Value="loginUser.Password" />
-	</div>
 
-	<button type="submit" class="btn btn-primary" @onclick="login">Login</button>
+    <div class="Login full" >
+        <div class=" container container1" style="width:600px;margin: 0 auto;  margin-top: 120px;
+  margin-bottom: 40px;">
+            <div class="form login">
+                <span class="title">Login</span>
+                <form asp-action="Login">
+                    <div class="input-field">
+                        <input type="text" placeholder="Username" >
+                        <i class="fa-regular fa-envelope icon"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="password" placeholder="Password" >
+                        <i class="fa-solid fa-lock icon"></i>
+                        <i class="fa-regular fa-eye-slash showHidePW"></i>
+                    </div>
 
-</EditForm>
-<a href="/dang-nhap-tu-google">Đăng nhập bằng Google</a>
-@if (Message != null)
-{
-		<p>@Message</p>
+                    <div class="checkbox-text">
+                        <div class="checkbox-content">
+                            <input type="checkbox" id="logCheck">
+                            <label for="logCheck" class="text">Remeber me</label>
+                        </div>
+                        <a href="#" class="text">Quên mật khẩu?</a>
+                    </div>
 
-}
-else
-{
-		<p>@Message</p>
-}
+                    <div class="input-field button">
+                        <input type="submit" value="Đăng nhập">
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
