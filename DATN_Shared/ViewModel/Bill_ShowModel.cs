@@ -13,7 +13,7 @@ namespace DATN_Shared.ViewModel
 		public string UserName { get; set; }
 		public Guid? HistoryConsumerPointID { get; set; }
 		public int ConsumerPoint { get; set; }
-		public Guid PaymentMethodId { get; set; }
+		public Guid? PaymentMethodId { get; set; }
 		public string PaymentMethodName { get; set; }
 		public string? Recipient { get; set; }
 		public string? District { get; set; }
