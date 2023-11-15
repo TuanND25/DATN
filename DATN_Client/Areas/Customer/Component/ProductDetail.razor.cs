@@ -2,6 +2,9 @@
 using DATN_Client.SessionService;
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace DATN_Client.Areas.Customer.Component
 {
@@ -30,10 +33,11 @@ namespace DATN_Client.Areas.Customer.Component
 		public string _chonSize { get; set; }
 		public string? _iduser { get; set; }
 		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
-
+		private ISession? _ss {  get; set; }
 		protected override async Task OnInitializedAsync()
 		{
-			_iduser = (_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
+			_ss = _ihttpcontextaccessor.HttpContext.Session;
+			_iduser = (_ss.GetString("UserId"));
 			_lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
 			_lstPrI_show_VM = (await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show")).Where(c => c.ProductId == BanOnlineController._idP).ToList();
 			_lstImg_PI = (await _client.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem")).Where(c => c.ProductId == BanOnlineController._idP).ToList();
@@ -92,7 +96,6 @@ namespace DATN_Client.Areas.Customer.Component
 
 		public async Task ThemVaoGiohang()
 		{
-			var ss = _ihttpcontextaccessor.HttpContext.Session;
 			if (_iduser != null)
 			{
 				_lstCI = await _client.GetFromJsonAsync<List<CartItems_VM>>($"https://localhost:7141/api/CartItems/{_iduser}");
@@ -116,15 +119,13 @@ namespace DATN_Client.Areas.Customer.Component
 			}
 			if (_iduser == null)
 			{
-				_lstCI = SessionServices.GetLstFromSession_LstCI(ss, "_lstCI_Vanglai");
+				_lstCI = SessionServices.GetLstFromSession_LstCI(_ss, "_lstCI_Vanglai");
 				var x = _pi_S_VM; // debug
 				if (_lstCI.Any(c => c.ProductItemId == _pi_S_VM.Id))
 				{
 					CartItems_VM ci = _lstCI.FirstOrDefault(c => c.ProductItemId == _pi_S_VM.Id);
-					_lstCI.Remove(ci);
 					ci.Quantity += _soLuong;
-					_lstCI.Add(ci);
-					var luuss1 = SessionServices.SetLstFromSession_LstCI(ss, "_lstCI_Vanglai", _lstCI);
+					var luuss1 = SessionServices.SetLstFromSession_LstCI(_ss, "_lstCI_Vanglai", _lstCI);
 					if (luuss1 == true)
 					{
 						_toastService.ShowSuccess("Sản phẩm đã được thêm vào giỏ hàng của bạn");
@@ -136,24 +137,36 @@ namespace DATN_Client.Areas.Customer.Component
 						return;
 					}
 				}
-				CartItems_VM cartItems = new CartItems_VM();
-				cartItems.Id = Guid.NewGuid();
-				cartItems.UserId = Guid.Parse("ff68aafb-dfdd-45cd-a21d-bd293d04b9a1");
-				cartItems.ProductItemId = _pi_S_VM.Id;
-				cartItems.Quantity = _soLuong;
-				cartItems.Status = 1;
-				_lstCI.Add(cartItems);
-				var luuss2 = SessionServices.SetLstFromSession_LstCI(ss, "_lstCI_Vanglai", _lstCI);
-				if (luuss2 == true)
+				CartItems_VM cartItems = new CartItems_VM
 				{
+					Id = Guid.NewGuid(),
+					UserId = Guid.Parse("ff68aafb-dfdd-45cd-a21d-bd293d04b9a1"),
+					ProductItemId = _pi_S_VM.Id,
+					Quantity = _soLuong,
+					Status = 1
+				};
+				_lstCI.Add(cartItems);
+				try
+				{
+					var JsonData = JsonConvert.SerializeObject(_lstCI);
+					_ss.SetString("_lstCI_Vanglai", JsonData);
 					_toastService.ShowSuccess("Sản phẩm đã được thêm vào giỏ hàng của bạn");
-					return;
 				}
-				else
+				catch (Exception)
 				{
 					_toastService.ShowError("Đã có lỗi xảy ra");
-					return;
 				}
+				//var luuss2 = SessionServices.SetLstFromSession_LstCI(ss, "_lstCI_Vanglai", _lstCI);
+				//if (luuss2 == true)
+				//{
+				//	_toastService.ShowSuccess("Sản phẩm đã được thêm vào giỏ hàng của bạn");
+				//	return;
+				//}
+				//else
+				//{
+				//	_toastService.ShowError("Đã có lỗi xảy ra");
+				//	return;
+				//}
 			}
 		}
 	}

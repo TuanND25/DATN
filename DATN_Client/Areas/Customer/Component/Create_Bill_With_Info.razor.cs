@@ -14,7 +14,7 @@ namespace DATN_Client.Areas.Customer.Component
 		[Inject] private NavigationManager _navi { get; set; }
 		[Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
 		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
-		private List<User_VM> _lstUser = new List<User_VM>();
+		//private List<User_VM> _lstUser = new List<User_VM>();
 		private List<CartItems_VM> _lstCI = new List<CartItems_VM>();
 		private List<Image_Join_ProductItem> _lstImg_PI = new List<Image_Join_ProductItem>();
 		private List<Image_Join_ProductItem> _lstImg_PI_tam = new List<Image_Join_ProductItem>();
@@ -61,8 +61,8 @@ namespace DATN_Client.Areas.Customer.Component
 			else
 			{
 				_bill_vm.UserId = Guid.Parse(_iduser);
-				_lstUser = await _httpClient.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
-				_user_vm = _lstUser.Where(c => c.Id == _bill_vm.UserId).FirstOrDefault();
+				//_lstUser = await _httpClient.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
+				_user_vm = await _httpClient.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get_user_by_id/{_iduser}");
 				_lstCI = await _httpClient.GetFromJsonAsync<List<CartItems_VM>>($"https://localhost:7141/api/CartItems/{_bill_vm.UserId}");
 				_lst_adrS_User = await _httpClient.GetFromJsonAsync<List<AddressShip_VM>>($"https://localhost:7141/api/AddressShip/get_address_by_UserID/{_user_vm.Id}");
 				_adrS_User = _lst_adrS_User.FirstOrDefault(c => c.Status == 1);
@@ -87,7 +87,6 @@ namespace DATN_Client.Areas.Customer.Component
 				_bill_vm.District = _adrS_User.District;
 				await ChonQuanHuyen();
 				_bill_vm.WardName = _adrS_User.WardName;
-				await ChonXaPhuong();
 			}
 			if (_adrS_User == null)
 			{
@@ -216,7 +215,11 @@ namespace DATN_Client.Areas.Customer.Component
 			_lstXaPhuong.Clear();
 			_bill_vm.District = string.Empty;
 			_bill_vm.WardName = string.Empty;
-			if (_bill_vm.Province == string.Empty) return;
+			if (_bill_vm.Province == string.Empty)
+			{
+				_TinhTp = string.Empty;
+				return;
+			}
 			Province_VM chon = new Province_VM();
 			chon = _lstTinhTp_Data.FirstOrDefault(c => c.Name == _bill_vm.Province);
 			_lstQuanHuyen = _lstQuanHuyen_Data.Where(c => c.ProvinceId == chon.Id).ToList();
@@ -228,7 +231,11 @@ namespace DATN_Client.Areas.Customer.Component
 			if (_bill_vm.District == _QuanHuyen) return;
 			_lstXaPhuong.Clear();
 			_bill_vm.WardName = string.Empty;
-			if (_bill_vm.District == string.Empty) return;
+			if (_bill_vm.District == string.Empty)
+			{
+				_QuanHuyen = string.Empty;
+				return;
+			}
 			District_VM chon = _lstQuanHuyen_Data.FirstOrDefault(c => c.Name == _bill_vm.District);
 			_lstXaPhuong = _lstXaPhuong_Data.Where(c => c.DistrictId == chon.Id).ToList();
 			_QuanHuyen = _bill_vm.District;
@@ -248,7 +255,6 @@ namespace DATN_Client.Areas.Customer.Component
 			_bill_vm.District = adrShip.District;
 			await ChonQuanHuyen();			
 			_bill_vm.WardName = adrShip.WardName;
-			await ChonXaPhuong();
 			_toastService.ShowSuccess("Thay đổi địa chỉ thành công");
 		}
 	}

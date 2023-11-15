@@ -69,7 +69,17 @@ namespace DATN_Client.Areas.Admin.Components
 				using (var stream = new FileStream(path, FileMode.Create))
 				{
 					// Thực hiện copy ảnh vừa chọn sang thư mục mới (wwwroot)
-					await _file.OpenReadStream().CopyToAsync(stream);
+					try
+					{
+						
+						await _file.OpenReadStream(2048 * 1024).CopyToAsync(stream);
+					}
+					catch (Exception)
+					{
+
+						_toastService.ShowError("Ảnh có kích thước quá lớn, vui lòng chọn ảnh khác");
+						return;
+					}
 				}
 				// Gán lại giá trị cho Description của đối tượng bằng tên file ảnh đã đưuọc sao chép
 				imgTam.PathImage = _file.Name;
