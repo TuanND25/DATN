@@ -17,7 +17,7 @@ namespace DATN_API.Controllers
             _sizeService = sizeService;
         }
 
-        [HttpGet]
+        [HttpGet("get_size")]
         public async Task<ActionResult<Size>> GetAllSize()
         {
             try
