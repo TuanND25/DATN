@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DATN_API.Migrations
 {
-    public partial class update_database : Migration
+    public partial class DATN_01 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -125,13 +125,10 @@ namespace DATN_API.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Percent = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Percent = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Discount_Conditions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -159,11 +156,12 @@ namespace DATN_API.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Reduced_Value = table.Column<int>(type: "int", nullable: false),
+                    Percent = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Discount_Conditions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Discount_Conditions = table.Column<int>(type: "int", nullable: true),
+                    Maximum_Reduction = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -199,9 +197,9 @@ namespace DATN_API.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Recipient = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DistrictID = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProvinceID = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    WardCode = table.Column<int>(type: "int", nullable: false),
+                    District = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Province = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WardName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ToAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NumberPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
@@ -348,9 +346,9 @@ namespace DATN_API.Migrations
                     ColorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SizeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AvaiableQuantity = table.Column<int>(type: "int", nullable: false),
-                    PurchasePrice = table.Column<int>(type: "int", nullable: false),
-                    CostPrice = table.Column<int>(type: "int", nullable: false),
+                    AvaiableQuantity = table.Column<int>(type: "int", nullable: true),
+                    PurchasePrice = table.Column<int>(type: "int", nullable: true),
+                    CostPrice = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -415,6 +413,7 @@ namespace DATN_API.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ConsumerPointId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FormulaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Point = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -441,7 +440,6 @@ namespace DATN_API.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Price = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -463,7 +461,7 @@ namespace DATN_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PromotionsProducts",
+                name: "PromotionsItem",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -473,15 +471,15 @@ namespace DATN_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PromotionsProducts", x => x.Id);
+                    table.PrimaryKey("PK_PromotionsItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PromotionsProducts_ProductItems_ProductItemsId",
+                        name: "FK_PromotionsItem_ProductItems_ProductItemsId",
                         column: x => x.ProductItemsId,
                         principalTable: "ProductItems",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PromotionsProducts_Promotions_PromotionsId",
+                        name: "FK_PromotionsItem_Promotions_PromotionsId",
                         column: x => x.PromotionsId,
                         principalTable: "Promotions",
                         principalColumn: "Id",
@@ -494,20 +492,27 @@ namespace DATN_API.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    HistoryConsumerPointID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PaymentMethodId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    HistoryConsumerPointID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PaymentMethodId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     VoucherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     BillCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TotalAmount = table.Column<int>(type: "int", nullable: false),
-                    ReducedAmount = table.Column<int>(type: "int", nullable: false),
+                    ShippingFee = table.Column<int>(type: "int", nullable: true),
+                    TotalAmount = table.Column<int>(type: "int", nullable: true),
+                    ReducedAmount = table.Column<int>(type: "int", nullable: true),
                     Cash = table.Column<int>(type: "int", nullable: true),
                     CustomerPayment = table.Column<int>(type: "int", nullable: true),
-                    FinalAmount = table.Column<int>(type: "int", nullable: false),
+                    FinalAmount = table.Column<int>(type: "int", nullable: true),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ConfirmationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CompletionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Recipient = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    District = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Province = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    WardName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ToAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NumberPhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -523,20 +528,17 @@ namespace DATN_API.Migrations
                         name: "FK_Bills_HistoryConsumerPoints_HistoryConsumerPointID",
                         column: x => x.HistoryConsumerPointID,
                         principalTable: "HistoryConsumerPoints",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Bills_PaymentMethods_PaymentMethodId",
                         column: x => x.PaymentMethodId,
                         principalTable: "PaymentMethods",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Bills_Vouchers_VoucherId",
                         column: x => x.VoucherId,
                         principalTable: "Vouchers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -547,7 +549,7 @@ namespace DATN_API.Migrations
                     BillId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductItemsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -603,6 +605,7 @@ namespace DATN_API.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    STT = table.Column<int>(type: "int", nullable: false),
                     PathImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
@@ -626,12 +629,12 @@ namespace DATN_API.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { new Guid("5dac6ad2-0762-4df5-95bb-4947fd66a616"), "1d73b14b-1fd2-40c3-82dc-b151a713e312", "User", "USER" });
+                values: new object[] { new Guid("7b219729-fffe-4d24-bc87-53215edb3254"), "108e36c6-c107-47c4-8ba6-b440eb00bfc1", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { new Guid("bbdf77a4-fd6d-4681-977b-d036515506bd"), "6c1f36e8-f5e3-4941-9227-9e856084b3e5", "Admin", "ADMIN" });
+                values: new object[] { new Guid("a48afc7a-b90b-44e1-811d-503f702cc3b2"), "445d330d-60bd-4ffc-8ce3-2ff7d226040f", "User", "USER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AddressShips_UserId",
@@ -758,13 +761,13 @@ namespace DATN_API.Migrations
                 column: "SizeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PromotionsProducts_ProductItemsId",
-                table: "PromotionsProducts",
+                name: "IX_PromotionsItem_ProductItemsId",
+                table: "PromotionsItem",
                 column: "ProductItemsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PromotionsProducts_PromotionsId",
-                table: "PromotionsProducts",
+                name: "IX_PromotionsItem_PromotionsId",
+                table: "PromotionsItem",
                 column: "PromotionsId");
 
             migrationBuilder.CreateIndex(
@@ -815,7 +818,7 @@ namespace DATN_API.Migrations
                 name: "Images");
 
             migrationBuilder.DropTable(
-                name: "PromotionsProducts");
+                name: "PromotionsItem");
 
             migrationBuilder.DropTable(
                 name: "VoucherUsers");
