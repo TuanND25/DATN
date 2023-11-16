@@ -19,7 +19,8 @@ namespace DATN_Client.Areas.Customer.Component
         private ProductItem_VM _pi_vm = new ProductItem_VM();
 		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
 		[Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
-		public string? _iduser { get; set; }
+        [Inject] private NavigationManager _navi { get; set; }
+        public string? _iduser { get; set; }
 		protected override async Task OnInitializedAsync()
         {
 			_iduser = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
@@ -64,6 +65,15 @@ namespace DATN_Client.Areas.Customer.Component
 				}
                 _toastService.ShowError("Tạo đơn hàng thất bại");
             }
+        }
+        public async Task BackToProduct()
+        {
+            _navi.NavigateTo("https://localhost:7075/Customer/BanOnline/ShowProduct", true);
+        }
+        public async Task Bill()
+        {
+            
+            _navi.NavigateTo("https://localhost:7075/Customer/UserManagement/BillByUser", true);
         }
     }
 }

@@ -5,8 +5,101 @@
                 SuccessClass="success-toast-override"
                 SuccessIcon="fa-solid fa-check"
                 ErrorIcon="fa-solid fa-triangle-exclamation" />
+                  <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        text-align: center;
+    }
 
-<div class="text-center">
+
+    h1 {
+        color: #4caf50;
+    }
+
+    p {
+        font-size: 18px;
+        color: #333;
+    }
+
+    .order-details {
+        text-align: left;
+        margin-top: 20px;
+    }
+
+        .order-details h2 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .order-details p {
+            font-size: 16px;
+        }
+
+    .chart {
+        margin-top: 20px;
+    }
+
+    .button {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+</style>
+
+
+@if (_responseModel.Message.ToLower() == "success")
+{
+    @* <div class="container">
+    <h1 class="text-success">Thanh Toán Thành Công</h1>
+    <p>Order ID: <strong>@_responseModel.OrderId</strong></p>
+    <p>Amount: <strong>@(int.Parse(_responseModel.Amount).ToString("#,##0")) đ</strong></p>
+    <p>Order Info: <strong>@_responseModel.OrderInfo</strong></p>
+    </div>*@
+
+    <div class="container">
+        <img src="/images/giphy.gif" width="100px" height="100px" />
+
+        <h1 class="text-success">Thanh Toán Thành Công</h1>
+        <p>Cảm ơn bạn đã thanh toán thành công. Giao dịch của bạn đã được hoàn tất.</p>
+        <div class="order-details">
+            <h2>Chi tiết đơn hàng</h2>
+            <p>Order ID: <strong>@_responseModel.OrderId</strong></p>
+            <p>Amount: <strong>@(int.Parse(_responseModel.Amount).ToString("#,##0")) đ</strong></p>
+            <p>Order Info: <strong>@_responseModel.OrderInfo</strong></p>
+        </div>
+        <div class="chart">
+            <!-- Đoạn mã cho biểu đồ dạng thanh có thể được thêm vào ở đây -->
+        </div>
+        <button type="button" id="add-to-cartbottom"
+                class="add-to-cartProduct add-cart-bottom button dark addtocart-modal"
+                name="add" @onclick="BackToProduct">
+            Trở về trang chính
+        </button>
+        <button type="button" id="add-to-cartbottom"
+                class="add-to-cartProduct add-cart-bottom button dark addtocart-modal"
+                name="add" @onclick="Bill">
+            Xem chi tiết hóa đơn
+        </button>
+    
+    </div>
+}
+else
+{
+    <div class="container">
+        <h1 class="text-danger">Thanh Toán Thất Bại</h1>
+    </div>
+}
+
+@*<div class="text-center">
     <h1 class="display-4">Thanh toán Momo</h1>
    
     @if (_responseModel.Message.ToLower() == "success")
@@ -24,5 +117,5 @@
             <h1 class="text-danger">Thanh Toán Thất Bại</h1>
         </div>
     }
-</div>
+</div>*@
 @* <button @onclick="CLDATA">CLDATA</button> *@
