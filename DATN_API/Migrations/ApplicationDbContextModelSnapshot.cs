@@ -561,15 +561,15 @@ namespace DATN_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("cb84a0c4-e9e9-4abb-b7cf-6ffd9e6c259f"),
-                            ConcurrencyStamp = "73f4f4d2-e5df-4015-99a5-4d6b88770d58",
+                            Id = new Guid("7b219729-fffe-4d24-bc87-53215edb3254"),
+                            ConcurrencyStamp = "108e36c6-c107-47c4-8ba6-b440eb00bfc1",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("f97f4bf2-9d5d-49b0-80d8-46c736c6172c"),
-                            ConcurrencyStamp = "f023cb54-f4aa-4512-a9ed-bae92fba89d8",
+                            Id = new Guid("a48afc7a-b90b-44e1-811d-503f702cc3b2"),
+                            ConcurrencyStamp = "445d330d-60bd-4ffc-8ce3-2ff7d226040f",
                             Name = "User",
                             NormalizedName = "USER"
                         });
