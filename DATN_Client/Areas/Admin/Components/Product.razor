@@ -1,6 +1,121 @@
-﻿namespace DATN_Client.Areas.Admin.Components
-{
-    public class Product
-    {
-    }
-}
+﻿
+<div class="row">
+    <div class="col-lg-8">
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Product</h5>
+                <EditForm Model="products_VM">
+                    <div class="row mb-3">
+                        <label for="inputText" class="col-sm-4 col-form-label">Name: </label>
+                        <div class="col-sm-8">
+                            <InputText class="form-control" @bind-Value="@products_VM.Name" />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Trạng thái: </label>
+                        <div class="col-sm-8">
+                            <div class="row">
+                                <InputRadioGroup @bind-Value="@products_VM.Status" class="form-control">
+                                    <div class="col-sm-6">
+                                        <InputRadio Value="1" /> Hoạt động
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <InputRadio Value="0" /> Ngừng hoạt động
+                                    </div>
+                                </InputRadioGroup>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <!--popup-->
+                        <label class="col-sm-4 col-form-label">Submit </label>
+                        <div class="col-sm-8">
+                            <button type="submit" class="btn btn-outline-success" style="float:center" data-bs-toggle="modal" data-bs-target="#Add">Create</button>
+                            <button type="submit" class="btn btn-outline-success" style="float:center" data-bs-toggle="modal" data-bs-target="#update">Update</button>
+                            <!--popup add-->
+                            <div class="modal fade" id="Add" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Thêm mới</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Bạn có xác nhận thêm mới san pham hay không ?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary" @onclick="AddProduct">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!--end popup add-->
+                            <!--popup update-->
+                            <div class="modal fade" id="update" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Update công thức</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Bạn có xác nhận update ten san pham hay không ?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary" @onclick="()=>UpdateProduct(products_VM)">Update</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!--end popup update-->
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+
+
+        @{
+            int count = 1;
+        }
+        <div class="card">
+            <div class="card-body">
+                <h4 style="margin-top:20px">List Product</h4>
+                <div class="pagetitle">
+                </div>
+                @if (products == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <div style="height: 500px; overflow-y: auto;">
+                        <table class="table">
+                            <thead>
+                                <tr style="position: sticky;top:0">
+                                    <th scope="col">#</th>
+                                    <th scope="col">Màu</th>
+                                    <th scope="col">Trạng Thái</th>
+                                    <th scope="col">Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var x in products)
+                                {
+                                    <tr>
+                                        <td>@(count++)</td>
+                                        <td>@x.Name</td>
+                                        <td>@(x.Status == 1 ? "Hoạt động" : "Ngừng hoạt động")</td>
+                                        <td><button type="button" class="btn btn-outline-success" style="float:center" @onclick="()=>LoadForm(x)">Apply</button> </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
