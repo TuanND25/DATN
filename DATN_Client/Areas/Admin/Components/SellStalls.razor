@@ -17,16 +17,16 @@
                     <div class="image_showProduct">
                         <img src="/images/@img" style="width:100%;height:100%" />
                         <p class="show_Price">
-                        @{
-					if (giamin == giamax || giamin == null || giamax == null)
-					{
-						@(giamax?.ToString("#,##0") + " VND")
-					}
-					else
-					{
-						@(giamin?.ToString("#,##0") + " - " + giamax?.ToString("#,##0") + " VND")
-					}
-				        }
+                            @{
+                                if (giamin == giamax || giamin == null || giamax == null)
+                                {
+                                    @(giamax?.ToString("#,##0") + " VND")
+                                }
+                                else
+                                {
+                                    @(giamin?.ToString("#,##0") + " - " + giamax?.ToString("#,##0") + " VND")
+                                }
+                            }
                         </p>
                     </div>
                     <div style="overflow:hidden">
@@ -38,13 +38,196 @@
             }
         </div>
     </div>
-    <div class="col-8">
-        <div>          
-            @foreach (var x in _lstBill_Vm_show)
-            {
-                <button>@x.BillCode</button>
-            }
-            <i class="fa-solid fa-circle-plus" style="font-size:35px" @onclick="()=>addBill()"></i>
+    <div class="col-8" style="display:flex;flex-direction:column;justify-content:space-between">
+        <div style="display:flex;justify-content:space-between;flex-direction:column">
+            <div style="display:flex; align-items:center;gap:3px;border-bottom:solid;">
+                @foreach (var x in _lstBill_Vm_show)
+                {
+                    <button class="btnBill @(BillId == x.Id ? "choseBill" :
+                "noChoseBill")" style="  display: flex;
+                    align-items: center;
+                    padding: 10px;
+                    justify-content: center;
+                    border-top-left-radius: 0.75rem;
+                    border-top-right-radius: 0.75rem;
+                    border:none;
+                    cursor:pointer"
+                        @onclick="()=>getBillId(x.Id)">
+                        <label>@x.BillCode</label>
+                        <label class="closeBill" @onclick="()=>closeBill(x.Id)" style="font-size:10px;margin-left:5px;cursor:pointer;text-align:center">X</label>
+                    </button>
+                }
+                <i class="fa-solid fa-circle-plus" style="font-size:35px" @onclick="()=>addBill()"></i>
+            </div>
+            <div style="margin-top:30px;display:flex;height:80px;align-items:center;justify-content:space-between;height:40%">
+                <div style="display:flex;align-items:center">
+                    <div style="margin-left:20px">
+                        1
+                    </div>
+                    <img src="/images/180333221_1211814135920494_4735639849484641427_n.jpg" class="img_productInBill" />
+                    <div style="display:flex; justify-content:space-between;flex-direction:column;margin-left:20px">
+                        <label>Áo Polo Outerity Polo Meowment</label>
+                        <label>Trắng</label>
+                        <label>S</label>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center">
+                    <div class="priceInBill">
+                        200000
+                    </div>
+                    <div class="selector-actions">
+                        <div class="number-input">
+                            <div class="input-wrapper">
+                                <button class="minus-button">-</button>
+                                <input type="number" class="input-field" value="1">
+                                <button class="plus-button">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-left:20px;padding:5px;border-bottom:1px solid #000;">
+                        200000
+                    </div>
+                    <div style="margin-left:20px;">
+                        <i class="fa-solid fa-trash" style="color:#d04040"></i>
+                    </div>
+                </div>
+
+            </div>
+            <div style="height:1px;background-color:#d3d3d3;width:100%;margin-top:5px"></div>
+        </div>
+        <div class="row">
+            <div class="col-6 infoKhachhang" style="display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;align-items:center;margin-bottom:10px">
+                    <input type="text" placeholder="Tìm KH theo tên hoặc số điện thoại" style="width:60%;margin-right:20px" />
+                    <i class="fa-solid fa-user-plus" style="font-size:20pxl;cursor:pointer"></i>
+                </div>
+                <label style="font-weight:700">Khách hàng: Nguyễn Thị Mai Linh - 0349198240</label>
+                <div class="row">
+                    <label class="col-4" style="font-weight:700">Điểm thưởng: </label>
+                    <label class="col-4" style="padding:0px">100 điểm</label>
+                </div>     
+                <div class="row">
+                    <label class="col-4" style="font-weight:700">Dùng điểm:</label>
+                    <input class="col-4" type="number" style="padding:0px;width:90px"/>
+                </div>
+                <div class="row">
+                    <label class="col-4" style="font-weight:700">Giảm giá:</label>
+                    <label class="col-4" style="padding:0px">10,000đ</label>
+                </div>
+            </div>
+            <div class="col-6">
+                <div style="display:flex">
+                    <button @onclick="()=>getPaymetMethod(1)" class="btnBill @(paymentmethodid==1 ? " choseBill":"nochoseBill")" style=" display: flex;
+                    align-items: center;
+                    padding: 10px;
+                    justify-content: center;
+                    border-top-left-radius: 0.75rem;
+                    border-top-right-radius: 0.75rem;
+                    border:none;
+                    cursor:pointer;
+                    margin-right:10px">
+                        Thanh toán Momo
+                    </button>
+                    <button @onclick="()=>getPaymetMethod(2)" class="btnBill @(paymentmethodid==2 ? " choseBill":"nochoseBill")" style="  display: flex;
+                    align-items: center;
+                    padding: 10px;
+                    justify-content: center;
+                    border-top-left-radius: 0.75rem;
+                    border-top-right-radius: 0.75rem;
+                    border:none;
+                    cursor:pointer">
+                        Tiền mặt
+                    </button>
+                </div>
+               <div style="height:220px;background-color:#F2F2F2">
+                    @if (paymentmethodid == 1)
+                    {
+                        <div style="display:flex;flex-direction:column;
+    gap:10px;background-color:#F2F2F2;height:100%;gap:10px">
+                            <div class="row">
+                                <div class="col-4" style="text-align:right">
+                                    <label>Thành tiền:</label>
+                                </div>
+                                <div class="col-4" style="text-align:right">
+                                    <label>1000000</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4" style="text-align:right">
+                                    <label>Tiêu điểm:</label>
+                                </div>
+                                <div class="col-4" style="text-align:right">
+                                    <label>10000</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4" style="text-align:right">
+                                    <label>Tổng cộng:</label>
+                                </div>
+                                <div class="col-4" style="text-align:right">
+                                    <label>990000</label>
+                                </div>
+                            </div>
+                            <div style="display:flex;justify-content:center;
+align-items:center;margin-top:20px">
+                                <button class="btn_Thanhtoan"> Thanh toán</button>
+                            </div>
+                        </div>
+                    }
+                    else if (paymentmethodid == 2)
+                    {
+                        <div style="display:flex;flex-direction:column;
+    gap:10px;background-color:#F2F2F2">
+                            <div class="row">
+                                <div class="col-4" style="text-align:right">
+                                    <label>Thành tiền:</label>
+                                </div>
+                                <div class="col-4" style="text-align:right">
+                                    <label>1000000</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4" style="text-align:right">
+                                    <label>Tiêu điểm:</label>
+                                </div>
+                                <div class="col-4" style="text-align:right">
+                                    <label>10000</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4" style="text-align:right">
+                                    <label>Tổng cộng:</label>
+                                </div>
+                                <div class="col-4" style="text-align:right">
+                                    <label>990000</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4" style="text-align:right">
+                                    <label>Thanh toán:</label>
+                                </div>
+                                <div class="col-4" style="text-align:right">
+                                    <input type="number" style="width:100px;text-align:right" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4" style="text-align:right">
+                                    <label>Tiền thừa:</label>
+                                </div>
+                                <div class="col-4" style="text-align:right">
+                                    <label>10000</label>
+                                </div>
+                            </div>
+                            <div style="display:flex;justify-content:center;
+align-items:center;margin-top:20px">
+                                <button class="btn_Thanhtoan"> Thanh toán</button>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
