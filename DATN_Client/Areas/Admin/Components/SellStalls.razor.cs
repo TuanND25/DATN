@@ -17,6 +17,8 @@ namespace DATN_Client.Areas.Admin.Components
         Bill_VM bill = new Bill_VM();
         List<Bill_VM> _lstBill_Vm = new List<Bill_VM>();
         List<Bill_VM> _lstBill_Vm_show = new List<Bill_VM>();
+        public int paymentmethodid { get; set; } = 2;
+        public Guid BillId { get; set; }
         protected override async Task OnInitializedAsync()
         {
             _lstPrI_show_VM = await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
@@ -26,8 +28,9 @@ namespace DATN_Client.Areas.Admin.Components
         public async Task  addBill()
         {
             var codeToday = "B" + DateTime.Now.ToString().Substring(0, 10).Replace("/", "") + ".";
+            var id = Guid.NewGuid();
             bill = new Bill_VM();
-            bill.Id = Guid.NewGuid();
+            bill.Id = id;
             bill.Status = 5;
             bill.Type = 1;//offline
             bill.UserId = Guid.Parse("6328a6c2-1e4b-40ea-8337-3a08d362eddd");
@@ -46,6 +49,25 @@ namespace DATN_Client.Areas.Admin.Components
                 throw;
             }
             _lstBill_Vm_show.Add(bill);
+            BillId = id;
+        }
+        public void getBillId(Guid id )
+        {
+            BillId = id;
+        }  
+        public void getPaymetMethod(int id )
+        {
+            paymentmethodid = id;
+        }
+        public void closeBill(Guid id)
+        {
+            var x = _lstBill_Vm_show.FirstOrDefault(x => x.Id == id);
+            _lstBill_Vm_show.Remove(x);
+            if (_lstBill_Vm_show.Count>0)
+            {
+                BillId = _lstBill_Vm_show[0].Id;
+            }
+           
         }
     }
 
