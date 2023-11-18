@@ -1,9 +1,11 @@
-﻿@model DATN_Shared.ViewModel.LoginUser
+﻿@using DATN_Client.Areas.Customer.Component
+@model DATN_Shared.ViewModel.LoginUser
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
 }
-<form asp-action="Login" method="post">
+@(await Html.RenderComponentAsync<Login>(RenderMode.Server))
+@*<form asp-action="Login" method="post">
     <div class="form">
         <label>Username:</label>
         <input type="text" class="form-control" asp-for="UserName" name="UserName" />
@@ -15,4 +17,4 @@
 
     <button type="submit" class="btn btn-primary">Login</button>
 </form>
-<a href="https://localhost:7075/Customer/ForgetPassword">quen mat khau</a>
+<a href="https://localhost:7075/Customer/ForgetPassword">quen mat khau</a>*@

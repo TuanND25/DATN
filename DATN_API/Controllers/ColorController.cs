@@ -17,7 +17,7 @@ namespace DATN_API.Controllers
         {
             _colorS = colorS;
         }
-        [HttpGet]
+        [HttpGet("get_color")]
         public async Task<ActionResult<Color>> GetAllColor()
         {
             try
