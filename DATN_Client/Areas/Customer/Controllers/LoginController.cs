@@ -46,8 +46,8 @@ namespace DATN_Client.Areas.Customer.Controllers
                 //var data = claims.Select(c => c.Value).ToArray();
                 //var id = data[0];
                 await HttpContext.SignInAsync(principal);
-                HttpContext.Session.SetString("UserId", jwt.Claims.FirstOrDefault(u => u.Type == "Id").Value);
-                HttpContext.Session.SetString("Token", token);
+                //HttpContext.Session.SetString("UserId", jwt.Claims.FirstOrDefault(u => u.Type == "Id").Value);
+                //HttpContext.Session.SetString("Token", token);
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var responseAuthorize = await _httpClient.GetAsync("https://localhost:7141/api/user/get-user");
                 if (principal.IsInRole("Admin"))
@@ -67,7 +67,8 @@ namespace DATN_Client.Areas.Customer.Controllers
 
         public async Task<IActionResult> LogOut()
         {
-            HttpContext.Session.Clear();
+            HttpContext.Session.Remove("UserId");
+            HttpContext.Session.Remove("Token");
             return RedirectToAction("Index", "Home", new { Area = "Customer" });
         }
 

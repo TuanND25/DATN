@@ -7,6 +7,7 @@ namespace DATN_Client.Areas.Customer.Component
 {
     public partial class SignUp
     {
+        [Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
         [Inject] NavigationManager navigationManager { get; set; }
         
         HttpClient _httpClient = new HttpClient();
@@ -21,22 +22,15 @@ namespace DATN_Client.Areas.Customer.Component
             
             if (respone.IsSuccessStatusCode)
             {
-                Message = "success";
+                _toastService.ShowSuccess("Đăng ký thành công");
+                await Task.Delay(3000);
                 navigationManager.NavigateTo("https://localhost:7075/Customer/Login/Login",true);
             }
             else
             {
-                if (respone.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    Message = result.Result;
-                }
-                else
-                {
-                    Message = "error";
-                }
-                               
-                    
-                              
+                Message = result.Result;
+                _toastService.ShowError(Message);
+
             }
         }
     }

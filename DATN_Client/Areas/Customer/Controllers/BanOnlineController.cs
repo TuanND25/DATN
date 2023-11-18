@@ -2,6 +2,7 @@
 using DATN_Shared.ViewModel.Momo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using X.PagedList;
 
 namespace DATN_Client.Areas.Customer.Controllers
@@ -25,6 +26,7 @@ namespace DATN_Client.Areas.Customer.Controllers
 
         public async Task<IActionResult> ShowProduct(int? page)
         {
+            HttpContext.Session.SetString($"{Guid.NewGuid()}", JsonConvert.SerializeObject(Guid.NewGuid()));
             _lstPrI_show_VM = await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
             _lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
             // Lấy list sp ko có spct

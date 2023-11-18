@@ -1,63 +1,88 @@
-﻿<h3>SignUp</h3>
+﻿@using Blazored.Toast.Configuration
+<BlazoredToasts Position="ToastPosition.TopRight"
+				Timeout="10"
+				IconType="IconType.FontAwesome"
+				SuccessClass="success-toast-override"
+				SuccessIcon="fa-solid fa-check"
+				ErrorIcon="fa-solid fa-triangle-exclamation" />
+
+<h3>SignUp</h3>
 
 
 
-<div class="Login full fullsign" >
-        <div class=" container1" style="width:600px;margin: 0 auto;  margin-top: 120px;
+<div class="Login full fullsign">
+	<div class=" container1" style="width:600px;margin: 0 auto;  margin-top: 120px;
   margin-bottom: 40px;">
-          <div class="form login" >
-            <span class="title">SignUp</span>
-              <form asp-action="SignUp">
-                <div class="input-field">
-                  <input type="text"  placeholder="UserName">
-                  <i class="fa-regular fa-user"></i>
-                </div>
+		<div class="form login">
+			<span class="title">SignUp</span>
+			<EditForm Model="signUp">
+				<DataAnnotationsValidator/>
+				<div class="input-field">
+					<InputText placeholder="Username" @bind-Value="signUp.UserName" />
+					<i class="fa-regular fa-user"></i>
+				</div>
+				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.UserName"></ValidationMessage></span>
 
-                <div class="input-field">
-                  <input type="text"  placeholder="NumberPhone">
-                  <i class="fa-regular fa-envelope icon"></i>
-                </div>
-                
-                <div class="input-field">
-                  <input type="password"  placeholder="Password">
-                  <i class="fa-solid fa-lock icon"></i>
-                  <i class="fa-regular fa-eye-slash showHidePW"></i>
-                </div>
-                <div class="input-field">
-                  <input type="password" placeholder="ConfirmPassWord">
-                  <i class="fa-solid fa-lock icon"></i>
-                  <i class="fa-regular fa-eye-slash showHidePW"></i>
-                </div>
-
-                <div class="checkbox-text">
-                  <div class="checkbox-content">
-                    <input type="checkbox" id="logCheck">
-                    <label for="logCheck" class="text">Tôi không phải người máy</label>
-                  </div>
-                  <a href="Forgot.html" class="text">Quên mật khẩu?</a>
-                </div>
-
-                <div class="input-field button">
-                  <input type="submit"  value="Đăng ký">
-                </div>
-              </form>
-
-              <div class="login-signup">
-                <span class="text">Bạn đã có tài khoản? 
-                  <a >Đăng nhập</a>
-                </span>
-              </div>
-          </div>
-        </div>
-      </div>
+				<div class="input-field">
+					<InputText placeholder="Email" @bind-Value="signUp.Email" />
+					<i class="fa-regular fa-user"></i>
+				</div>
+				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.Email"></ValidationMessage></span>
 
 
+				<div class="input-field">
+					<InputText placeholder="Password" @bind-Value="signUp.Password" />
+					<i class="fa-regular fa-user"></i>
+				</div>
+				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.Password"></ValidationMessage></span>
+
+				<div class="input-field">
+					<InputText placeholder="ConfirmPassword" @bind-Value="signUp.ConfirmPassword" />
+					<i class="fa-regular fa-user"></i>
+				</div>
+				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.ConfirmPassword"></ValidationMessage></span>
+
+				<div class="input-field">
+					<InputText placeholder="Name" @bind-Value="signUp.Name" />
+					<i class="fa-regular fa-user"></i>
+				</div>
+				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.Name"></ValidationMessage></span>
+
+				<div class="input-field">
+					<InputText placeholder="Phone" @bind-Value="signUp.PhoneNumber" />
+					<i class="fa-regular fa-user"></i>
+				</div>
+				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.PhoneNumber"></ValidationMessage></span>
+				<div class="input-field">
+					<InputSelect class="form-select" @bind-Value="@signUp.Sex">
+						<option value="true" selected>--Chọn--</option>
+						<option value="true">Nam</option>
+						<option value="false">Nữ</option>
+					</InputSelect>
+				</div>
+
+				<div class="input-field button">
+					<input type="submit" value="Đăng ký" @onclick="SignUpUser">
+				</div>
+
+			</EditForm>
+			<div class="login-signup">
+				<span class="text">
+					Bạn đã có tài khoản?
+					<a>Đăng nhập</a>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 
 
 
-<EditForm Model="signUp">
+
+
+@*<EditForm Model="signUp">
 	<DataAnnotationsValidator />
 	<div class="form">
 		<label>Username:</label>
@@ -72,12 +97,12 @@
 	<div class="form">
 		<label>ConfirmPassword</label>
 		<InputText type="password" class="form-control" @bind-Value="signUp.ConfirmPassword" />
-		<ValidationMessage For="()=>signUp.ConfirmPassword"style="color:red;" />
+		<ValidationMessage For="()=>signUp.ConfirmPassword" style="color:red;" />
 	</div>
 	<div class="form">
 		<label>PhoneNumber:</label>
 		<InputText type="number" class="form-control" @bind-Value="signUp.PhoneNumber" />
-		<ValidationMessage For="()=>signUp.PhoneNumber"style="color:red;" />
+		<ValidationMessage For="()=>signUp.PhoneNumber" style="color:red;" />
 	</div>
 	<div class="form">
 		<label>Email:</label>
@@ -95,30 +120,9 @@
 		<option value="true">Nam</option>
 		<option value="false">Nữ</option>
 	</InputSelect>
-	<ValidationMessage For="()=>signUp.Sex" style="color:red;"/>
+	<ValidationMessage For="()=>signUp.Sex" style="color:red;" />
 	<button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal" @onclick="SignUpUser">Sign Up</button>
 
 </EditForm>
+*@
 
-
-
-<!-- Basic Modal -->
-
-
-<div class="modal fade" id="basicModal" tabindex="-1">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Thông báo</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				@Message
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
-
-			</div>
-		</div>
-	</div>
-</div><!-- End Basic Modal-->
