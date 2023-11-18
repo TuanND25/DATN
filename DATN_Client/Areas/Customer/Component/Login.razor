@@ -1,38 +1,40 @@
-﻿
+﻿@using Blazored.Toast.Configuration
+<BlazoredToasts Position="ToastPosition.BottomRight"
+				Timeout="10"
+				IconType="IconType.FontAwesome"
+				SuccessClass="success-toast-override"
+				SuccessIcon="fa-solid fa-check"
+				ErrorIcon="fa-solid fa-triangle-exclamation" />
 
 
-    <div class="Login full" >
-        <div class=" container container1" style="width:600px;margin: 0 auto;  margin-top: 120px;
+<div class="Login full">
+	<div class=" container container1" style="width:600px;margin: 0 auto;  margin-top: 120px;
   margin-bottom: 40px;">
-            <div class="form login">
-                <span class="title">Login</span>
-                <form asp-action="Login">
-                    <div class="input-field">
-                        <input type="text" placeholder="Username" >
-                        <i class="fa-regular fa-envelope icon"></i>
-                    </div>
-                    <div class="input-field">
-                        <input type="password" placeholder="Password" >
-                        <i class="fa-solid fa-lock icon"></i>
-                        <i class="fa-regular fa-eye-slash showHidePW"></i>
-                    </div>
+		<div class="form login">
+			<span class="title">Login</span>
+			<EditForm Model="loginUser" >
+				<div class="input-field">
+					<InputText type="text" @bind-Value="loginUser.UserName" placeholder="Username"/>
+					<i class="fa-regular fa-envelope icon"></i>
+				</div>
+				<div class="input-field">
+					<InputText type="password"  @bind-Value="loginUser.Password" placeholder="Password"/>
+					<i class="fa-solid fa-lock icon"></i>
+					<i class="fa-regular fa-eye-slash showHidePW"></i>
+				</div>
 
-                    <div class="checkbox-text">
-                        <div class="checkbox-content">
-                            <input type="checkbox" id="logCheck">
-                            <label for="logCheck" class="text">Remeber me</label>
-                        </div>
-                        <a href="#" class="text">Quên mật khẩu?</a>
-                    </div>
 
-                    <div class="input-field button">
-                        <input type="submit" value="Đăng nhập">
 
-                    </div>
-                </form>
+				<div class="input-field button">
+					<input type="submit" value="Đăng nhập"  @onclick ="login">
+					
+				</div>
+			</EditForm>
 
-            </div>
-        </div>
-    </div>
+		</div>
+	</div>
+</div>
+
+
 
 
