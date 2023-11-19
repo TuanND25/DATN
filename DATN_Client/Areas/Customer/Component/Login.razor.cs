@@ -23,7 +23,11 @@ namespace DATN_Client.Areas.Customer.Component
         public async Task login()
         {
 
-
+            if (loginUser.UserName == null || loginUser.Password== null)
+            {
+                _toastService.ShowError("Phải điền đầy đủ thông tin");
+                return ;
+            }
             var response = await _httpClient.PostAsJsonAsync<LoginUser>("https://localhost:7141/api/user/login/", loginUser);
             if (response.IsSuccessStatusCode)
             {
@@ -66,7 +70,7 @@ namespace DATN_Client.Areas.Customer.Component
             }
             else
             {
-                _toastService.ShowError("Sai username hoac password");
+                _toastService.ShowError("Sai username hoặc password");
             }
         }
     }

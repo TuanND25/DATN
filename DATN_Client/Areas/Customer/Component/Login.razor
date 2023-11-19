@@ -13,13 +13,16 @@
 		<div class="form login">
 			<span class="title">Login</span>
 			<EditForm Model="loginUser" >
+				<DataAnnotationsValidator/>
 				<div class="input-field">
 					<InputText type="text" @bind-Value="loginUser.UserName" placeholder="Username"/>
 					<i class="fa-regular fa-envelope icon"></i>
+					<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>loginUser.UserName"></ValidationMessage></span>
 				</div>
 				<div class="input-field">
 					<InputText type="password"  @bind-Value="loginUser.Password" placeholder="Password"/>
 					<i class="fa-solid fa-lock icon"></i>
+					<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>loginUser.Password"></ValidationMessage></span>
 					<i class="fa-regular fa-eye-slash showHidePW"></i>
 				</div>
 
