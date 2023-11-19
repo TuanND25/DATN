@@ -12,14 +12,17 @@ namespace DATN_Client.Areas.Customer.Component
         
         HttpClient _httpClient = new HttpClient();
 		SignUpUser signUp = new SignUpUser();
-		public string Message { get; set; } = string.Empty;
+		
         public async Task SignUpUser()
         {
-			Message= string.Empty;
-			var respone = await _httpClient.PostAsJsonAsync<SignUpUser>("https://localhost:7141/api/user/signup", signUp);
-            var result = respone.Content.ReadAsStringAsync();
-          
+			
+            if (signUp==null)
+            {
+                _toastService.ShowError("Phải điền đủ thông tin");
+            }
             
+            var respone = await _httpClient.PostAsJsonAsync<SignUpUser>("https://localhost:7141/api/user/signup", signUp);
+            var result = respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
             {
                 _toastService.ShowSuccess("Đăng ký thành công");
@@ -28,8 +31,9 @@ namespace DATN_Client.Areas.Customer.Component
             }
             else
             {
-                Message = result.Result;
-                _toastService.ShowError(Message);
+                
+                
+                _toastService.ShowError("Phải điền đủ thông tin");
 
             }
         }
