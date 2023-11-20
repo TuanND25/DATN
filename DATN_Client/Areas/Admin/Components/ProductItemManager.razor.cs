@@ -47,15 +47,21 @@ namespace DATN_Client.Areas.Admin.Components
 		bool isModalOpenAddCate = false;
 		bool isModalOpenAddColor = false;
 		bool isModalOpenAddSize = false;
+		List<string> _lstSizeSample = new List<string> { "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL" };
 		protected override async Task OnInitializedAsync()
 		{
 			_lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
+			_lstP = _lstP.OrderBy(c => c.Name).ToList();
 			_lstCate = await _client.GetFromJsonAsync<List<Categories_VM>>("https://localhost:7141/api/Categories");
-			_lstC = await _client.GetFromJsonAsync<List<Color_VM>>("https://localhost:7141/api/Color");
-			_lstS = await _client.GetFromJsonAsync<List<Size_VM>>("https://localhost:7141/api/Size");
+			_lstCate = _lstCate.OrderBy(c => c.Name).ToList();
+			_lstC = await _client.GetFromJsonAsync<List<Color_VM>>("https://localhost:7141/api/Color/get_color");
+			_lstC = _lstC.OrderBy(c => c.Name).ToList();
+			_lstS = await _client.GetFromJsonAsync<List<Size_VM>>("https://localhost:7141/api/Size/get_size");
+			_lstS = _lstS.OrderBy(c => _lstSizeSample.IndexOf(c.Name)).ToList();
 			_lstImg = await _client.GetFromJsonAsync<List<Image_VM>>("https://localhost:7141/api/Image");
 			_lstImg_PI = await _client.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem");
 			_lstPrI_show_VM = await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
+			_lstPrI_show_VM = _lstPrI_show_VM.OrderBy(c => c.Name).ToList();
 			_idPI_Tam = Guid.NewGuid();
 		}
 		public async Task ChangeEv(InputFileChangeEventArgs e)
@@ -71,7 +77,7 @@ namespace DATN_Client.Areas.Admin.Components
 					// Thực hiện copy ảnh vừa chọn sang thư mục mới (wwwroot)
 					try
 					{
-						
+
 						await _file.OpenReadStream(2048 * 1024).CopyToAsync(stream);
 					}
 					catch (Exception)
@@ -114,7 +120,16 @@ namespace DATN_Client.Areas.Admin.Components
 				using (var stream = new FileStream(path, FileMode.Create))
 				{
 					// Thực hiện copy ảnh vừa chọn sang thư mục mới (wwwroot)
-					await _file.OpenReadStream().CopyToAsync(stream);
+					try
+					{
+						await _file.OpenReadStream(2048 * 1024).CopyToAsync(stream);
+					}
+					catch (Exception)
+					{
+
+						_toastService.ShowError("Ảnh có kích thước quá lớn, vui lòng chọn ảnh khác");
+						return;
+					}
 				}
 				// Gán lại giá trị cho Description của đối tượng bằng tên file ảnh đã đưuọc sao chép
 				imgTam.PathImage = _file.Name;
@@ -134,6 +149,8 @@ namespace DATN_Client.Areas.Admin.Components
 				{
 					await _client.PostAsJsonAsync("https://localhost:7141/api/Image/Post-Image", x);
 				}
+				_toastService.ShowSuccess("Thêm thành công");
+				await Task.Delay(3000);
 				_navigation.NavigateTo("Admin/ProductItem", true);
 			}
 		}
@@ -165,6 +182,8 @@ namespace DATN_Client.Areas.Admin.Components
 						await _client.PutAsJsonAsync($"https://localhost:7141/api/Image/Put-Image", x);
 					}
 				}
+				_toastService.ShowSuccess("Cập nhật thành công");
+				await Task.Delay(3000);
 				_navigation.NavigateTo("Admin/ProductItem", true);
 			}
 		}
@@ -185,7 +204,7 @@ namespace DATN_Client.Areas.Admin.Components
 			_PI_VM.SizeId = pi.SizeId;
 			_PI_VM.CategoryId = pi.CategoryID;
 			_PI_VM.AvaiableQuantity = pi.AvaiableQuantity;
-			_PI_VM.PurchasePrice = pi.PurchasePrice;
+			_PI_VM.PriceAfterReduction = pi.PriceAfterReduction;
 			_PI_VM.CostPrice = pi.CostPrice;
 			_PI_VM.Status = pi.Status;
 			//_lstImg_PI = (await _client.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem")).Where(c => c.ProductId == _PI_VM.ProductId).ToList();

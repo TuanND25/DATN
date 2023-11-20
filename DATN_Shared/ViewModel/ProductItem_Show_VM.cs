@@ -19,7 +19,7 @@ namespace DATN_Shared.ViewModel
 		public string CategoryName { get; set; }
 		public Guid PromotionItemId { get; set; }
 		public int?AvaiableQuantity { get; set; }
-		public int? PurchasePrice { get; set; }
+		public int? PriceAfterReduction { get; set; }
 		public int? CostPrice { get; set; }
 		public int Status { get; set; }
 	}

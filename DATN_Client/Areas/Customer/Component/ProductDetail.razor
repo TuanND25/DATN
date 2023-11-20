@@ -1,327 +1,336 @@
 ﻿@inject IJSRuntime JsRuntime
 @using Blazored.Toast.Configuration
 <BlazoredToasts Position="ToastPosition.BottomRight"
-                Timeout="10"
-                IconType="IconType.FontAwesome"
-                SuccessClass="success-toast-override"
-                SuccessIcon="fa-solid fa-check"
-                ErrorIcon="fa-solid fa-triangle-exclamation" />
+				Timeout="10"
+				IconType="IconType.FontAwesome"
+				SuccessClass="success-toast-override"
+				SuccessIcon="fa-solid fa-check"
+				ErrorIcon="fa-solid fa-triangle-exclamation" />
 @using DATN_Client.Areas.Admin.Controllers;
 <style>
-/*Detail*/
+	/*Detail*/
 
-/*End Detail*/
-    .number-input {
-        display: flex;
-        align-items: center;
-    }
+	/*End Detail*/
+	.number-input {
+		display: flex;
+		align-items: center;
+	}
 
-    .input-wrapper {
-        display: flex;
-        align-items: center;
-        border: 1px solid #ccc;
-        border-radius: 20px;
-        padding: 5px;
-    }
+	.input-wrapper {
+		display: flex;
+		align-items: center;
+		border: 1px solid #ccc;
+		border-radius: 20px;
+		padding: 5px;
+	}
 
-    .input-field {
-        margin-left: 10px;
-        width: 50px;
-        text-align: center;
-        border: none;
-        background-color: transparent;
-        pointer-events: none;
-    }
+	.input-field {
+		margin-left: 10px;
+		width: 50px;
+		text-align: center;
+		border: none;
+		background-color: transparent;
+		pointer-events: none;
+	}
 
-    .button {
-        position: relative;
-        display: inline-block;
-        padding: 10px 28px;
-        line-height: normal;
-        border: 1px solid #ffffff;
-        border-radius: 0;
-        text-transform: uppercase;
-        font-size: 12px;
-        text-align: center;
-        letter-spacing: 1px;
-        background-color: transparent;
-        -webkit-transition: color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),border 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
-        transition: color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),border 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
-        z-index: 1;
-        color: #000000;
-        overflow: hidden;
-    }
+	.button {
+		position: relative;
+		display: inline-block;
+		padding: 10px 28px;
+		line-height: normal;
+		border: 1px solid #ffffff;
+		border-radius: 0;
+		text-transform: uppercase;
+		font-size: 12px;
+		text-align: center;
+		letter-spacing: 1px;
+		background-color: transparent;
+		-webkit-transition: color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),border 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+		transition: color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),border 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+		z-index: 1;
+		color: #000000;
+		overflow: hidden;
+	}
 
-        .button:before {
-            position: absolute;
-            content: '';
-            display: block;
-            left: -2px;
-            top: 0;
-            right: -2px;
-            bottom: 0;
-            -webkit-transform: scale(1, 1);
-            transform: scale(1, 1);
-            -webkit-transform-origin: left center;
-            transform-origin: left center;
-            z-index: -1;
-            background-color: #ffffff;
-            -webkit-transition: -webkit-transform 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
-            transition: -webkit-transform 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
-            transition: transform 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
-            transition: transform 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),-webkit-transform 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
-        }
+		.button:before {
+			position: absolute;
+			content: '';
+			display: block;
+			left: -2px;
+			top: 0;
+			right: -2px;
+			bottom: 0;
+			-webkit-transform: scale(1, 1);
+			transform: scale(1, 1);
+			-webkit-transform-origin: left center;
+			transform-origin: left center;
+			z-index: -1;
+			background-color: #ffffff;
+			-webkit-transition: -webkit-transform 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+			transition: -webkit-transform 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+			transition: transform 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+			transition: transform 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),-webkit-transform 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+		}
 
-        .button:hover {
-            color: #fff;
-        }
+		.button:hover {
+			color: #fff;
+		}
 
-        .button.dark {
-            color: #fff;
-            border-color: #D1D1D1;
-        }
+		.button.dark {
+			color: #fff;
+			border-color: #D1D1D1;
+		}
 
-            .button.dark:before {
-                background-color: #D1D1D1;
-            }
+			.button.dark:before {
+				background-color: #D1D1D1;
+			}
 
-            .button.dark:hover {
-                color: #000000;
-            }
+			.button.dark:hover {
+				color: #000000;
+			}
 
-        .button:hover:before {
-            -webkit-transform-origin: right center;
-            transform-origin: right center;
-            -webkit-transform: scale(0, 1);
-            transform: scale(0, 1);
-        }
+		.button:hover:before {
+			-webkit-transform-origin: right center;
+			transform-origin: right center;
+			-webkit-transform: scale(0, 1);
+			transform: scale(0, 1);
+		}
 
-    .minus-button,
-    .plus-button {
-        width: 30px;
-        height: 30px;
-        border: none;
-        background-color: transparent;
-        color: #337ab7;
-        font-weight: bold;
-        cursor: pointer;
-    }
+	.minus-button,
+	.plus-button {
+		width: 30px;
+		height: 30px;
+		border: none;
+		background-color: transparent;
+		color: #337ab7;
+		font-weight: bold;
+		cursor: pointer;
+	}
 
-        .minus-button:hover,
-        .plus-button:hover {
-            color: #286090;
-        }
+		.minus-button:hover,
+		.plus-button:hover {
+			color: #286090;
+		}
 
-    .custom-button {
-        background-color: lightgray;
-        color: black;
-    }
+	.custom-button {
+		background-color: lightgray;
+		color: black;
+	}
 
-        .custom-button:focus {
-            background-color: blue;
-            color: white;
-        }
-
+		.custom-button:focus {
+			background-color: blue;
+			color: white;
+		}
 
 </style>
 @*<h3>@_nameCate</h3>*@
 @*<br />*@
 <div class="container-fluid ">
-    <span>Trang Chủ / @_nameCate / @_nameP</span>
+	<span>Trang Chủ / @_nameCate / @_nameP</span>
 </div>
 
 <div>
-    <div class="product-detail-wrapper">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-7" >
+	<div class="product-detail-wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-7">
 
-                    @foreach (var x in _lstImg_PI_tam.OrderBy(c => c.STT))
-                    {
-                    <div class="product-gallery">
-                        <div class="product-gallery__thumbs-container hidden-sm hidden-xs">
-                            <div class="product-gallery__thumbs thumb-fix">
+					@foreach (var x in _lstImg_PI_tam.OrderBy(c => c.STT))
+					{
+						<div class="product-gallery">
+							<div class="product-gallery__thumbs-container hidden-sm hidden-xs">
+								<div class="product-gallery__thumbs thumb-fix">
 
-                                <div class="product-gallery__thumb">
-                                        <a class="product-gallery__thumb-placeholder" href="javascript:void(0);" @onclick="()=>LoadAnh(x.Id)">
-                                            <img src="/images/@x.PathImage" alt="" style="width: 100px;height: 110px;" />
-                                    </a>
-                                </div>
+									<div class="product-gallery__thumb">
+										<a class="product-gallery__thumb-placeholder" href="javascript:void(0);" @onclick="()=>LoadAnh(x.Id)">
+											<img src="/images/@x.PathImage" alt="" style="width: 100px;height: 110px;" />
+										</a>
+									</div>
 
-                            </div>
-                        </div>
-                        <div class="product-image-detail box__product-gallery scroll">
-                            <ul id="sliderproduct" class="site-box-content slide_product">
-                                <li class="product-gallery-item gallery-item" style="">
-                                        <img src="/images/@_path_Tam" alt="" style="width:500px;height:650px;margin-top:8.5px" />
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    }
-
-
-
-
+								</div>
+							</div>
+							<div class="product-image-detail box__product-gallery scroll">
+								<ul id="sliderproduct" class="site-box-content slide_product">
+									<li class="product-gallery-item gallery-item" style="">
+										<a data-toggle="modal" data-target="#Add_P">
+											<img src="/images/@_path_Tam" alt="" style="width:500px;height:650px;margin-top:8.5px" />
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					}
 
 
-                   @* <div class="col-md-4" style="height: 550px; overflow-y: auto;width:120px">
-                        @foreach (var x in _lstImg_PI_tam.OrderBy(c => c.STT))
-                        {
-                            <div style="margin-bottom:30px;margin-top:30px">
-                                <a @onclick="()=>LoadAnh(x.Id)">
-                                    <img src="/images/@x.PathImage" alt="" style="width: 100px;height: 110px;" />
-                                    <div class="modal fade" id="Add_P">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <!-- Nội dung của popup -->
-                                                <img src="/images/@x.PathImage" />
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
 
-                        }
-                    </div>
-                    <div class="col-md-10">
-                        <center>
-                            <a data-toggle="modal" data-target="#Add_P">
-                                <img src="/images/@_path_Tam" alt="" style="width:500px;height:650px;margin-top:8.5px" />
-                            </a>
-                        </center>
-                    </div>*@
-                </div>
-                <div class="col-md-5">
-                    <div class="product-title">
-                        <h1>@_nameP</h1>
-                        <span id="pro_sku">SKU: ATO1003</span>
-                    </div>
-                    <div class="product-price" id="price-preview">
-                        @*<span class="pro-sale">-33%</span><span class="pro-price">154,000₫</span><del>230,000₫</del>*@
-                        <p class="pro-price">@_gia</p>
-                    </div>
-                    @*@foreach (var x in _lstColor)
-                    {
-                    <button class="custom-button" @onclick="()=>ChonMau(x)">@x</button>
-                    }
-                    <br>
-                    @foreach (var x in _lstSize)
-                    {
-                    <button class="custom-button" @onclick="()=>ChonSize(x)">@x</button>
-                    }*@
-                   
-                    <div class="select-swatch clearfix">
-                        <div id="variant-swatch-0" class="swatch clearfix" data-option="option1"
-                             data-option-index="0">
-                            @* <div class="header hide">Màu sắc: *@
-                            <br>
-                            @*  <div class="header"><span>Red</span></div>*@
-                            @foreach (var x in _lstColor)
-                            {
-                                <div class="select-swap">
-                                    <button data-value="S" class="n-sd swatch-element m  " @onclick="()=>ChonMau(x)">
-                                        <input class="variant-0" id="swatch-0-m" type="radio" name="option1"
-                                               value="S" data-vhandle="m">
 
-                                        <label for="swatch-0-m" class="">
-                                            <span>@x</span>
-                                        </label>
-                                    </button>
-                                </div>
-                            }
 
-                        </div>
-                        <div id="variant-swatch-0" class="swatch clearfix" data-option="option1"
-                             data-option-index="0">
-                            @* <div class="header hide">Kích thước:</div>*@
-                            @foreach (var x in _lstSize)
-                            {
-                                <div class="select-swap">
-                                    <button data-value="S" class="n-sd swatch-element m  " @onclick="()=>ChonSize(x)">
-                                        <input class="variant-0" id="swatch-0-m" type="radio" name="option1"
-                                               value="S" data-vhandle="m">
+					@* <div class="col-md-4" style="height: 550px; overflow-y: auto;width:120px">
+					@foreach (var x in _lstImg_PI_tam.OrderBy(c => c.STT))
+					{
+					<div style="margin-bottom:30px;margin-top:30px">
+					<a @onclick="()=>LoadAnh(x.Id)">
+					<img src="/images/@x.PathImage" alt="" style="width: 100px;height: 110px;" />
+					<div class="modal fade" id="Add_P">
+					<div class="modal-dialog">
+					<div class="modal-content">
+					<!-- Nội dung của popup -->
+					<img src="/images/@x.PathImage" />
 
-                                        <label for="swatch-0-m" class="">
-                                            <span>@x</span>
-                                        </label>
-                                    </button>
-                                </div>
-                            }
-                        </div>
+					</div>
+					</div>
+					</div>
+					</a>
+					</div>
 
-                    </div>
-                    <div class="selector-actions">
-                        <div class="number-input">
-                            <div class="input-wrapper">
-                                <button class="minus-button" @onclick="SL_Tru">-</button>
-                                <input type="number" class="input-field" readonly @bind-value="@_soLuong">
-                                <button class="plus-button" @onclick="SL_Cong">+</button>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="product-action-bottom visible-xs">
-                        <!-- <div class="input-bottom">
-                            <input id="quan-input" type="number" value="1" min="1">
-                        </div> -->
-                        <button type="button" id="add-to-cartbottom"
-                                class="add-to-cartProduct add-cart-bottom button dark addtocart-modal"
-                                name="add" @onclick="ThemVaoGiohang">
-                            Thêm vào giỏ
-                        </button>
-                    </div>
-                    @*Mô tả sản phẩm - Giới thiệu*@
-                    <div class="product-description">
-                        <div class="title-bl">
-                            <h2>Mô tả</h2>
-                        </div>
-                        <div class="description-content">
-                            <div class="description-productdetail">
-                                <p><img src="/images/size.png" width="100%" height="100%" /></p>
-                                <p>
-                                    <br>🔹 Bảng size Outerity<br>S : Dài 69 Rộng 52.5 | 1m50 - 1m65, 45 - 55Kg,<br>M
-                                    : Dài 73 Rộng 55 | 1m60 - 1m75, 50 - 65Kg<br>L: Dài : 76.5 Rộng: 57.5 | 1m7 -
-                                    1m8, 65Kg - 80Kg<br>👉 Nếu chưa biết lựa size bạn có thể inbox để được chúng
-                                    mình tư vấn.
-                                </p>
-                                <p>
-                                    ‼️LƯU Ý ▪️Khi giặt sản phẩm bằng tay: Vui lòng hoà tan kĩ nước giặt, bột giặt với
-                                    nước sau đó mới cho sản phẩm vào. ▪️Khi giặt sản phẩm bằng máy giặt: Vui lòng đổ
-                                    nước giặt, bột giặt vào khay của máy.
-                                </p>
-                                <p>
-                                    &nbsp;🚫TUYỆT ĐỐI KHÔNG đổ nước giặt, bột giặt trực tiếp vào sản phẩm. Như vậy sẽ
-                                    ảnh hưởng đến màu sắc của sản phẩm và làm cho áo có tình trạng loang màu.
-                                    Outerity xin cảm ơn ạ🖤
-                                </p>
-                                <p>
-                                    🔹 Chính sách đổi trả Outerity.<br>– Miễn phí đổi hàng cho khách mua ở Outerity
-                                    trong trường hợp bị lỗi từ nhà sản xuất, giao nhầm hàng, nhầm size.<br>- Quay
-                                    video mở sản phẩm khi nhận hàng, nếu không có video unbox, khi phát hiện lỗi
-                                    phải báo ngay cho Outerity trong 1 ngày tính từ ngày giao hàng thành công. Qua 1
-                                    ngày chúng mình không giải quyết khi không có video unbox.<br>– Sản phẩm đổi
-                                    trong thời gian 3 ngày kể từ ngày nhận hàng<br>– Sản phẩm còn mới nguyên tem,
-                                    tags, sản phẩm chưa giặt và không dơ bẩn, hư hỏng bởi những tác nhân bên ngoài
-                                    cửa hàng sau khi mua hàng.<br>👉 Đặc biệt:<br>- Meow | Tết Ấm Project là dự án
-                                    từ thiện đem lại 1 mùa Tết ấm áp hơn cho những hoàn cảnh khó khăn nên chúng mình
-                                    sẽ trích 10% lợi nhuận từ mỗi đơn hàng để phục vụ cho dự án trên.&nbsp;<br>– Tất
-                                    cả sản phẩm ver 3.0 sẽ được hỗ trợ trả hàng hoàn tiền trong vòng 05 ngày kể từ
-                                    ngày nhận hàng nếu có trải nghiệm không tốt, không hài lòng về sản phẩm<br>–
-                                    Chấp nhận trả hàng hoàn tiền với sản phẩm đã qua sử dụng, không còn nguyên tag
-                                    tuy nhiên sản phẩm phải còn nguyên vẹn, không bị rách, bung chỉ, bạc màu do quá
-                                    trình sử dụng<br>🔹<br>Liên hệ: 0862642568<br>/ Web / Outerity.com<br>/ IG /
-                                    <br>/ FB / Outerity<br>#ao #thun #unisex #local #brand #outerity
-                                    #nam #nu #aophong #form #rong #tay #lo
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+					}
+					</div>
+					<div class="col-md-10">
+					<center>
+					<a data-toggle="modal" data-target="#Add_P">
+					<img src="/images/@_path_Tam" alt="" style="width:500px;height:650px;margin-top:8.5px" />
+					</a>
+					</center>
+					</div>*@
+				</div>
+				<div class="col-md-5">
+					<div class="product-title">
+						<h1>@_nameP</h1>
+						<span id="pro_sku">SKU: ATO1003</span>
+					</div>
+					<div class="product-price" id="price-preview">
+						@*<span class="pro-sale">-33%</span><span class="pro-price">154,000₫</span><del>230,000₫</del>*@
+						<p class="pro-price">@_gia</p>
+					</div>
+					@*@foreach (var x in _lstColor)
+					{
+					<button class="custom-button" @onclick="()=>ChonMau(x)">@x</button>
+					}
+					<br>
+					@foreach (var x in _lstSize)
+					{
+					<button class="custom-button" @onclick="()=>ChonSize(x)">@x</button>
+					}*@
+
+					<div class="select-swatch clearfix">
+						<div id="variant-swatch-0" class="swatch clearfix" data-option="option1"
+							 data-option-index="0">
+							@* <div class="header hide">Màu sắc: *@
+							<br>
+							@*  <div class="header"><span>Red</span></div>*@
+							@foreach (var x in _lstColor)
+							{
+								<div class="select-swap">
+									<button data-value="S" class="n-sd swatch-element m  " @onclick="()=>ChonMau(x)">
+										<input class="variant-0" id="swatch-0-m" type="radio" name="option1"
+											   value="S" data-vhandle="m">
+
+										<label for="swatch-0-m" class="">
+											<span>@x</span>
+										</label>
+									</button>
+								</div>
+							}
+
+						</div>
+						<div id="variant-swatch-0" class="swatch clearfix" data-option="option1"
+							 data-option-index="0">
+							@* <div class="header hide">Kích thước:</div>*@
+							@foreach (var x in _lstSize)
+							{
+								<div class="select-swap">
+									<button data-value="S" class="n-sd swatch-element m  " @onclick="()=>ChonSize(x)">
+										<input class="variant-0" id="swatch-0-m" type="radio" name="option1"
+											   value="S" data-vhandle="m">
+
+										<label for="swatch-0-m" class="">
+											<span>@x</span>
+										</label>
+									</button>
+								</div>
+							}
+						</div>
+
+					</div>
+					<div class="selector-actions">
+						<div class="number-input">
+							<div class="input-wrapper">
+								<button class="minus-button" @onclick="SL_Tru">-</button>
+								<input type="number" class="input-field" readonly @bind-value="@_soLuong">
+								<button class="plus-button" @onclick="SL_Cong">+</button>
+							</div>
+						</div>
+					</div>
+					<br>
+					<div class="product-action-bottom visible-xs">
+						<!-- <div class="input-bottom">
+							<input id="quan-input" type="number" value="1" min="1">
+						</div> -->
+						<button type="button" id="add-to-cartbottom"
+								class="add-to-cartProduct add-cart-bottom button dark addtocart-modal"
+								name="add" @onclick="ThemVaoGiohang">
+							Thêm vào giỏ
+						</button>
+					</div>
+					@*Mô tả sản phẩm - Giới thiệu*@
+					<div class="product-description">
+						<div class="title-bl">
+							<h2>Mô tả</h2>
+						</div>
+						<div class="description-content">
+							<div class="description-productdetail">
+								<p><img src="/images/size.png" width="100%" height="100%" /></p>
+								<p>
+									<br>🔹 Bảng size Outerity<br>S : Dài 69 Rộng 52.5 | 1m50 - 1m65, 45 - 55Kg,<br>M
+									: Dài 73 Rộng 55 | 1m60 - 1m75, 50 - 65Kg<br>L: Dài : 76.5 Rộng: 57.5 | 1m7 -
+									1m8, 65Kg - 80Kg<br>👉 Nếu chưa biết lựa size bạn có thể inbox để được chúng
+									mình tư vấn.
+								</p>
+								<p>
+									‼️LƯU Ý ▪️Khi giặt sản phẩm bằng tay: Vui lòng hoà tan kĩ nước giặt, bột giặt với
+									nước sau đó mới cho sản phẩm vào. ▪️Khi giặt sản phẩm bằng máy giặt: Vui lòng đổ
+									nước giặt, bột giặt vào khay của máy.
+								</p>
+								<p>
+									&nbsp;🚫TUYỆT ĐỐI KHÔNG đổ nước giặt, bột giặt trực tiếp vào sản phẩm. Như vậy sẽ
+									ảnh hưởng đến màu sắc của sản phẩm và làm cho áo có tình trạng loang màu.
+									Outerity xin cảm ơn ạ🖤
+								</p>
+								<p>
+									🔹 Chính sách đổi trả Outerity.<br>– Miễn phí đổi hàng cho khách mua ở Outerity
+									trong trường hợp bị lỗi từ nhà sản xuất, giao nhầm hàng, nhầm size.<br>- Quay
+									video mở sản phẩm khi nhận hàng, nếu không có video unbox, khi phát hiện lỗi
+									phải báo ngay cho Outerity trong 1 ngày tính từ ngày giao hàng thành công. Qua 1
+									ngày chúng mình không giải quyết khi không có video unbox.<br>– Sản phẩm đổi
+									trong thời gian 3 ngày kể từ ngày nhận hàng<br>– Sản phẩm còn mới nguyên tem,
+									tags, sản phẩm chưa giặt và không dơ bẩn, hư hỏng bởi những tác nhân bên ngoài
+									cửa hàng sau khi mua hàng.<br>👉 Đặc biệt:<br>- Meow | Tết Ấm Project là dự án
+									từ thiện đem lại 1 mùa Tết ấm áp hơn cho những hoàn cảnh khó khăn nên chúng mình
+									sẽ trích 10% lợi nhuận từ mỗi đơn hàng để phục vụ cho dự án trên.&nbsp;<br>– Tất
+									cả sản phẩm ver 3.0 sẽ được hỗ trợ trả hàng hoàn tiền trong vòng 05 ngày kể từ
+									ngày nhận hàng nếu có trải nghiệm không tốt, không hài lòng về sản phẩm<br>–
+									Chấp nhận trả hàng hoàn tiền với sản phẩm đã qua sử dụng, không còn nguyên tag
+									tuy nhiên sản phẩm phải còn nguyên vẹn, không bị rách, bung chỉ, bạc màu do quá
+									trình sử dụng<br>🔹<br>Liên hệ: 0862642568<br>/ Web / Outerity.com<br>/ IG /
+									<br>/ FB / Outerity<br>#ao #thun #unisex #local #brand #outerity
+									#nam #nu #aophong #form #rong #tay #lo
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 
+<div class="modal fade" id="Add_P">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Nội dung của popup -->
+			<img src="/images/@_path_Tam" style="width:600px;height:850px" />
+		</div>
+	</div>
+</div>
