@@ -92,6 +92,9 @@ namespace DATN_Client.Areas.Admin.Components
                         _promotionItem.ProductItemsId = item;
                         _promotionItem.Status = 1;
                         var b = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/PromotionItem/Add", _promotionItem);
+                        var productItem = await _httpClient.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{item}");
+                        productItem.PriceAfterReduction = productItem.CostPrice - (productItem.CostPrice * _promotion.Percent) / 100;
+                        var t = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", productItem);
                     }
                 }
             }
