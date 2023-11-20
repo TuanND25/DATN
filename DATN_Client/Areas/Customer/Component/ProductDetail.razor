@@ -122,6 +122,14 @@
 			color: white;
 		}
 
+	.chonSize {
+		text-align: right;
+		color: #0158DA;
+	}
+
+		.chonSize:hover {
+			color: red;
+		}
 </style>
 @*<h3>@_nameCate</h3>*@
 @*<br />*@
@@ -133,75 +141,78 @@
 	<div class="product-detail-wrapper">
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-md-7">
+				<div class="col-md-8">
 
-					@foreach (var x in _lstImg_PI_tam.OrderBy(c => c.STT))
+					@* @foreach (var x in _lstImg_PI_tam.OrderBy(c => c.STT))
 					{
-						<div class="product-gallery">
-							<div class="product-gallery__thumbs-container hidden-sm hidden-xs">
-								<div class="product-gallery__thumbs thumb-fix">
+					<div class="product-gallery">
+					<div class="product-gallery__thumbs-container hidden-sm hidden-xs">
+					<div class="product-gallery__thumbs thumb-fix">
 
-									<div class="product-gallery__thumb">
-										<a class="product-gallery__thumb-placeholder" href="javascript:void(0);" @onclick="()=>LoadAnh(x.Id)">
-											<img src="/images/@x.PathImage" alt="" style="width: 100px;height: 110px;" />
-										</a>
-									</div>
-
-								</div>
-							</div>
-							<div class="product-image-detail box__product-gallery scroll">
-								<ul id="sliderproduct" class="site-box-content slide_product">
-									<li class="product-gallery-item gallery-item" style="">
-										<a data-toggle="modal" data-target="#Add_P">
-											<img src="/images/@_path_Tam" alt="" style="width:500px;height:650px;margin-top:8.5px" />
-										</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-					}
-
-
-
-
-
-
-					@* <div class="col-md-4" style="height: 550px; overflow-y: auto;width:120px">
-					@foreach (var x in _lstImg_PI_tam.OrderBy(c => c.STT))
-					{
-					<div style="margin-bottom:30px;margin-top:30px">
-					<a @onclick="()=>LoadAnh(x.Id)">
+					<div class="product-gallery__thumb">
+					<a class="product-gallery__thumb-placeholder" href="javascript:void(0);" @onclick="()=>LoadAnh(x.Id)">
 					<img src="/images/@x.PathImage" alt="" style="width: 100px;height: 110px;" />
-					<div class="modal fade" id="Add_P">
-					<div class="modal-dialog">
-					<div class="modal-content">
-					<!-- Nội dung của popup -->
-					<img src="/images/@x.PathImage" />
-
-					</div>
-					</div>
-					</div>
 					</a>
 					</div>
 
-					}
 					</div>
-					<div class="col-md-10">
-					<center>
+					</div>
+					<div class="product-image-detail box__product-gallery scroll">
+					<ul id="sliderproduct" class="site-box-content slide_product">
+					<li class="product-gallery-item gallery-item" style="">
 					<a data-toggle="modal" data-target="#Add_P">
-					<img src="/images/@_path_Tam" alt="" style="width:500px;height:650px;margin-top:8.5px" />
+					<img src="/images/@x.PathImage" alt="" style="width:500px;height:650px;margin-top:8.5px" />
 					</a>
-					</center>
-					</div>*@
+					</li>
+					</ul>
+					</div>
+					</div>
+					} *@
+
+
+
+					<div class="row">
+						<div class="col-md-4" style="height: 550px; overflow-y: auto;width:120px">
+							@foreach (var x in _lstImg_PI_tam.OrderBy(c => c.STT))
+							{
+								<div style="margin-bottom:30px;margin-top:30px">
+									<a @onclick="()=>LoadAnh(x.Id)">
+										<img class="img-thumbnail" src="/images/@x.PathImage" alt="" style="width: 100px;height: 110px;" />
+									</a>
+								</div>
+
+							}
+						</div>
+						<div class="col-md-8" style="align-items:center">
+							<center>
+								<a data-toggle="modal" data-target="#Add_P">
+									<img class="img-thumbnail" src="/images/@_path_Tam" alt="" style="width:500px;height:650px;margin-top:8.5px" />
+								</a>
+							</center>
+						</div>
+					</div>
+
+
+
 				</div>
-				<div class="col-md-5">
+				<div class="col-md-4">
 					<div class="product-title">
 						<h1>@_p_VM.Name</h1>
 						<span id="pro_sku">SKU: ATO1003</span>
 					</div>
 					<div class="product-price" id="price-preview">
-						@*<span class="pro-sale">-33%</span><span class="pro-price">154,000₫</span><del>230,000₫</del>*@
-						<p class="pro-price">@_gia</p>
+						@if (_percent > 0)
+						{
+							<span class="pro-sale">-@_percent%</span>
+
+							<span class="pro-price">@(_gia)</span>
+
+							<del>@(_giaBanDau)</del>
+						}
+						else
+						{
+							<span class="pro-price">@(_gia)</span>
+						}
 					</div>
 					@*@foreach (var x in _lstColor)
 					{
@@ -216,9 +227,7 @@
 					<div class="select-swatch clearfix">
 						<div id="variant-swatch-0" class="swatch clearfix" data-option="option1"
 							 data-option-index="0">
-							@* <div class="header hide">Màu sắc: *@
-							<br>
-							@*  <div class="header"><span>Red</span></div>*@
+							<div><span>Màu sắc: <b>@_chonMau</b></span></div>
 							@foreach (var x in _lstColor)
 							{
 								<div class="select-swap">
@@ -236,7 +245,14 @@
 						</div>
 						<div id="variant-swatch-0" class="swatch clearfix" data-option="option1"
 							 data-option-index="0">
-							@* <div class="header hide">Kích thước:</div>*@
+							<div class="row">
+								<div class="col-md-6">
+									<h6>Kích thước: <b>@_chonSize</b></h6>
+								</div>
+								<div class="col-md-6">
+									<h6 class="chonSize" data-toggle="modal" data-target="#Add_P">Hướng dẫn chọn size</h6>
+								</div>
+							</div>
 							@foreach (var x in _lstSize)
 							{
 								<div class="select-swap">
@@ -250,10 +266,12 @@
 									</button>
 								</div>
 							}
+
 						</div>
 
 					</div>
 					<div class="selector-actions">
+						<span>Số lượng</span>
 						<div class="number-input">
 							<div class="input-wrapper">
 								<button class="minus-button" @onclick="SL_Tru">-</button>
@@ -262,14 +280,14 @@
 							</div>
 						</div>
 					</div>
-					<br>
+					
 					<div class="product-action-bottom visible-xs">
 						<!-- <div class="input-bottom">
 							<input id="quan-input" type="number" value="1" min="1">
 						</div> -->
 						<button type="button" id="add-to-cartbottom"
 								class="add-to-cartProduct add-cart-bottom button dark addtocart-modal"
-								name="add" @onclick="ThemVaoGiohang">
+								name="add" @onclick="ThemVaoGiohang" style="width:100%;height:50px">
 							Thêm vào giỏ
 						</button>
 					</div>

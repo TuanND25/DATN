@@ -25,7 +25,13 @@ namespace DATN_API.Controllers
 		[HttpGet("getPromotionItem_Percent_by_productItemID/{id}")]
 		public async Task<PromotionItem_VM> GetAllPromotion(Guid id)
 		{
-			var x = await _PromotionItem.GetPercentPromotionItem(id);
+			PromotionItem_VM x = await _PromotionItem.GetPercentPromotionItem(id);
+			if (x==null)
+			{
+				//PromotionItem_VM promotionItem_VM = new PromotionItem_VM();
+				//promotionItem_VM.Percent = -1;
+				return new PromotionItem_VM();
+			}
 			return x;
 		}
 
