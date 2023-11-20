@@ -1,6 +1,6 @@
 ﻿@using Blazored.Toast.Configuration
 <BlazoredToasts Position="ToastPosition.BottomRight"
-				Timeout="10"
+				Timeout="5"
 				IconType="IconType.FontAwesome"
 				SuccessClass="success-toast-override"
 				SuccessIcon="fa-solid fa-check"
@@ -84,7 +84,7 @@
 		</div>
 	</div>
 	<BlazoredToasts Position="ToastPosition.BottomRight"
-					Timeout="10"
+					Timeout="5"
 					IconType="IconType.FontAwesome"
 					SuccessClass="success-toast-override"
 					SuccessIcon="fa-solid fa-check"
@@ -117,7 +117,7 @@
 		</div>
 	</div>
 	<BlazoredToasts Position="ToastPosition.BottomRight"
-					Timeout="10"
+					Timeout="5"
 					IconType="IconType.FontAwesome"
 					SuccessClass="success-toast-override"
 					SuccessIcon="fa-solid fa-check"
@@ -150,7 +150,7 @@
 		</div>
 	</div>
 	<BlazoredToasts Position="ToastPosition.BottomRight"
-					Timeout="10"
+					Timeout="5"
 					IconType="IconType.FontAwesome"
 					SuccessClass="success-toast-override"
 					SuccessIcon="fa-solid fa-check"
@@ -183,7 +183,7 @@
 		</div>
 	</div>
 	<BlazoredToasts Position="ToastPosition.BottomRight"
-					Timeout="10"
+					Timeout="5"
 					IconType="IconType.FontAwesome"
 					SuccessClass="success-toast-override"
 					SuccessIcon="fa-solid fa-check"
@@ -346,7 +346,7 @@
 				<div style="height:70px">
 					<div class="row">
 						<div class="col-md-6">
-							<InputNumber class="form-control" @bind-Value="_PI_VM.PurchasePrice" />
+							<InputNumber class="form-control" @bind-Value="_PI_VM.PriceAfterReduction" />
 						</div>
 						<div class="col-md-6">
 							<InputNumber class="form-control" @bind-Value="@_PI_VM.AvaiableQuantity" />
@@ -354,7 +354,7 @@
 					</div>
 					<div class="row">
 						<div class="col-md-6">
-							<ValidationMessage For="()=>_PI_VM.PurchasePrice" style="color:red;" />
+							<ValidationMessage For="()=>_PI_VM.PriceAfterReduction" style="color:red;" />
 						</div>
 						<div class="col-md-6">
 							<ValidationMessage For="@(()=>_PI_VM.AvaiableQuantity)" style="color:red;" />
@@ -504,7 +504,7 @@ else
 					<td style="vertical-align:middle;text-align:center">@x.ColorName</td>
 					<td style="vertical-align:middle;text-align:center">@x.SizeName</td>
 					<td style="vertical-align:middle;text-align:center">@x.AvaiableQuantity</td>
-					<td style="vertical-align:middle;text-align:center">@x.PurchasePrice</td>
+					<td style="vertical-align:middle;text-align:center">@x.PriceAfterReduction</td>
 					<td style="vertical-align:middle;text-align:center">@x.CostPrice</td>
 					<td style="vertical-align:middle;text-align:center">@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
 					<td style="vertical-align:middle;text-align:center">
@@ -517,6 +517,4 @@ else
 		</tbody>
 	</table>
 }
-<!-- Thư viện CSS Bootstrap -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 

@@ -20,8 +20,7 @@ namespace DATN_Shared.ViewModel
 		public Guid CategoryId { get; set; }
 		[Required(ErrorMessage ="Số lượng tồn không được để trống")]
 		public int? AvaiableQuantity { get; set; }
-		[Required(ErrorMessage = "Giá nhập không được để trống")]
-		public int? PurchasePrice { get; set; } 
+		public int? PriceAfterReduction { get; set; } 
 		[Required(ErrorMessage = "Giá bán không được để trống")]
 		public int? CostPrice { get; set; }
 		[Range(1, int.MaxValue, ErrorMessage = "Vui lòng chọn trạng thái")]
