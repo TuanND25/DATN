@@ -22,7 +22,7 @@ namespace DATN_API.Controllers
         {
             if (user == null)
             {
-                return BadRequest("fail");
+                return StatusCode(401,"Phải điền đầy đủ thông tin");
             }
             var result =await _signUpServices.SignUpAsync(user);
             if (result.IsSuccess)

@@ -2,6 +2,9 @@ using DATN_Client.Areas.Admin.Controllers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using DATN_Client.Areas.Customer.Controllers;
 using Blazored.Toast;
+using DATN_Shared.Models;
+using Microsoft.AspNetCore.Identity;
+using DATN_API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +25,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
               .AddCookie(options =>
               {
                   options.Cookie.HttpOnly = true;
-                  options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                  options.ExpireTimeSpan = TimeSpan.FromDays(30);
                   options.LoginPath = "/Login/Login";
                   options.SlidingExpiration = true;
               });
@@ -31,18 +34,22 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<BanOnlineController, BanOnlineController>();
 
+
+
 builder.Services.AddAuthentication()
+    .AddCookie()
     .AddGoogle(googleOptions =>
     {
 
         IConfigurationSection googleAuthNSection = builder.Configuration.GetSection("Authentication:Google");
-        googleOptions.ClientId = googleAuthNSection["ClientId"];
-        googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
-        googleOptions.CallbackPath = "/signin-google";
+        googleOptions.ClientId = "83122337541-1p5sbfd774vu6tm6gak4u8jajdliaohh.apps.googleusercontent.com";
+        googleOptions.ClientSecret = "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";
 
-        //googleOptions.CallbackPath = "/dang-nhap-tu-google";
+
+        googleOptions.CallbackPath = "https://localhost:7075/signin-google";
 
     });
+
 builder.Services.AddBlazoredToast();
 var app = builder.Build();
 

@@ -75,7 +75,7 @@ namespace DATN_API.Service_IService.Services
                             CategoryID = prI.CategoryId,
                             CategoryName = cate.Name,
                             AvaiableQuantity = prI.AvaiableQuantity,
-                            PurchasePrice = prI.PurchasePrice,
+							PriceAfterReduction = prI.PriceAfterReduction,
                             CostPrice = prI.CostPrice,
                             Status = prI.Status,
                             PromotionItemId = h.PromotionsId,
@@ -108,7 +108,7 @@ namespace DATN_API.Service_IService.Services
 							CategoryID = prI.CategoryId,
 							CategoryName = cate.Name,
 							AvaiableQuantity = prI.AvaiableQuantity,
-							PurchasePrice = prI.PurchasePrice,
+							PriceAfterReduction = prI.PriceAfterReduction,
 							CostPrice = prI.CostPrice,
 							Status = prI.Status,
 						}).ToList();
@@ -125,7 +125,7 @@ namespace DATN_API.Service_IService.Services
                 a.ColorId= item.ColorId;
                 a.SizeId = item.SizeId;
                 a.ProductId= item.ProductId;
-                a.PurchasePrice = item.PurchasePrice;
+                a.PriceAfterReduction = item.PriceAfterReduction;
                 a.CostPrice= item.CostPrice;
                 a.Status = item.Status;
                 _context.ProductItems.Update(a);

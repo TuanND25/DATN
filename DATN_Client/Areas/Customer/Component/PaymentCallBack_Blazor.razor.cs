@@ -72,7 +72,6 @@ namespace DATN_Client.Areas.Customer.Component
         }
         public async Task Bill()
         {
-            
             _navi.NavigateTo("https://localhost:7075/Customer/UserManagement/BillByUser", true);
         }
     }

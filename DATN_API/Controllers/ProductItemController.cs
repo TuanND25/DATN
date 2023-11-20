@@ -58,7 +58,7 @@ namespace DATN_API.Controllers
             product.SizeId = productItems.SizeId;
             product.CategoryId = productItems.CategoryId;
             product.AvaiableQuantity = productItems.AvaiableQuantity;
-            product.PurchasePrice = productItems.PurchasePrice;
+            product.PriceAfterReduction = productItems.CostPrice;
             product.CostPrice = productItems.CostPrice;
             product.Status= productItems.Status;
             var a = await _productItemServices.AddProductItem(product);
@@ -74,7 +74,7 @@ namespace DATN_API.Controllers
             product.SizeId = productItems.SizeId;
             product.CategoryId = productItems.CategoryId;
             product.AvaiableQuantity = productItems.AvaiableQuantity;
-            product.PurchasePrice = productItems.PurchasePrice;
+            product.PriceAfterReduction = productItems.PriceAfterReduction;
             product.CostPrice = productItems.CostPrice;
             product.Status = productItems.Status;
             var a = await _productItemServices.UpdateProductItem(product);
