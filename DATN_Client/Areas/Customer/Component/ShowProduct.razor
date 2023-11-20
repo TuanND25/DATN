@@ -9,8 +9,8 @@
 		foreach (var x in BanOnlineController._pageList)
 		{
 			string img = _lstImg_PI.Where(c => c.ProductId == x.Id).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
-			var giamin = _lstPrI_show_VM.Where(c => c.ProductId == x.Id).Min(c => c.CostPrice);
-			var giamax = _lstPrI_show_VM.Where(c => c.ProductId == x.Id).Max(c => c.CostPrice);
+			var giamin = _lstPrI_show_VM.Where(c => c.ProductId == x.Id).Min(c => c.PriceAfterReduction);
+			var giamax = _lstPrI_show_VM.Where(c => c.ProductId == x.Id).Max(c => c.PriceAfterReduction);
 
 			<div class="col-md-3">
 				<a href="https://localhost:7075/Customer/BanOnline/ProductDetail?id=@x.Id">
