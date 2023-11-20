@@ -328,7 +328,7 @@
 				<div style="height:95px">
 					<h4>Giá bán</h4>
 					<div class="input-group">
-						<InputNumber class="form-control" aria-label="Dollar amount (with dot and two decimal places)" @bind-Value="_PI_VM.PriceAfterReduction" />
+						<InputNumber class="form-control" aria-label="Dollar amount (with dot and two decimal places)" @bind-Value="_PI_VM.CostPrice" />
 						<span class="input-group-text">đ</span>
 					</div>
 					<ValidationMessage For="@(()=>_PI_VM.CostPrice)" style="color:red;" />
@@ -340,7 +340,7 @@
 						<div class="col-md-6">
 							<h4>Số lượng tồn</h4>
 							<div class="input-group">
-								<input type="number" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" @bind-value="_PI_VM.AvaiableQuantity"/>
+								<input type="number" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" @bind-value="_PI_VM.AvaiableQuantity" />
 								<span class="input-group-text">cái</span>
 							</div>
 							<ValidationMessage For="@(()=>_PI_VM.AvaiableQuantity)" style="color:red;" />
@@ -433,8 +433,8 @@ else
 				<th style="text-align:center">Màu sắc</th>
 				<th style="text-align:center">Size</th>
 				<th style="text-align:center">Số lượng tồn</th>
-				<th style="text-align:center">Giá nhập</th>
 				<th style="text-align:center">Giá bán</th>
+				<th style="text-align:center">Giá sau giảm</th>
 				<th style="text-align:center">Trạng thái</th>
 				<th></th>
 			</tr>
@@ -469,8 +469,8 @@ else
 					<td style="vertical-align:middle;text-align:center">@x.ColorName</td>
 					<td style="vertical-align:middle;text-align:center">@x.SizeName</td>
 					<td style="vertical-align:middle;text-align:center">@x.AvaiableQuantity</td>
-					<td style="vertical-align:middle;text-align:center">@x.PriceAfterReduction</td>
 					<td style="vertical-align:middle;text-align:center">@x.CostPrice</td>
+					<td style="vertical-align:middle;text-align:center">@x.PriceAfterReduction</td>
 					<td style="vertical-align:middle;text-align:center">@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
 					<td style="vertical-align:middle;text-align:center">
 						<button style="border: none;border-radius: 15px;" class="btn btn-primary" type="button" @onclick="()=>LoadUpdate(x)">

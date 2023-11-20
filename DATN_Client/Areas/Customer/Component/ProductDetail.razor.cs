@@ -31,12 +31,12 @@ namespace DATN_Client.Areas.Customer.Component
 		public string _giaBanDau { get; set; }
 		public int _soLuong { get; set; } = 1;
 		public int? _soluongton { get; set; } = 0;
-		public int _percent { get; set; } = 0;
+		public int? _percent { get; set; } = 0;
 		public string _chonMau { get; set; } = string.Empty;
 		public string _chonSize { get; set; } = string.Empty;
 		public string? _iduser { get; set; }
 		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
-		private ISession? _ss {  get; set; }
+		private ISession? _ss { get; set; }
 		List<string> _lstSizeSample = new List<string> { "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL" };
 
 		protected override async Task OnInitializedAsync()
@@ -114,7 +114,8 @@ namespace DATN_Client.Areas.Customer.Component
 					_toastService.ShowError("Biến thể không tồn tại, vui lòng chọn biến thể khác");
 					return;
 				}
-				//_percent = (await _client.GetFromJsonAsync<PromotionItem_VM>($"https://localhost:7264/api/PromotionItem/getPromotionItem_Percent_by_productItemID/{_pi_S_VM.Id}")).Percent;
+				var prmi = await _client.GetFromJsonAsync<PromotionItem_VM>($"https://localhost:7141/api/PromotionItem/getPromotionItem_Percent_by_productItemID/{_pi_S_VM.Id}");
+				 _percent = prmi.Percent;
 				_gia = _pi_S_VM.PriceAfterReduction?.ToString("#,##0") + "đ";
 				_giaBanDau = _pi_S_VM.CostPrice?.ToString("#,##0") + "đ";
 				_soluongton = 0;
@@ -133,7 +134,8 @@ namespace DATN_Client.Areas.Customer.Component
 				_toastService.ShowError("Biến thể không tồn tại, vui lòng chọn biến thể khác");
 				return;
 			}
-			//_percent = (await _client.GetFromJsonAsync<PromotionItem_VM>($"https://localhost:7264/api/PromotionItem/getPromotionItem_Percent_by_productItemID/{_pi_S_VM.Id}")).Percent;
+			var prmi = await _client.GetFromJsonAsync<PromotionItem_VM>($"https://localhost:7141/api/PromotionItem/getPromotionItem_Percent_by_productItemID/{_pi_S_VM.Id}");
+			_percent = prmi.Percent;
 			_gia = _pi_S_VM.PriceAfterReduction?.ToString("#,##0") + "đ";
 			_giaBanDau = _pi_S_VM.CostPrice?.ToString("#,##0") + "đ";
 			_soluongton = 0;
@@ -192,27 +194,17 @@ namespace DATN_Client.Areas.Customer.Component
 					Status = 1
 				};
 				_lstCI.Add(cartItems);
-				try
+				var luuss2 = SessionServices.SetLstFromSession_LstCI(_ss, "_lstCI_Vanglai", _lstCI);
+				if (luuss2 == true)
 				{
-					var JsonData = JsonConvert.SerializeObject(_lstCI);
-					_ss.SetString("_lstCI_Vanglai", JsonData);
 					_toastService.ShowSuccess("Sản phẩm đã được thêm vào giỏ hàng của bạn");
+					return;
 				}
-				catch (Exception)
+				else
 				{
 					_toastService.ShowError("Đã có lỗi xảy ra");
+					return;
 				}
-				//var luuss2 = SessionServices.SetLstFromSession_LstCI(ss, "_lstCI_Vanglai", _lstCI);
-				//if (luuss2 == true)
-				//{
-				//	_toastService.ShowSuccess("Sản phẩm đã được thêm vào giỏ hàng của bạn");
-				//	return;
-				//}
-				//else
-				//{
-				//	_toastService.ShowError("Đã có lỗi xảy ra");
-				//	return;
-				//}
 			}
 		}
 	}
