@@ -26,7 +26,7 @@ namespace DATN_API.Service_IService.Services
                 {
                     IsSuccess = false,
                     StatusCode = 403,
-                    Message = "Email da ton tai"
+                    Message = "Email đã tồn tại"
 
                 };
             }
@@ -36,7 +36,7 @@ namespace DATN_API.Service_IService.Services
                 {
                     IsSuccess = false,
                     StatusCode = 403,
-                    Message = "UserName da ton tai"
+                    Message = "UserName đã tồn tại"
 
                 };
             }
@@ -46,7 +46,7 @@ namespace DATN_API.Service_IService.Services
                 {
                     IsSuccess = false,
                     StatusCode = 403,
-                    Message = "xac nhan mat khau sai"
+                    Message = "Xác nhận mật khẩu sai"
 
                 };
             }
@@ -71,7 +71,7 @@ namespace DATN_API.Service_IService.Services
                     {
                         IsSuccess = false,
                         StatusCode = 403,
-                        Message = "mat khau khong du dai"
+                        Message = "Mật khẩu phải từ 6 kí tự"
 
                     };
 
