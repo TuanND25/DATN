@@ -103,7 +103,7 @@
 					<div style="display:flex;flex-direction:column;justify-content:space-between;color:#333333;font-weight:700;font-size:17px;text-align:left;margin-left:20px">
 						<label>@_pi_s_vm.Name</label>
 						<label style="font-weight:500">@(_pi_s_vm.ColorName + ", " + _pi_s_vm.SizeName)</label>
-						<label style="font-weight:500">@((_pi_s_vm.CostPrice)?.ToString("#,##0"))đ</label>
+						<label style="font-weight:500">@((_pi_s_vm.PriceAfterReduction)?.ToString("#,##0"))đ</label>
 						<div class="number-input">
 							<div class="input-wrapper">
 								<button class="minus-button" @onclick="()=>SL_Tru(x)">-</button>
@@ -115,7 +115,7 @@
 				</div>
 				<div style="display:flex;flex-direction:column;justify-content:space-between">
 					<label style="cursor:pointer;" @onclick="()=>DeleteCI(x)">Xóa sản phẩm</label>
-					<label>@((x.Quantity * _pi_s_vm.CostPrice)?.ToString("#,##0")) đ</label>
+					<label>@((x.Quantity * _pi_s_vm.PriceAfterReduction)?.ToString("#,##0")) đ</label>
 				</div>
 			</div>
 			<hr style="margin-top:10px;margin-bottom:10px;height:2px" />

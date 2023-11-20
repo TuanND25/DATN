@@ -110,7 +110,7 @@ namespace DATN_Client.Areas.Customer.Component
 			foreach (var x in _lstCI)
 			{
 				_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
-				_tongTienHang += (x.Quantity * _pi_s_vm.CostPrice);
+				_tongTienHang += (x.Quantity * _pi_s_vm.PriceAfterReduction);
 			}
 		}
 
@@ -188,7 +188,7 @@ namespace DATN_Client.Areas.Customer.Component
 						billItem_VM.BillId = _bill_vm.Id;
 						billItem_VM.ProductItemsId = x.ProductItemId;
 						billItem_VM.Quantity = x.Quantity;
-						billItem_VM.Price = _pi_vm.CostPrice;
+						billItem_VM.Price = _pi_vm.PriceAfterReduction;
 						billItem_VM.Status = 1;
 						_pi_vm.AvaiableQuantity -= x.Quantity;
 						var a = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/BillItem/Post-BillItem", billItem_VM);

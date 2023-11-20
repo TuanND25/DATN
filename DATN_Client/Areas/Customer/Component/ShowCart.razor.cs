@@ -29,7 +29,7 @@ namespace DATN_Client.Areas.Customer.Component
 			foreach (var x in _lstCI)
 			{
 				_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
-				_tongTien += (x.Quantity * _pi_s_vm.CostPrice);
+				_tongTien += (x.Quantity * _pi_s_vm.PriceAfterReduction);
 			}
 			_note = string.Empty;
 		}
@@ -53,7 +53,7 @@ namespace DATN_Client.Areas.Customer.Component
 			foreach (var x in _lstCI)
 			{
 				_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
-				_tongTien += (x.Quantity * _pi_s_vm.CostPrice);
+				_tongTien += (x.Quantity * _pi_s_vm.PriceAfterReduction);
 			}
 		}
 
@@ -76,7 +76,7 @@ namespace DATN_Client.Areas.Customer.Component
 			foreach (var x in _lstCI)
 			{
 				_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
-				_tongTien += (x.Quantity * _pi_s_vm.CostPrice);
+				_tongTien += (x.Quantity * _pi_s_vm.PriceAfterReduction);
 			}
 		}
 
@@ -96,7 +96,7 @@ namespace DATN_Client.Areas.Customer.Component
 			foreach (var x in _lstCI)
 			{
 				_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
-				_tongTien += (x.Quantity * _pi_s_vm.CostPrice);
+				_tongTien += (x.Quantity * _pi_s_vm.PriceAfterReduction);
 			}
 		}
 
