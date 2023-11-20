@@ -51,7 +51,7 @@ namespace DATN_Client.Areas.Customer.Component
                 _toastService.ShowSuccess("Đổi mật khẩu thất bại");
             }
         }
-        private void ShowPass()
+        public void ShowPass()
         {
             if (TypeInput_Pass == "text")
             {
