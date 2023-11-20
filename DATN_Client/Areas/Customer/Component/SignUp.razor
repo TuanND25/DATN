@@ -11,7 +11,7 @@
 
 
 <div class="Login full fullsign">
-	<div class=" container1" style="width:600px;margin: 0 auto;  margin-top: 10%;
+	<div class=" container1" style="width:600px;margin: 0 auto;  margin-top: 20%;
   margin-bottom: 40px;">
 		<div class="form login">
 			<span class="title">SignUp</span>
@@ -25,20 +25,20 @@
 
 				<div class="input-field">
 					<InputText placeholder="Email" @bind-Value="signUp.Email" />
-					<i class="fa-regular fa-user"></i>
+					<i class="fa-regular fa-envelope"></i>
 				</div>
 				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.Email"></ValidationMessage></span>
 
 
 				<div class="input-field">
 					<InputText placeholder="Password" @bind-Value="signUp.Password" />
-					<i class="fa-regular fa-user"></i>
+					<i class="fa-solid fa-lock"></i>
 				</div>
 				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.Password"></ValidationMessage></span>
 
 				<div class="input-field">
 					<InputText placeholder="ConfirmPassword" @bind-Value="signUp.ConfirmPassword" />
-					<i class="fa-regular fa-user"></i>
+					<i class="fa-solid fa-lock"></i>
 				</div>
 				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.ConfirmPassword"></ValidationMessage></span>
 
@@ -50,7 +50,7 @@
 
 				<div class="input-field">
 					<InputText placeholder="Phone" @bind-Value="signUp.PhoneNumber" />
-					<i class="fa-regular fa-user"></i>
+					<i class="fa-solid fa-phone"></i>
 				</div>
 				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.PhoneNumber"></ValidationMessage></span>
 				<div class="input-field">
