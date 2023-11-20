@@ -1,26 +1,22 @@
-﻿<h3>Color</h3>
-
-@code {
-
-}
+﻿
 <div class="row">
     <div class="col-lg-8">
 
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Quản lý màu</h5>
-                <EditForm Model="color_VM">
+                <h5 class="card-title">Quản lý Thể Loại</h5>
+                <EditForm Model="cate_VM">
                     <div class="row mb-3">
-                        <label for="inputText" class="col-sm-4 col-form-label">Màu sắc: </label>
+                        <label for="inputText" class="col-sm-4 col-form-label">Tên thể loại:  </label>
                         <div class="col-sm-8">
-                            <InputText class="form-control" @bind-Value="@color_VM.Name" />
+                            <InputText class="form-control" @bind-Value="@cate_VM.Name" />
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label class="col-sm-4 col-form-label">Trạng thái: </label>
                         <div class="col-sm-8">
                             <div class="row">
-                                <InputRadioGroup @bind-Value="@color_VM.Status" class="form-control">
+                                <InputRadioGroup @bind-Value="@cate_VM.Status" class="form-control">
                                     <div class="col-sm-6">
                                         <InputRadio Value="1" /> Hoạt động
                                     </div>
@@ -46,11 +42,11 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            Bạn có xác nhận thêm mới màu hay không ?
+                                            Bạn có xác nhận thêm mới thể loại hay không ?
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary" @onclick="AddColor">Save changes</button>
+                                            <button type="button" class="btn btn-primary" @onclick="AddCate">Save changes</button>
                                         </div>
                                     </div>
                                 </div>
@@ -64,11 +60,11 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            Bạn có xác nhận update màu hay không ?
+                                            Bạn có xác nhận update thể loại hay không ?
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary" @onclick="()=>UpdateColor(color_VM)">Update</button>
+                                            <button type="button" class="btn btn-primary" @onclick="()=>UpdateCate(cate_VM)">Update</button>
                                         </div>
                                     </div>
                                 </div>
@@ -85,10 +81,10 @@
         }
         <div class="card">
             <div class="card-body">
-                <h4 style="margin-top:20px">List Color</h4>
+                <h4 style="margin-top:20px">List Thể Loại</h4>
                 <div class="pagetitle">
                 </div>
-                @if (color == null)
+                @if (cate == null)
                 {
                     <p><em>Loading...</em></p>
                 }
@@ -105,7 +101,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var x in color)
+                                @foreach (var x in cate)
                                 {
                                     <tr>
                                         <td>@(count++)</td>

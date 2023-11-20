@@ -140,7 +140,7 @@ namespace DATN_Client.Areas.Customer.Component
 				CartItems_VM cartItems = new CartItems_VM
 				{
 					Id = Guid.NewGuid(),
-					UserId = Guid.Parse("ff68aafb-dfdd-45cd-a21d-bd293d04b9a1"),
+					UserId = Guid.Parse("ba803e1a-ae0f-40e2-95db-3abe82fa176a"),
 					ProductItemId = _pi_S_VM.Id,
 					Quantity = _soLuong,
 					Status = 1
