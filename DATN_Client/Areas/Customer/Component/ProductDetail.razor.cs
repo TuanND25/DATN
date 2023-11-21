@@ -52,8 +52,9 @@ namespace DATN_Client.Areas.Customer.Component
 			_giaMin = _lstPrI_show_VM.Min(c => c.PriceAfterReduction);
 			_giaMax = _lstPrI_show_VM.Max(c => c.PriceAfterReduction);
 			_gia = _giaMin < _giaMax ? _giaMin?.ToString("#,##0") + "đ - " + _giaMax?.ToString("#,##0") + "đ" : _giaMax?.ToString("#,##0") + "đ";
-			_lstColor = _lstPrI_show_VM.Select(c => c.ColorName).Distinct().ToList();
+			_lstColor = _lstPrI_show_VM.Select(c => c.ColorName).Distinct().OrderBy(c=>c).ToList();
 			_lstSize = _lstPrI_show_VM.Select(c => c.SizeName).Distinct().ToList();
+			_lstSize = _lstSize.OrderBy(c => _lstSizeSample.IndexOf(c)).ToList();
 		}
 
 		public async Task LoadAnh(Guid ID)
@@ -126,6 +127,7 @@ namespace DATN_Client.Areas.Customer.Component
 		public async Task ChonSize(string size)
 		{
 			_chonSize = size;
+			if (_chonMau == string.Empty) return;
 			_pi_S_VM = _lstPrI_show_VM.Where(c => c.ColorName == _chonMau && c.SizeName == _chonSize).FirstOrDefault();
 			if (_pi_S_VM == null)
 			{

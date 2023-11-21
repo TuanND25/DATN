@@ -13,7 +13,7 @@
 			var giamax = _lstPrI_show_VM.Where(c => c.ProductId == x.Id).Max(c => c.PriceAfterReduction);
 
 			<div class="col-md-3">
-				<a href="https://localhost:7075/Customer/BanOnline/ProductDetail?id=@x.Id">
+				<a href="https://localhost:7075/product-detail/@x.Id">
 					<img src="/images/@img" alt="" style="width:100%;height:483px">
 				</a>
 				@x.Name <br>
