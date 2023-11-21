@@ -68,7 +68,7 @@ namespace DATN_Client.Areas.Customer.Component
         }
         public async Task BackToProduct()
         {
-            _navi.NavigateTo("https://localhost:7075/Customer/BanOnline/ShowProduct", true);
+            _navi.NavigateTo("/all-product", true);
         }
         public async Task Bill()
         {

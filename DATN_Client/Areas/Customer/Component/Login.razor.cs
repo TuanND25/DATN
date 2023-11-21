@@ -64,7 +64,7 @@ namespace DATN_Client.Areas.Customer.Component
                     var user = await _httpClient.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get_user_by_id/{iduser}");
                     _toastService.ShowSuccess("Hi," + user.Name);
                     await Task.Delay(3000);
-                    navigationManager.NavigateTo("https://localhost:7075/Customer", true);
+                    navigationManager.NavigateTo("/all-product", true);
                 }
 
             }

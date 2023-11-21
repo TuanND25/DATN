@@ -133,16 +133,13 @@
 </style>
 @*<h3>@_nameCate</h3>*@
 @*<br />*@
-<div class="container-fluid ">
-	<span>Trang Chủ / @_nameCate / @_p_VM.Name</span>
-</div>
+<span>Trang Chủ / @_nameCate / @_p_VM.Name</span>
 
 <div>
 	<div class="product-detail-wrapper">
-		<div class="container-fluid">
+		<div>
 			<div class="row">
 				<div class="col-md-8">
-
 					@* @foreach (var x in _lstImg_PI_tam.OrderBy(c => c.STT))
 					{
 					<div class="product-gallery">
@@ -168,11 +165,8 @@
 					</div>
 					</div>
 					} *@
-
-
-
 					<div class="row">
-						<div class="col-md-4" style="height: 550px; overflow-y: auto;width:120px">
+						<div class="col-md-2" style="height: 550px; overflow-y: auto;text-align:center">
 							@foreach (var x in _lstImg_PI_tam.OrderBy(c => c.STT))
 							{
 								<div style="margin-bottom:30px;margin-top:30px">
@@ -180,20 +174,14 @@
 										<img class="img-thumbnail" src="/images/@x.PathImage" alt="" style="width: 100px;height: 110px;" />
 									</a>
 								</div>
-
 							}
 						</div>
-						<div class="col-md-8" style="align-items:center">
-							<center>
+						<div class="col-md-10" style="text-align:center">
 								<a data-toggle="modal" data-target="#Add_P">
-									<img class="img-thumbnail" src="/images/@_path_Tam" alt="" style="width:500px;height:650px;margin-top:8.5px" />
+									<img class="img-thumbnail" src="/images/@_path_Tam" alt="" style="width:600px;height:760px;margin-top:8.5px" />
 								</a>
-							</center>
 						</div>
 					</div>
-
-
-
 				</div>
 				<div class="col-md-4">
 					<div class="product-title">
@@ -231,10 +219,7 @@
 							@foreach (var x in _lstColor)
 							{
 								<div class="select-swap">
-									<button data-value="S" class="n-sd swatch-element m  " @onclick="()=>ChonMau(x)">
-										<input class="variant-0" id="swatch-0-m" type="radio" name="option1"
-											   value="S" data-vhandle="m">
-
+									<button class="n-sd swatch-element m  " @onclick="()=>ChonMau(x)">
 										<label for="swatch-0-m" class="">
 											<span>@x</span>
 										</label>
@@ -250,19 +235,17 @@
 									<h6>Kích thước: <b>@_chonSize</b></h6>
 								</div>
 								<div class="col-md-6">
-									<h6 class="chonSize" data-toggle="modal" data-target="#Add_P">Hướng dẫn chọn size</h6>
+									<h6 class="chonSize" data-toggle="modal" data-target="#ChonSize">Hướng dẫn chọn size</h6>
 								</div>
 							</div>
 							@foreach (var x in _lstSize)
 							{
 								<div class="select-swap">
-									<button data-value="S" class="n-sd swatch-element m  " @onclick="()=>ChonSize(x)">
-										<input class="variant-0" id="swatch-0-m" type="radio" name="option1"
-											   value="S" data-vhandle="m">
-
+									<button class="n-sd swatch-element m  " @onclick="()=>ChonSize(x)">
 										<label for="swatch-0-m" class="">
 											<span>@x</span>
 										</label>
+
 									</button>
 								</div>
 							}
@@ -280,7 +263,7 @@
 							</div>
 						</div>
 					</div>
-					
+
 					<div class="product-action-bottom visible-xs">
 						<!-- <div class="input-bottom">
 							<input id="quan-input" type="number" value="1" min="1">
@@ -298,7 +281,6 @@
 						</div>
 						<div class="description-content">
 							<div class="description-productdetail">
-								<p><img src="/images/size.png" width="100%" height="100%" /></p>
 								<p>
 									<br>🔹 Bảng size Outerity<br>S : Dài 69 Rộng 52.5 | 1m50 - 1m65, 45 - 55Kg,<br>M
 									: Dài 73 Rộng 55 | 1m60 - 1m75, 50 - 65Kg<br>L: Dài : 76.5 Rộng: 57.5 | 1m7 -
@@ -349,6 +331,15 @@
 		<div class="modal-content">
 			<!-- Nội dung của popup -->
 			<img src="/images/@_path_Tam" style="width:600px;height:850px" />
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="ChonSize">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Nội dung của popup -->
+			<img src="/images/size.png" style="width:600px;height:850px" />
 		</div>
 	</div>
 </div>

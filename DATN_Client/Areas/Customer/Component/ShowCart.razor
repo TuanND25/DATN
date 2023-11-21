@@ -115,7 +115,7 @@
 				</div>
 				<div style="display:flex;flex-direction:column;justify-content:space-between">
 					<label style="cursor:pointer;" @onclick="()=>DeleteCI(x)">Xóa sản phẩm</label>
-					<label>@((x.Quantity * _pi_s_vm.PriceAfterReduction)?.ToString("#,##0")) đ</label>
+					<label>@((x.Quantity * _pi_s_vm.PriceAfterReduction)?.ToString("#,##0"))đ</label>
 				</div>
 			</div>
 			<hr style="margin-top:10px;margin-bottom:10px;height:2px" />
@@ -136,7 +136,7 @@
 		<div class="billPay">
 			<div style="display:flex;justify-content:space-between">
 				<label>Tổng tiền</label>
-				<label style="color:#e32124">@(_tongTien?.ToString("#,##0")) đ</label>
+				<label style="color:#e32124">@(_tongTien?.ToString("#,##0"))đ</label>
 			</div>
 			<div>
 				<button class="btnBillPay" @onclick="CreateBill" data-toggle="modal" data-target="#thongBao">
@@ -168,6 +168,5 @@
 				</div>
 			</div>
 		</div>
-	</div>
-
+	</div> 
 }

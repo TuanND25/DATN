@@ -36,7 +36,7 @@ namespace DATN_Client.Areas.Customer.Component
 
 		public async Task SL_Cong(CartItems_VM ci)
 		{
-			
+
 			if (_idUser == null)
 			{
 				if (ci.Quantity == 99) return;
@@ -61,13 +61,13 @@ namespace DATN_Client.Areas.Customer.Component
 		{
 			if (_idUser == null)
 			{
-				if (ci.Quantity == 1) return;
+				if (ci.Quantity == 1) await DeleteCI(ci);
 				ci.Quantity -= 1;
-				SessionServices.SetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai",_lstCI);
+				SessionServices.SetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai", _lstCI);
 			}
 			else
 			{
-				if (ci.Quantity == 1) return;
+				if (ci.Quantity == 1) await DeleteCI(ci);
 				ci.Quantity -= 1;
 				await _client.PutAsJsonAsync("https://localhost:7141/api/CartItems/update-CartItems", ci);
 			}
@@ -82,7 +82,7 @@ namespace DATN_Client.Areas.Customer.Component
 
 		public async Task DeleteCI(CartItems_VM ci)
 		{
-			if (_idUser==null)
+			if (_idUser == null)
 			{
 				_lstCI.Remove(ci);
 				SessionServices.SetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai", _lstCI);
@@ -112,7 +112,7 @@ namespace DATN_Client.Areas.Customer.Component
 
 		public async Task MuaHang()
 		{
-			_navi.NavigateTo("https://localhost:7075/Customer/BanOnline/ShowProduct", true);
+			_navi.NavigateTo("/all-product", true);
 		}
 	}
 }
