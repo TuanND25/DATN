@@ -52,7 +52,7 @@ namespace DATN_Client.Areas.Customer.Component
 						billItem_VM.BillId = Create_Bill_With_Info._bill_vm.Id;
 						billItem_VM.ProductItemsId = x.ProductItemId;
 						billItem_VM.Quantity = x.Quantity;
-						billItem_VM.Price = _pi_vm.CostPrice;
+						billItem_VM.Price = _pi_vm.PriceAfterReduction;
 						billItem_VM.Status = 1;
 						_pi_vm.AvaiableQuantity -= x.Quantity;
 						var a = await _client.PostAsJsonAsync("https://localhost:7141/api/BillItem/Post-BillItem", billItem_VM);

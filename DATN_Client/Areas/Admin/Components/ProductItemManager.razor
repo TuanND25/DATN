@@ -254,7 +254,7 @@
 			<div>
 				<input @bind-value="_PI_VM.Id" style="display:none" />
 				<h4>Tên sản phẩm</h4>
-				<div style="height:70px">
+				<div style="height:60px">
 					<div style="display:flex">
 						<InputSelect class="form-select" @bind-Value="@_PI_VM.ProductId">
 							<option value="00000000-0000-0000-0000-000000000000" selected>--Chọn--</option>
@@ -270,131 +270,96 @@
 					<ValidationMessage For="()=>_PI_VM.ProductId" style="color:red;" />
 				</div>
 
-				<div class="row">
-					<div class="col-md-4">
-						<h4>Thể loại</h4>
-					</div>
-					<div class="col-md-4">
-						<h4>Màu sắc</h4>
-					</div>
-					<div class="col-md-4">
-						<h4>Size</h4>
-					</div>
-				</div>
-				<div style="height:70px">
-					<div class="row">
-						<div class="col-md-4" style="display:flex">
-							<InputSelect class="form-select" @bind-Value="@_PI_VM.CategoryId">
-								<option value="00000000-0000-0000-0000-000000000000" selected>--Chọn--</option>
-								@foreach (var x in _lstCate)
-								{
-									<option value="@x.Id">@x.Name</option>
-								}
-							</InputSelect>
-							<button type="button" class="btn btn-primary" @onclick="MoAddCate">
-								Thêm
-							</button>
-						</div>
-
-						<div class="col-md-4" style="display:flex">
-							<InputSelect class="form-select" @bind-Value="@_PI_VM.ColorId">
-								<option value="00000000-0000-0000-0000-000000000000" selected>--Chọn--</option>
-								@foreach (var x in _lstC)
-								{
-									<option value="@x.Id">@x.Name</option>
-								}
-							</InputSelect>
-							<button type="button" class="btn btn-primary" @onclick="MoAddColor">
-								Thêm
-							</button>
-						</div>
-
-						<div class="col-md-4" style="display:flex">
-							<InputSelect class="form-select" @bind-Value="@_PI_VM.SizeId">
-								<option value="00000000-0000-0000-0000-000000000000" selected>--Chọn--</option>
-								@foreach (var x in _lstS)
-								{
-									<option value="@x.Id">@x.Name</option>
-								}
-							</InputSelect>
-							<button type="button" class="btn btn-primary" @onclick="MoAddSize">
-								Thêm
-							</button>
-						</div>
-
-					</div>
+				<div style="height:95px">
 					<div class="row">
 						<div class="col-md-4">
+							<h4>Thể loại</h4>
+							<div style="display:flex">
+								<InputSelect class="form-select" @bind-Value="@_PI_VM.CategoryId">
+									<option value="00000000-0000-0000-0000-000000000000" selected>--Chọn--</option>
+									@foreach (var x in _lstCate)
+									{
+										<option value="@x.Id">@x.Name</option>
+									}
+								</InputSelect>
+								<button type="button" class="btn btn-primary" @onclick="MoAddCate">
+									Thêm
+								</button>
+							</div>
 							<ValidationMessage For="()=>_PI_VM.CategoryId" style="color:red;" />
 						</div>
+
 						<div class="col-md-4">
+							<h4>Màu sắc</h4>
+							<div style="display:flex">
+								<InputSelect class="form-select" @bind-Value="@_PI_VM.ColorId">
+									<option value="00000000-0000-0000-0000-000000000000" selected>--Chọn--</option>
+									@foreach (var x in _lstC)
+									{
+										<option value="@x.Id">@x.Name</option>
+									}
+								</InputSelect>
+								<button type="button" class="btn btn-primary" @onclick="MoAddColor">
+									Thêm
+								</button>
+							</div>
 							<ValidationMessage For="()=>_PI_VM.ColorId" style="color:red;" />
 						</div>
+
 						<div class="col-md-4">
+							<h4>Size</h4>
+							<div style="display:flex">
+								<InputSelect class="form-select" @bind-Value="@_PI_VM.SizeId">
+									<option value="00000000-0000-0000-0000-000000000000" selected>--Chọn--</option>
+									@foreach (var x in _lstS)
+									{
+										<option value="@x.Id">@x.Name</option>
+									}
+								</InputSelect>
+								<button type="button" class="btn btn-primary" @onclick="MoAddSize">
+									Thêm
+								</button>
+							</div>
 							<ValidationMessage For="()=>_PI_VM.SizeId" style="color:red;" />
 						</div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-md-6">
-						<h4>Giá nhập</h4>
+
+				<div style="height:95px">
+					<h4>Giá bán</h4>
+					<div class="input-group">
+						<InputNumber class="form-control" aria-label="Dollar amount (with dot and two decimal places)" @bind-Value="_PI_VM.CostPrice" />
+						<span class="input-group-text">đ</span>
 					</div>
-					<div class="col-md-6">
-						<h4>Số lượng tồn</h4>
-					</div>
+					<ValidationMessage For="@(()=>_PI_VM.CostPrice)" style="color:red;" />
 				</div>
-				<div style="height:70px">
+
+
+				<div style="height:95px">
 					<div class="row">
 						<div class="col-md-6">
-							<InputNumber class="form-control" @bind-Value="_PI_VM.PriceAfterReduction" />
-						</div>
-						<div class="col-md-6">
-							<InputNumber class="form-control" @bind-Value="@_PI_VM.AvaiableQuantity" />
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-6">
-							<ValidationMessage For="()=>_PI_VM.PriceAfterReduction" style="color:red;" />
-						</div>
-						<div class="col-md-6">
+							<h4>Số lượng tồn</h4>
+							<div class="input-group">
+								<input type="number" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" @bind-value="_PI_VM.AvaiableQuantity" />
+								<span class="input-group-text">cái</span>
+							</div>
 							<ValidationMessage For="@(()=>_PI_VM.AvaiableQuantity)" style="color:red;" />
 						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-6">
-						<h4>Giá bán</h4>
-					</div>
-					<div class="col-md-6">
-						<h4>Trạng thái</h4>
-					</div>
-				</div>
-				<div style="height:70px">
-					<div class="row">
-						<div class="col-md-6">
-							<InputNumber class="form-control" @bind-Value="@_PI_VM.CostPrice" />
-						</div>
-						<div class="col-md-6">
+						<div class="col-md-6" style="height:60px">
+							<h4>Trạng thái</h4>
 							<InputSelect class="form-select" @bind-Value="@_PI_VM.Status">
 								<option value="0" selected>--Chọn--</option>
 								<option value="1">Còn hàng</option>
 								<option value="2">Hết hàng</option>
 								<option value="3">Ngừng kinh doanh</option>
 							</InputSelect>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-6">
-							<ValidationMessage For="@(()=>_PI_VM.CostPrice)" style="color:red;" />
-						</div>
-						<div class="col-md-6">
 							<ValidationMessage For="@(()=>_PI_VM.Status)" style="color:red;" />
 						</div>
 					</div>
 				</div>
 			</div>
 			<center>
-				<div style="margin-bottom:16.83px">
+				<div style="margin-bottom:16.83px;margin-top:10px">
 					<button type="submit" class="btn btn-primary" @onclick="Add_PI">Add</button>
 					<button type="submit" class="btn btn-primary" @onclick="Update_PI">Update</button>
 				</div>
@@ -468,8 +433,8 @@ else
 				<th style="text-align:center">Màu sắc</th>
 				<th style="text-align:center">Size</th>
 				<th style="text-align:center">Số lượng tồn</th>
-				<th style="text-align:center">Giá nhập</th>
 				<th style="text-align:center">Giá bán</th>
+				<th style="text-align:center">Giá sau giảm</th>
 				<th style="text-align:center">Trạng thái</th>
 				<th></th>
 			</tr>
@@ -504,8 +469,8 @@ else
 					<td style="vertical-align:middle;text-align:center">@x.ColorName</td>
 					<td style="vertical-align:middle;text-align:center">@x.SizeName</td>
 					<td style="vertical-align:middle;text-align:center">@x.AvaiableQuantity</td>
-					<td style="vertical-align:middle;text-align:center">@x.PriceAfterReduction</td>
 					<td style="vertical-align:middle;text-align:center">@x.CostPrice</td>
+					<td style="vertical-align:middle;text-align:center">@x.PriceAfterReduction</td>
 					<td style="vertical-align:middle;text-align:center">@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
 					<td style="vertical-align:middle;text-align:center">
 						<button style="border: none;border-radius: 15px;" class="btn btn-primary" type="button" @onclick="()=>LoadUpdate(x)">

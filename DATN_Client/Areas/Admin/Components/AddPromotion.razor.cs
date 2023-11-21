@@ -44,9 +44,9 @@ namespace DATN_Client.Areas.Admin.Components
             _lstPrI_show_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
             _lstProductItem = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
             _lstCate = await _httpClient.GetFromJsonAsync<List<Categories_VM>>("https://localhost:7141/api/Categories");
-            _lstC = await _httpClient.GetFromJsonAsync<List<Color_VM>>("https://localhost:7141/api/Color");
-            _lstS = await _httpClient.GetFromJsonAsync<List<Size_VM>>("https://localhost:7141/api/Size");
-            foreach (var a in _lstPromotionItem)
+			_lstC = await _httpClient.GetFromJsonAsync<List<Color_VM>>("https://localhost:7141/api/Color/get_color");
+			_lstS = await _httpClient.GetFromJsonAsync<List<Size_VM>>("https://localhost:7141/api/Size/get_size");
+			foreach (var a in _lstPromotionItem)
             {
                 _lstProductItemSelect.Add(a.ProductItemsId);
 
@@ -80,18 +80,20 @@ namespace DATN_Client.Areas.Admin.Components
             var c = _promotion.Id = Guid.NewGuid();
             var a = await _httpClient.PostAsJsonAsync<Promotions_VM>("https://localhost:7141/api/promotion/Add", _promotion);
 
-
-            foreach (var item in _lstProductItemSelect)
-            {
-                _promotionItem.Id = Guid.NewGuid();
-                _promotionItem.PromotionsId = c;
-                _promotionItem.ProductItemsId = item;
-                _promotionItem.Status = 1;
-
-                var b = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/PromotionItem/Add", _promotionItem);
-            }
             if (a.IsSuccessStatusCode)
             {
+                foreach (var item in _lstProductItemSelect)
+                {
+                    _promotionItem.Id = Guid.NewGuid();
+                    _promotionItem.PromotionsId = c;
+                    _promotionItem.ProductItemsId = item;
+                    _promotionItem.Status = 1;
+                    var b = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/PromotionItem/Add", _promotionItem);
+
+                    var productItem = await _httpClient.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{item}");
+                    productItem.PriceAfterReduction = productItem.CostPrice - (productItem.CostPrice * _promotion.Percent) / 100;
+                    var t = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", productItem);
+                }
                 _navigationManager.NavigateTo("https://localhost:7075/Admin/Promotion", true);
             }
         }

@@ -1,6 +1,7 @@
 ﻿using DATN_API.Data;
 using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
+using DATN_Shared.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace DATN_API.Service_IService.Services
@@ -119,5 +120,38 @@ namespace DATN_API.Service_IService.Services
                 return null;
             }
         }
-    }
+		public async Task<PromotionItem_VM> GetPercentPromotionItem(Guid id)
+		{
+			var _lst = await (from a in _context.PromotionsItem
+							  join b in _context.Promotions on a.PromotionsId equals b.Id
+							  join c in _context.ProductItems on a.ProductItemsId equals c.Id
+							  select new PromotionItem_VM
+							  {
+								  Id = a.Id,
+								  ProductItemsId = a.ProductItemsId,
+								  Percent = b.Percent,
+								  PromotionsId = a.Id,
+								  Status = a.Status,
+								  ProductId = c.ProductId
+							  }).FirstOrDefaultAsync(a => a.ProductItemsId == id || a.ProductId == id);
+			return _lst;
+		}
+
+		public async Task<List<PromotionItem_VM>> GetLstPercentPromotionItem()
+		{
+			var _lst = await (from a in _context.PromotionsItem
+							  join b in _context.Promotions on a.PromotionsId equals b.Id
+							  join c in _context.ProductItems on a.ProductItemsId equals c.Id
+							  select new PromotionItem_VM
+							  {
+								  Id = a.Id,
+								  ProductItemsId = a.ProductItemsId,
+								  Percent = b.Percent,
+								  PromotionsId = a.Id,
+								  Status = a.Status,
+								  ProductId = c.ProductId
+							  }).ToListAsync();
+			return _lst;
+		}
+	}
 }

@@ -1189,7 +1189,8 @@ PRODUCT DETAIL
 
 .selector-actions {
     width: 100%;
-    margin-top: 15px;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
 
 .quantity-area {

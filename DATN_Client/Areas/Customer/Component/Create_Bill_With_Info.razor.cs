@@ -28,6 +28,7 @@ namespace DATN_Client.Areas.Customer.Component
 		private ProductItem_VM _pi_vm = new ProductItem_VM();
 		public string _sdt { get; set; }
 		public int? _tongTienHang { get; set; } = 0;
+		public int? _tongTienAll { get; set; } = 0;
 		private List<Province_VM> _lstTinhTp = new List<Province_VM>();
 		private List<District_VM> _lstQuanHuyen = new List<District_VM>();
 		private List<Ward_VM> _lstXaPhuong = new List<Ward_VM>();
@@ -100,18 +101,14 @@ namespace DATN_Client.Areas.Customer.Component
 			_payM = _lstPayM.FirstOrDefault(c => c.Name == "Thanh toán khi nhận hàng (COD)");
 			_bill_vm.PaymentMethodId = _payM.Id;
 			_bill_vm.Note = ShowCart._note;
-			//_bill_vm.Province = string.Empty;
-			//_bill_vm.District = string.Empty;
-			//_bill_vm.WardName = string.Empty;
-			//_TinhTp = _bill_vm.Province;
-			//_QuanHuyen = _bill_vm.District;
-			//_XaPhuong = _bill_vm.WardName;
+			_bill_vm.ShippingFee = 30000;
 
 			foreach (var x in _lstCI)
 			{
 				_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
-				_tongTienHang += (x.Quantity * _pi_s_vm.CostPrice);
+				_tongTienHang += (x.Quantity * _pi_s_vm.PriceAfterReduction);
 			}
+			_tongTienAll = _tongTienHang + _bill_vm.ShippingFee;
 		}
 
 		//public Guid Id { get; set; }
@@ -145,7 +142,7 @@ namespace DATN_Client.Areas.Customer.Component
 				//var abc = _bill_vm;
 				// Bill
 				_bill_vm.Id = Guid.NewGuid();
-				_bill_vm.TotalAmount = _tongTienHang;
+				_bill_vm.TotalAmount = _tongTienAll;
 				_bill_vm.Type = 1;
 				_bill_vm.Status = 1;
 				if (_bill_vm.Note == string.Empty) _bill_vm.Note = "Không có ghi chú";
@@ -156,7 +153,7 @@ namespace DATN_Client.Areas.Customer.Component
 				if (_user_vm.Name == null) _ord.FullName = _bill_vm.Recipient;
 				else _ord.FullName = _user_vm.Name;
 				_ord.OrderInfo =_bill_vm.Note;
-				_ord.Amount = _tongTienHang;
+				_ord.Amount = _tongTienAll;
 				var reponse = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/Momo/CreatePaymentAsync", _ord);
 				var reponse2 = await reponse.Content.ReadFromJsonAsync<MomoCreatePaymentResponseModel>();
 				_navi.NavigateTo($"{reponse2.PayUrl}", true);
@@ -166,7 +163,7 @@ namespace DATN_Client.Areas.Customer.Component
 				var codeToday = "B" + DateTime.Now.ToString().Substring(0, 10).Replace("/", "") + ".";
 				_lstBill = (await _httpClient.GetFromJsonAsync<List<Bill_VM>>("https://localhost:7141/api/Bill/get_alll_bill")).Where(c => c.BillCode.StartsWith(codeToday)).ToList();
 				_bill_vm.Id = Guid.NewGuid();
-				_bill_vm.TotalAmount = _tongTienHang;
+				_bill_vm.TotalAmount = _tongTienAll;
 				_bill_vm.Type = 1;
 				_bill_vm.Status = 1;
 				if (_bill_vm.Note == string.Empty) _bill_vm.Note = "Không có ghi chú";
@@ -188,7 +185,7 @@ namespace DATN_Client.Areas.Customer.Component
 						billItem_VM.BillId = _bill_vm.Id;
 						billItem_VM.ProductItemsId = x.ProductItemId;
 						billItem_VM.Quantity = x.Quantity;
-						billItem_VM.Price = _pi_vm.CostPrice;
+						billItem_VM.Price = _pi_vm.PriceAfterReduction;
 						billItem_VM.Status = 1;
 						_pi_vm.AvaiableQuantity -= x.Quantity;
 						var a = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/BillItem/Post-BillItem", billItem_VM);

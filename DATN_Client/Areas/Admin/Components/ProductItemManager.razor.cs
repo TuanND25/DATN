@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using DATN_Client.Areas.Customer.Controllers;
+using System.Globalization;
+using System.Text;
 
 namespace DATN_Client.Areas.Admin.Components
 {
@@ -48,6 +50,22 @@ namespace DATN_Client.Areas.Admin.Components
 		bool isModalOpenAddColor = false;
 		bool isModalOpenAddSize = false;
 		List<string> _lstSizeSample = new List<string> { "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL" };
+		private string XoaDau(string text)
+		{
+			string normalizedString = text.Normalize(NormalizationForm.FormD);
+			StringBuilder stringBuilder = new StringBuilder();
+
+			foreach (char c in normalizedString)
+			{
+				UnicodeCategory unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+				if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+				{
+					stringBuilder.Append(c);
+				}
+			}
+
+			return stringBuilder.ToString().Normalize(NormalizationForm.FormC).ToLower();
+		}
 		protected override async Task OnInitializedAsync()
 		{
 			_lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
@@ -361,16 +379,27 @@ namespace DATN_Client.Areas.Admin.Components
 								c.SizeName == _PM_S_VM.SizeName) &&
 								(_PM_S_VM.ColorName == null ||
 								_PM_S_VM.ColorName == "0" ||
-								c.ColorName == _PM_S_VM.ColorName)).ToList().ToList();
+								c.ColorName == _PM_S_VM.ColorName)).OrderBy(c=>c.Name).ToList();
 		}
 		public async Task TimKiem()
 		{
 			_lstPrI_show_VM = await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
 
-			_lstPrI_show_VM = _lstPrI_show_VM.Where(c =>
+			if (_PM_S_VM.Name.ToLower() != XoaDau(_PM_S_VM.Name))
+			{
+				_lstPrI_show_VM = _lstPrI_show_VM.Where(c =>
 								_PM_S_VM.Name == null ||
 								_PM_S_VM.Name == string.Empty ||
 								c.Name.Trim().ToLower().Contains(_PM_S_VM.Name.Trim().ToLower())).ToList();
+			}
+			else
+			{
+				_lstPrI_show_VM = _lstPrI_show_VM.Where(c =>
+								_PM_S_VM.Name == null ||
+								_PM_S_VM.Name == string.Empty ||
+								XoaDau(c.Name.Trim()).Contains(XoaDau(_PM_S_VM.Name.Trim()))).ToList();
+			}
+			
 		}
 		private void SetModalState(bool isOpen, string modalType)
 		{

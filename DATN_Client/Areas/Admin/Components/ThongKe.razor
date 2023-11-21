@@ -1,0 +1,207 @@
+﻿<div class="pagetitle">
+    <h1>Dashboard</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+    </nav>
+</div>
+<style>
+    .notpoundimg {
+        height: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+
+<section class="section dashboard">
+    <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-8">
+            <div class="row">
+
+
+                <div class="col-xxl-4 col-md-6">
+                    <div class="card info-card sales-card">
+                        <EditForm Model="count">
+                            <div class="filter">
+                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                    <li class="dropdown-header text-start">
+                                        <h6>Filter</h6>
+                                    </li>
+                                    <li><a class="dropdown-item" @onclick="()=>Sale(0)">Today</a></li>
+                                    <li><a class="dropdown-item" @onclick="()=>Sale(1)">This Month</a></li>
+                                    <li><a class="dropdown-item" @onclick="()=>Sale(2)">This Year</a></li>
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Sales <span>| @count.Tittle</span></h5>
+
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-cart"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6>@count.Dem</h6>
+                                        <span class="text-success small pt-1 fw-bold">12%</span>
+                                        <span class="text-muted small pt-2 ps-1">increase</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </EditForm>
+                    </div>
+                </div><!-- End Sales Card -->
+                <!-- Product Card -->
+                <div class="col-xxl-4 col-xl-12">
+
+                    <div class="card info-card customers-card">
+                        <EditForm Model="count2">
+                            <div class="filter">
+                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                    <li class="dropdown-header text-start">
+                                        <h6>Filter</h6>
+                                    </li>
+
+                                    <li><a class="dropdown-item" @onclick="()=>Products(0)">Today</a></li>
+                                    <li><a class="dropdown-item" @onclick="()=>Products(1)">This Month</a></li>
+                                    <li><a class="dropdown-item" @onclick="()=>Products(2)">This Year</a></li>
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Products <span>| @count2.Tittle</span></h5>
+
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="fa-solid fa-shirt"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6>@count2.Dem</h6>
+                                        <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </EditForm>
+                    </div>
+
+                </div><!-- End Customers Card -->
+                <!-- Revenue Card -->
+                <div class="col-xxl-4 col-md-6">
+                    <div class="card info-card revenue-card">
+                        <EditForm Model="count1">
+                            <div class="filter">
+                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                    <li class="dropdown-header text-start">
+                                        <h6>Filter</h6>
+                                    </li>
+
+                                    <li><a class="dropdown-item" @onclick="()=>Revenue(0)">Today</a></li>
+                                    <li><a class="dropdown-item" @onclick="()=>Revenue(1)">This Month</a></li>
+                                    <li><a class="dropdown-item" @onclick="()=>Revenue(2)">This Year</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="card-body">
+                                <h5 class="card-title">Revenue <span>|@count1.Tittle </span></h5>
+
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-currency-dollar"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        @if (count1.Dem > 1000000)
+                                        {
+                                            <h5 style="font-weight:700;">₫@count1.Dem?.ToString("#,##0")</h5>
+                                        }
+                                        else
+                                        {
+                                            <h6>₫@count1.Dem?.ToString("#,##0")</h6>
+                                        }
+
+                                        <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </EditForm>
+                    </div>
+                </div><!-- End Revenue Card -->
+                <!-- Top Selling -->
+                <div class="col-12">
+                    <div class="card top-selling overflow-auto">
+                        <EditForm Model="count3">
+                            <div class="filter">
+                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                    <li class="dropdown-header text-start">
+                                        <h6>Filter</h6>
+                                    </li>
+                                    <li><a class="dropdown-item" @onclick="()=>TopSale(0)">Today</a></li>
+                                    <li><a class="dropdown-item" @onclick="()=>TopSale(1)">This Month</a></li>
+                                    <li><a class="dropdown-item" @onclick="()=>TopSale(2)">This Year</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="card-body pb-0" style="height:500px;">
+                                <h5 class="card-title">Top Selling <span>| @count3.Tittle</span></h5>
+
+                                <table class="table table-borderless">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Preview</th>
+                                            <th scope="col">Product</th>
+                                            <th scope="col">Size</th>
+                                            <th scope="col">Color</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col">Sold</th>
+                                            <th scope="col">Revenue</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (_lstThongKeProductItem.Count() == 0)
+                                        {
+                                            <tr>
+                                                <td colspan="7">
+                                                    <div class="notpoundimg">
+                                                        <h6 style="margin-top: 20px;">
+                                                            Chưa có sản phẩm nào được bán trong @(count3.Tittle=="Today"?"Hôm nay":count3.Tittle=="This Month"?"Tháng này":"Năm nay")</h6>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            @foreach (var a in _lstThongKeProductItem)
+                                            {
+                                                <tr>
+                                                    <th scope="row"><a href="#"><img src="/images/anh-avatar-thu-vi-cuc-dep_025544933.jpg" alt=""></a></th>
+                                                    <td><a href="#" class="text-primary fw-bold">@a.Name</a></td>
+                                                    <td>@a.SizeName</td>
+                                                    <td>@a.ColorName</td>
+                                                    <td>@a.CostPrice</td>
+                                                    <td class="fw-bold">@a.Quantity</td>
+                                                    <td>@(a.CostPrice*a.Quantity)₫</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </EditForm>
+                    </div>
+                </div><!-- End Top Selling -->
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
