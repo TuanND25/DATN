@@ -30,55 +30,156 @@
         justify-content: center;
     }
 
+    .card-tittle {
+        font-weight: 500;
+        font-size: 11pt;
+        font-family: "Poppins",sans-serif;
+        color: #012970;
+    }
+
+    .status {
+        text-align: right;
+        line-height: 24px;
+        color: #ee4d2d;
+        text-transform: uppercase;
+    }
+
+
 </style>
 
 
 
-<div class="card">
+<div class="card" style="margin-bottom:10px">
     <div class="card-body">
         <h5 class="card-title">Danh sách đơn hàng</h5>
-        <!-- Default Table -->
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Mã đơn hàng</th>
-                    <th scope="col">Ngày đặt</th>
-                    <th scope="col" style="text-align:center;">Thành tiền</th>
-                    <th scope="col" style="text-align:center;">Tình trạng</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (_lstBills.Count() == 0)
-                {
-                    <tr>
-                        <td colspan="4">
-                            <div class="notpoundimg">
-                                <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/orderlist/5fafbb923393b712b96488590b8f781f.png"
-                                 style="width: 100px; height: 100px;" alt="Bức ảnh">
-                                <h6 style="margin-top: 20px;">Chưa có đơn hàng nào</h6>
-                            </div>
-                        </td>
-                    </tr>
-                }
-                else
-                {
-                    @foreach (var a in _lstBills)
-                    {
-                        <tr>
-                            <th scope="row">
-                                <a @onclick="()=>NavBillItem(a)" style="color:#212530">#@a.BillCode</a>
-                            </th>
-                            <td style="width:220px;">@a.CreateDate</td>
-                            <td style="text-align:right;padding-right:30px;">@(a.TotalAmount?.ToString("#,##0"))₫</td>
-                            <td style="text-align:center;">
-                                <span class="@(a.Status==0?"badge bg-danger":a.Status==1?"badge bg-warning":a.Status==2?"badge bg-info":"badge bg-success")">
-                                    @(a.Status==0?"Đã huỷ":a.Status==1?"Chờ xác nhận":a.Status==2?"Đang vận chuyển":"Hoàn thành")
-                                </span>
-                            </td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
+        <ul class="nav nav-tabs nav-tabs-bordered d-flex" id="borderedTabJustified" role="tablist">
+            <li class="nav-item flex-fill" role="presentation">
+                <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-home" type="button" role="tab" aria-controls="home" aria-selected="true">Tất cả</button>
+            </li>
+            <li class="nav-item flex-fill" role="presentation">
+                <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Chờ xác nhận</button>
+            </li>
+            <li class="nav-item flex-fill" role="presentation">
+                <button class="nav-link w-100" id="contact-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Vận chuyển</button>
+            </li>
+            <li class="nav-item flex-fill" role="presentation">
+                <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-1" type="button" role="tab" aria-controls="profile" aria-selected="false">Hoàn thành</button>
+            </li>
+            <li class="nav-item flex-fill" role="presentation">
+                <button class="nav-link w-100" id="contact-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-2" type="button" role="tab" aria-controls="contact" aria-selected="false">Đã huỷ</button>
+            </li>
+        </ul>
     </div>
 </div>
+<div class="card" >
+    <div class="card-body">
+        <div class="tab-content pt-2" id="borderedTabJustifiedContent">
+            <div class="tab-pane fade show active" id="bordered-justified-home" role="tabpanel" aria-labelledby="home-tab">
+
+                <div style="margin:12px 0;">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="card-tittle">ĐƠN HÀNG: #286384, Đặt lúc — 09/11/2023, 02:21SA</h6>
+                        </div>
+                        <div class="col-md-6 status">
+                            Hoàn thành
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-2" style="width:110px;">
+                            <img src="" style="width:95px;height:95px;" />
+                        </div>
+                        <div class="col-md-10"  style="width: calc(100% - 110px);">
+                            <div>Áo Nguyễn Văn Thắng</div>
+                            <div class="row">
+                                <div class="col-md-6">Đen / L</div>
+                                <div class="col-md-6" style="text-align:right">200.000</div>
+                            </div>
+                            <div>x10</div>
+                        </div>
+
+                    </div>
+                    <div class="row"></div>
+                    <div class="row"></div>
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="tab-pane fade" id="bordered-justified-profile" role="tabpanel" aria-labelledby="profile-tab">
+                Nesciunt totam et. Consequuntur magnam aliquid eos nulla dolor iure eos quia. Accusantium distinctio omnis et atque fugiat. Itaque doloremque aliquid sint quasi quia distinctio similique. Voluptate nihil recusandae mollitia dolores. Ut laboriosam voluptatum dicta.
+            </div>
+            <div class="tab-pane fade" id="bordered-justified-contact" role="tabpanel" aria-labelledby="contact-tab">
+                Saepe animi et soluta ad odit soluta sunt. Nihil quos omnis animi debitis cumque. Accusantium quibusdam perspiciatis qui qui omnis magnam. Officiis accusamus impedit molestias nostrum veniam. Qui amet ipsum iure. Dignissimos fuga tempore dolor.
+            </div>
+            <div class="tab-pane fade" id="bordered-justified-1" role="tabpanel" aria-labelledby="profile-tab">
+                Nesciunt totam et. Consequuntur magnam aliquid eos nulla dolor iure eos quia. Accusantium distinctio omnis et atque fugiat. Itaque doloremque aliquid sint quasi quia distinctio similique. Voluptate nihil recusandae mollitia dolores. Ut laboriosam voluptatum dicta.
+            </div>
+            <div class="tab-pane fade" id="bordered-justified-2" role="tabpanel" aria-labelledby="contact-tab">
+                Saepe animi et soluta ad odit soluta sunt. Nihil quos omnis animi debitis cumque. Accusantium quibusdam perspiciatis qui qui omnis magnam. Officiis accusamus impedit molestias nostrum veniam. Qui amet ipsum iure. Dignissimos fuga tempore dolor.
+            </div>
+        </div>
+    </div>
+</div><!-- End Bordered Tabs Justified -->
+
+
+
+<!-- Default Table -->
+@*        <table class="table">
+    <thead>
+    <tr>
+    <th scope="col">Mã đơn hàng</th>
+    <th scope="col">Ngày đặt</th>
+    <th scope="col" style="text-align:center;">Thành tiền</th>
+    <th scope="col" style="text-align:center;">Tình trạng</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (_lstBills.Count() == 0)
+    {
+    <tr>
+    <td colspan="4">
+    <div class="notpoundimg">
+    <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/orderlist/5fafbb923393b712b96488590b8f781f.png"
+    style="width: 100px; height: 100px;" alt="Bức ảnh">
+    <h6 style="margin-top: 20px;">Chưa có đơn hàng nào</h6>
+    </div>
+    </td>
+    </tr>
+    }
+    else
+    {
+    @foreach (var a in _lstBills)
+    {
+    <tr>
+    <th scope="row">
+    <a @onclick="()=>NavBillItem(a)" style="color:#212530">#@a.BillCode</a>
+    </th>
+    <td style="width:220px;">@a.CreateDate</td>
+    <td style="text-align:right;padding-right:30px;">@(a.TotalAmount?.ToString("#,##0"))₫</td>
+    <td style="text-align:center;">
+    <span class="@(a.Status==0?"badge bg-danger":a.Status==1?"badge bg-warning":a.Status==2?"badge bg-info":"badge bg-success")">
+    @(a.Status==0?"Đã huỷ":a.Status==1?"Chờ xác nhận":a.Status==2?"Đang vận chuyển":"Hoàn thành")
+    </span>
+    </td>
+    </tr>
+    }
+    }
+    </tbody>
+    </table>*@
+
