@@ -24,35 +24,81 @@ namespace DATN_API.Controllers
         {
             _userManager = userManager;
             _context = context;
-            
-         
+
+
         }
         [HttpPost("request")]
-        public async Task<IActionResult> RequestPasswordReset(ForgetPasswordRequest request)
+        public async Task<IActionResult> CheckUserForget(ForgetPasswordRequest request)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(p=>p.Email==request.Email && p.PhoneNumber==request.PhoneNumber && p.UserName== request.Username);
-            if (user!= null)
+            var user = await _context.Users.FirstOrDefaultAsync(p => p.Email == request.Email && p.PhoneNumber == request.PhoneNumber && p.UserName == request.Username);
+            if (user != null)
             {
+				request.PhoneNumber = "+84" + request.PhoneNumber.Substring(1);
+				user.OTP = GenerateRandomOTP();
+				_context.Users.UpdateRange(user);
+				_context.SaveChanges();
+				var responseOTP = await SendSmsAsync(request.PhoneNumber, "OTP reset password :" + user.OTP);
+				return StatusCode(200);
+                //request.PhoneNumber = "+84" + request.PhoneNumber.Substring(1);
+                //user.OTP = GenerateRandomOTP();
+                //_context.Users.UpdateRange(user);
+                //_context.SaveChanges();
+                //var responseOTP = await SendSmsAsync(request.PhoneNumber, "OTP reset password :" + user.OTP);
 
-                var passwordRandom = GenerateRandomAlphanumericString();
-                var code= await _userManager.GeneratePasswordResetTokenAsync(user);
-                await _userManager.ResetPasswordAsync(user,code,passwordRandom);
-                string message = "your new password : " + passwordRandom;
-                request.PhoneNumber = "+84" + request.PhoneNumber.Substring(1);
-                var response = await SendSmsAsync(request.PhoneNumber, message);
-                if (response != null && response.Status == MessageResource.StatusEnum.Sent)
+                //if (user.OTP == request.OTP)
+                //{
+                //    var passwordRandom = GenerateRandomAlphanumericString();
+                //    var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                //    await _userManager.ResetPasswordAsync(user, code, passwordRandom);
+                //    string message = "your new password : " + passwordRandom;
+
+                //    var responsePassword = await SendSmsAsync(request.PhoneNumber, message);
+                //}
+                //else
+                //{
+                //    return BadRequest("OTP không chính xác");
+                //}
+
+
+
+
+            }
+            else
+            {
+                return StatusCode(404,"Không tìm thấy tài khoản");
+            }
+            
+        }
+        [HttpPost("otp")]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordRequest request)
+        {
+			var user = await _context.Users.FirstOrDefaultAsync(p => p.Email == request.Email && p.PhoneNumber == request.PhoneNumber && p.UserName == request.Username);
+            if (user != null)
+            {
+              
+
+                if (user.OTP == request.OTP)
                 {
-                    return Ok(new { message = "Password reset link sent via SMS." });
+					request.PhoneNumber = "+84" + request.PhoneNumber.Substring(1);
+					var passwordRandom = GenerateRandomAlphanumericString();
+                    var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    await _userManager.ResetPasswordAsync(user, code, passwordRandom);
+                    string message = "your new password : " + passwordRandom;
+
+                    var responsePassword = await SendSmsAsync(request.PhoneNumber, message);
+                    return StatusCode(200, "reset passwrod success");
                 }
                 else
                 {
-                    return Ok(new { Message = "Success" });
+                    return BadRequest("OTP không chính xác");
                 }
-
             }
-            return NotFound(new { error = "User not found." });
-        }
-        private async Task<MessageResource> SendSmsAsync(string toPhoneNumber, string message)
+            else
+            {
+                return BadRequest();
+            }
+		}
+		private async Task<MessageResource> SendSmsAsync(string toPhoneNumber, string message)
         {
             TwilioClient.Init(_twilioSettings.AccountSid, _twilioSettings.AuthToken);
 
@@ -71,6 +117,19 @@ namespace DATN_API.Controllers
             char[] result = new char[7];
 
             for (int i = 0; i < 7; i++)
+            {
+                result[i] = characters[random.Next(characters.Length)];
+            }
+
+            return new string(result);
+        }
+        public static string GenerateRandomOTP()
+        {
+            const string characters = "0123456789";
+            Random random = new Random();
+            char[] result = new char[6];
+
+            for (int i = 0; i < 6; i++)
             {
                 result[i] = characters[random.Next(characters.Length)];
             }
