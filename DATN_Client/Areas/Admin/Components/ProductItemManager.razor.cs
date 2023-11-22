@@ -63,7 +63,6 @@ namespace DATN_Client.Areas.Admin.Components
 					stringBuilder.Append(c);
 				}
 			}
-
 			return stringBuilder.ToString().Normalize(NormalizationForm.FormC).ToLower();
 		}
 		protected override async Task OnInitializedAsync()

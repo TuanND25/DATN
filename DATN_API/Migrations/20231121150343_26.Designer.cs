@@ -4,6 +4,7 @@ using DATN_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DATN_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231121150343_26")]
+    partial class _26
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -432,10 +434,6 @@ namespace DATN_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProductCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -565,15 +563,15 @@ namespace DATN_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2e7f1322-969a-4d13-8c51-b15df625e168"),
-                            ConcurrencyStamp = "1676ebb1-aa7e-4aa5-9cb4-dcac48b54602",
+                            Id = new Guid("b40bcbe4-35ba-49ed-b850-c4f749ccb37d"),
+                            ConcurrencyStamp = "b9b446eb-a731-4ce5-a7db-eae74867c854",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("1ac1fa8f-b722-46e3-952c-a212f15c1429"),
-                            ConcurrencyStamp = "e3cc7d6a-0e41-4ffa-a562-11c4f1758dc4",
+                            Id = new Guid("dba9c5c7-441f-4098-b731-1215ace9b0ad"),
+                            ConcurrencyStamp = "a29780bc-0b21-4aff-8428-d59948581620",
                             Name = "User",
                             NormalizedName = "USER"
                         });

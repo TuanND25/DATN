@@ -4,6 +4,7 @@ using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace DATN_API.Service_IService.Services
 {
@@ -20,6 +21,16 @@ namespace DATN_API.Service_IService.Services
         }
         public async Task<Response> SignUpAsync(SignUpUser user)
         {
+            if(await _userManager.Users.FirstOrDefaultAsync(p=>p.PhoneNumber== user.PhoneNumber) != null)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    StatusCode = 403,
+                    Message = "PhoneNumber đã tồn tại"
+
+                };
+            }
             if (await _userManager.FindByEmailAsync(user.Email) != null)
             {
                 return new Response
