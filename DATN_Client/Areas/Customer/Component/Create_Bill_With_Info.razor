@@ -5,75 +5,9 @@
 				SuccessClass="success-toast-override"
 				SuccessIcon="fa-solid fa-check"
 				ErrorIcon="fa-solid fa-triangle-exclamation" />
-<style>
-	.paymentMethods {
-		border: 1px solid #A09F9E;
-		padding: 20px 30px 20px 30px;
-		border-radius: 5px;
-	}
 
-	.titleCOD {
-		font-size: 14px;
-		padding: 10px 5px 10px 5px;
-		border: 1px solid #A09F9E;
-		background-color: #fdf4ed;
-		border-radius: 5px;
-	}
-
-	.btnSuccesBill {
-		background-color: #7dccff;
-		color: #f2faff;
-		padding: 15px 20px;
-		border: none;
-		border-radius: 5px;
-		margin-top: 25px;
-	}
-
-		.btnSuccesBill:hover {
-			background-color: #64a3cc;
-			color: #fff;
-		}
-
-	.img_Ab {
-		position: absolute;
-		background-color: #949491;
-		border-radius: 50%;
-		width: 20px;
-		height: 20px;
-		text-align: center;
-		top: -10px;
-		right: -10px;
-		color: #fff;
-		opacity: 0.8;
-	}
-
-	.countPrice {
-		/* width: 70%; */
-		display: flex;
-		justify-content: space-between;
-		margin-top: auto;
-		margin-bottom: auto;
-	}
-
-	.centered-div {
-		display: flex;
-		align-items: center;
-	}
-
-		.centered-div label {
-			font-size: 18px;
-			padding: 10px;
-		}
-
-	.validation-message{
-		color: red;
-		font-family: none;
-		font-size:15px;
-	}
-</style>
-
-<div class="container" style="display:flex">
-	<div class="col-md-7">
+<div class="row">
+	<div class="col-md-8">
 		<h4 style="padding-left:100px">Thông tin giao hàng</h4>
 		<EditForm Model="_bill_vm">
 			<DataAnnotationsValidator />
@@ -112,7 +46,7 @@
 				</div>
 				<div class="row" style="margin-top:15px">
 					<div class="col-4">
-						<InputSelect class="form-select" @bind-Value="@_bill_vm.Province" @onclick="ChonTinhTP">
+						<InputSelect class="form-select" @bind-Value="@_bill_vm.Province" @oninput="ChonTinhTP">
 							<option value="@string.Empty" selected>--Tỉnh/Thành phố--</option>
 							@foreach (var x in _lstTinhTp)
 							{
@@ -122,7 +56,7 @@
 						<ValidationMessage For="()=>_bill_vm.Province" />
 					</div>
 					<div class="col-4">
-						<InputSelect class="form-select" @bind-Value="@_bill_vm.District" @onclick="@ChonQuanHuyen">
+						<InputSelect class="form-select" @bind-Value="@_bill_vm.District" @oninput="@ChonQuanHuyen">
 							<option value="@string.Empty" selected>--Quận/Huyện/Thị xã--</option>
 							@foreach (var x in _lstQuanHuyen)
 							{
@@ -150,26 +84,28 @@
 					<InputRadioGroup @bind-Value="_bill_vm.PaymentMethodId" class="form-control">
 						@foreach (var a in _lstPayM)
 						{
-							<InputRadio Value="@a.Id" />
-							<span>@a.Name</span>
-						<br />
+							<label class="radio-button">
+								<InputRadio Value="@a.Id" />
+								<div class="radio-circle"></div>
+								<span class="radio-label">@a.Name</span>
+							</label>
 							@if (a.Name == "Thanh toán khi nhận hàng (COD)" && _lstPayM.Where(c => c.Id == _bill_vm.PaymentMethodId).FirstOrDefault().Name == "Thanh toán khi nhận hàng (COD)")
-						{
-							<div>
-								<p class="titleCOD">
-									1. Khi click vào nút <b>Hoàn tất đơn hàng</b> thì đơn hàng sẽ được hệ thống tự động xác nhận mà không cần phải gọi qua điện thoại, nếu điền thông tin địa chỉ và số điện thoại chính xác thì đơn hàng sẽ được vận chuyển từ 3-4-5 ngày tùy vùng miền.<br>
-									2. Trường hợp đặt hàng xong nhưng muốn HỦY ĐƠN, vui lòng soạn tin nhắn theo cú pháp: SĐT ĐÃ ĐẶT ĐƠN (hoặc MÃ ĐƠN hoặc GMAIL ĐƠN HÀNG) + TÊN NGƯỜI NHẬN sau đó gửi qua các kênh online: Page Facebook, Intagram. Nhân viên check tin nhắn sẽ xử lý hủy giúp Quý KH.
-								</p>
-							</div>
-						}
+							{
+								<div>
+									<p class="titleCOD">
+										1. Khi click vào nút <b>Hoàn tất đơn hàng</b> thì đơn hàng sẽ được hệ thống tự động xác nhận mà không cần phải gọi qua điện thoại, nếu điền thông tin địa chỉ và số điện thoại chính xác thì đơn hàng sẽ được vận chuyển từ 3-4-5 ngày tùy vùng miền.<br>
+										2. Trường hợp đặt hàng xong nhưng muốn HỦY ĐƠN, vui lòng soạn tin nhắn theo cú pháp: SĐT ĐÃ ĐẶT ĐƠN (hoặc MÃ ĐƠN hoặc GMAIL ĐƠN HÀNG) + TÊN NGƯỜI NHẬN sau đó gửi qua các kênh online: Page Facebook, Intagram. Nhân viên check tin nhắn sẽ xử lý hủy giúp Quý KH.
+									</p>
+								</div>
+							}
 							@if (a.Name == "Thanh toán Momo" && _lstPayM.Where(c => c.Id == _bill_vm.PaymentMethodId).FirstOrDefault().Name == "Thanh toán Momo")
-						{
-							<div>
-								<p class="titleCOD">
-									Sau khi bấm nút <b>Hoàn tất đơn hàng</b> bạn sẽ được chuyển hướng đến trang thanh toán của Momo. Vui lòng thanh toán để hoàn tất đơn hàng
-								</p>
-							</div>
-						}
+							{
+								<div>
+									<p class="titleCOD">
+										Sau khi bấm nút <b>Hoàn tất đơn hàng</b> bạn sẽ được chuyển hướng đến trang thanh toán của Momo. Vui lòng thanh toán để hoàn tất đơn hàng
+									</p>
+								</div>
+							}
 						}
 					</InputRadioGroup>
 				</div>
@@ -184,7 +120,7 @@
 			</div>
 		</EditForm>
 	</div>
-	<div class="col-md-5">
+	<div class="col-md-4">
 		@foreach (var x in _lstCI)
 		{
 			_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
@@ -222,9 +158,23 @@
 			<div style="height:1px;background-color:#000;margin-top:10px;margin-bottom:15px">
 			</div>
 		}
+		<button class="btn-voucher">
+			<i class="fa-solid fa-ticket fa-lg" style="color: #2b56a1;"></i> <span>Ví Voucher</span>
+		</button>
+			<div class="input-container">
+			<input type="text" placeholder="Nhập mã giảm giá" @bind-value="_voucherCode">
+				<button class="invite-btn" type="button" @onclick="ApDungVoucher">
+					Áp dụng
+				</button>
+			</div>
+
 		<div class="row">
-			<div class="col-md-5"><h6>Tạm tính </h6></div>
+			<div class="col-md-5"><h6>Tạm tính</h6></div>
 			<div class="col-md-7"><h6 style="text-align:right;">@(_tongTienHang?.ToString("#,##0"))đ</h6></div>
+		</div>
+		<div class="row">
+			<div class="col-md-5"><h6>Giảm giá</h6></div>
+			<div class="col-md-7"><h6 style="text-align:right;">@(_tiengiam?.ToString("#,##0"))đ</h6></div>
 		</div>
 		<div class="row">
 			<div class="col-md-5"><h6>Phí ship</h6></div>
@@ -240,3 +190,5 @@
 		</div>
 	</div>
 </div>
+
+

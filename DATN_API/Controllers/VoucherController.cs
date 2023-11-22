@@ -49,8 +49,24 @@ namespace DATN_API.Controllers
             
         }
 
-        // POST api/<VoucherController>
-        [HttpPost("Post-Voucher")]
+		[HttpGet("GetVoucherByCode/{code}")]
+		public async Task<ActionResult<Voucher>> GetVoucherByCode(string code)
+		{
+			try
+			{
+				var lstID = await _voucherService.GetVoucherByCode(code.ToUpper());
+				return Ok(lstID);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest("Liên hệ Lợi để sửa 0828698564");
+
+			}
+
+		}
+
+		// POST api/<VoucherController>
+		[HttpPost("Post-Voucher")]
         public async Task<ActionResult<Voucher>> PostVoucher(Voucher_VM a)
         {
             try
@@ -58,7 +74,7 @@ namespace DATN_API.Controllers
                 Voucher voucher = new Voucher();
                 voucher.Id = a.Id;
                 voucher.Name = a.Name;
-                voucher.Code = a.Code;
+                voucher.Code = a.Code.ToUpper();
                 voucher.Percent = a.Percent;
                 voucher.Quantity = a.Quantity;
                 voucher.StartDate = a.StartDate;

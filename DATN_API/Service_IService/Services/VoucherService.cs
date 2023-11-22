@@ -26,7 +26,12 @@ namespace DATN_API.Service_IService.Services
             return await _context.Vouchers.ToListAsync();
         }
 
-        public async Task<Voucher> GetVoucherById(Guid Id)
+		public async Task<Voucher> GetVoucherByCode(string code)
+		{
+			return await _context.Vouchers.FirstOrDefaultAsync(c=>c.Code==code);
+		}
+
+		public async Task<Voucher> GetVoucherById(Guid Id)
         {
             return await _context.Vouchers.FindAsync(Id);
         }

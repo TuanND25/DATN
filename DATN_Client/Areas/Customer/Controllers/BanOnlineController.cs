@@ -20,7 +20,7 @@ namespace DATN_Client.Areas.Customer.Controllers
 		private Products_VM _P_Show = new Products_VM();
 		public static Guid _idP;
 		public static IPagedList<Products_VM> _pageList;
-		public static MomoExecuteResponseModel _momoExecuteResponseModel;
+		public static MomoExecuteResponseModel _momoExecuteResponseModel = new();
 		public static string _tenDanhMuc { get; set; }
 		public static string _valueSearch { get; set; }
 		public static int _soKQ { get; set; }
