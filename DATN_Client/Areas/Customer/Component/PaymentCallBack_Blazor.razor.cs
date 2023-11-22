@@ -33,12 +33,13 @@ namespace DATN_Client.Areas.Customer.Component
 			else _lstCI = await _client.GetFromJsonAsync<List<CartItems_VM>>($"https://localhost:7141/api/CartItems/{Create_Bill_With_Info._bill_vm.UserId}");
             if (_responseModel.Message.ToLower() == "success")
             {
-				var codeToday = "B" + DateTime.Now.ToString().Substring(0, 10).Replace("/", "") + ".";
+				var codeToday = DateTime.Now.ToString().Replace("/", "").Substring(0, 4) + 
+								DateTime.Now.Year.ToString().Substring(2);
 				_lstBill = (await _client.GetFromJsonAsync<List<Bill_VM>>("https://localhost:7141/api/Bill/get_alll_bill")).Where(c => c.BillCode.StartsWith(codeToday)).ToList();
 				// Tạo mã bill dạng: B + ngày tháng năm tạo bill + số lớn nhất +1
 				if (_lstBill.Count == 0) Create_Bill_With_Info._bill_vm.BillCode = codeToday + "1";
 				else Create_Bill_With_Info._bill_vm.BillCode = 
-						codeToday + _lstBill.Max(c => int.Parse(c.BillCode.Substring(10)) + 1).ToString();
+						codeToday + _lstBill.Max(c => int.Parse(c.BillCode.Substring(6)) + 1).ToString();
 				Create_Bill_With_Info._bill_vm.CreateDate = DateTime.Now;
                 if (Create_Bill_With_Info._bill_vm.ToAddress == string.Empty) Create_Bill_With_Info._bill_vm.ToAddress = "...";
                 var addBill = await _client.PostAsJsonAsync("https://localhost:7141/api/Bill/Post-Bill", Create_Bill_With_Info._bill_vm);

@@ -28,11 +28,11 @@ namespace DATN_Shared.ViewModel
         public string? Note { get; set; }
 		[Required(ErrorMessage = "Vui lòng nhập thông tin này!")]
 		public string? Recipient { get; set; } // Người nhận
-		[Required(ErrorMessage = "Vui lòng chọn quận/huyện!")]
+		[Required(ErrorMessage = "Vui lòng chọn Quận/Huyện/Thị xã!")]
 		public string? District { get; set; } // Quận/Huyện
-		[Required(ErrorMessage = "Vui lòng chọn tỉnh/thành phố!")]
+		[Required(ErrorMessage = "Vui lòng chọn Tỉnh/Thành phố!")]
 		public string? Province { get; set; } // Tỉnh/ TP
-		[Required(ErrorMessage = "Vui lòng chọn xã/phường!")]
+		[Required(ErrorMessage = "Vui lòng chọn Xã/Phường!")]
 		public string? WardName { get; set; } // Phường/ Xã
 		[Required(ErrorMessage = "Vui lòng nhập thông tin này!")]
 		public string? ToAddress { get; set; } // Địa chỉ chi tiết
