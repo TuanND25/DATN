@@ -38,6 +38,7 @@ namespace DATN_API.Controllers
                 var code= await _userManager.GeneratePasswordResetTokenAsync(user);
                 await _userManager.ResetPasswordAsync(user,code,passwordRandom);
                 string message = "your new password : " + passwordRandom;
+                request.PhoneNumber = "+84" + request.PhoneNumber.Substring(1);
                 var response = await SendSmsAsync(request.PhoneNumber, message);
                 if (response != null && response.Status == MessageResource.StatusEnum.Sent)
                 {

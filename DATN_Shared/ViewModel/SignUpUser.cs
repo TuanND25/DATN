@@ -23,7 +23,7 @@ namespace DATN_Shared.ViewModel
 
         [MaxLength(20, ErrorMessage = "Phonenumber không được vượt quá 20 ký tự")]
 		[Required(ErrorMessage = "PhoneNumber không được để trống")]
-		
+        [RegularExpression(@"^0\d{9}$", ErrorMessage = "Số điện thoại không hợp lệ")]	
    
         public string PhoneNumber { get; set; } = string.Empty;
         [MaxLength(30, ErrorMessage = "Name không được vượt quá 30 ký tự")]

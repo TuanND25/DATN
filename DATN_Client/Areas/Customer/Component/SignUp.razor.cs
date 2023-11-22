@@ -30,7 +30,7 @@ namespace DATN_Client.Areas.Customer.Component
                 return;
                 
             }
-            signUp.PhoneNumber= "+84 " + signUp.PhoneNumber.Substring(1);
+            
             var respone = await _httpClient.PostAsJsonAsync<SignUpUser>("https://localhost:7141/api/user/signup", signUp);
             var result = respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
