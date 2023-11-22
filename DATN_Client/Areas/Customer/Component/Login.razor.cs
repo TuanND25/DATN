@@ -70,7 +70,7 @@ namespace DATN_Client.Areas.Customer.Component
             }
             else
             {
-                _toastService.ShowError("Sai username hoặc password");
+                _toastService.ShowError("Sai tên đăng nhập hoặc mật khẩu");
             }
         }
     }

@@ -6,7 +6,7 @@
 				SuccessIcon="fa-solid fa-check"
 				ErrorIcon="fa-solid fa-triangle-exclamation" />
 
-<h3>SignUp</h3>
+
 
 
 
@@ -18,11 +18,20 @@
 			<EditForm Model="signUp">
 				<DataAnnotationsValidator/>
 				<div class="input-field">
+					<InputText placeholder="Name" @bind-Value="signUp.Name" />
+					<i class="fa-regular fa-user"></i>
+				</div>
+				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.Name"></ValidationMessage></span>
+				<div class="input-field">
 					<InputText placeholder="Username" @bind-Value="signUp.UserName" />
 					<i class="fa-regular fa-user"></i>
 				</div>
 				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.UserName"></ValidationMessage></span>
-
+				<div class="input-field">
+					<InputText placeholder="Phone" @bind-Value="signUp.PhoneNumber" />
+					<i class="fa-solid fa-phone"></i>
+				</div>
+				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.PhoneNumber"></ValidationMessage></span>
 				<div class="input-field">
 					<InputText placeholder="Email" @bind-Value="signUp.Email" />
 					<i class="fa-regular fa-envelope"></i>
@@ -42,23 +51,18 @@
 				</div>
 				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.ConfirmPassword"></ValidationMessage></span>
 
-				<div class="input-field">
-					<InputText placeholder="Name" @bind-Value="signUp.Name" />
-					<i class="fa-regular fa-user"></i>
-				</div>
-				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.Name"></ValidationMessage></span>
+				
 
-				<div class="input-field">
-					<InputText placeholder="Phone" @bind-Value="signUp.PhoneNumber" />
-					<i class="fa-solid fa-phone"></i>
-				</div>
-				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.PhoneNumber"></ValidationMessage></span>
-				<div class="input-field">
-					<InputSelect class="form-select" @bind-Value="@signUp.Sex">
-						<option value="true" selected>--Chọn--</option>
-						<option value="true">Nam</option>
-						<option value="false">Nữ</option>
-					</InputSelect>
+				
+				<div style="margin-top :5%">
+					<InputRadioGroup @bind-Value="@signUp.Sex" class="form-control" >
+						
+							<InputRadio Value="true" /> Nam
+						
+						
+							<InputRadio Value="false" /> Nữ
+					
+					</InputRadioGroup>
 				</div>
 
 				<div class="input-field button">
