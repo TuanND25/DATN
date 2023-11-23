@@ -7,11 +7,11 @@
 				ErrorIcon="fa-solid fa-triangle-exclamation" />
 
 <div class="row">
-	<div class="col-md-8">
-		<h4 style="padding-left:100px">Thông tin giao hàng</h4>
+	<div class="col-md-7">
+		<h4>Thông tin giao hàng</h4>
 		<EditForm Model="_bill_vm">
 			<DataAnnotationsValidator />
-			<div class="col-12" style="padding-left:100px;margin-top:20px">
+			<div class="col-12" style="margin-top:20px">
 				<div style="display:flex;">
 					<img src="/img/avartar_user.png" style="width:8%;margin-right:20px" />
 					@if (_user_vm.Name == null || _user_vm.Name == string.Empty)
@@ -46,7 +46,7 @@
 				</div>
 				<div class="row" style="margin-top:15px">
 					<div class="col-4">
-						<InputSelect class="form-select" @bind-Value="@_bill_vm.Province" @oninput="ChonTinhTP">
+						<InputSelect class="form-select" @bind-Value="@_bill_vm.Province" @onclick="ChonTinhTP">
 							<option value="@string.Empty" selected>--Tỉnh/Thành phố--</option>
 							@foreach (var x in _lstTinhTp)
 							{
@@ -56,7 +56,7 @@
 						<ValidationMessage For="()=>_bill_vm.Province" />
 					</div>
 					<div class="col-4">
-						<InputSelect class="form-select" @bind-Value="@_bill_vm.District" @oninput="@ChonQuanHuyen">
+						<InputSelect class="form-select" @bind-Value="@_bill_vm.District" @onclick="ChonQuanHuyen">
 							<option value="@string.Empty" selected>--Quận/Huyện/Thị xã--</option>
 							@foreach (var x in _lstQuanHuyen)
 							{
@@ -109,18 +109,20 @@
 						}
 					</InputRadioGroup>
 				</div>
-				<div style="display:flex;justify-content:space-between;align-items:center">
+				<div style="display:flex;justify-content:space-between;align-items:center;margin-top:25px">
 					<div>
 						<a style="color:#7dccff;cursor:pointer;" @onclick="BackToCart">Giỏ hàng</a>
 					</div>
-					<button class="btnSuccesBill" @onclick="Btn_DatHang" disabled="@_datHangThanhCong">
-						Thanh toán
-					</button>
+					<div>
+						<button class="btnSuccesBill @_afterClick" @onclick="Btn_DatHang" disabled="@_datHangThanhCong">
+							Thanh toán
+						</button>
+					</div>
 				</div>
 			</div>
 		</EditForm>
 	</div>
-	<div class="col-md-4">
+	<div class="col-md-5">
 		@foreach (var x in _lstCI)
 		{
 			_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
@@ -167,18 +169,31 @@
 					Áp dụng
 				</button>
 			</div>
-
+		@* !string.IsNullOrEmpty(_voucherCode) && !_lstVchUser.Any(c => c.VoucherId == _v_vm.Id && c.Status == 0) && _v_vm.Quantity > 0 && _tongTienHang > _v_vm.Discount_Conditions *@
+		@if (_tiengiam > 0)
+		{
+			<div style="display:flex;background-color:#fdf4ed;border:1px solid #A09F9E;border-radius:5px;padding:10px 10px;vertical-align:middle">
+				<div class="col-md-11">
+					<span>
+						Mã giảm giá <b>@_voucherCode.ToUpper()</b> đã giúp bạn tiết kiệm @(_tiengiam?.ToString("#,##0"))đ.
+					</span>
+				</div>
+				<div class="col-md-1" style="text-align:unset">
+					<span @onclick="XoaVoucher"><b>Hủy</b></span>
+				</div>
+			</div>
+		}
 		<div class="row">
-			<div class="col-md-5"><h6>Tạm tính</h6></div>
-			<div class="col-md-7"><h6 style="text-align:right;">@(_tongTienHang?.ToString("#,##0"))đ</h6></div>
+			<div class="col-md-5"><label>Tạm tính</label></div>
+			<div class="col-md-7" style="text-align:right;"><label>@(_tongTienHang?.ToString("#,##0"))đ</label></div>
 		</div>
 		<div class="row">
-			<div class="col-md-5"><h6>Giảm giá</h6></div>
-			<div class="col-md-7"><h6 style="text-align:right;">@(_tiengiam?.ToString("#,##0"))đ</h6></div>
+			<div class="col-md-5"><label>Giảm giá</label></div>
+			<div class="col-md-7" style="text-align:right;"><label>@(_tiengiam?.ToString("#,##0"))đ</label></div>
 		</div>
 		<div class="row">
-			<div class="col-md-5"><h6>Phí ship</h6></div>
-			<div class="col-md-7"><h6 style="text-align:right;">@(_bill_vm.ShippingFee?.ToString("#,##0"))đ</h6></div>
+			<div class="col-md-5"><label>Phí vận chuyển</label></div>
+			<div class="col-md-7" style="text-align:right;"><label>@(_bill_vm.ShippingFee?.ToString("#,##0"))đ</label></div>
 		</div>
 		<div class="row">
 			<div class="col-md-5">

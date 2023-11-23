@@ -66,6 +66,7 @@ namespace DATN_Client.Areas.Admin.Components
             voucher_VM.Name = GetValueFromList.Name;
             voucher_VM.Code = GetValueFromList.Code;
             voucher_VM.Percent = GetValueFromList.Percent;
+            voucher_VM.Quantity = GetValueFromList.Quantity;
             voucher_VM.Discount_Conditions = GetValueFromList.Discount_Conditions;
             voucher_VM.Maximum_Reduction = GetValueFromList.Maximum_Reduction;
             voucher_VM.StartDate = GetValueFromList.StartDate;
