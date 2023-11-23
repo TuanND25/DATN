@@ -1,232 +1,289 @@
-﻿<div class="row">
-    <div class="col-4" style="background-color:#e9f2f0">
-        <div>
-            <input class="input_Search" type="text" placeholder="Tìm kiếm theo tên" />
-        </div>
-        <div>
-            <p class="title_Product">Danh sách sản phẩm</p>
-        </div>
-        <div class="row" style="margin-bottom:20px">
-            @foreach (var item in _lstP)
-            {
-                string img = _lstImg_PI.Where(c => c.ProductId == item.Id).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
-
-                var giamin = _lstPrI_show_VM.Where(c => c.ProductId == item.Id).Min(c => c.CostPrice);
-                var giamax = _lstPrI_show_VM.Where(c => c.ProductId == item.Id).Max(c => c.CostPrice);
-                <div class="col-4">
-                    <div class="image_showProduct">
-                        <img src="/images/@img" style="width:100%;height:100%" />
-                        <p class="show_Price">
-                            @{
-                                if (giamin == giamax || giamin == null || giamax == null)
-                                {
-                                    @(giamax?.ToString("#,##0") + " VND")
-                                }
-                                else
-                                {
-                                    @(giamin?.ToString("#,##0") + " - " + giamax?.ToString("#,##0") + " VND")
-                                }
-                            }
-                        </p>
-                    </div>
-                    <div style="overflow:hidden">
-                        <label class="name_Product">@item.Name</label>
-                    </div>
-                    <hr />
-                </div>
-
-            }
-        </div>
-    </div>
-    <div class="col-8" style="display:flex;flex-direction:column;justify-content:space-between">
-        <div style="display:flex;justify-content:space-between;flex-direction:column">
-            <div style="display:flex; align-items:center;gap:3px;border-bottom:solid;">
+﻿<div class="row" style="height:100vh;">
+    <div class="col-9" style="height:100%;display:flex;flex-direction:column">
+        <div style="width:100%">
+           <div style="min-height:60vh;margin-bottom:20px;background-color:#fff">
+                <div style="display:flex; align-items:center;gap:3px;border-bottom:solid;">
                 @foreach (var x in _lstBill_Vm_show)
                 {
-                    <button class="btnBill @(BillId == x.Id ? "choseBill" :
-                "noChoseBill")" style="  display: flex;
+                    <div class="@(BillId.ToString() == x.Id.ToString() ? "choseBill" :
+                "noChoseBill abc")" style="
                     align-items: center;
-                    padding: 10px;
-                    justify-content: center;
-                    border-top-left-radius: 0.75rem;
-                    border-top-right-radius: 0.75rem;
-                    border:none;
-                    cursor:pointer"
-                        @onclick="()=>getBillId(x.Id)">
-                        <label>@x.BillCode</label>
-                        <label class="closeBill" @onclick="()=>closeBill(x.Id)" style="font-size:10px;margin-left:5px;cursor:pointer;text-align:center">X</label>
-                    </button>
-                }
-                <i class="fa-solid fa-circle-plus" style="font-size:35px" @onclick="()=>addBill()"></i>
-            </div>
-            <div style="margin-top:30px;display:flex;height:80px;align-items:center;justify-content:space-between;height:40%">
-                <div style="display:flex;align-items:center">
-                    <div style="margin-left:20px">
-                        1
-                    </div>
-                    <img src="/images/180333221_1211814135920494_4735639849484641427_n.jpg" class="img_productInBill" />
-                    <div style="display:flex; justify-content:space-between;flex-direction:column;margin-left:20px">
-                        <label>Áo Polo Outerity Polo Meowment</label>
-                        <label>Trắng</label>
-                        <label>S</label>
-                    </div>
-                </div>
-                <div style="display:flex;align-items:center">
-                    <div class="priceInBill">
-                        200000
-                    </div>
-                    <div class="selector-actions">
-                        <div class="number-input">
-                            <div class="input-wrapper">
-                                <button class="minus-button">-</button>
-                                <input type="number" class="input-field" value="1">
-                                <button class="plus-button">+</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="margin-left:20px;padding:5px;border-bottom:1px solid #000;">
-                        200000
-                    </div>
-                    <div style="margin-left:20px;">
-                        <i class="fa-solid fa-trash" style="color:#d04040"></i>
-                    </div>
-                </div>
-
-            </div>
-            <div style="height:1px;background-color:#d3d3d3;width:100%;margin-top:5px"></div>
-        </div>
-        <div class="row">
-            <div class="col-6 infoKhachhang" style="display:flex;flex-direction:column;gap:10px">
-                <div style="display:flex;align-items:center;margin-bottom:10px">
-                    <input type="text" placeholder="Tìm KH theo tên hoặc số điện thoại" style="width:60%;margin-right:20px" />
-                    <i class="fa-solid fa-user-plus" style="font-size:20pxl;cursor:pointer"></i>
-                </div>
-                <label style="font-weight:700">Khách hàng: Nguyễn Thị Mai Linh - 0349198240</label>
-                <div class="row">
-                    <label class="col-4" style="font-weight:700">Điểm thưởng: </label>
-                    <label class="col-4" style="padding:0px">100 điểm</label>
-                </div>     
-                <div class="row">
-                    <label class="col-4" style="font-weight:700">Dùng điểm:</label>
-                    <input class="col-4" type="number" style="padding:0px;width:90px"/>
-                </div>
-                <div class="row">
-                    <label class="col-4" style="font-weight:700">Giảm giá:</label>
-                    <label class="col-4" style="padding:0px">10,000đ</label>
-                </div>
-            </div>
-            <div class="col-6">
-                <div style="display:flex">
-                    <button @onclick="()=>getPaymetMethod(1)" class="btnBill @(paymentmethodid==1 ? " choseBill":"nochoseBill")" style=" display: flex;
-                    align-items: center;
-                    padding: 10px;
                     justify-content: center;
                     border-top-left-radius: 0.75rem;
                     border-top-right-radius: 0.75rem;
                     border:none;
                     cursor:pointer;
-                    margin-right:10px">
-                        Thanh toán Momo
-                    </button>
-                    <button @onclick="()=>getPaymetMethod(2)" class="btnBill @(paymentmethodid==2 ? " choseBill":"nochoseBill")" style="  display: flex;
+                    display:flex;
+                    ">
+                        <label class="cba @(BillId.ToString() == x.Id.ToString() ? "choseBill " :
+                "noChoseBill abc cba")" style="  display: flex;
                     align-items: center;
-                    padding: 10px;
+                    padding: 10px 0px 10px 10px;
                     justify-content: center;
                     border-top-left-radius: 0.75rem;
                     border-top-right-radius: 0.75rem;
                     border:none;
-                    cursor:pointer">
-                        Tiền mặt
-                    </button>
-                </div>
-               <div style="height:220px;background-color:#F2F2F2">
-                    @if (paymentmethodid == 1)
-                    {
-                        <div style="display:flex;flex-direction:column;
-    gap:10px;background-color:#F2F2F2;height:100%;gap:10px">
-                            <div class="row">
-                                <div class="col-4" style="text-align:right">
-                                    <label>Thành tiền:</label>
-                                </div>
-                                <div class="col-4" style="text-align:right">
-                                    <label>1000000</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-4" style="text-align:right">
-                                    <label>Tiêu điểm:</label>
-                                </div>
-                                <div class="col-4" style="text-align:right">
-                                    <label>10000</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-4" style="text-align:right">
-                                    <label>Tổng cộng:</label>
-                                </div>
-                                <div class="col-4" style="text-align:right">
-                                    <label>990000</label>
-                                </div>
-                            </div>
-                            <div style="display:flex;justify-content:center;
-align-items:center;margin-top:20px">
-                                <button class="btn_Thanhtoan"> Thanh toán</button>
-                            </div>
-                        </div>
-                    }
-                    else if (paymentmethodid == 2)
-                    {
-                        <div style="display:flex;flex-direction:column;
-    gap:10px;background-color:#F2F2F2">
-                            <div class="row">
-                                <div class="col-4" style="text-align:right">
-                                    <label>Thành tiền:</label>
-                                </div>
-                                <div class="col-4" style="text-align:right">
-                                    <label>1000000</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-4" style="text-align:right">
-                                    <label>Tiêu điểm:</label>
-                                </div>
-                                <div class="col-4" style="text-align:right">
-                                    <label>10000</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-4" style="text-align:right">
-                                    <label>Tổng cộng:</label>
-                                </div>
-                                <div class="col-4" style="text-align:right">
-                                    <label>990000</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-4" style="text-align:right">
-                                    <label>Thanh toán:</label>
-                                </div>
-                                <div class="col-4" style="text-align:right">
-                                    <input type="number" style="width:100px;text-align:right" />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-4" style="text-align:right">
-                                    <label>Tiền thừa:</label>
-                                </div>
-                                <div class="col-4" style="text-align:right">
-                                    <label>10000</label>
-                                </div>
-                            </div>
-                            <div style="display:flex;justify-content:center;
-align-items:center;margin-top:20px">
-                                <button class="btn_Thanhtoan"> Thanh toán</button>
-                            </div>
-                        </div>
+                    cursor:pointer;
+                   "
+                           @onclick="()=>getBillId(x.Id)">
+                            <label>@x.BillCode</label>
 
+                        </label>
+                        <label class="closeBill" @onclick="()=>closeBill(x.Id)" style="display:flex;font-size:10px;cursor:pointer;text-align:center;margin-right:5px;margin-left:5px">X</label>
+                    </div>
+                }
+                <i class="fa-solid fa-circle-plus" style="font-size:35px;cursor:pointer" @onclick="addBill"></i>
+            </div>
+            <div style="overflow-y: scroll;">
+                <table style="width:100%">
+                    <thead style="background-color:#f2f2f2;color:#000">
+                    <th style="width:5%">STT</th>
+                    <th style="width:30%">Sản phẩm</th>
+                    <th style="width:5%">Size</th>
+                    <th style="width:8%">Màu</th>
+                    <th style="width:5%">Trừ</th>
+                    <th>SL</th>
+                    <th style="width:5%">Cộng</th>
+                    <th style="width:5%">Tồn</th>
+                    <th style="width:15%">Giá</th>
+                    <th>Thành tiền</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="text-align:center">1</td>
+                            <td><i class="fa-solid fa-trash-can" style="color: #ee4444;"></i> Áo thun Outerity</td>
+                            <td style="text-align:center">M</td>
+                            <td style="text-align:center">Đen</td>
+                            <td class="" style="padding:0px">
+                                <div class="div_tru">
+                                    <span class="fa-solid fa-minus"></span>
+                               </div>
+                            </td>
+                            <td style="text-align:center;">
+                                <span style="text-align:center">1</span>
+                            </td>
+                            <td class="" style="padding:0px">
+                                <div class="div_tru">
+                                    <span class="fa-solid fa-plus"></span>
+                                </div>
+                            </td>
+                            <td style="text-align:center">
+                                 <span>9</span>
+                            </td>
+                            <td style="text-align:right;">200,000đ</td>
+                            <td style="text-align:right;">200,000đ</td>
+                        </tr
+                    </tbody>
+                </table>
+            </div>
+           </div>
+           <div style="background-color:#fff;width:100%;height:30vh">
+               <input type="text" style="width:30%;border-radius:7px;margin-bottom:10px" 
+               @oninput="SearchProduct"
+               placeholder="Tìm kiếm sản phẩm"/>
+            <div class="showlistProduct">             
+            @foreach (var x in _lstP)
+                    {
+                        string img = _lstImg_PI.Where(c => c.ProductId == x.Id).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
+                             <div style="display:flex;flex-direction:column;width:100px;grid-column: span 1 / span 8;">
+                   <img src="/images/@img"
+                   class="imagelistShow"/>
+                   <span class="titleNameProduct">
+                       @x.Name
+                   </span>
+               </div>
                     }
+
+            </div>
+           </div>
+        </div>
+    </div>
+    <div class="col-3">
+       <div style="display:flex;flex-direction:column">
+            <span style="font-weight:700;font-size:18px">
+            THANH TOÁN ĐƠN HÀNG
+        </span>
+        <div style="display:flex;"><input type="checkbox"/><span>Thêm thông tin</span></div>
+        <div class="row" style="margin-top:15px;" >
+            <div class="col-5"><button class="col-4 btn_searchUser" data-target="#CancelOrder" data-toggle="modal">
+                Khách hàng
+                </button>
+            </div>
+            <div class="col-6" style="font-size:14px;display:flex;align-items:center;font-weight:700">
+               
+                 @if (getuser.Id != default)
+                {
+                  <div style="display:flex;flex-direction:column">
+                    <label class="nameUser">@getuser.Name</label>
+                    <label>@getuser.PhoneNumber</label>
+                  </div>
+                }
+                else
+                {
+                    <label style="font-weight:700"> Khách hàng chưa có thông tin.</label>
+                }          
+            </div>
+            <div class="col-1" style="font-size:25px;display:flex;align-items:center">
+               <i class="fa-solid fa-xmark" style="color: #000;"></i>
+            </div>
+       </div>
+       <div class="row" style="margin-top:15px;">
+           <div class="col-5">
+               <span >Tổng tiền hàng</span>
+           </div>
+           <div class="col-7" style="text-align:right">
+               <span >100,000,000đ</span>
+           </div>
+       </div>
+       <div class="row" style="margin-top:15px;">
+           <div class="col-5" style="display:flex;gap:5px;align-items:center">
+               <span>Dùng điểm</span><input type="checkbox"/>
+           </div>
+           <div class="col-7" style="display:flex;justify-content:flex-end;align-items:center">
+              <input type="number" style="text-align:right;width:60%"/>
+           </div>
+       </div>
+       <div class="row" style="margin-top:15px;">
+           <div class="col-5" style="display:flex;gap:5px">
+               <span>Điểm quy đổi</span>
+           </div>
+           <div class="col-7" style="display:flex;justify-content:flex-end">
+              <span>10,000đ</span>
+           </div>
+       </div>
+
+       <div class="row" style="margin-top:15px;">
+           <div class="col-5" style="display:flex;gap:5px;align-items:center">
+               <span>Người nhận</span>
+           </div>
+           <div class="col-7" style="display:flex;justify-content:flex-end">
+              <input type="text"/>
+           </div>
+       </div>
+       <div class="row" style="margin-top:15px;align-items:center">
+           <div class="col-5" style="display:flex;gap:5px">
+               <span>Số điện thoại</span>
+           </div>
+           <div class="col-7" style="display:flex;justify-content:flex-end">
+              <input type="number"/>
+           </div>
+       </div>
+         <div class="row" style="margin-top:15px;align-items:center">
+           <div class="col-5"><button class="col-4 btn_searchUser" data-target="#AddressShipSellStall" data-toggle="modal">
+                Địa chỉ
+                </button>
+            </div>
+           <div class="col-7" style="display:flex;justify-content:flex-end">
+                  @if (getuser.Id != default)
+                {
+                  <div style="display:flex;flex-direction:column">
+                    <label class="nameUser">@getuser.Name</label>
+                    <label>@getuser.PhoneNumber</label>
+                  </div>
+                }
+                else
+                {
+                    <label style="font-weight:700">Chưa có thông tin địa chỉ</label>
+                }   
+           </div>
+       </div>
+
+
+
+
+
+
+    </div>
+</div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="AddressShipSellStall">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Phần tiêu đề của popup -->
+            <div class="modal-header">
+                <h6 class="modal-title">Thông tin địa chỉ giao hàng</h6>
+                <i class="fa-solid fa-xmark close" style="cursor: pointer;" data-dismiss="modal"></i>
+            </div>
+           <div>
+               <div class="row" style="margin-top:15px">
+					<div class="col-4">
+						<select class="form-select" @oninput="ChonTinhTP">
+							
+							@foreach (var x in _lstTinhTp)
+							{
+								<option value="@x.Name">@x.Name</option>
+							}
+						</select>						
+					</div>
+					<div class="col-4">
+						<select class="form-select" @oninput="@ChonQuanHuyen">
+							
+							@foreach (var x in _lstQuanHuyen)
+							{
+								<option value="@x.Name">@x.Name</option>
+							}
+						</select>					
+					</div>
+					<div class="col-4">
+						<select class="form-select">
+							
+							@foreach (var x in _lstXaPhuong)
+							{
+								<option value="@x.Name">@x.Name</option>
+							}
+						</select>					
+					</div>
+
+				</div>
+           </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="CancelOrder">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Phần tiêu đề của popup -->
+            <div class="modal-header">
+                <h6 class="modal-title">Tìm kiếm khách hàng</h6>
+                <i class="fa-solid fa-xmark close" style="cursor: pointer;" data-dismiss="modal"></i>
+            </div>
+            <!-- Nội dung của popup -->
+            <div class="container">
+                <div>
+                    <input type="text" @oninput="SearchUser" class="input_SearchUser" placeholder="Nhập tên hoặc số điện thoại khách hàng"/>
+                </div>
+                @{
+                    Guid id = Guid.Parse("3de28ff2-c838-481e-bd90-1925a4bf452a");
+                }
+                <div style="height:300px;overflow-y:auto;">
+                      <div class="UserShow" @onclick="()=>GetUserFormSearchUser(id)" data-dismiss="modal">
+                        Khách vãng lai
+                    </div>
+                   @* @foreach (var x in _lstUser)
+                    {
+                        <div class="UserShow" @onclick="()=>GetUserFormSearchUser(x.Id)" data-dismiss="modal">
+                            @x.Name : @x.PhoneNumber
+                        </div>
+                    }*@
+                  
                 </div>
             </div>
+
+
+            <!-- Phần chân của popup -->
 
         </div>
     </div>
