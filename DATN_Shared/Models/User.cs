@@ -14,11 +14,11 @@ namespace DATN_Shared.Models
    
         public string Name { get; set; } = string.Empty;
         public bool Sex { get; set; } 
-        public string RefreshToken { get; set; } =string.Empty;
+        
         public DateTime TokenCreated { get; set; } 
         public DateTime TokenExpires { get; set; }
-        public int Status { get; set; } 
-        public string OTP { get; set; }
+        public int Status { get; set; }
+        public string? OTP { get; set; } = string.Empty;
         public ConsumerPoint ConsumerPoint { get; set; }
         public Cart Cart { get; set; }  
         public virtual ICollection<Reviews> Reviews { get; set; }

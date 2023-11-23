@@ -14,7 +14,7 @@ namespace DATN_Client.Areas.Customer.Component
 		[Inject] private NavigationManager _navi { get; set; }
 		[Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
 		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
-		//private List<User_VM> _lstUser = new List<User_VM>();
+																				   //private List<User_VM> _lstUser = new List<User_VM>();
 		private List<CartItems_VM> _lstCI = new List<CartItems_VM>();
 		private List<Image_Join_ProductItem> _lstImg_PI = new List<Image_Join_ProductItem>();
 		private List<Image_Join_ProductItem> _lstImg_PI_tam = new List<Image_Join_ProductItem>();
@@ -39,14 +39,17 @@ namespace DATN_Client.Areas.Customer.Component
 		private List<HistoryConsumerPoint_VM> _lstHCP_VM = new List<HistoryConsumerPoint_VM>();
 		private List<AddressShip_VM> _lst_adrS_User = new List<AddressShip_VM>();
 		private AddressShip_VM? _adrS_User = new AddressShip_VM();
+		private Voucher_VM? _v_vm = new Voucher_VM();
 		public string _TinhTp { get; set; }
 		public string _QuanHuyen { get; set; }
 		public string? _iduser { get; set; }
 		public bool _datHangThanhCong { get; set; } = false;
-        protected override async Task OnInitializedAsync()
+		public string _voucherCode { get; set; } = string.Empty;
+		public int? _tiengiam { get; set; } = 0;
+		protected override async Task OnInitializedAsync()
 		{
 			_iduser = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
-			if (SessionServices.GetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai").Count == 0 && _iduser == null) _navi.NavigateTo("https://localhost:7075/cart",true);
+			if (SessionServices.GetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai").Count == 0 && _iduser == null) _navi.NavigateTo("https://localhost:7075/cart", true);
 			//var token = _ihttpcontextaccessor.HttpContext.Session.GetString("Token"); // Gọi token
 			//_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token); // Xác thực
 			_bill_vm = new Bill_VM();
@@ -65,7 +68,7 @@ namespace DATN_Client.Areas.Customer.Component
 				_lst_adrS_User = await _httpClient.GetFromJsonAsync<List<AddressShip_VM>>($"https://localhost:7141/api/AddressShip/get_address_by_UserID/{_user_vm.Id}");
 				_adrS_User = _lst_adrS_User.FirstOrDefault(c => c.Status == 1);
 			}
-			
+
 			_lstImg_PI = (await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem")).OrderBy(c => c.STT).ToList();
 			_lstTinhTp_Data = await _httpClient.GetFromJsonAsync<List<Province_VM>>("https://api.npoint.io/ac646cb54b295b9555be"); // api tỉnh tp
 			_lstTinhTp = _lstTinhTp_Data;
@@ -73,7 +76,7 @@ namespace DATN_Client.Areas.Customer.Component
 			_lstXaPhuong_Data = await _httpClient.GetFromJsonAsync<List<Ward_VM>>("https://api.npoint.io/dd278dc276e65c68cdf5");
 			_lstPayM = (await _httpClient.GetFromJsonAsync<List<PaymentMethod_VM>>("https://localhost:7141/api/paymentMethod/get_all_paymentMethod")).Where(c => c.Status == 1).ToList();
 			_lstPrI_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_VM>>("https://localhost:7141/api/productitem/get_all_productitem");
-			_lstHCP_VM = await _httpClient.GetFromJsonAsync<List<HistoryConsumerPoint_VM>>("https://localhost:7141/api/HistoryConsumerPoint/get-HistoryConsumerPoint");	
+			_lstHCP_VM = await _httpClient.GetFromJsonAsync<List<HistoryConsumerPoint_VM>>("https://localhost:7141/api/HistoryConsumerPoint/get-HistoryConsumerPoint");
 			if (_adrS_User != null)
 			{
 				_bill_vm.NumberPhone = _adrS_User.NumberPhone;
@@ -149,7 +152,7 @@ namespace DATN_Client.Areas.Customer.Component
 				_ord.OrderId = Guid.NewGuid().ToString();
 				if (_user_vm.Name == null) _ord.FullName = _bill_vm.Recipient;
 				else _ord.FullName = _user_vm.Name;
-				_ord.OrderInfo =_bill_vm.Note;
+				_ord.OrderInfo = _bill_vm.Note;
 				_ord.Amount = _tongTienAll;
 				var reponse = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/Momo/CreatePaymentAsync", _ord);
 				var reponse2 = await reponse.Content.ReadFromJsonAsync<MomoCreatePaymentResponseModel>();
@@ -157,7 +160,8 @@ namespace DATN_Client.Areas.Customer.Component
 			}
 			if (_lstPayM.FirstOrDefault(c => c.Id == _bill_vm.PaymentMethodId).Name == "Thanh toán khi nhận hàng (COD)")
 			{
-				var codeToday = "B" + DateTime.Now.ToString().Substring(0, 10).Replace("/", "") + ".";
+				var codeToday = DateTime.Now.ToString().Replace("/", "").Substring(0, 4) +
+								DateTime.Now.Year.ToString().Substring(2);
 				_lstBill = (await _httpClient.GetFromJsonAsync<List<Bill_VM>>("https://localhost:7141/api/Bill/get_alll_bill")).Where(c => c.BillCode.StartsWith(codeToday)).ToList();
 				_bill_vm.Id = Guid.NewGuid();
 				_bill_vm.TotalAmount = _tongTienAll;
@@ -168,7 +172,7 @@ namespace DATN_Client.Areas.Customer.Component
 				if (_bill_vm.Recipient == string.Empty) _bill_vm.Recipient = _user_vm.Name;
 				// Tạo mã bill dạng: B + ngày tháng năm tạo bill + số lớn nhất +1
 				if (_lstBill.Count == 0) _bill_vm.BillCode = codeToday + "1";
-				else _bill_vm.BillCode = codeToday + _lstBill.Max(c => int.Parse(c.BillCode.Substring(10)) + 1).ToString();
+				else _bill_vm.BillCode = codeToday + _lstBill.Max(c => int.Parse(c.BillCode.Substring(6)) + 1).ToString();
 				// Ngày tạo
 				_bill_vm.CreateDate = DateTime.Now;
 				try
@@ -251,13 +255,46 @@ namespace DATN_Client.Areas.Customer.Component
 		{
 			_bill_vm.Recipient = adrShip.Recipient;
 			_bill_vm.NumberPhone = adrShip.NumberPhone;
-			_bill_vm.ToAddress = adrShip.ToAddress;		
+			_bill_vm.ToAddress = adrShip.ToAddress;
 			_bill_vm.Province = adrShip.Province;
-			await ChonTinhTP();			
+			await ChonTinhTP();
 			_bill_vm.District = adrShip.District;
-			await ChonQuanHuyen();			
+			await ChonQuanHuyen();
 			_bill_vm.WardName = adrShip.WardName;
 			_toastService.ShowSuccess("Thay đổi địa chỉ thành công");
+		}
+
+		private async Task ApDungVoucher()
+		{
+			_tongTienHang = 0;
+			_tongTienAll = 0;
+			foreach (var x in _lstCI)
+			{
+				_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
+				_tongTienHang += (x.Quantity * _pi_s_vm.PriceAfterReduction);
+			}
+			_tongTienAll = _tongTienHang + _bill_vm.ShippingFee;
+
+			_v_vm = await _httpClient.GetFromJsonAsync<Voucher_VM>($"https://localhost:7141/api/Voucher/GetVoucherByCode/{_voucherCode.ToUpper()}");
+			if (_v_vm == null || _v_vm.Quantity == 0)
+			{
+				_toastService.ShowError("Mã giảm giá không tồn tại, đã hết hạn hoặc hết lượt sử dụng");
+				return;
+			}
+			if (_tongTienHang < _v_vm.Discount_Conditions)
+			{
+				_toastService.ShowError($"Mã giảm giá {_voucherCode.ToUpper()} chỉ sử dụng cho đơn hàng có tổng trị từ {_v_vm.Discount_Conditions?.ToString("#,##0")}");
+				return;
+			}
+			if (_v_vm != null)
+			{
+				_tiengiam = _tongTienAll * _v_vm.Percent / 100;
+				if (_tiengiam > _v_vm.Maximum_Reduction)
+				{
+					_tiengiam = _v_vm.Maximum_Reduction;
+				}
+				_tongTienAll -= _tiengiam;
+			}
 		}
 	}
 }
