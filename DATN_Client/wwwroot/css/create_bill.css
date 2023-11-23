@@ -15,10 +15,10 @@
 .btnSuccesBill {
     background-color: #7dccff;
     color: #f2faff;
-    padding: 15px 20px;
+    padding: 18px 30px;
     border: none;
     border-radius: 5px;
-    margin-top: 25px;
+    font-size:20px;
 }
 
     .btnSuccesBill:hover {
@@ -26,18 +26,22 @@
         color: #fff;
     }
 
-.img_Ab {
-    position: absolute;
-    background-color: #949491;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    text-align: center;
-    top: -10px;
-    right: -10px;
-    color: #fff;
-    opacity: 0.8;
-}
+    .btnSuccesBill.afterClick{
+        background-color: darkgray;
+        color:black;
+    }
+    .img_Ab {
+        position: absolute;
+        background-color: #949491;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        top: -10px;
+        right: -10px;
+        color: #fff;
+        opacity: 0.8;
+    }
 
 .countPrice {
     /* width: 70%; */

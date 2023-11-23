@@ -9,7 +9,7 @@ namespace DATN_Shared.Models
     public class VoucherUser
     {
         public Guid Id { get; set; }
-        public Guid VoucherId { get; set; }
+        public Guid? VoucherId { get; set; }
         public Guid UserId { get; set; }
         public int Status { get; set; }
 

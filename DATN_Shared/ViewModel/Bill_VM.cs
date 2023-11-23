@@ -32,7 +32,7 @@ namespace DATN_Shared.ViewModel
 		public string? District { get; set; } // Quận/Huyện
 		[Required(ErrorMessage = "Vui lòng chọn Tỉnh/Thành phố!")]
 		public string? Province { get; set; } // Tỉnh/ TP
-		[Required(ErrorMessage = "Vui lòng chọn Xã/Phường!")]
+		[Required(ErrorMessage = "Vui lòng chọn Xã/Phường/Thị trấn!")]
 		public string? WardName { get; set; } // Phường/ Xã
 		[Required(ErrorMessage = "Vui lòng nhập thông tin này!")]
 		public string? ToAddress { get; set; } // Địa chỉ chi tiết

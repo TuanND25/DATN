@@ -55,12 +55,15 @@ namespace DATN_API.Controllers
 			try
 			{
 				var lstID = await _voucherService.GetVoucherByCode(code.ToUpper());
+                if (lstID == null)
+                {
+                    return Ok(new Voucher());
+                }
 				return Ok(lstID);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return BadRequest("Liên hệ Lợi để sửa 0828698564");
-
+                return BadRequest(null);
 			}
 
 		}
