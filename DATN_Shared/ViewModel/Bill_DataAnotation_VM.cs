@@ -7,25 +7,25 @@ using System.Threading.Tasks;
 
 namespace DATN_Shared.ViewModel
 {
-    public class Bill_VM
-    {
-        public Guid Id { get; set; }
-        public Guid UserId { get; set; }
-        public Guid? HistoryConsumerPointID { get; set; }
-        public Guid? PaymentMethodId { get; set; }
-        public Guid? VoucherId { get; set; }
-        public string BillCode { get; set; }
-        public int? TotalAmount { get; set; }
-        public int? ReducedAmount { get; set; }
-        public int? Cash { get; set; }  // tiền mặt
-        public int? CustomerPayment { get; set; } // tiền khách đưa
-        public int? FinalAmount { get; set; } // tiền khách đưa
-        public DateTime? CreateDate { get; set; }
-        public DateTime? ConfirmationDate { get; set; }
-        public DateTime? CompletionDate { get; set; }
-        public int Type { get; set; }
-  
-        public string? Note { get; set; }
+	public class Bill_DataAnotation_VM
+	{
+		public Guid Id { get; set; }
+		public Guid UserId { get; set; }
+		public Guid? HistoryConsumerPointID { get; set; }
+		public Guid? PaymentMethodId { get; set; }
+		public Guid? VoucherId { get; set; }
+		public string BillCode { get; set; }
+		public int? TotalAmount { get; set; }
+		public int? ReducedAmount { get; set; }
+		public int? Cash { get; set; }  // tiền mặt
+		public int? CustomerPayment { get; set; } // tiền khách đưa
+		public int? FinalAmount { get; set; } // tiền khách đưa
+		public DateTime? CreateDate { get; set; }
+		public DateTime? ConfirmationDate { get; set; }
+		public DateTime? CompletionDate { get; set; }
+		public int Type { get; set; }
+
+		public string? Note { get; set; }
 		[Required(ErrorMessage = "Vui lòng nhập thông tin này!")]
 		public string? Recipient { get; set; } // Người nhận
 		[Required(ErrorMessage = "Vui lòng chọn Quận/Huyện/Thị xã!")]
@@ -39,9 +39,9 @@ namespace DATN_Shared.ViewModel
 		[Required(ErrorMessage = "Vui lòng nhập thông tin này!")]
 		[RegularExpression(@"^0\d{9}$", ErrorMessage = "Thông tin không hợp lệ.")]
 		public string? NumberPhone { get; set; } // SDT
-        public int Status { get; set; }
+		public int Status { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "Số phải lớn hơn hoặc bằng 0.")]
-        public int? ShippingFee { get; set; }
-    }
+		[Range(0, int.MaxValue, ErrorMessage = "Số phải lớn hơn hoặc bằng 0.")]
+		public int? ShippingFee { get; set; }
+	}
 }
