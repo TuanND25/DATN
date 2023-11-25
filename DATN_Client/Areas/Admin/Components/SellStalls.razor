@@ -1,7 +1,7 @@
 ﻿<div class="row" style="height:100vh;">
     <div class="col-9" style="height:100%;display:flex;flex-direction:column">
         <div style="width:100%">
-           <div style="min-height:60vh;margin-bottom:20px;background-color:#fff">
+           <div style="height:55vh;margin-bottom:20px;background-color:#fff">
                 <div style="display:flex; align-items:center;gap:3px;border-bottom:solid;">
                 @foreach (var x in _lstBill_Vm_show)
                 {
@@ -18,7 +18,7 @@
                         <label class="cba @(BillId.ToString() == x.Id.ToString() ? "choseBill " :
                 "noChoseBill abc cba")" style="  display: flex;
                     align-items: center;
-                    padding: 10px 0px 10px 10px;
+                    padding: 5px 0px 5px 10px;
                     justify-content: center;
                     border-top-left-radius: 0.75rem;
                     border-top-right-radius: 0.75rem;
@@ -32,7 +32,7 @@
                         <label class="closeBill" @onclick="()=>closeBill(x.Id)" style="display:flex;font-size:10px;cursor:pointer;text-align:center;margin-right:5px;margin-left:5px">X</label>
                     </div>
                 }
-                <i class="fa-solid fa-circle-plus" style="font-size:35px;cursor:pointer" @onclick="addBill"></i>
+                <i class="fa-solid fa-circle-plus" style="font-size:35px;cursor:pointer" @onclick="()=>addBill()"></i>
             </div>
             <div style="overflow-y: scroll;">
                 <table style="width:100%">
@@ -84,50 +84,57 @@
             <div class="showlistProduct">             
             @foreach (var x in _lstP)
                     {
-                        string img = _lstImg_PI.Where(c => c.ProductId == x.Id).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
-                             <div style="display:flex;flex-direction:column;width:100px;grid-column: span 1 / span 8;">
-                   <img src="/images/@img"
-                   class="imagelistShow"/>
-                   <span class="titleNameProduct">
-                       @x.Name
-                   </span>
-               </div>
+                       <div data-target="#ChooseSizeAndColor" data-toggle="modal" @onclick="()=>getProductChooseSizeAndColor(x.Id)">
+                            @{
+                                string img = _lstImg_PI.Where(c => c.ProductId == x.Id).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
+                            }
+                            <div style="display:flex;flex-direction:column;width:100px;grid-column: span 1 / span 8;">
+                               <img src="/images/@img"
+                               class="imagelistShow"/>
+                               <span class="titleNameProduct">
+                                   @x.Name
+                               </span>
+                               <span>@x.ProductCode</span>
+                            </div>
+                       </div>
                     }
 
             </div>
            </div>
         </div>
     </div>
-    <div class="col-3">
-       <div style="display:flex;flex-direction:column">
+    <div class="col-3" style="padding:0px">
+       <div style="display:flex;flex-direction:column;">
             <span style="font-weight:700;font-size:18px">
             THANH TOÁN ĐƠN HÀNG
         </span>
-        <div style="display:flex;"><input type="checkbox"/><span>Thêm thông tin</span></div>
-        <div class="row" style="margin-top:15px;" >
-            <div class="col-5"><button class="col-4 btn_searchUser" data-target="#CancelOrder" data-toggle="modal">
+        <div style="display:flex;"><span style="margin-right:5px">Thêm thông tin</span><input type="checkbox" @bind-value="activeTabThemThongTin"/></div>
+        <div class="row" style="margin-top:5px;" >
+            <div class="col-5" style="display:flex;justify-content:center;align-items:center">
+                <button class="col-4 btn_searchUser" data-target="#CancelOrder" data-toggle="modal">  
                 Khách hàng
                 </button>
             </div>
             <div class="col-6" style="font-size:14px;display:flex;align-items:center;font-weight:700">
                
-                 @if (getuser.Id != default)
+                 @if (getuser.Id != default && getuser.UserName.ToString() != "khachvanglai")
                 {
                   <div style="display:flex;flex-direction:column">
                     <label class="nameUser">@getuser.Name</label>
-                    <label>@getuser.PhoneNumber</label>
+                    <label>@getuser.PhoneNumber</label>                
+                    <label>1000 điểm </label>                             
                   </div>
                 }
-                else
+                else if(getuser.Id != default && getuser.UserName.ToString() == "khachvanglai")
                 {
                     <label style="font-weight:700"> Khách hàng chưa có thông tin.</label>
                 }          
             </div>
             <div class="col-1" style="font-size:25px;display:flex;align-items:center">
-               <i class="fa-solid fa-xmark" style="color: #000;"></i>
+               <i class="fa-solid fa-xmark" style="color: #000;cursor:pointer;" @onclick="ClearInfoUser"></i>
             </div>
        </div>
-       <div class="row" style="margin-top:15px;">
+       <div class="row" style="margin-top:5px;">
            <div class="col-5">
                <span >Tổng tiền hàng</span>
            </div>
@@ -135,24 +142,29 @@
                <span >100,000,000đ</span>
            </div>
        </div>
-       <div class="row" style="margin-top:15px;">
+        @if (getuser.Id != default && getuser.UserName.ToString() != "khachvanglai")
+            {
+                 <div class="row" style="margin-top:5px;">
            <div class="col-5" style="display:flex;gap:5px;align-items:center">
-               <span>Dùng điểm</span><input type="checkbox"/>
+               <span>Dùng điểm</span><input type="checkbox" @bind-value="activeTabDungDiem"/>
            </div>
            <div class="col-7" style="display:flex;justify-content:flex-end;align-items:center">
-              <input type="number" style="text-align:right;width:60%"/>
+              <input type="number" style="text-align:right;width:60%" readonly="@(!@activeTabDungDiem)" />
            </div>
        </div>
-       <div class="row" style="margin-top:15px;">
+       <div class="row" style="margin-top:5px;">
            <div class="col-5" style="display:flex;gap:5px">
                <span>Điểm quy đổi</span>
            </div>
            <div class="col-7" style="display:flex;justify-content:flex-end">
               <span>10,000đ</span>
            </div>
-       </div>
-
-       <div class="row" style="margin-top:15px;">
+       </div>  
+            }
+            
+        @if (activeTabThemThongTin==true)
+            {
+                   <div class="row" style="margin-top:5px;">
            <div class="col-5" style="display:flex;gap:5px;align-items:center">
                <span>Người nhận</span>
            </div>
@@ -160,7 +172,7 @@
               <input type="text"/>
            </div>
        </div>
-       <div class="row" style="margin-top:15px;align-items:center">
+       <div class="row" style="margin-top:5px;align-items:center">
            <div class="col-5" style="display:flex;gap:5px">
                <span>Số điện thoại</span>
            </div>
@@ -168,34 +180,95 @@
               <input type="number"/>
            </div>
        </div>
-         <div class="row" style="margin-top:15px;align-items:center">
+       <div class="row" style="margin-top:5px;align-items:center">
            <div class="col-5"><button class="col-4 btn_searchUser" data-target="#AddressShipSellStall" data-toggle="modal">
                 Địa chỉ
                 </button>
             </div>
+           <div class="col-12" style="display:flex;justify-content:flex-end;margin-top:10px">
+               <span style="font-weight:700">123 Phương Canh, Xuân Phương, Nam Từ Liêm, Hà Nội</span>
+           </div>
+       </div>
+       <div class="row" style="margin-top:5px;align-items:center">
+           <div class="col-5" style="display:flex;gap:5px">
+               <span>Phí vận chuyển</span>
+           </div>
            <div class="col-7" style="display:flex;justify-content:flex-end">
-                  @if (getuser.Id != default)
-                {
-                  <div style="display:flex;flex-direction:column">
-                    <label class="nameUser">@getuser.Name</label>
-                    <label>@getuser.PhoneNumber</label>
-                  </div>
-                }
-                else
-                {
-                    <label style="font-weight:700">Chưa có thông tin địa chỉ</label>
-                }   
+              <input type="number"/>
+           </div>
+       </div>
+            }
+        <div class="row" style="margin-top:5px;align-items:center">
+           <div class="col-5" style="display:flex;gap:5px">
+               <span>Tổng tiền</span>
+           </div>
+           <div class="col-7" style="display:flex;justify-content:flex-end">
+              <span>1,000,000đ</span>
+           </div>
+       </div>
+         <div class="row" style="margin-top:5px;align-items:center">
+           <div class="col-12" style="display:flex;gap:5px">
+               <span>Phương thức thanh toán</span>
+           </div>       
+       </div>
+        <div class="row" style="margin-top:5px;align-items:center;margin-top:10px">
+           <div class="col-12" style="display:flex;gap:5px">
+               <button class="btnPhuongThucThanhToan @(activeTienMat==true ? "acttiveTabPTTTT":"")" @onclick="ActiveTabTienMat">Tiền mặt</button>
+               <button class="btnPhuongThucThanhToan @(activeChuyenKhoan==true ? "acttiveTabPTTTT":"")" @onclick="ActiveTabChuyenKhoan">Chuyển khoản</button>
+           </div>       
+       </div>
+       @if (activeTienMat==true)
+            {
+          <div class="row " style="margin-top:5px;margin-top:10px" >
+           <div class="col-12" style="display:flex;gap:5px;justify-content:end;align-items:center">
+               <i class="fa-solid fa-money-bill" style="color: #5cb85c;"></i>
+                <input type="number" style=" padding:0px;"/>
+                <i class="fa-solid fa-x"  style="color: #ee4444;cursor:pointer" @onclick="CloseTabTienMat"></i>
+           </div>       
+       </div>
+            }
+            @if (activeChuyenKhoan==true)
+            {
+                  <div class="row" style="margin-top:5px;margin-top:10px">
+           <div class="col-12" style="display:flex;gap:5px;justify-content:end;align-items:center">
+               <i class="fa-solid fa-credit-card" style="color: #5cb85c;"></i>
+                <input type="number" style=" padding:0px;"/>
+                <i class="fa-solid fa-x"  style="color: #ee4444;cursor:pointer" @onclick="CloseTabChuyenKhoan"></i>
+           </div>       
+       </div>
+            }
+             <div class="row" style="margin-top:35px;align-items:center">
+           <div class="col-5" style="display:flex;gap:5px">
+               <span>Tiền khách đưa</span>
+           </div>
+           <div class="col-7" style="display:flex;justify-content:flex-end;text-align:end">
+              <span>1,000,000đ</span>
+           </div>
+       </div>
+         <div class="row" style="margin-top:5px;align-items:center">
+           <div class="col-5" style="display:flex;gap:5px">
+               <span>Tiền trả lại</span>
+           </div>
+           <div class="col-7" style="display:flex;justify-content:flex-end;text-align:end">
+              <span>1,000,000đ</span>
            </div>
        </div>
 
-
-
-
-
-
+        <div class="row" style="margin-top:25px;display:flex;justify-content:center;align-items:center;padding:0px">
+           <div class="col-12" style="padding:0px">
+               <button class="btnEndBill" >
+                    Thanh Toán
+               </button>
+           </div>
+          
+       </div>
+      
+       
     </div>
 </div>
 </div>
+
+
 
 
 
@@ -204,45 +277,78 @@
 <div class="modal fade" id="AddressShipSellStall">
     <div class="modal-dialog">
         <div class="modal-content">
-
             <!-- Phần tiêu đề của popup -->
-            <div class="modal-header">
+            <div class="modal-header" style="background-color:#f2cc8c">
                 <h6 class="modal-title">Thông tin địa chỉ giao hàng</h6>
                 <i class="fa-solid fa-xmark close" style="cursor: pointer;" data-dismiss="modal"></i>
             </div>
            <div>
-               <div class="row" style="margin-top:15px">
-					<div class="col-4">
-						<select class="form-select" @oninput="ChonTinhTP">
-							
-							@foreach (var x in _lstTinhTp)
-							{
-								<option value="@x.Name">@x.Name</option>
-							}
-						</select>						
-					</div>
-					<div class="col-4">
-						<select class="form-select" @oninput="@ChonQuanHuyen">
-							
+               <div style="margin-top:15px;padding-left:20px">
+					<div class="row">
+                         <div class="col-3">
+						   <span>Tỉnh thành</span>				
+					    </div>
+                        <div class="col-7">
+						    <select class="form-select" @oninput="ChonTinhTP">
+							<option value="@string.Empty" selected>--Tỉnh/Thành phố--</option>
+							    @foreach (var x in _lstTinhTp)
+							    {
+								    <option value="@x.Name">@x.Name</option>
+							    }
+						    </select>						
+					    </div>
+                    </div>
+                    
+                    <div class="row" style="margin-top:15px">
+                         <div class="col-3">
+						   <span>Quận huyện</span>				
+					    </div>
+                        <div class="col-7">
+						    <select class="form-select" @oninput="@ChonQuanHuyen"
+                            @bind="@_QuanHuyen">
+							<option value="@string.Empty" selected>--Quận/Huyện/Thị xã--</option>
 							@foreach (var x in _lstQuanHuyen)
 							{
 								<option value="@x.Name">@x.Name</option>
 							}
-						</select>					
-					</div>
-					<div class="col-4">
-						<select class="form-select">
-							
+						</select>						
+					    </div>
+                    </div>
+                      <div class="row" style="margin-top:15px">
+                         <div class="col-3">
+						   <span>Phường xã</span>				
+					    </div>
+                        <div class="col-7">
+						  <select class="form-select">
+							<option value="@string.Empty" selected>--Phường/Xã--</option>
 							@foreach (var x in _lstXaPhuong)
 							{
 								<option value="@x.Name">@x.Name</option>
 							}
-						</select>					
-					</div>
-
+						</select>						
+					    </div>
+                    </div>
+                      <div class="row" style="margin-top:15px">
+                         <div class="col-3" style="display:flex;align-items:center">
+						   <span style="white-space: nowrap;">Địa chỉ chi tiết</span	</div> 
+                         <div class="col-7">
+						    <input type="text" style="width:100%" placeholder="Vd:123 Phương Canh"/>				
+					    </div>   
+                    </div>
+				  <div class="row" style="margin-top:15px">
+                         <div class="col-3" style="display:flex;align-items:center">
+						   <span style="white-space: nowrap;">Ghi chú</span	</div> 
+                         <div class="col-7">
+						    <textarea rows="4" style="width:100%"/>				
+					    </div>   
+                  </div>
+                  <div style="display:flex;justify-content:center;align-items:center;margin-top:15px">
+                      <button class="col-4 btn_searchUser" data-dismiss="modal" style="width:fit-content;padding:10px 50px">
+                Địa chỉ
+                </button>
+                  </div>
 				</div>
            </div>
-
         </div>
     </div>
 </div>
@@ -256,7 +362,7 @@
         <div class="modal-content">
 
             <!-- Phần tiêu đề của popup -->
-            <div class="modal-header">
+            <div class="modal-header" style="background-color:#f2cc8c">
                 <h6 class="modal-title">Tìm kiếm khách hàng</h6>
                 <i class="fa-solid fa-xmark close" style="cursor: pointer;" data-dismiss="modal"></i>
             </div>
@@ -269,15 +375,15 @@
                     Guid id = Guid.Parse("3de28ff2-c838-481e-bd90-1925a4bf452a");
                 }
                 <div style="height:300px;overflow-y:auto;">
-                      <div class="UserShow" @onclick="()=>GetUserFormSearchUser(id)" data-dismiss="modal">
+                      <div class="UserShow" @onclick="()=>ClearInfoUser()" data-dismiss="modal">
                         Khách vãng lai
                     </div>
-                   @* @foreach (var x in _lstUser)
+                    @foreach (var x in _lstUser)
                     {
                         <div class="UserShow" @onclick="()=>GetUserFormSearchUser(x.Id)" data-dismiss="modal">
                             @x.Name : @x.PhoneNumber
                         </div>
-                    }*@
+                    }
                   
                 </div>
             </div>
@@ -285,6 +391,87 @@
 
             <!-- Phần chân của popup -->
 
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="modal fade" id="ChooseSizeAndColor">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Phần tiêu đề của popup -->
+            <div class="modal-header" style="background-color:#f2cc8c">
+                <h6 class="modal-title">Thêm thông tin sản phẩm</h6>
+                <i class="fa-solid fa-xmark close" style="cursor: pointer;" data-dismiss="modal"></i>
+            </div>
+            <!-- Nội dung của popup -->
+            <div class="container">
+               <div class="row" style="margin-top:20px">
+                   <div class="col-3">Size hiện có</div>
+                   <div class="col-8">
+                     @if (_lstSize.Count > 0 )
+                        {
+                              @foreach (var x in _lstSize )
+                            {
+                                <button class=" @(activeSize == x.Id ? "acttiveTabPTTTT":"btnSize")" @onclick="()=>getSizeAndShowColor(x.Id)">@x.Name</button>
+                            }
+                        }
+                   </div>
+               </div>
+                <div class="row" style="margin-top:20px">
+                   <div class="col-3">Màu hiện có</div>
+                   <div class="col-8">
+                     @if (_lstColor.Count > 0 )
+                        {
+                              @foreach (var x in _lstColor )
+                            {
+                                <button class=" @(activeColor == x.Id ? "acttiveTabPTTTT":"btnSize")" @onclick="()=>getColorAndgetQuantityProductItem(x.Id)"> @x.Name</button>
+                            }
+                        }
+                   </div>
+               </div>
+
+               <div class="row" style="margin-top:20px">
+                   <div class="col-3 ">Tồn kho</div>
+                   <div class="col-8">
+                     <span style="margin-left: 10px;">@SoluongProductItem</span>
+                   </div>
+               </div>
+                <div class="row" style="margin-top:20px">
+                   <div class="col-3 ">Số lượng</div>
+                   <div class="col-8">
+                      <div class="div-quantity">
+                            <div class="minus-plus-hover" @onclick="MinusSoluongProduct">
+                                <span class="fa-solid fa-minus minus-plus-hover" style="width:100%;height:100%;display:flex;justify-content:center;align-items:center"></span>
+                            </div>
+                          <input type="number" style="width:40%;padding:0px;text-align:center;
+                            border-right:1px solid #a99662;border-left:1px solid #a99662;border-bottom:none" @bind-value="SoluongProductItemMua" @oninput="CheckSoluongProductItemMua"
+                          />                       
+                           <div class="@(activePlus==true?"minus-plus-hover-active":"minus-plus-hover")" 
+                           disabled="@(!activePlus)" @onclick="PlusSoluongProduct"
+                           >
+                                <span class="fa-solid fa-plus" style="width:100%;height:100%;display:flex;justify-content:center;align-items:center"></span>
+                            </div>
+                      </div>
+                   </div>
+               </div>
+                <div class="row" style="margin-top:40px">
+                   <div class="col-12 ">
+                       <button class=" @(activeBtnAddProductToBill==true?"btn-SuccesAddProductToBill":"btn-SuccesAddProductToBillDisable")" disabled="@(!activeBtnAddProductToBill)" 
+                       @onclick="AddProductToBill" 
+                       >
+                           Xác nhận
+                       </button>
+                   </div>
+                  
+               </div>
+            </div>
         </div>
     </div>
 </div>

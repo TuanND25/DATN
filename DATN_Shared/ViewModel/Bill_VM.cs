@@ -26,22 +26,14 @@ namespace DATN_Shared.ViewModel
         public int Type { get; set; }
   
         public string? Note { get; set; }
-		[Required(ErrorMessage = "Vui lòng nhập thông tin này!")]
-		public string? Recipient { get; set; } // Người nhận
-		[Required(ErrorMessage = "Vui lòng chọn Quận/Huyện/Thị xã!")]
-		public string? District { get; set; } // Quận/Huyện
-		[Required(ErrorMessage = "Vui lòng chọn Tỉnh/Thành phố!")]
-		public string? Province { get; set; } // Tỉnh/ TP
-		[Required(ErrorMessage = "Vui lòng chọn Xã/Phường/Thị trấn!")]
-		public string? WardName { get; set; } // Phường/ Xã
-		[Required(ErrorMessage = "Vui lòng nhập thông tin này!")]
-		public string? ToAddress { get; set; } // Địa chỉ chi tiết
-		[Required(ErrorMessage = "Vui lòng nhập thông tin này!")]
-		[RegularExpression(@"^0\d{9}$", ErrorMessage = "Thông tin không hợp lệ.")]
-		public string? NumberPhone { get; set; } // SDT
+        public string? Recipient { get; set; } // Người nhận
+        public string? District { get; set; } // Quận/Huyện
+        public string? Province { get; set; } // Tỉnh/ TP
+        public string? WardName { get; set; } // Phường/ Xã
+        public string? ToAddress { get; set; } // Địa chỉ chi tiết
+        public string? NumberPhone { get; set; } // SDT
         public int Status { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "Số phải lớn hơn hoặc bằng 0.")]
         public int? ShippingFee { get; set; }
     }
 }

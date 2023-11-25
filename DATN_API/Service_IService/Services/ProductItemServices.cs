@@ -49,9 +49,9 @@ namespace DATN_API.Service_IService.Services
             return a;
         }
 
-        public async Task<ProductItems> GetAllProductItemByProduct(Guid ProductId)
+        public async Task<List<ProductItems>> GetAllProductItemByProduct(Guid ProductId)
         {
-            var a = await _context.ProductItems.FirstOrDefaultAsync(a => a.ProductId==ProductId);
+            var a = await _context.ProductItems.Where(a => a.ProductId==ProductId).ToListAsync();
             return a; 
         }
 
