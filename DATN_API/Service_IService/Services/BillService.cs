@@ -38,16 +38,15 @@ namespace DATN_API.Service_IService.Services
 			var lst = (from a in _context.Bills
 					   join b in _context.Users on a.UserId equals b.Id
 					   //join c in _context.HistoryConsumerPoints on a.HistoryConsumerPointID equals c.Id // không join được vì HistoryConsumerPointID có thể null
-					   //join d in _context.PaymentMethods on a.PaymentMethodId equals d.Id
+					   join d in _context.PaymentMethods on a.PaymentMethodId equals d.Id
 					   //join e in _context.Vouchers on a.VoucherId equals e.Id // không join được vì VoucherID có thể null
 					   select new Bill_ShowModel
 					   {
 						   Id = a.Id,
 						   UserId = a.UserId,
 						   UserName = b.Name,
-						   HistoryConsumerPointID = a.HistoryConsumerPointID,
 						   PaymentMethodId = a.PaymentMethodId,
-						  // PaymentMethodName = d.Name,
+						   PaymentMethodName = d.Name,
 						   //VoucherId = a.VoucherId,
 						   //Reduced_Value = e.Reduced_Value,
 						   BillCode = a.BillCode,

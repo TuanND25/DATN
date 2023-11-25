@@ -55,95 +55,244 @@
         align-items: center;
         justify-content: center;
     }
+
+    .btnAddress {
+        border: none;
+        display: flex;
+        padding: 0.75rem 1.5rem;
+        background-color: #488aec;
+        color: #ffffff;
+        font-size: 0.75rem;
+        line-height: 1rem;
+        font-weight: 700;
+        text-align: center;
+        text-transform: uppercase;
+        vertical-align: middle;
+        align-items: center;
+        border-radius: 0.5rem;
+        user-select: none;
+        gap: 0.75rem;
+        box-shadow: 0 4px 6px -1px #488aec31, 0 2px 4px -1px #488aec17;
+        transition: all .6s ease;
+    }
+
+        .btnAddress:hover {
+            box-shadow: 0 10px 15px -3px #488aec4f, 0 4px 6px -2px #488aec17;
+        }
+
+        .btnAddress:focus, button:active {
+            opacity: .85;
+            box-shadow: none;
+        }
+
+        .btnAddress i {
+            font-size: 1.2rem;
+        }
+
+    .loader-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.5); /* Màu nền với độ mờ 0.5 */
+        z-index: 9999; /* Đảm bảo loader hiển thị trên các phần tử khác */
+    }
+
+    .loader1 {
+        --path: #2f3545;
+        --dot: #5628ee;
+        --duration: 3s;
+        width: 44px;
+        height: 44px;
+        position: relative;
+    }
+
+        .loader1:before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            position: absolute;
+            display: block;
+            background: var(--dot);
+            top: 37px;
+            left: 19px;
+            transform: translate(-18px, -18px);
+            animation: dotRect var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+
+        .loader1 svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+            .loader1 svg rect, .loader1 svg polygon, .loader1 svg circle {
+                fill: none;
+                stroke: var(--path);
+                stroke-width: 10px;
+                stroke-linejoin: round;
+                stroke-linecap: round;
+            }
+
+            .loader1 svg polygon {
+                stroke-dasharray: 145 76 145 76;
+                stroke-dashoffset: 0;
+                animation: pathTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+            }
+
+            .loader1 svg rect {
+                stroke-dasharray: 192 64 192 64;
+                stroke-dashoffset: 0;
+                animation: pathRect 3s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+            }
+
+            .loader1 svg circle {
+                stroke-dasharray: 150 50 150 50;
+                stroke-dashoffset: 75;
+                animation: pathCircle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+            }
+
+        .loader1.triangle {
+            width: 48px;
+        }
+
+            .loader1.triangle:before {
+                left: 21px;
+                transform: translate(-10px, -18px);
+                animation: dotTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+            }
+
+
+
+    .loader1 {
+        display: inline-block;
+        margin: 0 16px;
+    }
+
 </style>
 
-<div style="background-color:#fff;padding:30px 30px;">
-    <div style="display:flex;justify-content:space-between">
-        <label style="font-size:20px;font-weight:500; margin-bottom:20px;">Địa chỉ của tôi</label>
-        <div>
-            <button class="btnUpdateInfo" data-bs-toggle="modal" @onclick="Load">
-                THÊM ĐỊA CHỈ MỚI
-            </button>
-        </div><link href="~/css/showinfouser.css" rel="stylesheet" />
-    </div>
-    <hr>
-    @if (_lstAddressGetById.Count() == 0)
-    {
-        <div class="notpoundimg">
-            <img src="/images/address-not-found.png"
-             style="width: 260px; height: 200px;" alt="Bức ảnh">
-            <h6 style="margin-top: 20px;">Bạn chưa có địa chỉ</h6>
+@if (isLoader)
+{
+    <div class="loader-container">
+        <div class="loader1">
+            <svg viewBox="0 0 80 80">
+                <circle id="test" cx="40" cy="40" r="32"></circle>
+            </svg>
         </div>
-    }
-    else
-    {
-        @foreach (var item in _lstAddressGetById)
+
+        <div class="loader1 triangle">
+            <svg viewBox="0 0 86 80">
+                <polygon points="43 8 79 72 7 72"></polygon>
+            </svg>
+        </div>
+
+        <div class="loader1">
+            <svg viewBox="0 0 80 80">
+                <rect x="8" y="8" width="64" height="64"></rect>
+            </svg>
+        </div>
+    </div>
+}
+else
+{
+    <div style="background-color:#fff;padding:30px 30px;">
+        <div style="display:flex;justify-content:space-between">
+            <label style="font-size:20px;font-weight:500; margin-bottom:20px;">Địa chỉ của tôi</label>
+            <div>
+                <button class="btnAddress" data-bs-toggle="modal" @onclick="Load">
+                    <i class="fa-regular fa-address-book"></i>
+                    Thêm địa chỉ
+                </button>
+                @*            <button class="btnUpdateInfo"  data-bs-toggle="modal" @onclick="Load">
+                    THÊM ĐỊA CHỈ MỚI
+                    </button>*@
+            </div><link href="~/css/showinfouser.css" rel="stylesheet" />
+        </div>
+        <hr>
+        @if (_lstAddressGetById.Count() == 0)
         {
-            <div class="row">
-                <div class="row col-md-5">
-                    <div class="col-md-12" style="font-family:inherit;font-size:15px;display:flex; ">
-                        <label style="border-right: 2px solid black;padding-right:10px;">
-                            @item.Recipient
-                        </label>
-                        <label style="padding-left:10px;font-family:inherit;font-size:14px">
-                            @item.NumberPhone
-                        </label>
-                    </div>
-                </div>
-                <div class="col-md-2"></div>
-                <div class="row col-md-5">
-                    <div class="col-md-5"></div>
-                    <div class="col-md-7" style="display:flex;padding-left:37px;margin-left:215px;">
-                        <button class="btnTrongSuot" data-bs-toggle="modal" style="padding-right:10px;"
-                        @onclick="()=>LoadUpdate(item.Id)">
-                            Cập nhật
-                        </button>
-                        @if (item.Status == 1)
-                        {
-                            <button class="btnTrongSuot btne" disabled @onclick="()=>DeleteAddress(item.Id)"
-                        style="border-left: 2px solid black;">
-                                Xoá
-                            </button>
-                        }
-                        else
-                        {
-                            <button class="btnTrongSuot" @onclick="()=>DeleteAddress(item.Id)"
-                        style="border-left: 2px solid black;">
-                                Xoá
-                            </button>
-                        }
-                    </div>
-                </div>
+            <div class="notpoundimg">
+                <img src="/images/address-not-found.png"
+             style="width: 260px; height: 200px;" alt="Bức ảnh">
+                <h6 style="margin-top: 20px;">Bạn chưa có địa chỉ</h6>
             </div>
-            <div class="row" style="margin-top:10px">
-                <div class="col-md-7" style="font-family:inherit;font-size:14px">@item.ToAddress</div>
-                <div class="col-md-5" style="">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-8" style="font-family:inherit;font-size:15px;margin-left:190px">
-                        @if (item.Status == 1)
-                        {
-                            <button class="btnTrongSuot1 btne " disabled @onclick="()=>SetDefaultAddress(item.Id)">Thiết lập mặc định</button>
-                        }
-                        else
-                        {
-                            <button class="btnTrongSuot1" @onclick="()=>SetDefaultAddress(item.Id)">Đặt làm mặc định</button>
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-7" style="font-family:inherit;font-size:14px">@(item.WardName +", "+item.District + ", "+item.Province)</div>
-                <div class="col-md-5" style="">
-                </div>
-            </div>
-            @if (item.Status == 1)
-            {
-                <button style="border-color:red;color:red;background-color: transparent;margin-top:5px;">Mặc định</button>
-            }
-            <hr />
         }
-    }
-</div>
+        else
+        {
+            @foreach (var item in _lstAddressGetById)
+            {
+                <div class="row">
+                    <div class="row col-md-5">
+                        <div class="col-md-12" style="font-family:inherit;font-size:15px;display:flex; ">
+                            <label style="border-right: 2px solid black;padding-right:10px;">
+                                @item.Recipient
+                            </label>
+                            <label style="padding-left:10px;font-family:inherit;font-size:14px">
+                                @item.NumberPhone
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="row col-md-5">
+                        <div class="col-md-5"></div>
+                        <div class="col-md-7" style="display:flex;padding-left:37px;margin-left:215px;">
+                            <button class="btnTrongSuot" data-bs-toggle="modal" style="padding-right:10px;"
+                        @onclick="()=>LoadUpdate(item.Id)">
+                                Cập nhật
+                            </button>
+                            @if (item.Status == 1)
+                            {
+                                <button class="btnTrongSuot btne" disabled @onclick="()=>DeleteAddress(item.Id)"
+                        style="border-left: 2px solid black;">
+                                    Xoá
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="btnTrongSuot" @onclick="()=>DeleteAddress(item.Id)"
+                        style="border-left: 2px solid black;">
+                                    Xoá
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:10px">
+                    <div class="col-md-7" style="font-family:inherit;font-size:14px">@item.ToAddress</div>
+                    <div class="col-md-5" style="">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-8" style="font-family:inherit;font-size:15px;margin-left:190px">
+                            @if (item.Status == 1)
+                            {
+                                <button class="btnTrongSuot1 btne " disabled @onclick="()=>SetDefaultAddress(item.Id)">Thiết lập mặc định</button>
+                            }
+                            else
+                            {
+                                <button class="btnTrongSuot1" @onclick="()=>SetDefaultAddress(item.Id)">Đặt làm mặc định</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-7" style="font-family:inherit;font-size:14px">@(item.WardName +", "+item.District + ", "+item.Province)</div>
+                    <div class="col-md-5" style="">
+                    </div>
+                </div>
+                @if (item.Status == 1)
+                {
+                    <button style="border-color:red;color:red;background-color: transparent;margin-top:5px;">Mặc định</button>
+                }
+                <hr />
+            }
+        }
+    </div>
+}
+
 
 
 

@@ -63,6 +63,22 @@ namespace DATN_API.Controllers
             }
 
         }
+        [HttpGet("get_alll_billItem_by_UserId/{Id}")]
+        public async Task<ActionResult<List<BillDetailShow>>> GetAllBillItemsByUserId(Guid Id)
+        {
+            try
+            {
+                var lstId = await _iBillItemService.GetAllBillItemsByUserId(Id);
+                return Ok(lstId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Liên hệ Thai để sửa 0349198240");
+
+            }
+
+        }
+
         // POST api/<AddressShipController>
         [HttpPost("Post-BillItem")]
         public async Task<ActionResult<BillItems>> PostBillItem(BillItem_VM billitem_vm)
