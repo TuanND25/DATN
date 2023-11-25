@@ -4,6 +4,6 @@ namespace DATN_API.Service_IService.IServices
 {
     public interface ILoginServices
     {
-        public Task<Response> LoginAsync(LoginUser user);
+        public Task<ResponseMess> LoginAsync(LoginUser user);
     }
 }

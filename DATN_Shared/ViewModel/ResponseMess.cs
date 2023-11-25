@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DATN_Shared.ViewModel
 {
-    public class Response
+    public class ResponseMess
     {
         public int StatusCode { get; set; }
         public string Message { get; set; }

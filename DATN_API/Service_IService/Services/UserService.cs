@@ -42,7 +42,7 @@ namespace DATN_API.Service_IService.Services
 		}
 
 
-		public async Task<Response> ChangePassword(ChangePassword_VM changePassword)
+		public async Task<ResponseMess> ChangePassword(ChangePassword_VM changePassword)
 		{
 			var user = await _context.Users.FindAsync(changePassword.UserId);
 			if (user != null)
@@ -50,7 +50,7 @@ namespace DATN_API.Service_IService.Services
 				var result = await _userManager.ChangePasswordAsync(user, changePassword.OldPassword, changePassword.NewPassword);
 				if (result.Succeeded)
 				{
-					return new Response
+					return new ResponseMess
 					{
 						IsSuccess = true,
 						Message = "Change Password Success",
@@ -61,7 +61,7 @@ namespace DATN_API.Service_IService.Services
 				}
 				else
 				{
-					return new Response
+					return new ResponseMess
 					{
 						IsSuccess = true,
 						Message = "Change Password Fail",
@@ -73,7 +73,7 @@ namespace DATN_API.Service_IService.Services
 			}
 			else
 			{
-				return new Response
+				return new ResponseMess
 				{
 					IsSuccess = true,
 					Message = "Khong duoc de trong",
@@ -84,7 +84,7 @@ namespace DATN_API.Service_IService.Services
 			}
 		}
 
-		public async Task<Response> UpdateUser(UpdateUser_VM updateUser)
+		public async Task<ResponseMess> UpdateUser(UpdateUser_VM updateUser)
 		{
 			var user = await _context.Users.FindAsync(updateUser.Id);
 			if (user != null)
@@ -95,7 +95,7 @@ namespace DATN_API.Service_IService.Services
 				user.Sex = updateUser.Sex;
 				_context.Update(user);
 				await _context.SaveChangesAsync();
-				return new Response
+				return new ResponseMess
 				{
 					IsSuccess = true,
 					StatusCode = 200,
@@ -105,7 +105,7 @@ namespace DATN_API.Service_IService.Services
 			}
 			else
 			{
-				return new Response
+				return new ResponseMess
 				{
 					IsSuccess = false,
 					StatusCode = 400,
@@ -116,11 +116,11 @@ namespace DATN_API.Service_IService.Services
 
 		}
 
-        public async Task<Response> AddEmployeeOrAdmin(SignUpUser user, string role)
+        public async Task<ResponseMess> AddEmployeeOrAdmin(SignUpUser user, string role)
         {
             if (await _userManager.FindByEmailAsync(user.Email) != null)
             {
-                return new Response
+                return new ResponseMess
                 {
                     IsSuccess = false,
                     StatusCode = 400,
@@ -130,7 +130,7 @@ namespace DATN_API.Service_IService.Services
             }
             else if (await _userManager.FindByNameAsync(user.UserName) != null)
             {
-                return new Response
+                return new ResponseMess
                 {
                     IsSuccess = false,
                     StatusCode = 400,
@@ -140,7 +140,7 @@ namespace DATN_API.Service_IService.Services
             }
             if (user.Password != user.ConfirmPassword)
             {
-                return new Response
+                return new ResponseMess
                 {
                     IsSuccess = false,
                     StatusCode = 400,
@@ -160,7 +160,7 @@ namespace DATN_API.Service_IService.Services
 
                 if (!result.Succeeded)
                 {
-                    return new Response
+                    return new ResponseMess
                     {
                         IsSuccess = false,
                         StatusCode = 500,
@@ -170,7 +170,7 @@ namespace DATN_API.Service_IService.Services
 
                 }
                 await _userManager.AddToRoleAsync(newUser, role);
-                return new Response
+                return new ResponseMess
                 {
                     IsSuccess = true,
                     StatusCode = 201,
@@ -179,7 +179,7 @@ namespace DATN_API.Service_IService.Services
             }
             else
             {
-                return new Response
+                return new ResponseMess
                 {
                     IsSuccess = true,
                     StatusCode = 500,

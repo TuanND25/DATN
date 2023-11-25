@@ -25,9 +25,11 @@ namespace DATN_Client.Areas.Customer.Component
             var response = await httpClient.PostAsJsonAsync<ForgetPasswordRequest>("https://localhost:7141/api/forget-password/request", ForgetPasswordUser);
             if (response.IsSuccessStatusCode)
             {
-                messgase = await response.Content.ReadAsStringAsync();
+				_toastService.ShowSuccess("Mã xác thực OTP đã gửi về máy");
+                Task.Delay(2000);
+				messgase = await response.Content.ReadAsStringAsync();
                 responseAPI ="200";
-           
+                
 
 
             }

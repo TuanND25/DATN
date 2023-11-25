@@ -31,8 +31,9 @@ namespace DATN_Shared.ViewModel
 		public string Name { get; set; }  = string.Empty;
         [Required(ErrorMessage = "ConfirmPassword không được để trống")]
 		public string ConfirmPassword { get; set; } = string.Empty;
-        [Required(ErrorMessage = "giới thích không được để trống")]
-		
+       
+		[Range(0, double.MaxValue, ErrorMessage = "OTP không đúng định dạng ")]
+		public string OTP { get; set; } = string.Empty;
 		public bool Sex { get; set; } 
     }
 }
