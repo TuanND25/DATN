@@ -15,16 +15,40 @@
         align-items: center;
         justify-content: center;
     }
+
+    .t {
+        text-align: center;
+    }
+
+    .t1 {
+        border-left: 2px solid;
+    }
+
+    .t2 {
+        margin-bottom: 50px;
+        margin-top: 30px;
+    }
+
+    h3 {
+        font-weight: 500;
+        font-size: 26px;
+        font-family: "Poppins", sans-serif;
+    }
+
+    span {
+        font-family: "Poppins", sans-serif;
+        font-weight: 500;
+    }
 </style>
 
 <section class="section dashboard">
     <div class="row">
 
         <!-- Left side columns -->
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <div class="row">
 
-
+                <!-- Hoá đơn -->
                 <div class="col-xxl-4 col-md-6">
                     <div class="card info-card sales-card">
                         <EditForm Model="count">
@@ -55,7 +79,7 @@
                             </div>
                         </EditForm>
                     </div>
-                </div><!-- End Sales Card -->
+                </div><!-- End thẻ hoá đơn -->
                 <!-- Product Card -->
                 <div class="col-xxl-4 col-xl-12">
 
@@ -90,7 +114,7 @@
                         </EditForm>
                     </div>
 
-                </div><!-- End Customers Card -->
+                </div><!-- End Product Card -->
                 <!-- Revenue Card -->
                 <div class="col-xxl-4 col-md-6">
                     <div class="card info-card revenue-card">
@@ -133,6 +157,58 @@
                         </EditForm>
                     </div>
                 </div><!-- End Revenue Card -->
+
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Danh sách cần làm</h5>
+                            @*<BarChart @ref="barChart" Class="mb-4" />
+                            <LineChart @ref="lineChart" />*@
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Danh sách cần làm</h5>
+
+                            <div class="row col-md-12 t2">
+                                <div class="col-md-4 t">
+                                    <div><h3>10</h3></div>
+                                    <div><span>Chờ xác nhận</span></div>
+                                </div>
+                                <div class="col-md-4 t t1">
+                                    <div><h3>10</h3></div>
+                                    <div><span>Chờ lấy hàng</span></div>
+                                </div>
+                                <div class="col-md-4 t t1">
+                                    <div><h3>10</h3></div>
+                                    <div><span>Đã xử lý</span></div>
+                                </div>
+                            </div>
+                            <div class="row col-md-12 t2">
+                                <div class="col-md-4 t">
+                                    <div><h3>10</h3></div>
+                                    <div><span>Đơn huỷ</span></div>
+                                </div>
+                                <div class="col-md-4 t t1">
+                                    <div><h3>10</h3></div>
+                                    <div><span>Sản phẩm hết hàng</span></div>
+                                </div>
+                                <div class="col-md-4 t t1">
+                                    <div><h3>10</h3></div>
+                                    <div><span>Chương trình khuyến mại</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
                 <!-- Top Selling -->
                 <div class="col-12">
                     <div class="card top-selling overflow-auto">
@@ -171,7 +247,8 @@
                                                 <td colspan="7">
                                                     <div class="notpoundimg">
                                                         <h6 style="margin-top: 20px;">
-                                                            Chưa có sản phẩm nào được bán trong @(count3.Tittle=="Today"?"Hôm nay":count3.Tittle=="This Month"?"Tháng này":"Năm nay")</h6>
+                                                            Chưa có sản phẩm nào được bán trong @(count3.Tittle=="Today"?"Hôm nay":count3.Tittle=="This Month"?"Tháng này":"Năm nay")
+                                                        </h6>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -181,7 +258,7 @@
                                             @foreach (var a in _lstThongKeProductItem)
                                             {
                                                 <tr>
-                                                    <th scope="row"><a href="#"><img src="/images/anh-avatar-thu-vi-cuc-dep_025544933.jpg" alt=""></a></th>
+                                                    <th scope="row"><a href="#"><img src="/images/Outerity Line Dino Tee.png" alt=""></a></th>
                                                     <td><a href="#" class="text-primary fw-bold">@a.Name</a></td>
                                                     <td>@a.SizeName</td>
                                                     <td>@a.ColorName</td>

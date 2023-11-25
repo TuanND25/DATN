@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DATN_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231120113249_2")]
+    [Migration("20231125154639_2")]
     partial class _2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,7 +98,7 @@ namespace DATN_API.Migrations
                     b.Property<int?>("FinalAmount")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("HistoryConsumerPointID")
+                    b.Property<Guid?>("HistoryConsumerPointId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Note")
@@ -145,7 +145,7 @@ namespace DATN_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HistoryConsumerPointID");
+                    b.HasIndex("HistoryConsumerPointId");
 
                     b.HasIndex("PaymentMethodId");
 
@@ -305,6 +305,9 @@ namespace DATN_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("BillId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("ConsumerPointId")
                         .HasColumnType("uniqueidentifier");
 
@@ -318,6 +321,8 @@ namespace DATN_API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BillId");
 
                     b.HasIndex("ConsumerPointId");
 
@@ -431,6 +436,10 @@ namespace DATN_API.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -563,15 +572,15 @@ namespace DATN_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8c5f72ab-c714-48f5-87c3-cb0b12de76d2"),
-                            ConcurrencyStamp = "f0689c0d-7dcc-4c8e-993a-99e6ccb966e9",
+                            Id = new Guid("515b85c6-d7d2-4ec1-91c7-7fa053402b1d"),
+                            ConcurrencyStamp = "4e0b35e0-1de0-4693-9c52-1826d40db40e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("6c679a1c-d8dc-4c51-9f49-2bf2b37eddcc"),
-                            ConcurrencyStamp = "cea7f11e-8193-4cf6-9485-091d85794398",
+                            Id = new Guid("3a659ac0-897d-4347-9b8e-14740552bbea"),
+                            ConcurrencyStamp = "fa247d8e-83c4-4e14-9f85-1c865b4e09c9",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -633,6 +642,9 @@ namespace DATN_API.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("OTP")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
@@ -641,10 +653,6 @@ namespace DATN_API.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("RefreshToken")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -733,7 +741,8 @@ namespace DATN_API.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("VoucherId")
+                    b.Property<Guid?>("VoucherId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -861,9 +870,9 @@ namespace DATN_API.Migrations
 
             modelBuilder.Entity("DATN_Shared.Models.Bill", b =>
                 {
-                    b.HasOne("DATN_Shared.Models.HistoryConsumerPoint", "HistoryConsumerPoints")
+                    b.HasOne("DATN_Shared.Models.HistoryConsumerPoint", null)
                         .WithMany("Bills")
-                        .HasForeignKey("HistoryConsumerPointID");
+                        .HasForeignKey("HistoryConsumerPointId");
 
                     b.HasOne("DATN_Shared.Models.PaymentMethod", "PaymentMethods")
                         .WithMany("Bills")
@@ -878,8 +887,6 @@ namespace DATN_API.Migrations
                     b.HasOne("DATN_Shared.Models.Voucher", "Vouchers")
                         .WithMany("Bills")
                         .HasForeignKey("VoucherId");
-
-                    b.Navigation("HistoryConsumerPoints");
 
                     b.Navigation("PaymentMethods");
 
@@ -950,6 +957,12 @@ namespace DATN_API.Migrations
 
             modelBuilder.Entity("DATN_Shared.Models.HistoryConsumerPoint", b =>
                 {
+                    b.HasOne("DATN_Shared.Models.Bill", "Bill")
+                        .WithMany("HistoryConsumerPoints")
+                        .HasForeignKey("BillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DATN_Shared.Models.ConsumerPoint", "ConsumerPoints")
                         .WithMany("HistoryConsumerPoints")
                         .HasForeignKey("ConsumerPointId")
@@ -961,6 +974,8 @@ namespace DATN_API.Migrations
                         .HasForeignKey("FormulaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Bill");
 
                     b.Navigation("ConsumerPoints");
 
@@ -1127,6 +1142,8 @@ namespace DATN_API.Migrations
             modelBuilder.Entity("DATN_Shared.Models.Bill", b =>
                 {
                     b.Navigation("BillItems");
+
+                    b.Navigation("HistoryConsumerPoints");
                 });
 
             modelBuilder.Entity("DATN_Shared.Models.BillItems", b =>

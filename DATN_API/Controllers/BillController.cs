@@ -51,7 +51,6 @@ namespace DATN_API.Controllers
 				Bill bill = new Bill();
 				bill.Id = bill_vm.Id;
 				bill.UserId = bill_vm.UserId;
-				bill.HistoryConsumerPointID = bill_vm.HistoryConsumerPointID;
 				bill.PaymentMethodId = bill_vm.PaymentMethodId;
 				bill.VoucherId = bill_vm.VoucherId;
 				bill.BillCode = bill_vm.BillCode;
@@ -104,7 +103,6 @@ namespace DATN_API.Controllers
 				Bill bill = await _billService.GetBillById(bill_vm.Id);
 				bill.Id = bill_vm.Id;
 				bill.UserId = bill_vm.UserId;
-				bill.HistoryConsumerPointID = bill_vm.HistoryConsumerPointID;
 				bill.PaymentMethodId = bill_vm.PaymentMethodId;
 				bill.VoucherId = bill_vm.VoucherId;
 				bill.BillCode = bill_vm.BillCode;
