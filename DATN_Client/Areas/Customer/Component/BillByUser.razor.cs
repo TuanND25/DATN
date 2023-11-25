@@ -18,8 +18,8 @@ namespace DATN_Client.Areas.Customer.Component
         protected override async Task OnInitializedAsync()
         {
 
-            //var a = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
-            var a = Guid.Parse("8155b4cc-9273-431a-a63b-dd4ae111a4fa");
+            var a = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
+            //var a = Guid.Parse("8155b4cc-9273-431a-a63b-dd4ae111a4fa");
 
             _user = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7141/api/user/get_user_by_id/{a}");
             _lstBills = await _httpClient.GetFromJsonAsync<List<Bill_VM>>($"https://localhost:7141/api/Bill/get_bill_by_user/{a}");
