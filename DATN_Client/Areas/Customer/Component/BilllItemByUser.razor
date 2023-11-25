@@ -14,83 +14,333 @@
                 SuccessIcon="fa-solid fa-check"
                 ErrorIcon="fa-solid fa-triangle-exclamation" />
 
+
+<style>
+    .button {
+        font-family: Roboto, Arial, Sans-Serif;
+        font-size: 14px;
+        text-align: center;
+        letter-spacing: 0.5px;
+        color: #ffffff;
+        background-color: #065fd4;
+        border: 0;
+        box-shadow: none;
+        border-radius: 2px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 16px;
+        padding-right: 16px;
+        text-transform: uppercase;
+        font-weight: 500;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .button1 {
+        font-family: Roboto, Arial, Sans-Serif;
+        font-size: 14px;
+        text-align: center;
+        letter-spacing: 0.5px;
+        color: #ffffff;
+        background-color: #b7b7b7;
+        border: 0;
+        box-shadow: none;
+        border-radius: 2px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 16px;
+        padding-right: 16px;
+        text-transform: uppercase;
+        font-weight: 500;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+
+    .main1 * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .main1 {
+        width: 100%;
+        height: 20vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: pop;
+        flex-direction: column;
+    }
+
+    .ul {
+        display: flex;
+        margin-top: 0;
+        margin-left: 25px;
+    }
+
+        .ul .li {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 22px;
+        }
+
+            .ul .li .icon {
+                font-size: 35px;
+                margin: 0 60px;
+            }
+
+            .ul .li .fas {
+                font-size: 28px;
+                margin: 0 60px;
+                margin-bottom: 12px;
+            }
+
+            .ul .li .text {
+                font-size: 14px;
+                font-weight: 600;
+                color: #61affe;
+            }
+
+            /* progress1 Div Css  */
+
+            .ul .li .progress1 {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                background-color: rgba(68, 68, 68, 0.781);
+                margin: 14px 0;
+                display: grid;
+                place-items: center;
+                color: #fff;
+                position: relative;
+                cursor: pointer;
+            }
+
+    .progress1::after {
+        content: " ";
+        position: absolute;
+        width: 165px;
+        height: 5px;
+        background-color: rgba(68, 68, 68, 0.781);
+        right: 32px;
+    }
+
+    .one::after {
+        width: 0;
+        height: 0;
+    }
+
+    .ul .li .progress1 .uil {
+        display: none;
+    }
+
+    .ul .li .progress1 p {
+        font-size: 13px;
+    }
+
+    /* active11 Css  */
+
+    .ul .li .active1 {
+        background-color: #61affe;
+        display: grid;
+        place-items: center;
+    }
+
+    .li .active1::after {
+        background-color: #61affe;
+    }
+
+    .ul .li .active1 p {
+        display: none;
+    }
+
+    .ul .li .active1 .uil {
+        font-size: 20px;
+        display: flex;
+    }
+</style>
+
 @{
-    int? tong=0;
+    int? tong = 0;
 }
 
-<div class="card">
-    <div class="card-body">
-        <EditForm Model="_bill_ShowModel">
-        <h5 class="card-title">Danh sách đơn hàng</h5>
-        <div>
-            <h6 class="card-title">ĐƠN HÀNG: #286384, Đặt lúc — 09/11/2023, 02:21SA</h6>
+<EditForm Model="_bill_ShowModel">
+    <div class="card" style="margin-bottom:10px;">
+        <div class="card-body">
+            <h5 class="card-title">Tình trạng đơn hàng</h5>
+            <div class="main1">
+                <ul class="ul">
+                    <li class="li">
+                        <i class="fas fa-solid fa-clipboard-list"></i>
+                        <div class="progress1 one active1" style="">
+                            <p>1</p>
+                            <i class="uil uil-check "></i>
+                        </div>
+                        <p class="text">Đơn hàng đã đặt</p>
+                    </li>
+                    <li class="li">
+                        <i class="fas fa-regular fa-credit-card"></i>
+                        <div class="progress1 two active1" style="">
+                            <p>2</p>
+                            <i class="uil uil-check"></i>
+                        </div>
+                        <p class="text">Chờ thanh toán</p>
+                    </li>
+                    <li class="li">
+                        <i class="fas fa-shipping-fast"></i>
+                        <div class="progress1 three" style="margin-right:-5px;">
+                            <p>3</p>
+                            <i class="uil uil-check"></i>
+                        </div>
+                        <p class="text">Đã giao cho ĐVVC</p>
+                    </li>
+                    <li class="li">
+                        <i class="fas fa-solid fa-box-open"></i>
+                        <div class="progress1 four" style="">
+                            <p>4</p>
+                            <i class="uil uil-check"></i>
+                        </div>
+                        <p class="text">Đã nhận được hàng</p>
+                    </li>
+                    <li class="li">
+                        <i class="fas fa-regular fa-star"></i>
+                        <div class="progress1 five" style="">
+                            <p>5</p>
+                            <i class="uil uil-check"></i>
+                        </div>
+                        <p class="text">Đánh giá </p>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="row">
-            <h5 class="card-title col-md-6" style="margin-left:15px;margin-right:30px;">Chi tiết đơn hàng</h5>
-            <h5 class="card-title col-md-5" style="text-align:right; color:red;">@(_bill_ShowModel.Status==0?"Đã huỷ":_bill_ShowModel.Status==1?"Chờ xác nhận":_bill_ShowModel.Status==2?"Đang vận chuyển":"Hoàn thành")</h5>
-        </div>
-        <hr />
-        <!-- Default Table -->
-        <table class="table table-borderless">
-            <thead>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Sản phẩm</th>
-                    <th scope="col" style="vertical-align:middle;">Đơn giá</th>
-                    <th scope="col" style="vertical-align:middle;">Số lượng</th>
-                    <th scope="col" style="vertical-align:middle; text-align:right;width:110px;">Thành tiền</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var a in _lstBillItems)
-                {
+    </div>
+    <div class="card">
+        <div class="card-body">
+
+            <div class="row">
+                <h5 class="card-title col-md-6" style="margin-left:15px;margin-right:30px;">Chi tiết đơn hàng</h5>
+                <h5 class="card-title col-md-5" style="text-align:right; color:red;">@(_bill_ShowModel.Status==0?"Đã huỷ":_bill_ShowModel.Status==1?"Chờ xác nhận":_bill_ShowModel.Status==2?"Đang vận chuyển":"Hoàn thành")</h5>
+            </div>
+            <hr />
+            <!-- Default Table -->
+            <table class="table table-borderless">
+                <thead>
                     <tr>
-                        <th style="width:115px;">
-                            <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/orderlist/5fafbb923393b712b96488590b8f781f.png"
-                             style="width: 90px; height: 90px;" alt="Bức ảnh">
-                        </th>
-                        <td style="vertical-align:middle;max-width:300px;">
-                            <a>@a.Name</a> <br />
-                            <span>@a.SizeName / @a.ColorName</span>
-                        </td>
-                        <td style="vertical-align:middle;">@(a.CostPrice?.ToString("#,##0"))₫</td>
-                        <td style="vertical-align:middle;text-align:center;">@a.Quantity</td>
-                        <td style="vertical-align:middle; text-align:right;">@((a.CostPrice*a.Quantity)?.ToString("#,##0"))₫</td>
+                        <th scope="col"></th>
+                        <th scope="col">Sản phẩm</th>
+                        <th scope="col" style="vertical-align:middle;text-align:center;">Đơn giá</th>
+                        <th scope="col" style="vertical-align:middle;text-align:center;">Số lượng</th>
+                        <th scope="col" style="vertical-align:middle; text-align:right;width:110px;">Thành tiền</th>
                     </tr>
-                   tong += (a.CostPrice*a.Quantity);
-                }
-                <tr style="border-top:1px solid #ededed">
-                    <td style="text-align:right;" colspan="3">Giá sản phẩm</td>
-                    <td style="text-align:right;font-weight:600;" colspan="5">@(tong?.ToString("#,##0"))₫</td>
-                </tr>
-                <tr>
-                    <td style="text-align:right;" colspan="3">Tổng tiền</td>
-                    <td style="text-align:right;font-weight:600;" colspan="5">@(_bill_ShowModel.TotalAmount?.ToString("#,##0"))₫</td>
-                </tr>
-                <tr>
-                    <td style="text-align:right;" colspan="3">Phương thức thanh toán</td>
-                    <td style="text-align:right;font-weight:600;" colspan="5">@_bill_ShowModel.PaymentMethodName</td>
-                </tr>
-            </tbody>
-        </table>
-        <h5 class="card-title">Địa chỉ nhận hàng</h5>
-        <div class="row">
-            <div class="row col-md-5">
-                <div class="col-md-12" style="font-family:inherit;font-size:15px;display:flex; ">
-                    <label style="border-right: 2px solid black;padding-right:10px;">
-                        @_bill_ShowModel.Recipient
-                    </label>
-                    <label style="padding-left:10px;font-family:inherit;font-size:14px">
-                         @_bill_ShowModel.NumberPhone
-                    </label>
+                </thead>
+                <tbody>
+                    @foreach (var a in _lstBillItems)
+                    {
+                        <tr>
+                            <th style="width:115px;">
+                                <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/orderlist/5fafbb923393b712b96488590b8f781f.png"
+                                 style="width: 90px; height: 90px;" alt="Bức ảnh">
+                            </th>
+                            <td style="vertical-align:middle;max-width:300px;">
+                                <a>@a.Name</a> <br />
+                                <span>@a.SizeName / @a.ColorName</span>
+                            </td>
+                            <td style="vertical-align:middle;text-align:center;">@(a.CostPrice?.ToString("#,##0"))₫</td>
+                            <td style="vertical-align:middle;text-align:center;">@a.Quantity</td>
+                            <td style="vertical-align:middle; text-align:right;">@((a.CostPrice*a.Quantity)?.ToString("#,##0"))₫</td>
+                        </tr>
+                        tong += (a.CostPrice * a.Quantity);
+                    }
+                    <tr style="border-top:1px solid #ededed">
+                        <td style="text-align:right;" colspan="3">Giá sản phẩm</td>
+                        <td style="text-align:right;font-weight:600;" colspan="5">@(tong?.ToString("#,##0"))₫</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;" colspan="3">Tổng tiền</td>
+                        <td style="text-align:right;font-weight:600;" colspan="5">@(_bill_ShowModel.TotalAmount?.ToString("#,##0"))₫</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;" colspan="3">Phương thức thanh toán</td>
+                        <td style="text-align:right;font-weight:600;" colspan="5">@_bill_ShowModel.PaymentMethodName</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="card-title">Địa chỉ nhận hàng</h5>
+                </div>
+                <div class="col-md-6">
+                    @if (_bill_ShowModel.Status == 2)
+                    {
+                        <button type="button" class="button" style="float:right;">Đánh giá</button>
+                    }
+                    else if (_bill_ShowModel.Status == 1)
+                    {
+                        <button type="button" class="button1" style="margin-left:20px;float:right;">Huỷ đơn hàng</button>
+                    }
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-7" style="font-family:inherit;font-size:14px">@(_bill_ShowModel.ToAddress +", " + _bill_ShowModel.WardName+", " +_bill_ShowModel.District+", " +_bill_ShowModel.Province)</div>
-            <div class="col-md-5" style="">
+
+            <div class="row">
+                <div class="row col-md-5">
+                    <div class="col-md-12" style="font-family:inherit;font-size:15px;display:flex; ">
+                        <label style="border-right: 2px solid black;padding-right:10px;">
+                            @_bill_ShowModel.Recipient
+                        </label>
+                        <label style="padding-left:10px;font-family:inherit;font-size:14px">
+                            @_bill_ShowModel.NumberPhone
+                        </label>
+                    </div>
+                </div>
             </div>
+            <div class="row">
+                <div class="col-md-7" style="font-family:inherit;font-size:14px">@(_bill_ShowModel.ToAddress +", " + _bill_ShowModel.WardName+", " +_bill_ShowModel.District+", " +_bill_ShowModel.Province)</div>
+                <div class="col-md-5" style="">
+                </div>
+            </div>
+
         </div>
-        </EditForm>
     </div>
+</EditForm>
+
+
+<div class="modal fade" id="ChonDiaChi">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Phần tiêu đề của popup -->
+			<div class="modal-header">
+				<h4 class="modal-title">Chọn địa chỉ</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+
+			<!-- Nội dung của popup -->
+			<div class="modal-body">
+				@foreach (var item in _lstAddressGetById)
+				{
+					<div class="row" style="height:60px">
+						<div class="col-md-10">
+							@item.Recipient | @item.NumberPhone <br>
+							@(item.ToAddress + ", " + item.WardName + ", " + item.District + ", " + item.Province)
+						</div>
+						<div class="col-md-2" style="text-align:center;vertical-align:middle;">
+							<button class="btn btn-primary" data-dismiss="modal" @*@onclick="()=>ChonDiaChiTuList(item)"*@>Chọn</button>
+						</div>
+					</div>
+				}
+			</div>
+			<!-- Phần chân của popup -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+			</div>
+		</div>
+	</div>
+	<BlazoredToasts Position="ToastPosition.TopRight"
+					Timeout="5"
+					IconType="IconType.FontAwesome"
+					SuccessClass="success-toast-override"
+					SuccessIcon="fa-solid fa-check"
+					ErrorIcon="fa-solid fa-triangle-exclamation" />
 </div>

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DATN_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231121152140_3")]
-    partial class _3
+    [Migration("20231125101212_1")]
+    partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -567,15 +567,15 @@ namespace DATN_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2e7f1322-969a-4d13-8c51-b15df625e168"),
-                            ConcurrencyStamp = "1676ebb1-aa7e-4aa5-9cb4-dcac48b54602",
+                            Id = new Guid("8f088514-9ee9-4cb9-9d00-8a8e3684bc51"),
+                            ConcurrencyStamp = "c0d7f809-cbb1-4ab6-a0d7-912ca98ba52b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("1ac1fa8f-b722-46e3-952c-a212f15c1429"),
-                            ConcurrencyStamp = "e3cc7d6a-0e41-4ffa-a562-11c4f1758dc4",
+                            Id = new Guid("ebfceab9-3057-4d66-a621-43dfe839ab00"),
+                            ConcurrencyStamp = "93f45ade-43ff-4714-b49a-010489330f7e",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -637,6 +637,9 @@ namespace DATN_API.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("OTP")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
@@ -645,10 +648,6 @@ namespace DATN_API.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("RefreshToken")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -737,7 +736,8 @@ namespace DATN_API.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("VoucherId")
+                    b.Property<Guid?>("VoucherId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");

@@ -58,11 +58,13 @@ namespace DATN_API.Data
 			builder.Entity<CartItems>().HasOne(c => c.Cart).WithMany(ci => ci.CartItems).HasForeignKey(ci => ci.UserId);
 			builder.Entity<BillItems>().HasOne(pi => pi.ProductItems).WithMany(bi => bi.BillItems).HasForeignKey(bi => bi.ProductItemsId);
 			builder.Entity<BillItems>().HasOne(b => b.Bills).WithMany(bi => bi.BillItems).HasForeignKey(bi => bi.BillId);
-			builder.Entity<Bill>().HasOne(h => h.HistoryConsumerPoints).WithMany(b => b.Bills).HasForeignKey(b => b.HistoryConsumerPointID);
+
+			
 			builder.Entity<Bill>().HasOne(e=>e.PaymentMethods).WithMany(b=>b.Bills).HasForeignKey(y => y.PaymentMethodId);
 			builder.Entity<Bill>().HasOne(e=>e.Vouchers).WithMany(b=>b.Bills).HasForeignKey(y => y.VoucherId);
 			builder.Entity<HistoryConsumerPoint>().HasOne(f => f.Formulas).WithMany(h => h.HistoryConsumerPoints).HasForeignKey(h => h.FormulaId);
 			builder.Entity<HistoryConsumerPoint>().HasOne(c => c.ConsumerPoints).WithMany(h => h.HistoryConsumerPoints).HasForeignKey(h => h.ConsumerPointId);
+			builder.Entity<HistoryConsumerPoint>().HasOne(a => a.Bill).WithMany(x => x.HistoryConsumerPoints).HasForeignKey(x => x.BillId);
 			builder.Entity<ConsumerPoint>().HasOne(c => c.Users).WithOne(u => u.ConsumerPoint).HasForeignKey<ConsumerPoint>(u => u.UserID).OnDelete(DeleteBehavior.NoAction);
 
 
@@ -74,7 +76,7 @@ namespace DATN_API.Data
 
 
 
-			builder.Entity<Bill>().Property(x=>x.HistoryConsumerPointID).IsRequired(false);
+			
 			builder.Entity<Bill>().Property(x=>x.ReducedAmount).IsRequired(false);
 			builder.Entity<Bill>().Property(x=>x.VoucherId).IsRequired(false);
 			builder.Entity<Bill>().Property(x=>x.PaymentMethodId).IsRequired(false);

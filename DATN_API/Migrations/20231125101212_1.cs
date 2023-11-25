@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DATN_API.Migrations
 {
-    public partial class DATN_01 : Migration
+    public partial class _1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,10 +30,10 @@ namespace DATN_API.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Sex = table.Column<bool>(type: "bit", nullable: false),
-                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TokenCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TokenExpires = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    OTP = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -111,6 +111,7 @@ namespace DATN_API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -347,7 +348,7 @@ namespace DATN_API.Migrations
                     SizeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AvaiableQuantity = table.Column<int>(type: "int", nullable: true),
-                    PurchasePrice = table.Column<int>(type: "int", nullable: true),
+                    PriceAfterReduction = table.Column<int>(type: "int", nullable: true),
                     CostPrice = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -629,12 +630,12 @@ namespace DATN_API.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { new Guid("7b219729-fffe-4d24-bc87-53215edb3254"), "108e36c6-c107-47c4-8ba6-b440eb00bfc1", "Admin", "ADMIN" });
+                values: new object[] { new Guid("8f088514-9ee9-4cb9-9d00-8a8e3684bc51"), "c0d7f809-cbb1-4ab6-a0d7-912ca98ba52b", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { new Guid("a48afc7a-b90b-44e1-811d-503f702cc3b2"), "445d330d-60bd-4ffc-8ce3-2ff7d226040f", "User", "USER" });
+                values: new object[] { new Guid("ebfceab9-3057-4d66-a621-43dfe839ab00"), "93f45ade-43ff-4714-b49a-010489330f7e", "User", "USER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AddressShips_UserId",

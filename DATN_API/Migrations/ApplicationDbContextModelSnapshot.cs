@@ -96,7 +96,7 @@ namespace DATN_API.Migrations
                     b.Property<int?>("FinalAmount")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("HistoryConsumerPointID")
+                    b.Property<Guid?>("HistoryConsumerPointId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Note")
@@ -143,7 +143,7 @@ namespace DATN_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HistoryConsumerPointID");
+                    b.HasIndex("HistoryConsumerPointId");
 
                     b.HasIndex("PaymentMethodId");
 
@@ -303,6 +303,9 @@ namespace DATN_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("BillId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("ConsumerPointId")
                         .HasColumnType("uniqueidentifier");
 
@@ -316,6 +319,8 @@ namespace DATN_API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BillId");
 
                     b.HasIndex("ConsumerPointId");
 
@@ -565,15 +570,15 @@ namespace DATN_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("10021e88-36a6-4664-a9ae-993e53c4af14"),
-                            ConcurrencyStamp = "bc63b1f7-e764-40b9-9e77-998570907804",
+                            Id = new Guid("515b85c6-d7d2-4ec1-91c7-7fa053402b1d"),
+                            ConcurrencyStamp = "4e0b35e0-1de0-4693-9c52-1826d40db40e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("7209268d-ebb2-4727-82dd-4192ca156688"),
-                            ConcurrencyStamp = "1c35d6fd-6587-4513-a5c5-03641fb6091d",
+                            Id = new Guid("3a659ac0-897d-4347-9b8e-14740552bbea"),
+                            ConcurrencyStamp = "fa247d8e-83c4-4e14-9f85-1c865b4e09c9",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -734,7 +739,8 @@ namespace DATN_API.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("VoucherId")
+                    b.Property<Guid?>("VoucherId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -862,9 +868,9 @@ namespace DATN_API.Migrations
 
             modelBuilder.Entity("DATN_Shared.Models.Bill", b =>
                 {
-                    b.HasOne("DATN_Shared.Models.HistoryConsumerPoint", "HistoryConsumerPoints")
+                    b.HasOne("DATN_Shared.Models.HistoryConsumerPoint", null)
                         .WithMany("Bills")
-                        .HasForeignKey("HistoryConsumerPointID");
+                        .HasForeignKey("HistoryConsumerPointId");
 
                     b.HasOne("DATN_Shared.Models.PaymentMethod", "PaymentMethods")
                         .WithMany("Bills")
@@ -879,8 +885,6 @@ namespace DATN_API.Migrations
                     b.HasOne("DATN_Shared.Models.Voucher", "Vouchers")
                         .WithMany("Bills")
                         .HasForeignKey("VoucherId");
-
-                    b.Navigation("HistoryConsumerPoints");
 
                     b.Navigation("PaymentMethods");
 
@@ -951,6 +955,12 @@ namespace DATN_API.Migrations
 
             modelBuilder.Entity("DATN_Shared.Models.HistoryConsumerPoint", b =>
                 {
+                    b.HasOne("DATN_Shared.Models.Bill", "Bill")
+                        .WithMany("HistoryConsumerPoints")
+                        .HasForeignKey("BillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DATN_Shared.Models.ConsumerPoint", "ConsumerPoints")
                         .WithMany("HistoryConsumerPoints")
                         .HasForeignKey("ConsumerPointId")
@@ -962,6 +972,8 @@ namespace DATN_API.Migrations
                         .HasForeignKey("FormulaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Bill");
 
                     b.Navigation("ConsumerPoints");
 
@@ -1128,6 +1140,8 @@ namespace DATN_API.Migrations
             modelBuilder.Entity("DATN_Shared.Models.Bill", b =>
                 {
                     b.Navigation("BillItems");
+
+                    b.Navigation("HistoryConsumerPoints");
                 });
 
             modelBuilder.Entity("DATN_Shared.Models.BillItems", b =>

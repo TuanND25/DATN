@@ -11,7 +11,6 @@ namespace DATN_Shared.Models
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
-        public Guid? HistoryConsumerPointID { get; set; }
         public Guid? PaymentMethodId { get; set; }
         public Guid? VoucherId { get; set; }
         public string BillCode { get; set; }
@@ -37,7 +36,7 @@ namespace DATN_Shared.Models
         public User Users { get; set; }
         public PaymentMethod PaymentMethods { get; set; }
         public Voucher Vouchers { get; set; }
-        public HistoryConsumerPoint HistoryConsumerPoints { get; set; }
+        public virtual ICollection<HistoryConsumerPoint> HistoryConsumerPoints { get; set; }
         public virtual ICollection<BillItems> BillItems { get; set; }
     }
 }
