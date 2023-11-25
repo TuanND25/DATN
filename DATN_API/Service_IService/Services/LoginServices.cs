@@ -23,12 +23,12 @@ namespace DATN_API.Service_IService.Services
             _configuration = configuration;
         }
 
-        public async Task<Response> LoginAsync(LoginUser userLogin)
+        public async Task<ResponseMess> LoginAsync(LoginUser userLogin)
         {
             var user = await _userManager.FindByNameAsync(userLogin.UserName);
             if (user == null)
             {
-                return new Response
+                return new ResponseMess
                 {
                     IsSuccess = false,
                     Message = "username không tồn tại",
@@ -37,7 +37,7 @@ namespace DATN_API.Service_IService.Services
             }
             else if (!await _userManager.CheckPasswordAsync(user, userLogin.Password))
             {
-                return new Response
+                return new ResponseMess
                 {
                     IsSuccess = false,
                     StatusCode = 400,
@@ -66,7 +66,7 @@ namespace DATN_API.Service_IService.Services
                     signingCredentials: creds
                     );
       
-                return new Response
+                return new ResponseMess
                 {
                     IsSuccess = true,
                     StatusCode = StatusCodes.Status200OK,

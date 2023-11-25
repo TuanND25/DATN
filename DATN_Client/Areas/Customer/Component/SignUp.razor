@@ -8,77 +8,106 @@
 
 
 
-
-
-<div class="Login full fullsign">
-	<div class=" container1" style="width:600px;margin: 0 auto;  margin-top: 20%;
+@if (!string.IsNullOrEmpty(check))
+{
+	<div class="Login full fullsign">
+		<div class=" container1" style="width:600px;margin: 0 auto;  margin-top: 20%;
   margin-bottom: 40px;">
-		<div class="form login">
-			<span class="title">SignUp</span>
-			<EditForm Model="signUp">
-				<DataAnnotationsValidator/>
-				<div class="input-field">
-					<InputText placeholder="Name" @bind-Value="signUp.Name" />
-					<i class="fa-regular fa-user"></i>
-				</div>
-				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.Name"></ValidationMessage></span>
-				<div class="input-field">
-					<InputText placeholder="Username" @bind-Value="signUp.UserName" />
-					<i class="fa-regular fa-user"></i>
-				</div>
-				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.UserName"></ValidationMessage></span>
-				<div class="input-field">
-					<InputText placeholder="Phone" @bind-Value="signUp.PhoneNumber" />
-					<i class="fa-solid fa-phone"></i>
-				</div>
-				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.PhoneNumber"></ValidationMessage></span>
-				<div class="input-field">
-					<InputText placeholder="Email" @bind-Value="signUp.Email" />
-					<i class="fa-regular fa-envelope"></i>
-				</div>
-				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.Email"></ValidationMessage></span>
-
-
-				<div class="input-field">
-					<InputText placeholder="Password" @bind-Value="signUp.Password" />
-					<i class="fa-solid fa-lock"></i>
-				</div>
-				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.Password"></ValidationMessage></span>
-
-				<div class="input-field">
-					<InputText placeholder="ConfirmPassword" @bind-Value="signUp.ConfirmPassword" />
-					<i class="fa-solid fa-lock"></i>
-				</div>
-				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.ConfirmPassword"></ValidationMessage></span>
-
-				
-
-				
-				<div style="margin-top :5%">
-					<InputRadioGroup @bind-Value="@signUp.Sex" class="form-control" >
-						
-							<InputRadio Value="true" /> Nam
-						
-						
-							<InputRadio Value="false" /> Nữ
+			<div class="form login">
+				<span class="title">SignUp</span>
+				<EditForm Model="signUp">
+					<DataAnnotationsValidator />
+					<div class="input-field">
+						<InputText placeholder="OTP" @bind-Value="signUp.OTP" />
+						<i class="fa-regular fa-user"></i>
+					</div>
+					<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.OTP"></ValidationMessage></span>
 					
-					</InputRadioGroup>
-				</div>
+					
 
-				<div class="input-field button">
-					<input type="submit" value="Đăng ký" @onclick="SignUpUser">
-				</div>
 
-			</EditForm>
-			<div class="login-signup">
-				<span class="text">
-					Bạn đã có tài khoản?
-					<a>Đăng nhập</a>
-				</span>
+
+				
+
+					<div class="input-field button">
+						<input type="submit" value="Đăng ký" @onclick="SignUPOTP">
+					</div>
+
+				</EditForm>
+				
 			</div>
 		</div>
 	</div>
-</div>
+}
+else
+{
+	<div class="Login full fullsign">
+		<div class=" container1" style="width:600px;margin: 0 auto;  margin-top: 20%;
+  margin-bottom: 40px;">
+			<div class="form login">
+				<span class="title">SignUp</span>
+				<EditForm Model="signUp">
+					<DataAnnotationsValidator />
+					<div class="input-field">
+						<InputText placeholder="Name" @bind-Value="signUp.Name" />
+						<i class="fa-regular fa-user"></i>
+					</div>
+					<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.Name"></ValidationMessage></span>
+					<div class="input-field">
+						<InputText placeholder="Username" @bind-Value="signUp.UserName" />
+						<i class="fa-regular fa-user"></i>
+					</div>
+					<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.UserName"></ValidationMessage></span>
+					<div class="input-field">
+						<InputText placeholder="Phone" @bind-Value="signUp.PhoneNumber" />
+						<i class="fa-solid fa-phone"></i>
+					</div>
+					<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.PhoneNumber"></ValidationMessage></span>
+					<div class="input-field">
+						<InputText placeholder="Email" @bind-Value="signUp.Email" />
+						<i class="fa-regular fa-envelope"></i>
+					</div>
+					<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.Email"></ValidationMessage></span>
+
+
+					<div class="input-field">
+						<InputText placeholder="Password" @bind-Value="signUp.Password" />
+						<i class="fa-solid fa-lock"></i>
+					</div>
+					<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.Password"></ValidationMessage></span>
+
+					<div class="input-field">
+						<InputText placeholder="ConfirmPassword" @bind-Value="signUp.ConfirmPassword" />
+						<i class="fa-solid fa-lock"></i>
+					</div>
+					<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.ConfirmPassword"></ValidationMessage></span>
+
+
+
+
+					<div style="margin-top :5%">
+						<InputRadioGroup @bind-Value="@signUp.Sex" class="form-control">
+
+							<InputRadio Value="true" /> Nam
+
+
+							<InputRadio Value="false" /> Nữ
+
+						</InputRadioGroup>
+					</div>
+
+					<div class="input-field button">
+						<input type="submit" value="Đăng ký" @onclick="SignUpUser">
+					</div>
+
+				</EditForm>
+				
+			</div>
+		</div>
+	</div>
+
+}
+
 
 
 
