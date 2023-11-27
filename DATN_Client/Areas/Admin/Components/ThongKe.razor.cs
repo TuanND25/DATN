@@ -26,9 +26,9 @@ namespace DATN_Client.Areas.Admin.Components
         {
             _lstBill = await _httpClient.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
             await Sale(0);
-            await Revenue(0);
-            await Products(0);
-            await TopSale(0);
+            await Revenue(1);
+            await Products(1);
+            await TopSale(1);
         }
         public async Task Sale(int option)
         {
@@ -221,6 +221,7 @@ namespace DATN_Client.Areas.Admin.Components
                                         .ToList();
             }
         }
+
     }
     public class Count
     {

@@ -28,8 +28,8 @@ namespace DATN_Client.Areas.Customer.Component
 			_lstPrI_VM = await _client.GetFromJsonAsync<List<ProductItem_VM>>("https://localhost:7141/api/productitem/get_all_productitem");
 			if (_responseModel.Message.ToLower() == "success")
 			{
-				Create_Bill_With_Info._bill_vm.Status = 1;
-				var updateStatus = _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", Create_Bill_With_Info._bill_vm);
+				Create_Bill_With_Info._bill_validate_vm.Status = 1;
+				var updateStatus = _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", Create_Bill_With_Info._bill_validate_vm);
 			}
 		}
 		public async Task BackToProduct()

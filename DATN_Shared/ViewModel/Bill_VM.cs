@@ -26,12 +26,12 @@ namespace DATN_Shared.ViewModel
         public int Type { get; set; }
   
         public string? Note { get; set; }
-		public string? Recipient { get; set; } // Người nhận
-		public string? District { get; set; } // Quận/Huyện
-		public string? Province { get; set; } // Tỉnh/ TP
-		public string? WardName { get; set; } // Phường/ Xã
-		public string? ToAddress { get; set; } // Địa chỉ chi tiết
-		public string? NumberPhone { get; set; } // SDT
+        public string? Recipient { get; set; } // Người nhận
+        public string? District { get; set; } // Quận/Huyện
+        public string? Province { get; set; } // Tỉnh/ TP
+        public string? WardName { get; set; } // Phường/ Xã
+        public string? ToAddress { get; set; } // Địa chỉ chi tiết
+        public string? NumberPhone { get; set; } // SDT
         public int Status { get; set; }
 
         public int? ShippingFee { get; set; }
