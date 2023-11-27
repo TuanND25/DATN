@@ -24,7 +24,7 @@ namespace DATN_Client.Areas.Admin.Components
         List<User_VM> _lstUser_1 = new List<User_VM>();
         User_VM getuser = new User_VM();
         User_VM userKhachvanglai_bien = new User_VM();
-         
+
         public int ActiveTabSearchUser { get; set; } = 1;
         public int paymentmethodid { get; set; } = 2;
 
@@ -41,8 +41,17 @@ namespace DATN_Client.Areas.Admin.Components
         private List<Color_VM> _lstColorAll = new List<Color_VM>();
         private List<Size_VM> _lstSize = new List<Size_VM>();
         private List<Color_VM> _lstColor = new List<Color_VM>();
+
+
+        private List<BillItem_VM> _lstBillItemOnBill = new List<BillItem_VM>();
+        private List<BillItem_VM> _lstBillItemOnBillShow = new List<BillItem_VM>();
+        private List<ProductItem_Show_VM> _lstProductItemShow = new List<ProductItem_Show_VM>();
+        private List<BillItemShowSellStall> _lstBillItemShow = new List<BillItemShowSellStall>();
+
+
+
         public int? SoluongProductItem { get; set; } = 0;
-        public int? SoluongProductItemMua { get; set; } = 10;
+        public int SoluongProductItemMua { get; set; } = 10;
 
         public Guid IdSize { get; set; }
         public Guid IdColor { get; set; }
@@ -58,8 +67,8 @@ namespace DATN_Client.Areas.Admin.Components
         public bool activeChuyenKhoan { get; set; } = false;
         public bool activeBtnAddProductToBill { get; set; } = false;
         public bool activePlus { get; set; } = false;
-        public Guid activeSize { get; set; } 
-        public Guid activeColor { get; set; } 
+        public Guid activeSize { get; set; }
+        public Guid activeColor { get; set; }
 
 
 
@@ -72,6 +81,8 @@ namespace DATN_Client.Areas.Admin.Components
             _lstP_1 = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
             _lstUser = await _client.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
             _lstUser_1 = await _client.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
+            _lstBillItemOnBill = await _client.GetFromJsonAsync<List<BillItem_VM>>("https://localhost:7141/api/BillItem/get_alll_bill_item");
+            _lstProductItemShow = await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
             var userKhachvanglai1 = _lstUser_1.FirstOrDefault(c => c.UserName == "khachvanglai");
             var userKhachvanglai = _lstUser.FirstOrDefault(c => c.UserName == "khachvanglai");
             userKhachvanglai_bien = userKhachvanglai;
@@ -84,7 +95,7 @@ namespace DATN_Client.Areas.Admin.Components
             _lstTinhTp = _lstTinhTp_Data;
             _lstQuanHuyen_Data = await _client.GetFromJsonAsync<List<District_VM>>("https://api.npoint.io/34608ea16bebc5cffd42");
             _lstXaPhuong_Data = await _client.GetFromJsonAsync<List<Ward_VM>>("https://api.npoint.io/dd278dc276e65c68cdf5");
-          
+
 
         }
         public async Task addBill()
@@ -138,10 +149,16 @@ namespace DATN_Client.Areas.Admin.Components
         {
             var z = _lstBill_Vm_show.FirstOrDefault(x => x.Id == id);
             _lstBill_Vm_show.Remove(z);
+            if (_lstBill_Vm_show.Count==0)
+            {
+                BillId = default;
+                return;
+            }
             if (_lstBill_Vm_show.Count > 0)
             {
                 BillId = _lstBill_Vm_show[0].Id;
             }
+
         }
         public void SearchUser(ChangeEventArgs e)
         {
@@ -298,7 +315,45 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public async Task AddProductToBill()
         {
-           //Thực hiện add productItem vào hóa đơn chờ
+
+            //Thực hiện add productItem vào hóa đơn chờ
+            CheckValidateAddProductToBill();
+            //vừa phải add vào hóa đơn chi tiết thật và add vào hóa đơn chi tiết ảo 
+            //add vào hòa đơn thật nếu thành công add vào hóa đơn ảo 
+            //add vào hóa đơnt thật
+            
+            var ProductItem = _lstProductItem.FirstOrDefault(x => x.ColorId == activeColor && x.SizeId == activeSize);
+            var ProductItemShow = _lstProductItemShow.FirstOrDefault(x => x.Id == ProductItem.Id);
+            var Soluongtonkho = ProductItem.AvaiableQuantity;
+            var price = ProductItem.PriceAfterReduction;
+            var status = 1;
+            var IdBillAdd = Guid.NewGuid();
+            BillItem_VM billadd = new BillItem_VM();
+            billadd.Id = IdBillAdd;
+            billadd.BillId = BillId;
+            billadd.ProductItemsId = ProductItem.Id;
+            billadd.Quantity = SoluongProductItemMua;
+            billadd.Price = ProductItem.PriceAfterReduction;
+            billadd.Status = 1;
+            var AddBillItemToDB = await _client.PostAsJsonAsync("https://localhost:7141/api/BillItem/Post-BillItem", billadd);
+            if (AddBillItemToDB.StatusCode.ToString() == "OK")
+            {
+                var BillItemShow = _lstBillItemOnBill.FirstOrDefault(x => x.Id == IdBillAdd);
+                BillItemShowSellStall BillItemShowSellStall = new BillItemShowSellStall();
+
+                BillItemShowSellStall.Id = IdBillAdd;
+                BillItemShowSellStall.ProductItemId = ProductItem.Id;
+                BillItemShowSellStall.BillId = BillId;
+                BillItemShowSellStall.ProductName = ProductItemShow.Name;
+                BillItemShowSellStall.SizeName = ProductItemShow.SizeName;
+                BillItemShowSellStall.ColorName = ProductItemShow.ColorName;
+                BillItemShowSellStall.AvailableQuantity = ProductItemShow.AvaiableQuantity;
+                BillItemShowSellStall.Quantity = billadd.Quantity;
+                BillItemShowSellStall.Price = ProductItemShow.PriceAfterReduction;
+                BillItemShowSellStall.Status = 1;
+
+                _lstBillItemShow.Add(BillItemShowSellStall);
+            }        
         }
 
         public void CheckSoluongProductItemMua(ChangeEventArgs e)
@@ -314,7 +369,7 @@ namespace DATN_Client.Areas.Admin.Components
                 //}
 
 
-               
+
 
                 if (SoluongProductItem < SoluongProductItemMua)
                 {
@@ -327,31 +382,45 @@ namespace DATN_Client.Areas.Admin.Components
             }
             CheckValidateAddProductToBill();
         }
-       
+
+
+
+
+
         public void PlusSoluongProduct()
         {
             if (SoluongProductItemMua < SoluongProductItem)
             {
                 SoluongProductItemMua += 1;
             }
-           
+
         }
         public void MinusSoluongProduct()
         {
-            if (SoluongProductItemMua > 1 )
+            if (SoluongProductItemMua > 1)
             {
                 SoluongProductItemMua -= 1;
             }
-            
+
         }
 
-
-
-
+        public class BillItemShowSellStall
+        {
+            public Guid Id { get; set; }
+            public Guid BillId { get; set; }
+            public Guid ProductItemId { get; set; }
+            public string ProductName { get; set; }
+            public string SizeName { get; set; }
+            public string ColorName { get; set; }
+            public int? AvailableQuantity { get; set; }
+            public int Quantity { get; set; }
+            public int? Price { get; set; }
+            public int Status { get; set; }
+        }
 
         public void CheckValidateAddProductToBill()
         {
-            if (activeSize == default || activeColor==default || SoluongProductItem <= 0 || SoluongProductItemMua > SoluongProductItem || SoluongProductItemMua<1 )
+            if (activeSize == default || activeColor == default || SoluongProductItem <= 0 || SoluongProductItemMua > SoluongProductItem || SoluongProductItemMua < 1 || BillId == default)
             {
                 activeBtnAddProductToBill = false;
             }
