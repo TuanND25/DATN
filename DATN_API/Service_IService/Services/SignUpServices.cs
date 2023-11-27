@@ -5,6 +5,9 @@ using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Twilio;
+using Twilio.Http;
+using Twilio.Rest.Api.V2010.Account;
 
 namespace DATN_API.Service_IService.Services
 {
@@ -13,17 +16,36 @@ namespace DATN_API.Service_IService.Services
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly ApplicationDbContext _context;
-        public SignUpServices(UserManager<User> userManager, RoleManager<Role> roleManager, ApplicationDbContext context)
+		private readonly TwilioSettings _twilioSettings = new TwilioSettings();
+		public SignUpServices(UserManager<User> userManager, RoleManager<Role> roleManager, ApplicationDbContext context)
         {
             _roleManager = roleManager;
             _userManager = userManager;
             _context = context;
         }
-        public async Task<Response> SignUpAsync(SignUpUser user)
+
+		public string RandomOTP()
+		{
+
+			const string characters = "0123456789";
+			Random random = new Random();
+			char[] result = new char[6];
+
+			for (int i = 0; i < 6; i++)
+			{
+				result[i] = characters[random.Next(characters.Length)];
+			}
+
+			return new string(result);
+		}
+
+	
+
+		public async Task<ResponseMess> SignUpAsync(SignUpUser user)
         {
-            if(await _userManager.Users.FirstOrDefaultAsync(p=>p.PhoneNumber== user.PhoneNumber) != null)
+            if(await _userManager.Users.FirstOrDefaultAsync(p=>p.PhoneNumber== user.PhoneNumber && p.Status==1) != null )
             {
-                return new Response
+                return new ResponseMess
                 {
                     IsSuccess = false,
                     StatusCode = 403,
@@ -31,9 +53,9 @@ namespace DATN_API.Service_IService.Services
 
                 };
             }
-            if (await _userManager.FindByEmailAsync(user.Email) != null)
+            if (await _userManager.Users.FirstOrDefaultAsync(p=>p.Email==user.Email && p.Status==1) != null)
             {
-                return new Response
+                return new ResponseMess
                 {
                     IsSuccess = false,
                     StatusCode = 403,
@@ -41,9 +63,9 @@ namespace DATN_API.Service_IService.Services
 
                 };
             }
-            else if (await _userManager.FindByNameAsync(user.UserName) != null)
+            else if (await _userManager.Users.FirstOrDefaultAsync(p=>p.UserName == user.UserName && p.Status == 1 ) != null)
             {
-                return new Response
+                return new ResponseMess
                 {
                     IsSuccess = false,
                     StatusCode = 403,
@@ -53,7 +75,7 @@ namespace DATN_API.Service_IService.Services
             }
             if (user.Password != user.ConfirmPassword)
             {
-                return new Response
+                return new ResponseMess
                 {
                     IsSuccess = false,
                     StatusCode = 403,
@@ -69,16 +91,22 @@ namespace DATN_API.Service_IService.Services
                 Email = user.Email,
                 Name = user.Name,
                 PhoneNumber = user.PhoneNumber,
+                OTP=  RandomOTP(),
                 Sex= user.Sex,               
-                Status = 1
+                Status = 3
             };
+            newUser.PhoneNumber = "+84" + newUser.PhoneNumber.Substring(1);
+
+		 	 await SendSmsOTP(newUser.PhoneNumber, "OTP xác thực đăng kí :" + newUser.OTP);
+            newUser.PhoneNumber = newUser.PhoneNumber.Replace("+84","0");
+
             if (await _roleManager.RoleExistsAsync("user"))
             {
                 var result = await _userManager.CreateAsync(newUser, user.Password);
                 
                 if (!result.Succeeded)
                 {
-                    return new Response
+                    return new ResponseMess
                     {
                         IsSuccess = false,
                         StatusCode = 403,
@@ -96,16 +124,16 @@ namespace DATN_API.Service_IService.Services
                 };
                 await _context.Carts.AddAsync(newCart);
                 await _context.SaveChangesAsync();
-                return new Response
+                return new ResponseMess
                 {
                     IsSuccess = true,
                     StatusCode = 201,
-                    Message = "Register successfully!"
+                    Message = "Vui lòng xác nhận OTP"
                 };
             }
             else
             {
-                return new Response
+                return new ResponseMess
                 {
                     IsSuccess = true,
                     StatusCode = 500,
@@ -116,6 +144,64 @@ namespace DATN_API.Service_IService.Services
 
         }
 
+		public async Task<ResponseMess> SignUpOTPsync(SignUpUser user)
+		{
 
-    }
+            var check = await _context.Users.FirstOrDefaultAsync(p => p.UserName == user.UserName && p.Email == user.Email && p.PhoneNumber == user.PhoneNumber && p.Name == user.Name && p.Status==3);
+			if ( check!= null)
+            {
+                if (check.OTP == user.OTP)
+                {
+					check.Status = 1;
+                    
+					_context.Users.UpdateRange(check);
+					await _context.SaveChangesAsync();
+					return new ResponseMess
+					{
+						IsSuccess = true,
+						StatusCode = 200,
+						Message = "Xác thực thành công",
+
+					};
+
+				}
+				return new ResponseMess
+				{
+					IsSuccess = true,
+					StatusCode = 400,
+					Message = "Xác thực thất bại",
+
+				};
+
+			}
+			else
+			{
+				return new ResponseMess
+				{
+					IsSuccess = false,
+					StatusCode = 400,
+					Message = "Xác thực thất bại",
+					
+				};
+
+			}
+		}
+
+		public async Task<ResponseMess> SendSmsOTP(string toPhoneNumber, string message)
+		{
+			TwilioClient.Init(_twilioSettings.AccountSid, _twilioSettings.AuthToken);
+
+			var Notification = MessageResource.Create(
+				body: message,
+				from: new Twilio.Types.PhoneNumber(_twilioSettings.PhoneNumber),
+				to: new Twilio.Types.PhoneNumber(toPhoneNumber)
+			);
+            return new ResponseMess {
+                IsSuccess = false,
+                StatusCode = 400,
+                Message = "Gửi thất bại",
+                Token = null
+            };
+		}
+	}
 }

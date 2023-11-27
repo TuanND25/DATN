@@ -16,6 +16,16 @@
 
 
 <style>
+        .btnTrongSuot {
+        background-color: transparent;
+        color: blue;
+        border: none;
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 500;
+        margin-left:20px;
+        margin-bottom:4px;
+    }
     .button {
         font-family: Roboto, Arial, Sans-Serif;
         font-size: 14px;
@@ -269,8 +279,9 @@
                 </tbody>
             </table>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6" style="display:flex;">
                     <h5 class="card-title">Địa chỉ nhận hàng</h5>
+                    <button class="btnTrongSuot" data-toggle="modal" data-target="#ChangeDiaChi"> Thay đổi </button>
                 </div>
                 <div class="col-md-6">
                     @if (_bill_ShowModel.Status == 2)
@@ -307,20 +318,20 @@
 </EditForm>
 
 
-<div class="modal fade" id="ChonDiaChi">
+<div class="modal fade" id="ChangeDiaChi">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<!-- Phần tiêu đề của popup -->
 			<div class="modal-header">
 				<h4 class="modal-title">Chọn địa chỉ</h4>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<button type="button" class="close" style="background-color:transparent;" data-dismiss="modal">&times;</button>
 			</div>
 
 			<!-- Nội dung của popup -->
 			<div class="modal-body">
 				@foreach (var item in _lstAddressGetById)
 				{
-					<div class="row" style="height:60px">
+					<div class="row" style="height:60px; margin-top:30px;">
 						<div class="col-md-10">
 							@item.Recipient | @item.NumberPhone <br>
 							@(item.ToAddress + ", " + item.WardName + ", " + item.District + ", " + item.Province)

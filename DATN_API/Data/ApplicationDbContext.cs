@@ -85,7 +85,8 @@ namespace DATN_API.Data
 		{
 			builder.Entity<Role>().HasData(
 					new Role() { Id = Guid.NewGuid(), Name = "Admin", NormalizedName = "ADMIN" },
-					new Role() { Id = Guid.NewGuid(), Name = "User", NormalizedName = "USER" }
+					new Role() { Id = Guid.NewGuid(), Name = "User", NormalizedName = "USER" },
+					new Role() { Id = Guid.NewGuid(), Name = "Staff", NormalizedName = "STAFF" }
 				);
 		}
 	}

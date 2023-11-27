@@ -35,5 +35,20 @@ namespace DATN_API.Controllers
                 return StatusCode(result.StatusCode,result.Message);
             }
         }
-    }
+		[Route("signup-otp")]
+		[HttpPost]
+		public async Task<IActionResult> SignUpOTP(SignUpUser user)
+		{
+			var reusult = await _signUpServices.SignUpOTPsync(user);
+            if (reusult.IsSuccess)
+            {
+                return StatusCode(reusult.StatusCode, reusult.Message);
+            }
+            else
+            {
+
+				return StatusCode(reusult.StatusCode, reusult.Message);
+			}
+		}
+	}
 }
