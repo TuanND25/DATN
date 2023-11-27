@@ -40,6 +40,20 @@
         font-weight: 500;
     }
 </style>
+@if(isLoader)
+{
+    <div class="loader-overlay">
+    <div class="loader-container">
+      <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
+        <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+      </svg>
+    </div></div>
+}
+else
+{
 
 <section class="section dashboard">
     <div class="row">
@@ -149,7 +163,7 @@
                                             <h6>₫@count1.Dem?.ToString("#,##0")</h6>
                                         }
 
-                                        <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                                        <span class="text-success small pt-1 fw-bold">@count1.Persen%</span> <span class="text-muted small pt-2 ps-1">increase</span>
 
                                     </div>
                                 </div>
@@ -158,15 +172,14 @@
                     </div>
                 </div><!-- End Revenue Card -->
 
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Danh sách cần làm</h5>
-                            @*<BarChart @ref="barChart" Class="mb-4" />
-                            <LineChart @ref="lineChart" />*@
-                        </div>
-                    </div>
-                </div>
+                @{
+                    var a = _lstBill.Where(x => x.Status == 1).Count();
+                    var b = _lstBill.Where(x => x.Status == 2).Count();
+                    var c = _lstBill.Where(x => x.Status == 0).Count();
+                    var d = _lstProductItem.Where(x => x.Status == 1 && x.AvaiableQuantity<50).Count();
+                    var e = _lstPromotion.Where(x => x.Status == 1).Count();
+                    
+                }
 
 
 
@@ -177,29 +190,29 @@
 
                             <div class="row col-md-12 t2">
                                 <div class="col-md-4 t">
-                                    <div><h3>10</h3></div>
+                                    <div><h3>@a</h3></div>
                                     <div><span>Chờ xác nhận</span></div>
                                 </div>
                                 <div class="col-md-4 t t1">
-                                    <div><h3>10</h3></div>
+                                    <div><h3>@b</h3></div>
                                     <div><span>Chờ lấy hàng</span></div>
                                 </div>
                                 <div class="col-md-4 t t1">
-                                    <div><h3>10</h3></div>
+                                    <div><h3>@c</h3></div>
                                     <div><span>Đã xử lý</span></div>
                                 </div>
                             </div>
                             <div class="row col-md-12 t2">
                                 <div class="col-md-4 t">
-                                    <div><h3>10</h3></div>
+                                    <div><h3>@c</h3></div>
                                     <div><span>Đơn huỷ</span></div>
                                 </div>
                                 <div class="col-md-4 t t1">
-                                    <div><h3>10</h3></div>
-                                    <div><span>Sản phẩm hết hàng</span></div>
+                                    <div><h3>@d</h3></div>
+                                    <div><span>Sản phẩm sắp hết hàng</span></div>
                                 </div>
                                 <div class="col-md-4 t t1">
-                                    <div><h3>10</h3></div>
+                                    <div><h3>@e</h3></div>
                                     <div><span>Chương trình khuyến mại</span></div>
                                 </div>
                             </div>
@@ -279,6 +292,7 @@
         </div>
     </div>
 </section>
+}
 
 
 

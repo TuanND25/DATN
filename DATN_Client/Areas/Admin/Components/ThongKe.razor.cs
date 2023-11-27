@@ -7,6 +7,8 @@ namespace DATN_Client.Areas.Admin.Components
     public partial class ThongKe
     {
         List<Bill_ShowModel> _lstBill = new List<Bill_ShowModel>();
+        List<ProductItems> _lstProductItem = new List<ProductItems>();
+        List<Promotions_VM> _lstPromotion = new List<Promotions_VM>();
         Bill_ShowModel _model = new Bill_ShowModel();
         HttpClient _httpClient = new HttpClient();
         public DateTime _optioSale = DateTime.Now;
@@ -22,13 +24,18 @@ namespace DATN_Client.Areas.Admin.Components
 
         [Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
         User_VM _user_VM = new User_VM();
+        bool isLoader = false;
         protected override async Task OnInitializedAsync()
         {
+            isLoader = true;
             _lstBill = await _httpClient.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
+            _lstProductItem = await _httpClient.GetFromJsonAsync<List<ProductItems>>("https://localhost:7141/api/productitem/get_all_productitem");
+            _lstPromotion = await _httpClient.GetFromJsonAsync<List<Promotions_VM>>("https://localhost:7141/api/promotion");
             await Sale(0);
             await Revenue(1);
             await Products(1);
             await TopSale(1);
+            isLoader = false;
         }
         public async Task Sale(int option)
         {
@@ -77,6 +84,21 @@ namespace DATN_Client.Areas.Admin.Components
                     count1.Dem += b.TotalAmount;
                 }
                 count1.Tittle = "This Month";
+                int? countTemp = 0;
+                var _lstBillBefore = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year && x.CreateDate?.Month == DateTime.Now.Month - 1).ToList();
+                foreach (var b in _lstBillBefore)
+                {
+                    countTemp +=b.TotalAmount;
+                }
+                if (_lstBillBefore.Count > 0)
+                {
+                    count1.Persen = (count1.Dem - countTemp) / countTemp * 100;
+                }
+                else
+                {
+                    count1.Persen = 0;
+                }
+                
             }
             else
             {
@@ -227,7 +249,7 @@ namespace DATN_Client.Areas.Admin.Components
     {
         public int? Dem { get; set; }
         public string Tittle { get; set; }
-        public int Persen { get; set; }
+        public int? Persen { get; set; }
         public bool Status { get; set; }
         public Count()
         {
