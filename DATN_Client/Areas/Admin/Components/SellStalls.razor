@@ -49,18 +49,20 @@
                     <th>Thành tiền</th>
                     </thead>
                     <tbody>
-                        <tr>
+                        @foreach (var x in _lstBillItemShow)
+                            {
+                                <tr>
                             <td style="text-align:center">1</td>
-                            <td><i class="fa-solid fa-trash-can" style="color: #ee4444;"></i> Áo thun Outerity</td>
-                            <td style="text-align:center">M</td>
-                            <td style="text-align:center">Đen</td>
+                            <td style="overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 1;"><i class="fa-solid fa-trash-can" style="color: #ee4444;margin-right:5px;"></i>@x.ProductName</td>
+                            <td style="text-align:center">@x.SizeName</td>
+                            <td style="text-align:center">@x.ColorName</td>
                             <td class="" style="padding:0px">
                                 <div class="div_tru">
                                     <span class="fa-solid fa-minus"></span>
                                </div>
                             </td>
                             <td style="text-align:center;">
-                                <span style="text-align:center">1</span>
+                                <span style="text-align:center">@x.Quantity</span>
                             </td>
                             <td class="" style="padding:0px">
                                 <div class="div_tru">
@@ -68,11 +70,12 @@
                                 </div>
                             </td>
                             <td style="text-align:center">
-                                 <span>9</span>
+                                 <span>@x.AvailableQuantity</span>
                             </td>
-                            <td style="text-align:right;">200,000đ</td>
-                            <td style="text-align:right;">200,000đ</td>
-                        </tr
+                            <td style="text-align:right;">@x.Price</td>
+                            <td style="text-align:right;">@(x.Price*x.Quantity)</td>
+                        </tr>
+                            }
                     </tbody>
                 </table>
             </div>
@@ -465,7 +468,7 @@
                    <div class="col-12 ">
                        <button class=" @(activeBtnAddProductToBill==true?"btn-SuccesAddProductToBill":"btn-SuccesAddProductToBillDisable")" disabled="@(!activeBtnAddProductToBill)" 
                        @onclick="AddProductToBill" 
-                       >
+                        data-dismiss="modal">
                            Xác nhận
                        </button>
                    </div>
