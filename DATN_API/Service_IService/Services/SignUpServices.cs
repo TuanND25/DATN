@@ -43,6 +43,39 @@ namespace DATN_API.Service_IService.Services
 
 		public async Task<ResponseMess> SignUpAsync(SignUpUser user)
         {
+			if (user.Password != user.ConfirmPassword)
+			{
+				return new ResponseMess
+				{
+					IsSuccess = false,
+					StatusCode = 403,
+					Message = "Xác nhận mật khẩu sai"
+
+				};
+			}
+			if (await  _userManager.Users.FirstOrDefaultAsync(p=>p.PhoneNumber == user.PhoneNumber && p.Status == 3 )!=null)
+            {
+                var usertemp = await _context.Users.FirstOrDefaultAsync(p => p.PhoneNumber == user.PhoneNumber && p.Status == 3);
+			 	var code = await _userManager.GeneratePasswordResetTokenAsync(usertemp);
+                await _userManager.ResetPasswordAsync(usertemp, code, user.Password);
+                usertemp.UserName = user.UserName;
+                usertemp.Name = user.Name;
+                usertemp.Sex = user.Sex;
+                usertemp.Email = user.Email;
+                usertemp.OTP = RandomOTP();
+                _context.Users.Update(usertemp);
+               await _context.SaveChangesAsync();
+				usertemp.PhoneNumber = "+84" + usertemp.PhoneNumber.Substring(1);
+				await SendSmsOTP(usertemp.PhoneNumber, "OTP xác thực đăng kí :" + usertemp.OTP);
+                return new ResponseMess
+                {
+                    IsSuccess = true,
+                    StatusCode= 200,
+                    Message= "success"
+                };
+
+
+			}
             if(await _userManager.Users.FirstOrDefaultAsync(p=>p.PhoneNumber== user.PhoneNumber && p.Status==1) != null )
             {
                 return new ResponseMess
@@ -73,16 +106,7 @@ namespace DATN_API.Service_IService.Services
 
                 };
             }
-            if (user.Password != user.ConfirmPassword)
-            {
-                return new ResponseMess
-                {
-                    IsSuccess = false,
-                    StatusCode = 403,
-                    Message = "Xác nhận mật khẩu sai"
-
-                };
-            }
+           
             var id = Guid.NewGuid();
             User newUser = new User
             {
