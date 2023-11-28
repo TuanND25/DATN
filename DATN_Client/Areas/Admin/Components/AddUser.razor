@@ -1,0 +1,67 @@
+﻿<h3>AddUser</h3>
+
+
+<div class="Login full fullsign">
+	<div class=" container1" style="width:600px;margin: 0 auto;  margin-top: 20%;margin-bottom: 40px;">
+		<div class="form login">
+			<span class="title">user</span>
+			<EditForm Model="user">
+				<DataAnnotationsValidator />
+				<div class="input-field">
+					<InputText placeholder="Name" @bind-Value="user.Name" />
+					<i class="fa-regular fa-user"></i>
+				</div>
+				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>user.Name"></ValidationMessage></span>
+				<div class="input-field">
+					<InputText placeholder="Username" @bind-Value="user.UserName" />
+					<i class="fa-regular fa-user"></i>
+				</div>
+				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>user.UserName"></ValidationMessage></span>
+				<div class="input-field">
+					<InputText placeholder="Phone" @bind-Value="user.PhoneNumber" />
+					<i class="fa-solid fa-phone"></i>
+				</div>
+				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>user.PhoneNumber"></ValidationMessage></span>
+				<div class="input-field">
+					<InputText placeholder="Email" @bind-Value="user.Email" />
+					<i class="fa-regular fa-envelope"></i>
+				</div>
+				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>user.Email"></ValidationMessage></span>
+
+
+				<div class="input-field">
+					<InputText placeholder="Password" @bind-Value="user.Password" />
+					<i class="fa-solid fa-lock"></i>
+				</div>
+				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>user.Password"></ValidationMessage></span>
+
+				<div class="input-field">
+					<InputText placeholder="ConfirmPassword" @bind-Value="user.ConfirmPassword" />
+					<i class="fa-solid fa-lock"></i>
+				</div>
+				<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>user.ConfirmPassword"></ValidationMessage></span>
+				
+
+			
+
+
+				<div style="margin-top :5%">
+					<InputRadioGroup @bind-Value="@user.Sex" class="form-control">
+
+						<InputRadio Value="true" /> Nam
+
+
+						<InputRadio Value="false" /> Nữ
+
+					</InputRadioGroup>
+				</div>
+
+				<div class="input-field button">
+					<input type="submit" value="Đăng ký">
+				</div>
+
+			</EditForm>
+
+		</div>
+	</div>
+</div>
