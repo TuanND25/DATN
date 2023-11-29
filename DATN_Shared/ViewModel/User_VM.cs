@@ -25,6 +25,7 @@ namespace DATN_Shared.ViewModel
         public bool Sex { get; set; }
         [Required(ErrorMessage = "Trạng thái không được để trống")]
         public int Status { get; set; }
+        public string Role { get; set; }
 
 
     }

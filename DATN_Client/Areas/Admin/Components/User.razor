@@ -1,4 +1,13 @@
-﻿﻿<div class="card">
+﻿@using Blazored.Toast.Configuration
+<BlazoredToasts Position="ToastPosition.TopRight"
+				Timeout="10"
+				IconType="IconType.FontAwesome"
+				SuccessClass="success-toast-override"
+				SuccessIcon="fa-solid fa-check"
+				ErrorIcon="fa-solid fa-triangle-exclamation" />﻿
+
+
+<div class="card">
 	<div class="card-body">
 		<h1 style="margin-top:20px">Quản lý user</h1>
 		<div class="pagetitle">
@@ -11,26 +20,154 @@
 		</div>
 	</div>
 </div>
-<div class="container">
+
+<div class="container-fluid">
 	<div class="row">
-		<EditForm Model="user_VM">
-			<div class="row">
-				<div class="col-md-8">
-					<InputText class="form-control" @bind-Value="user_VM.UserName" placeholder="Tìm kiếm theo tên" />
+		<div class="col-md-6"style="margin-top:500px;margin-left:50px">
+			<EditForm Model="user_VM">
+				<div class="row">
+					<div class="col-md-8">
+						<InputText class="form-control" @bind-Value="user_VM.UserName" placeholder="Tìm kiếm theo tên đăng nhập" />
+					</div>
+					<div class="col-md-4">
+						<button type="submit" class="btn btn-primary" @onclick="SearchByUsername">Tìm kiếm</button>
+					</div>
 				</div>
-				<div class="col-md-4">
-					<button type="submit" class="btn btn-primary" @onclick="SearchByUsername">Tìm kiếm</button>
+			</EditForm>
+		</div>
+		<div class="col-md-4">
+			<div class="card">
+				<div class="card-body" style="margin-top: 20px">
+					
+					<EditForm Model="userbyadmin">
+						<DataAnnotationsValidator />
+						<div style="border-end-end-radius: 80px 80px;">
+							<div class="input-group input-group-sm mb-3">
+								<span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa-regular fa-user"></i></span>
+								<InputText type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Tên người dùng" @bind-Value="userbyadmin.name" />
+
+							</div>
+							<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>userbyadmin.name"></ValidationMessage></span>
+							<div class="input-group input-group-sm mb-3">
+								<span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa-regular fa-user"></i></span>
+								<InputText type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Tên đăng nhập" @bind-Value="userbyadmin.username" />
+
+							</div>
+							<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>userbyadmin.username"></ValidationMessage></span>
+							<div class="input-group input-group-sm mb-3">
+								<span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa-solid fa-phone"></i></span>
+								<InputText type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Số điện thoại" @bind-Value="userbyadmin.phonenumber" />
+
+							</div>
+							<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>userbyadmin.phonenumber"></ValidationMessage></span>
+							<div class="input-group input-group-sm mb-3">
+								<span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa-regular fa-envelope"></i></span>
+								<InputText type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Email" @bind-Value="userbyadmin.email" />
+
+							</div>
+							<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>userbyadmin.email"></ValidationMessage></span>
+							<div class="input-group input-group-sm mb-3">
+								<span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa-solid fa-lock"></i></span>
+								<InputText type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Mật khẩu" @bind-Value="userbyadmin.password" />
+
+							</div>
+							<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>userbyadmin.password"></ValidationMessage></span>
+							<div class="input-group input-group-sm mb-3">
+								<span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa-solid fa-lock"></i></span>
+								<InputText type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Xác nhận mật khẩu" @bind-Value="userbyadmin.confirmpassword" />
+
+							</div>
+								<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>userbyadmin.confirmpassword"></ValidationMessage></span>
+							<div class="input-group input-group-sm mb-3">
+								<span class="input-group-text" id="inputGroup-sizing-sm">Cấp người dùng</span>
+								<InputSelect @bind-Value="userbyadmin.role">
+									<option value="staff" selected>Nhân viên</option>
+									<option value="user" >Người dùng</option>
+								</InputSelect>
+
+							</div>
+							<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>userbyadmin.role"></ValidationMessage></span>
+							<div class="input-group input-group-sm mb-5">
+								<InputRadioGroup @bind-Value="userbyadmin.sex" class="form-control">
+
+									<InputRadio Value="true" /> Nam
+
+
+									<InputRadio Value="false" style="margin-left: 15px" /> Nữ
+
+								</InputRadioGroup>
+							</div>
+							<div class="input-group input-group-sm mb-5">
+								<InputRadioGroup @bind-Value="userbyadmin.status" class="form-control">
+
+									<InputRadio Value="1" /> Đang hoạt động
+
+
+									<InputRadio Value="0" style="margin-left: 15px" /> Ngừng hoạt động
+
+								</InputRadioGroup>
+							</div>
+							<button type="submit" class="btn btn-success" @onclick="AddUserVsStaff" style="margin-bottom:30px">Thêm người dùng</button>
+							<button type="submit" class="btn btn-primary" @onclick="UpdateUser" style="margin-bottom:30px">Cập nhật thông tin</button>
+						</div>
+					</EditForm>
 				</div>
 			</div>
-		</EditForm>
+		</div>
 	</div>
-	<div class="row">
-		<EditForm>
 
-		</EditForm>
-	</div>
 </div>
+@if (users == null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th style="text-align:center">Tên người dùng</th>
+				<th style="text-align:center">Tên đăng nhập</th>
+				<th style="text-align:center">Số điện thoại</th>
+				<th style="text-align:center">Email</th>
+				<th style="text-align:center">Giới tính</th>
+				<th style="text-align:center">Trạng thái</th>
+				<th style="text-align:center">Chức vụ</th>
+				<th style="text-align:center">Địa chỉ</th>
+				<th style="text-align:center">Cập nhật</th>
 
+
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var x in users)
+			{
+				<tr>
+
+
+					<td style="vertical-align:middle;text-align:center">@x.name</td>
+					<td style="vertical-align:middle;text-align:center">@x.username</td>
+					<td style="vertical-align:middle;text-align:center">@x.username</td>
+					<td style="vertical-align:middle;text-align:center">@x.email</td>
+					<td style="vertical-align:middle;text-align:center">@(x.sex == true ? "Nam" : " Nữ")</td>
+					<td style="vertical-align:middle;text-align:center">@(x.status == 1 ? "Hoạt động" : x.status == 0 ? "Ngừng hoạt động" : "Chưa xác thực")</td>
+					<td style="vertical-align:middle;text-align:center">@x.role</td>
+
+					<td style="vertical-align:middle;text-align:center">
+						<button style="border: none;border-radius: 15px;" class="btn btn-primary" type="button" @onclick="()=>GetAddressShipByUser(x.id)">
+							Xem địa chỉ
+						</button>
+					</td>
+					<td style="vertical-align:middle;text-align:center">
+						<button style="border: none;border-radius: 15px;" class="btn btn-primary" type="button" @onclick="()=>LoadFormUser(x)">
+							Chỉnh sửa
+						</button>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
 
 
 
