@@ -93,6 +93,7 @@ namespace DATN_API.Service_IService.Services
 				user.Email = updateUser.Email;
 				user.PhoneNumber = updateUser.PhoneNumber;
 				user.Sex = updateUser.Sex;
+			
 				_context.Update(user);
 				await _context.SaveChangesAsync();
 				return new ResponseMess
@@ -116,7 +117,7 @@ namespace DATN_API.Service_IService.Services
 
 		}
 
-        public async Task<ResponseMess> AddEmployeeOrAdmin(SignUpUser user, string role)
+        public async Task<ResponseMess> AddEmployeeOrAdmin(AddUserByAdmin user)
         {
             if (await _userManager.FindByEmailAsync(user.Email) != null)
             {
@@ -124,7 +125,7 @@ namespace DATN_API.Service_IService.Services
                 {
                     IsSuccess = false,
                     StatusCode = 400,
-                    Message = "Email da ton tai"
+                    Message = "Email đã tồn tại"
 
                 };
             }
@@ -134,7 +135,7 @@ namespace DATN_API.Service_IService.Services
                 {
                     IsSuccess = false,
                     StatusCode = 400,
-                    Message = "UserName da ton tai"
+                    Message = "Username đã tồn tại"
 
                 };
             }
@@ -144,7 +145,7 @@ namespace DATN_API.Service_IService.Services
                 {
                     IsSuccess = false,
                     StatusCode = 400,
-                    Message = "xac nhan mat khau sai"
+                    Message = "Xác nhận mật sai"
 
                 };
             }
@@ -153,8 +154,12 @@ namespace DATN_API.Service_IService.Services
                 UserName = user.UserName,
                 Email = user.Email,
                 Name = user.Name,
+				PhoneNumber= user.PhoneNumber,
+				Sex= user.Sex,
+				Status =1 
+				
             };
-            if (await _roleManager.RoleExistsAsync(role))
+            if (await _roleManager.RoleExistsAsync(user.Role))
             {
                 var result = await _userManager.CreateAsync(newUser, user.Password);
 
@@ -164,12 +169,12 @@ namespace DATN_API.Service_IService.Services
                     {
                         IsSuccess = false,
                         StatusCode = 500,
-                        Message = "mat khau khong du dai"
+                        Message = "Mật khẩu không đủ dài"
 
                     };
 
                 }
-                await _userManager.AddToRoleAsync(newUser, role);
+                await _userManager.AddToRoleAsync(newUser,user.Role);
                 return new ResponseMess
                 {
                     IsSuccess = true,
@@ -194,5 +199,7 @@ namespace DATN_API.Service_IService.Services
             var a= await _context.Users.FindAsync(Id);
 			return a;
         }
-    }
+
+		
+	}
 }

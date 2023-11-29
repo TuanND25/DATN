@@ -15,6 +15,7 @@ namespace DATN_Client.Areas.Admin.Components
 		public string Message { get; set; } = string.Empty;
 
 		public User_VM user_VM = new User_VM();
+		public AddUserByAdmin user = new AddUserByAdmin();
 		protected override async Task OnInitializedAsync()
 		{
 			users = await httpClient.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
