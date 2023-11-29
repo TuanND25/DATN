@@ -14,7 +14,7 @@
 		<div class=" container1" style="width:600px;margin: 0 auto;  margin-top: 20%;
   margin-bottom: 40px;">
 			<div class="form login">
-				<span class="title">SignUp</span>
+				<span class="title">Đăng ký</span>
 				<EditForm Model="signUp">
 					<DataAnnotationsValidator />
 					<div class="input-field">
@@ -22,19 +22,19 @@
 						<i class="fa-regular fa-user"></i>
 					</div>
 					<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.OTP"></ValidationMessage></span>
-					
-					
 
 
 
-				
+
+
+
 
 					<div class="input-field button">
 						<input type="submit" value="Đăng ký" @onclick="SignUPOTP">
 					</div>
 
 				</EditForm>
-				
+
 			</div>
 		</div>
 	</div>
@@ -49,17 +49,17 @@ else
 				<EditForm Model="signUp">
 					<DataAnnotationsValidator />
 					<div class="input-field">
-						<InputText placeholder="Name" @bind-Value="signUp.Name" />
+						<InputText placeholder="Tên người dùng" @bind-Value="signUp.Name" />
 						<i class="fa-regular fa-user"></i>
 					</div>
 					<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.Name"></ValidationMessage></span>
 					<div class="input-field">
-						<InputText placeholder="Username" @bind-Value="signUp.UserName" />
+						<InputText placeholder="Tên đăng nhập" @bind-Value="signUp.UserName" />
 						<i class="fa-regular fa-user"></i>
 					</div>
 					<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.UserName"></ValidationMessage></span>
 					<div class="input-field">
-						<InputText placeholder="Phone" @bind-Value="signUp.PhoneNumber" />
+						<InputText placeholder="Số điện thoại" @bind-Value="signUp.PhoneNumber" />
 						<i class="fa-solid fa-phone"></i>
 					</div>
 					<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.PhoneNumber"></ValidationMessage></span>
@@ -71,13 +71,13 @@ else
 
 
 					<div class="input-field">
-						<InputText placeholder="Password" @bind-Value="signUp.Password" />
+						<InputText placeholder="Mật khẩu" @bind-Value="signUp.Password" />
 						<i class="fa-solid fa-lock"></i>
 					</div>
 					<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.Password"></ValidationMessage></span>
 
 					<div class="input-field">
-						<InputText placeholder="ConfirmPassword" @bind-Value="signUp.ConfirmPassword" />
+						<InputText placeholder="Xác nhận lại mật khẩu" @bind-Value="signUp.ConfirmPassword" />
 						<i class="fa-solid fa-lock"></i>
 					</div>
 					<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.ConfirmPassword"></ValidationMessage></span>
@@ -101,7 +101,9 @@ else
 					</div>
 
 				</EditForm>
-				
+				<div style=" margin-top:10px">
+					<a href="https://localhost:7075/Customer/Login/Login" style="margin-left:27%"> Đã có tài khoản - Đăng nhập</a>
+				</div>
 			</div>
 		</div>
 	</div>

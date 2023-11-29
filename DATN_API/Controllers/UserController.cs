@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Twilio.Types;
 
 namespace DATN_API.Controllers
 {
@@ -15,22 +16,38 @@ namespace DATN_API.Controllers
     public class UserController : ControllerBase
     {
         public readonly UserManager<User> _userManager;
+        public readonly RoleManager<Role> _roleManager;
         public readonly ApplicationDbContext _context;
         public readonly IUserService _userService;
-        public UserController(ApplicationDbContext context, IUserService userService,UserManager<User> userManager)
+        public UserController(ApplicationDbContext context, IUserService userService,UserManager<User> userManager, RoleManager<Role> role)
         {
             _context = context;
             _userService = userService;
 			_userManager = userManager;
+            _roleManager = role;
 		}
 
 		[Route("get-user")]	
 		[HttpGet]
         public async Task<IActionResult> GetUser()
         {
-            var users = await _userManager.Users.ToListAsync();
+            var listuser = from users in _userManager.Users
+                           join roleusers in _context.UserRoles on users.Id equals roleusers.UserId
+                           join roles in _roleManager.Roles on roleusers.RoleId equals roles.Id
+                           select new
+                           {
+                               id = users.Id,
+                               name = users.Name,
+                               username = users.UserName,
+                               phonenumber = users.PhoneNumber,
+                               email = users.Email,
+                               sex = users.Sex,
+                               status = users.Status,
+                               role = roles.Name,
+                           };
+                      
      
-            return Ok(users);
+            return Ok(listuser);
         }
 
         [HttpGet("get_user_by_id/{Id}")]
@@ -52,16 +69,16 @@ namespace DATN_API.Controllers
 
         [Route("update-user")]
         [HttpPut]
-        public async Task<IActionResult> UpdateUser(UpdateUser_VM updateUser)
+        public async Task<IActionResult> UpdateUser(AddUserByAdmin updateUser)
         {
            var result = await _userService.UpdateUser(updateUser);
             if (result.IsSuccess)
             {
-                return Ok();
+                return StatusCode(result.StatusCode,result.Message);
             }
             else
             {
-                return BadRequest();    
+                return StatusCode(result.StatusCode, result.Message);    
             }
         }
 
@@ -101,11 +118,11 @@ namespace DATN_API.Controllers
             var result = await _userService.AddEmployeeOrAdmin(user);
             if (result.IsSuccess)
             {
-                return Ok(result);
+                return StatusCode(result.StatusCode,result.Message);
             }
             else
             {
-                return BadRequest(result);
+                return StatusCode(result.StatusCode,result.Message);
             }
         }
 
