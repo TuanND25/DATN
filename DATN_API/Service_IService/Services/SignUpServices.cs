@@ -118,6 +118,7 @@ namespace DATN_API.Service_IService.Services
                 Name = user.Name,
                 PhoneNumber = user.PhoneNumber,
                 OTP=  RandomOTP(),
+                TokenExpires= DateTime.Now,
                 Sex= user.Sex,               
                 Status = 3
             };

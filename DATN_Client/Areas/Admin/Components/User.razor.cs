@@ -33,9 +33,18 @@ namespace DATN_Client.Areas.Admin.Components
 		}
         public async Task ChangeStatusUser(AddUserByAdmin user)
         {
-			user.status = 0;
-            var a= await httpClient.PutAsJsonAsync<AddUserByAdmin>("https://localhost:7141/api/user/update-user", user);
-        }
+			user_VM.Id = user.id;
+			user_VM.Name = user.name;
+			user_VM.UserName = user.username;
+			user_VM.PhoneNumber = user.phonenumber;
+			user_VM.Status = 0;
+			user_VM.Email = user.email;
+			user_VM.Role = user.role;
+			user_VM.Sex = user.sex;
+			user = null;
+            var a= await httpClient.PutAsJsonAsync<User_VM>("https://localhost:7141/api/user/update-status-user", user_VM);
+			navigationManager.NavigateTo("https://localhost:7075/Admin/User", true);
+		}
 		
 		public async Task SearchByUsername()
 		{
@@ -59,7 +68,7 @@ namespace DATN_Client.Areas.Admin.Components
 			{
 				_toastService.ShowSuccess(result.Result);
 				Task.Delay(2000);
-				navigationManager.NavigateTo("https://localhost:7075/Admin/User");
+				navigationManager.NavigateTo("https://localhost:7075/Admin/User",true);
 			}
 			else
 			{
@@ -94,7 +103,7 @@ namespace DATN_Client.Areas.Admin.Components
 			{
 				_toastService.ShowSuccess(result.Result);
 				Task.Delay(2000);
-				navigationManager.NavigateTo("https://localhost:7075/Admin/User");
+				navigationManager.NavigateTo("https://localhost:7075/Admin/User",true);
 			}
 			else
 			{

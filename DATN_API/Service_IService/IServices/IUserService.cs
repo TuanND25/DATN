@@ -5,7 +5,7 @@ namespace DATN_API.Service_IService.IServices
 {
 	public interface IUserService
 	{
-		public Task<User> UpdateStatusUser(User_VM user);
+		public Task<ResponseMess> UpdateStatusUser(User_VM user);
 		public Task<ResponseMess> UpdateUser(AddUserByAdmin updateUser);
 		public Task<ResponseMess> AddEmployeeOrAdmin(AddUserByAdmin user);
 		public Task<ResponseMess> ChangePassword(ChangePassword_VM changePassword);
