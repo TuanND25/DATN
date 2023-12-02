@@ -25,19 +25,29 @@ namespace DATN_API.Service_IService.Services
 			return await _userManager.Users.Where(u => u.UserName.Contains(username)).ToListAsync();
 		}
 
-		public async Task<User> UpdateStatusUser(User_VM user)
+		public async Task<ResponseMess> UpdateStatusUser(User_VM user)
 		{
 			var userupdate = _context.Users.Where(p => p.Id == user.Id).FirstOrDefault();
 			if (userupdate == null)
 			{
-				return null;
+				return new ResponseMess {
+					IsSuccess = false,
+					Message = "Không có người dùng nào để cập nhật thông tin",
+					StatusCode = 400,
+					Token = null
+				};
 			}
 			else
 			{
 				userupdate.Status = user.Status;
 				_context.Users.Update(userupdate);
 				await _context.SaveChangesAsync();
-				return userupdate;
+				return new ResponseMess {
+					IsSuccess = true,
+					Message = "Thay đổi trạng thái thành công",
+					StatusCode = 200,
+					Token = null
+				};
 			}
 		}
 

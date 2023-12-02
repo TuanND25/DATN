@@ -63,8 +63,18 @@ namespace DATN_API.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateStatusUser(User_VM user)
         {
-            await _userService.UpdateStatusUser(user);
-            return Ok(user);
+        
+            var response = await _userService.UpdateStatusUser(user);
+            if (response.IsSuccess)
+            {
+                return StatusCode(response.StatusCode, response.Message);
+
+            }
+            else
+            {
+				return StatusCode(response.StatusCode, response.Message);
+
+			}
         }
 
         [Route("update-user")]

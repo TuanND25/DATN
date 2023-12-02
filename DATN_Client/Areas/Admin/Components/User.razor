@@ -1,6 +1,6 @@
 ﻿@using Blazored.Toast.Configuration
 <BlazoredToasts Position="ToastPosition.TopRight"
-				Timeout="10"
+				Timeout="5"
 				IconType="IconType.FontAwesome"
 				SuccessClass="success-toast-override"
 				SuccessIcon="fa-solid fa-check"
@@ -139,8 +139,6 @@ else
 			@foreach (var x in users)
 			{
 				<tr>
-
-
 					<td style="vertical-align:middle;text-align:center">@x.name</td>
 					<td style="vertical-align:middle;text-align:center">@x.username</td>
 					<td style="vertical-align:middle;text-align:center">@x.phonenumber</td>
@@ -149,27 +147,28 @@ else
 					<td style="vertical-align:middle;text-align:center">@(x.status == 1 ? "Hoạt động" : x.status == 0 ? "Ngừng hoạt động" : "Chưa xác thực")</td>
 					<td style="vertical-align:middle;text-align:center">@x.role</td>
 					<td style="vertical-align:middle;text-align:center">
-						<div class="modal fade" id="Status">
-							<div class="modal-dialog">
-								<div class="modal-content">
+						<div class="modal fade" id="Status-@x.id">
+								<div class="modal-dialog">
+									<div class="modal-content">
 
-									<!-- Phần tiêu đề của popup -->
-									<div class="modal-header">
-										<h4 class="modal-title">Thêm sản phẩm</h4>
-										<button type="button" class="close" data-dismiss="modal">&times;</button>
-									</div>
+										<!-- Phần tiêu đề của popup -->
+										<div class="modal-header">
+											<h4 class="modal-title">Thêm sản phẩm</h4>
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+										</div>
 
-									<!-- Nội dung của popup -->
-									<p>Bạn có đồng ý ngừng hoạt động người dùng này</p>
-									<!-- Phần chân của popup -->
-									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-										<button type="button" class="btn btn-danger" @onclick="()=>ChangeStatusUser(x)" data-dismiss="modal">Xác nhận</button>
+										<!-- Nội dung của popup -->
+										<p>Bạn có đồng ý ngừng hoạt động người dùng này</p>
+										<!-- Phần chân của popup -->
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+											<button type="button" class="btn btn-danger" @onclick="()=>ChangeStatusUser(x)" data-dismiss="modal">Xác nhận</button>
+										</div>
 									</div>
 								</div>
-							</div>
+							
 						</div>
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Status">
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Status-@x.id">
 							Ngừng hoạt động
 						</button>
 					</td>
