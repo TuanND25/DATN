@@ -15,11 +15,14 @@ namespace DATN_Client.Areas.Customer.Component
         HttpClient _httpClient = new HttpClient();
         SignUpUser signUp = new SignUpUser();
         public string check { get; set; } = string.Empty;
-
-        public async Task SignUpUser()
+		private int countdownMinutes = 5;
+		private int countdownSeconds = 0;
+		private bool isCountingDown = false;
+		private System.Timers.Timer timer;
+		public async Task SignUpUser()
         {
-           
-
+               
+        
             if (signUp.UserName == string.Empty || signUp.Email == string.Empty || signUp.PhoneNumber == string.Empty || signUp.Password == string.Empty || signUp.ConfirmPassword == string.Empty || signUp.Name == string.Empty)
             {
                 _toastService.ShowError("Vui lòng điền đầy đủ thông tin");
@@ -58,6 +61,7 @@ namespace DATN_Client.Areas.Customer.Component
         public async Task SignUPOTP()
         {
             var response = await _httpClient.PostAsJsonAsync<SignUpUser>("https://localhost:7141/api/user/signup-otp",signUp);
+            var result = response.Content.ReadAsStringAsync();  
             if (response.IsSuccessStatusCode)
             {
                 _toastService.ShowSuccess("Đăng ký thành công");
@@ -67,10 +71,13 @@ namespace DATN_Client.Areas.Customer.Component
             }
             else
             {
-				_toastService.ShowError("Mã xác nhận OTP sai");
+				_toastService.ShowError(result.Result);
 				Task.Delay(2000);
                 return;
 			}
         }
-    }
+
+		
+	}
 }
+

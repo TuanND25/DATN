@@ -35,29 +35,13 @@ namespace DATN_API.Controllers
             {
 				request.PhoneNumber = "+84" + request.PhoneNumber.Substring(1);
 				user.OTP = GenerateRandomOTP();
+
+                user.TokenExpires = DateTime.Now;
 				_context.Users.UpdateRange(user);
 				_context.SaveChanges();
-				var responseOTP = await SendSmsAsync(request.PhoneNumber, "OTP reset password :" + user.OTP);
+				var responseOTP = await SendSmsAsync(request.PhoneNumber, "OTP xác thực đổi mật khẩu  :" + user.OTP);
 				return StatusCode(200);
-                //request.PhoneNumber = "+84" + request.PhoneNumber.Substring(1);
-                //user.OTP = GenerateRandomOTP();
-                //_context.Users.UpdateRange(user);
-                //_context.SaveChanges();
-                //var responseOTP = await SendSmsAsync(request.PhoneNumber, "OTP reset password :" + user.OTP);
-
-                //if (user.OTP == request.OTP)
-                //{
-                //    var passwordRandom = GenerateRandomAlphanumericString();
-                //    var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                //    await _userManager.ResetPasswordAsync(user, code, passwordRandom);
-                //    string message = "your new password : " + passwordRandom;
-
-                //    var responsePassword = await SendSmsAsync(request.PhoneNumber, message);
-                //}
-                //else
-                //{
-                //    return BadRequest("OTP không chính xác");
-                //}
+               
 
 
 
@@ -65,7 +49,7 @@ namespace DATN_API.Controllers
             }
             else
             {
-                return StatusCode(404,"Không tìm thấy tài khoản");
+                return StatusCode(404,"Không tìm thấy tài khoản trùng khớp với thông tin bạn nhập");
             }
             
         }
@@ -79,14 +63,22 @@ namespace DATN_API.Controllers
 
                 if (user.OTP == request.OTP)
                 {
-					request.PhoneNumber = "+84" + request.PhoneNumber.Substring(1);
-					var passwordRandom = GenerateRandomAlphanumericString();
-                    var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                    await _userManager.ResetPasswordAsync(user, code, passwordRandom);
-                    string message = "your new password : " + passwordRandom;
+                    if (DateTime.Now.Minute - user.TokenExpires.Minute < 5)
+                    {
+						request.PhoneNumber = "+84" + request.PhoneNumber.Substring(1);
+						var passwordRandom = GenerateRandomAlphanumericString();
+						var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+						await _userManager.ResetPasswordAsync(user, code, passwordRandom);
+						string message = "Mật khẩu mới của bạn là : " + passwordRandom;
 
-                    var responsePassword = await SendSmsAsync(request.PhoneNumber, message);
-                    return StatusCode(200, "reset passwrod success");
+						var responsePassword = await SendSmsAsync(request.PhoneNumber, message);
+						return StatusCode(200, "Mật khẩu đã được gửi về điện thoại của bạn hãy kiểm tra");
+                    }
+                    else
+                    {
+						return StatusCode(400, "OTP có hạn là 5 phút,OTP đã hết hạn hãy ấn vào gửi lại");
+					}
+					
                 }
                 else
                 {

@@ -23,7 +23,7 @@
 
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-md-6"style="margin-top:500px;margin-left:50px">
+		<div class="col-md-6" style="margin-top:500px;margin-left:50px">
 			<EditForm Model="user_VM">
 				<div class="row">
 					<div class="col-md-8">
@@ -38,7 +38,7 @@
 		<div class="col-md-4">
 			<div class="card">
 				<div class="card-body" style="margin-top: 20px">
-					
+
 					<EditForm Model="userbyadmin">
 						<DataAnnotationsValidator />
 						<div style="border-end-end-radius: 80px 80px;">
@@ -72,17 +72,12 @@
 
 							</div>
 							<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>userbyadmin.password"></ValidationMessage></span>
-							<div class="input-group input-group-sm mb-3">
-								<span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa-solid fa-lock"></i></span>
-								<InputText type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Xác nhận mật khẩu" @bind-Value="userbyadmin.confirmpassword" />
 
-							</div>
-								<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>userbyadmin.confirmpassword"></ValidationMessage></span>
 							<div class="input-group input-group-sm mb-3">
 								<span class="input-group-text" id="inputGroup-sizing-sm">Cấp người dùng</span>
 								<InputSelect @bind-Value="userbyadmin.role">
 									<option value="staff" selected>Nhân viên</option>
-									<option value="user" >Người dùng</option>
+									<option value="user">Người dùng</option>
 								</InputSelect>
 
 							</div>
@@ -133,6 +128,7 @@ else
 				<th style="text-align:center">Giới tính</th>
 				<th style="text-align:center">Trạng thái</th>
 				<th style="text-align:center">Chức vụ</th>
+				<th style="text-align:center">Chỉnh sửa trạng thái</th>
 				<th style="text-align:center">Địa chỉ</th>
 				<th style="text-align:center">Cập nhật</th>
 
@@ -152,7 +148,31 @@ else
 					<td style="vertical-align:middle;text-align:center">@(x.sex == true ? "Nam" : " Nữ")</td>
 					<td style="vertical-align:middle;text-align:center">@(x.status == 1 ? "Hoạt động" : x.status == 0 ? "Ngừng hoạt động" : "Chưa xác thực")</td>
 					<td style="vertical-align:middle;text-align:center">@x.role</td>
+					<td style="vertical-align:middle;text-align:center">
+						<div class="modal fade" id="Status">
+							<div class="modal-dialog">
+								<div class="modal-content">
 
+									<!-- Phần tiêu đề của popup -->
+									<div class="modal-header">
+										<h4 class="modal-title">Thêm sản phẩm</h4>
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+									</div>
+
+									<!-- Nội dung của popup -->
+									<p>Bạn có đồng ý ngừng hoạt động người dùng này</p>
+									<!-- Phần chân của popup -->
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+										<button type="button" class="btn btn-danger" @onclick="()=>ChangeStatusUser(x)" data-dismiss="modal">Xác nhận</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Status">
+							Ngừng hoạt động
+						</button>
+					</td>
 					<td style="vertical-align:middle;text-align:center">
 						<button style="border: none;border-radius: 15px;" class="btn btn-primary" type="button" @onclick="()=>GetAddressShipByUser(x.id)">
 							Xem địa chỉ
@@ -163,6 +183,7 @@ else
 							Chỉnh sửa
 						</button>
 					</td>
+
 				</tr>
 			}
 		</tbody>
