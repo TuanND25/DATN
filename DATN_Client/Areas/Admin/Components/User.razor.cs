@@ -14,7 +14,7 @@ namespace DATN_Client.Areas.Admin.Components
 		public List<AddUserByAdmin> users { get; set; }
 		public static List<AddressShip_VM> addressShips {get; set;}
 
-		public  User_VM doituongtam = new User_VM();
+		public  AddUserByAdmin doituongtam = new AddUserByAdmin();
 		public string Message { get; set; } = string.Empty;
 
 		public User_VM user_VM = new User_VM();
@@ -31,10 +31,10 @@ namespace DATN_Client.Areas.Admin.Components
 			addressShips = addressShips.Where(a => a.UserId == Id).ToList();
 			navigationManager.NavigateTo("https://localhost:7075/Admin/Addresss",true);
 		}
-        public async Task ChangeStatusUser()
+        public async Task ChangeStatusUser(AddUserByAdmin user)
         {
-			doituongtam.Status = 0;
-            var a= await httpClient.PutAsJsonAsync<User_VM>("https://localhost:7141/api/user/update-user", doituongtam);
+			user.status = 0;
+            var a= await httpClient.PutAsJsonAsync<AddUserByAdmin>("https://localhost:7141/api/user/update-user", user);
         }
 		
 		public async Task SearchByUsername()
@@ -42,13 +42,13 @@ namespace DATN_Client.Areas.Admin.Components
 			users = await httpClient.GetFromJsonAsync<List<AddUserByAdmin>>("https://localhost:7141/api/user/get-user");
 			users = users.Where(u=>user_VM.UserName==null|| user_VM.UserName==string.Empty|| u.username.Trim().ToLower().Contains(user_VM.UserName.Trim().ToLower())).ToList();
 		}
-		public async Task gandoituong(User_VM user)
+		public async Task gandoituong(AddUserByAdmin user)
 		{
 			doituongtam = user;
 		}
 		public async Task AddUserVsStaff()
 		{
-			if (userbyadmin.username == string.Empty || userbyadmin.email == string.Empty || userbyadmin.phonenumber == string.Empty || userbyadmin.password == string.Empty || userbyadmin.confirmpassword == string.Empty || userbyadmin.name == string.Empty || userbyadmin.role == string.Empty)
+			if (userbyadmin.username == string.Empty || userbyadmin.email == string.Empty || userbyadmin.phonenumber == string.Empty || userbyadmin.password == string.Empty || userbyadmin.name == string.Empty || userbyadmin.role == string.Empty)
 			{
 				_toastService.ShowError("Vui lòng điền đầy đủ thông tin");
 				return;
@@ -76,14 +76,14 @@ namespace DATN_Client.Areas.Admin.Components
 			userbyadmin.sex = GetValueFromList.sex;
 			userbyadmin.status = GetValueFromList.status;
 			userbyadmin.password = GetValueFromList.password;	
-			userbyadmin.confirmpassword= GetValueFromList.confirmpassword;
+			
 			userbyadmin.role = GetValueFromList.role;	
 							
 
 		}
 		public async Task UpdateUser()
 		{
-			if (userbyadmin.username == string.Empty || userbyadmin.email == string.Empty || userbyadmin.phonenumber == string.Empty || userbyadmin.password == string.Empty || userbyadmin.confirmpassword == string.Empty || userbyadmin.name == string.Empty || userbyadmin.role== string.Empty)
+			if (userbyadmin.username == string.Empty || userbyadmin.email == string.Empty  || userbyadmin.name == string.Empty || userbyadmin.role== string.Empty)
 			{
 				_toastService.ShowError("Vui lòng điền đầy đủ thông tin");
 				return;

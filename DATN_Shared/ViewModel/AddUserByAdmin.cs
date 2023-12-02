@@ -31,12 +31,7 @@ namespace DATN_Shared.ViewModel
 		[Required(ErrorMessage = "Tên người dùng không được để trống")]
 		public string name { get; set; } = string.Empty;
 		[Required(ErrorMessage = "Xác nhận mật khẩu không được để trống")]
-		public string confirmpassword { get; set; } = string.Empty;
-
-		
-		[Required(ErrorMessage = "Role không được để trống ")]
-		[MaxLength(30, ErrorMessage = "Role không được vượt quá 30 ký tự")]
-
+	
 		public string role { get; set; } = string.Empty;
 		public bool sex { get; set; }
 		public int status { get; set; }

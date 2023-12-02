@@ -145,16 +145,7 @@ namespace DATN_API.Service_IService.Services
 
                 };
             }
-            if (user.password != user.confirmpassword)
-            {
-                return new ResponseMess
-                {
-                    IsSuccess = false,
-                    StatusCode = 400,
-                    Message = "Xác nhận mật sai"
 
-                };
-            }
             User newUser = new User
             {
                 UserName = user.username,
