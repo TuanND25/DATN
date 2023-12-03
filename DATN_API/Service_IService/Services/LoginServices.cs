@@ -26,12 +26,21 @@ namespace DATN_API.Service_IService.Services
         public async Task<ResponseMess> LoginAsync(LoginUser userLogin)
         {
             var user = await _userManager.FindByNameAsync(userLogin.UserName);
+            if (user.Status==3)
+            {
+				return new ResponseMess
+				{
+					IsSuccess = false,
+					Message = "Bạn chưa xác thực OTP, hãy đăng ký lại",
+					StatusCode = 400
+				};
+			}
             if (user == null)
             {
                 return new ResponseMess
                 {
                     IsSuccess = false,
-                    Message = "username không tồn tại",
+                    Message = "Tên đăng nhập không tồn tại",
                     StatusCode = 400
                 };
             }
@@ -41,7 +50,7 @@ namespace DATN_API.Service_IService.Services
                 {
                     IsSuccess = false,
                     StatusCode = 400,
-                    Message = "mat khau sai"
+                    Message = "Tên đăng nhập hoặc mật khẩu sai"
                 };
             }
             else

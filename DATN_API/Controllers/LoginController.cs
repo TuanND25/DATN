@@ -21,12 +21,12 @@ namespace DATN_API.Controllers
             var result = await _loginServices.LoginAsync(user);
             if (result.IsSuccess)
             {
-                return Ok(result.Token);
+                return StatusCode(result.StatusCode,result.Message);
             }
             else
             {
-                return BadRequest(result);
-            }
+				return StatusCode(result.StatusCode, result.Message);
+			}
         }
     }
 }

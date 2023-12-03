@@ -29,6 +29,7 @@ namespace DATN_Client.Areas.Customer.Component
                 return ;
             }
             var response = await _httpClient.PostAsJsonAsync<LoginUser>("https://localhost:7141/api/user/login/", loginUser);
+            var result = response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
                 var token = await response.Content.ReadAsStringAsync();
@@ -70,7 +71,7 @@ namespace DATN_Client.Areas.Customer.Component
             }
             else
             {
-                _toastService.ShowError("Sai tên đăng nhập hoặc mật khẩu");
+                _toastService.ShowError(result.Result);
             }
         }
     }
