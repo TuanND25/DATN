@@ -1,4 +1,27 @@
-﻿<div class="row" style="height:100vh;">
+﻿@using Blazored.Toast.Configuration
+<BlazoredToasts Position="ToastPosition.BottomRight"
+				Timeout="5"
+				IconType="IconType.FontAwesome"
+				SuccessClass="success-toast-override"
+				SuccessIcon="fa-solid fa-check"
+				ErrorIcon="fa-solid fa-triangle-exclamation" />
+
+
+@if(isLoader)
+{
+    <div class="loader-overlay">
+    <div class="loader-container">
+      <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
+        <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+      </svg>
+    </div></div>
+}
+else
+{
+<div class="row" style="height:100vh;">
     <div class="col-9" style="height:100%;display:flex;flex-direction:column">
         <div style="width:100%">
            <div style="height:55vh;margin-bottom:20px;background-color:#fff">
@@ -26,7 +49,7 @@
                     cursor:pointer;
                    "
                            @onclick="()=>getBillId(x.Id)">
-                            <label>@x.BillCode</label>
+                            <label style="user-select: none">@x.BillCode</label>
 
                         </label>
                         <label class="closeBill" @onclick="()=>closeBill(x.Id)" style="display:flex;font-size:10px;cursor:pointer;text-align:center;margin-right:5px;margin-left:5px">X</label>
@@ -35,7 +58,7 @@
                 <i class="fa-solid fa-circle-plus" style="font-size:35px;cursor:pointer" @onclick="()=>addBill()"></i>
             </div>
             <div style="overflow-y: scroll;">
-                <table style="width:100%">
+                <table style="width:100%" class="table-sellStall">
                     <thead style="background-color:#f2f2f2;color:#000">
                     <th style="width:5%">STT</th>
                     <th style="width:30%">Sản phẩm</th>
@@ -49,16 +72,21 @@
                     <th>Thành tiền</th>
                     </thead>
                     <tbody>
-                        @foreach (var x in _lstBillItemShow)
+                       @if (_lstBillItemShow.Count != 0 )
+                            {
+                                 @foreach (var x in _lstBillItemShow)
                             {
                                 <tr>
                             <td style="text-align:center">1</td>
-                            <td style="overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 1;"><i class="fa-solid fa-trash-can" style="color: #ee4444;margin-right:5px;"></i>@x.ProductName</td>
+                            <td style="overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 1;">
+                                <i class="fa-solid fa-trash-can" style="color: #ee4444;margin-right:5px;cursor:pointer" @onclick="()=>RemoveBillItem(x.Id)">
+
+                                </i>@x.ProductName</td>
                             <td style="text-align:center">@x.SizeName</td>
                             <td style="text-align:center">@x.ColorName</td>
                             <td class="" style="padding:0px">
                                 <div class="div_tru">
-                                    <span class="fa-solid fa-minus"></span>
+                                    <span class="fa-solid fa-minus" @onclick="()=>MinusQuantityToBillItem(x.Id)"></span>
                                </div>
                             </td>
                             <td style="text-align:center;">
@@ -66,15 +94,16 @@
                             </td>
                             <td class="" style="padding:0px">
                                 <div class="div_tru">
-                                    <span class="fa-solid fa-plus"></span>
+                                    <span class="fa-solid fa-plus" @onclick="()=>AddQuantityToBillItem(x.Id)"></span>
                                 </div>
                             </td>
                             <td style="text-align:center">
-                                 <span>@x.AvailableQuantity</span>
+                                 <span>@(x.AvailableQuantity-x.Quantity)</span>
                             </td>
                             <td style="text-align:right;">@x.Price</td>
                             <td style="text-align:right;">@(x.Price*x.Quantity)</td>
                         </tr>
+                            }
                             }
                     </tbody>
                 </table>
@@ -371,8 +400,9 @@
             </div>
             <!-- Nội dung của popup -->
             <div class="container">
-                <div>
+                <div style="display:flex;align-items:center">
                     <input type="text" @oninput="SearchUser" class="input_SearchUser" placeholder="Nhập tên hoặc số điện thoại khách hàng"/>
+                    <i class="fa-solid fa-user-plus" style="cursor:pointer"></i>
                 </div>
                 @{
                     Guid id = Guid.Parse("3de28ff2-c838-481e-bd90-1925a4bf452a");
@@ -439,7 +469,6 @@
                         }
                    </div>
                </div>
-
                <div class="row" style="margin-top:20px">
                    <div class="col-3 ">Tồn kho</div>
                    <div class="col-8">
@@ -471,10 +500,10 @@
                         data-dismiss="modal">
                            Xác nhận
                        </button>
-                   </div>
-                  
+                   </div>                
                </div>
             </div>
         </div>
     </div>
 </div>
+}

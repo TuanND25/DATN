@@ -207,23 +207,23 @@
         color: #fff;
     }
 
-table, th, td {
+.table-sellStall table, th, td {
     border: 1px solid #D3D3D3;
     border-collapse: collapse;
 }
 
-table {
+.table-sellStall table {
     border-top: 2px solid;
 }
 
-th {
+.table-sellStall th {
     text-align: center;
     justify-content: center;
     align-items: center;
     padding: 8px 10px 8px 10px;
 }
 
-td {
+.table-sellStall td {
     padding: 8px 10px 8px 10px;
 }
 

@@ -123,7 +123,7 @@ namespace DATN_API.Controllers
             try
             {
                 BillItems billitem = await _iBillItemService.GetBillItemsById(billitem_vm.Id);
-                billitem.Id = Guid.NewGuid();
+                billitem.Id = billitem_vm.Id;
                 billitem.BillId = billitem_vm.BillId;
                 billitem.ProductItemsId = billitem_vm.ProductItemsId;
                 billitem.Quantity = billitem_vm.Quantity;

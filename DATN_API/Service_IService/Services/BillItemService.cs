@@ -29,7 +29,7 @@ namespace DATN_API.Service_IService.Services
 				//addressShip.ToAddress = a.ToAddress;
 				//addressShip.NumberPhone = a.NumberPhone;
 				//addressShip.Status = a.Status;
-				_context.BillItems.Update(a);
+				_context.BillItems.Remove(a);
 				await _context.SaveChangesAsync();
 				return a;
 			}
