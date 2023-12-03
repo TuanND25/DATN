@@ -26,8 +26,8 @@ namespace DATN_Client.Areas.Customer.Component
             _lstBillItems = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>($"https://localhost:7141/api/BillItem/getbilldetail/{_bill.Id}");
 
 
-            var c = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
-            //var c = Guid.Parse("F3C0CEA4-8F18-4990-908A-5DF1169F87A2");
+            //var c = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
+            var c = Guid.Parse("F3C0CEA4-8F18-4990-908A-5DF1169F87A2");
             var d = await _httpClient.GetFromJsonAsync<List<AddressShip_VM>>($"https://localhost:7141/api/AddressShip/get_address_by_UserID/{c}");
             _lstAddressGetById = d.OrderByDescending(x => x.Status).ToList();
 

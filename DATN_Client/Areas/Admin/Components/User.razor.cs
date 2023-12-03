@@ -19,6 +19,7 @@ namespace DATN_Client.Areas.Admin.Components
 
 		public User_VM user_VM = new User_VM();
 		public AddUserByAdmin userbyadmin = new AddUserByAdmin();
+		public AddUserByAdmin userbyadmin1 = new AddUserByAdmin();
 		protected override async Task OnInitializedAsync()
 		{
 			users = await httpClient.GetFromJsonAsync<List<AddUserByAdmin>>("https://localhost:7141/api/user/get-user");
@@ -77,27 +78,24 @@ namespace DATN_Client.Areas.Admin.Components
 		}
 		public async Task LoadFormUser(AddUserByAdmin GetValueFromList)
 		{
-			userbyadmin.id = GetValueFromList.id;
-			userbyadmin.name = GetValueFromList.name;
-			userbyadmin.username = GetValueFromList.username;
-			userbyadmin.phonenumber = GetValueFromList.phonenumber;
-			userbyadmin.email = GetValueFromList.email;
-			userbyadmin.sex = GetValueFromList.sex;
-			userbyadmin.status = GetValueFromList.status;
-			userbyadmin.password = GetValueFromList.password;	
-			
-			userbyadmin.role = GetValueFromList.role;	
-							
-
+			userbyadmin1.id = GetValueFromList.id;
+			userbyadmin1.name = GetValueFromList.name;
+			userbyadmin1.username = GetValueFromList.username;
+			userbyadmin1.phonenumber = GetValueFromList.phonenumber;
+			userbyadmin1.email = GetValueFromList.email;
+			userbyadmin1.sex = GetValueFromList.sex;
+			userbyadmin1.status = GetValueFromList.status;
+			userbyadmin1.password = GetValueFromList.password;	
+			userbyadmin1.role = GetValueFromList.role;	
 		}
 		public async Task UpdateUser()
 		{
-			if (userbyadmin.username == string.Empty || userbyadmin.email == string.Empty  || userbyadmin.name == string.Empty || userbyadmin.role== string.Empty)
+			if (userbyadmin1.username == string.Empty || userbyadmin1.email == string.Empty  || userbyadmin1.name == string.Empty || userbyadmin1.role== string.Empty)
 			{
 				_toastService.ShowError("Vui lòng điền đầy đủ thông tin");
 				return;
 			}
-			var response = await httpClient.PutAsJsonAsync<AddUserByAdmin>("https://localhost:7141/api/user/update-user", userbyadmin);
+			var response = await httpClient.PutAsJsonAsync<AddUserByAdmin>("https://localhost:7141/api/user/update-user", userbyadmin1);
 			var result = response.Content.ReadAsStringAsync();
 			if (response.IsSuccessStatusCode)
 			{
