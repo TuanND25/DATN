@@ -125,7 +125,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Thêm người dùng</h5>
+                <h5 class="modal-title">Cập nhật người dùng</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -221,7 +221,7 @@
 
 <div class="card">
     <div class="card-body">
-        <div class="row" style="margin-bottom:50px;">
+        <div class="row" style="margin-bottom:30px;">
             <div class="col-md-6">
                 <EditForm Model="user_VM">
                     <div class="row">
@@ -259,8 +259,6 @@
                         <th style="text-align:center">Chỉnh sửa trạng thái</th>
                         <th style="text-align:center">Địa chỉ</th>
                         <th style="text-align:center">Cập nhật</th>
-
-
                     </tr>
                 </thead>
                 <tbody>
@@ -272,7 +270,11 @@
                             <td style="vertical-align:middle;text-align:center">@x.phonenumber</td>
                             <td style="vertical-align:middle;text-align:center">@x.email</td>
                             <td style="vertical-align:middle;text-align:center">@(x.sex == true ? "Nam" : " Nữ")</td>
-                            <td style="vertical-align:middle;text-align:center">@(x.status == 1 ? "Hoạt động" : x.status == 0 ? "Ngừng hoạt động" : "Chưa xác thực")</td>
+                            <td style="vertical-align:middle;text-align:center">
+                                 <span class="@(x.status==1?"badge bg-success":x.status==0?"badge bg-danger":"badge bg-warning")">
+                                       @(x.status == 1 ? "Hoạt động" :x.status==0?"Ngừng hoạt động":"Chưa xác thực")
+                                 </span>
+                                </td>
                             <td style="vertical-align:middle;text-align:center">@x.role</td>
                             <td style="vertical-align:middle;text-align:center">
                                 <div class="modal fade" id="Status-@x.id">
