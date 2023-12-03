@@ -31,6 +31,21 @@ namespace DATN_API.Controllers
             }
 
         }
+        [HttpGet("get_alll_bill_item_show")]
+        public async Task<ActionResult<BillDetailShow>> GetBillItemsShow()
+        {
+            try
+            {
+                var lst = await _iBillItemService.GetBillItemsShow();
+                return Ok(lst);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Liên hệ Thai để sửa 0349198240");
+
+            }
+
+        }
 
         // GET api/<AddressShipController>/5
         [HttpGet("getbilldetail/{BillId}")]

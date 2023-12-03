@@ -1,14 +1,25 @@
-﻿<h3>Color</h3>
+﻿<div class="card">
+    <div class="card-body">
+        <div class="pagetitle">
+            <h1>Quản lý màu sắc</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item">Quản lý thuộc tính</li>
+                    <li class="breadcrumb-item active">Màu sắc</li>
+                </ol>
+            </nav>
+        </div><!-- End Breadcrumbs with a page title -->
+    </div>
+</div>
 
-@code {
 
-}
 <div class="row">
-    <div class="col-lg-8">
+    <div class="col-lg-6">
 
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Quản lý màu</h5>
+
                 <EditForm Model="color_VM">
                     <div class="row mb-3">
                         <label for="inputText" class="col-sm-4 col-form-label">Màu sắc: </label>
@@ -78,14 +89,15 @@
                 </EditForm>
             </div>
         </div>
+    </div>
 
-
+    <div class="col-md-6">
         @{
             int count = 1;
         }
         <div class="card">
             <div class="card-body">
-                <h4 style="margin-top:20px">List Color</h4>
+                <h4 style="margin-top:20px">Danh sách màu sắc</h4>
                 <div class="pagetitle">
                 </div>
                 @if (color == null)
