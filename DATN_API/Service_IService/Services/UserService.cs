@@ -25,19 +25,29 @@ namespace DATN_API.Service_IService.Services
 			return await _userManager.Users.Where(u => u.UserName.Contains(username)).ToListAsync();
 		}
 
-		public async Task<User> UpdateStatusUser(User_VM user)
+		public async Task<ResponseMess> UpdateStatusUser(User_VM user)
 		{
 			var userupdate = _context.Users.Where(p => p.Id == user.Id).FirstOrDefault();
 			if (userupdate == null)
 			{
-				return null;
+				return new ResponseMess {
+					IsSuccess = false,
+					Message = "Không có người dùng nào để cập nhật thông tin",
+					StatusCode = 400,
+					Token = null
+				};
 			}
 			else
 			{
 				userupdate.Status = user.Status;
 				_context.Users.Update(userupdate);
 				await _context.SaveChangesAsync();
-				return userupdate;
+				return new ResponseMess {
+					IsSuccess = true,
+					Message = "Thay đổi trạng thái thành công",
+					StatusCode = 200,
+					Token = null
+				};
 			}
 		}
 
@@ -53,7 +63,7 @@ namespace DATN_API.Service_IService.Services
 					return new ResponseMess
 					{
 						IsSuccess = true,
-						Message = "Change Password Success",
+						Message = "Thay đổi mật khẩu thành công",
 						StatusCode = 200,
 						Token = null,
 
@@ -64,7 +74,7 @@ namespace DATN_API.Service_IService.Services
 					return new ResponseMess
 					{
 						IsSuccess = true,
-						Message = "Change Password Fail",
+						Message = "Thay đổi mật khẩu thành công",
 						StatusCode = 400,
 						Token = null,
 
@@ -76,7 +86,7 @@ namespace DATN_API.Service_IService.Services
 				return new ResponseMess
 				{
 					IsSuccess = true,
-					Message = "Khong duoc de trong",
+					Message = "Không được để trống",
 					StatusCode = 400,
 					Token = null,
 
@@ -84,23 +94,29 @@ namespace DATN_API.Service_IService.Services
 			}
 		}
 
-		public async Task<ResponseMess> UpdateUser(UpdateUser_VM updateUser)
+		public async Task<ResponseMess> UpdateUser(AddUserByAdmin updateUser)
 		{
-			var user = await _context.Users.FindAsync(updateUser.Id);
+			var user = await _context.Users.FindAsync(updateUser.id);
 			if (user != null)
 			{
-				user.Name = updateUser.Name;
-				user.Email = updateUser.Email;
-				user.PhoneNumber = updateUser.PhoneNumber;
-				user.Sex = updateUser.Sex;
-			
-				_context.Update(user);
+				user.Name = updateUser.name;
+				user.Email = updateUser.email;
+				user.PhoneNumber = updateUser.phonenumber;
+				user.Sex = updateUser.sex;
+				user.Status = updateUser.status;
+				
+				
+				var code =await _userManager.GeneratePasswordResetTokenAsync(user);
+				await _userManager.ResetPasswordAsync(user,code,updateUser.password);
+				
+				
+				_context.Users.Update(user);
 				await _context.SaveChangesAsync();
 				return new ResponseMess
 				{
 					IsSuccess = true,
 					StatusCode = 200,
-					Message = "update user success",
+					Message = "Cập nhận thông tin người dùng thành công",
 					Token = null
 				};
 			}
@@ -110,7 +126,7 @@ namespace DATN_API.Service_IService.Services
 				{
 					IsSuccess = false,
 					StatusCode = 400,
-					Message = "update user fail",
+					Message = "Cập nhập thông tin người dùng thất bại",
 					Token = null
 				};
 			}
@@ -119,7 +135,7 @@ namespace DATN_API.Service_IService.Services
 
         public async Task<ResponseMess> AddEmployeeOrAdmin(AddUserByAdmin user)
         {
-            if (await _userManager.FindByEmailAsync(user.Email) != null)
+            if (await _userManager.FindByEmailAsync(user.email) != null)
             {
                 return new ResponseMess
                 {
@@ -129,39 +145,30 @@ namespace DATN_API.Service_IService.Services
 
                 };
             }
-            else if (await _userManager.FindByNameAsync(user.UserName) != null)
+            else if (await _userManager.FindByNameAsync(user.username) != null)
             {
                 return new ResponseMess
                 {
                     IsSuccess = false,
                     StatusCode = 400,
-                    Message = "Username đã tồn tại"
+                    Message = "Tên đăng nhập đã tồn tại"
 
                 };
             }
-            if (user.Password != user.ConfirmPassword)
-            {
-                return new ResponseMess
-                {
-                    IsSuccess = false,
-                    StatusCode = 400,
-                    Message = "Xác nhận mật sai"
 
-                };
-            }
             User newUser = new User
             {
-                UserName = user.UserName,
-                Email = user.Email,
-                Name = user.Name,
-				PhoneNumber= user.PhoneNumber,
-				Sex= user.Sex,
+                UserName = user.username,
+                Email = user.email,
+                Name = user.name,
+				PhoneNumber= user.phonenumber,
+				Sex= user.	sex,
 				Status =1 
 				
             };
-            if (await _roleManager.RoleExistsAsync(user.Role))
+            if (await _roleManager.RoleExistsAsync(user.role))
             {
-                var result = await _userManager.CreateAsync(newUser, user.Password);
+                var result = await _userManager.CreateAsync(newUser, user.password);
 
                 if (!result.Succeeded)
                 {
@@ -174,12 +181,12 @@ namespace DATN_API.Service_IService.Services
                     };
 
                 }
-                await _userManager.AddToRoleAsync(newUser,user.Role);
+                await _userManager.AddToRoleAsync(newUser,user.role);
                 return new ResponseMess
                 {
                     IsSuccess = true,
                     StatusCode = 201,
-                    Message = "Register successfully!"
+                    Message = "Thêm người dùng thành công"
                 };
             }
             else
@@ -199,6 +206,7 @@ namespace DATN_API.Service_IService.Services
             var a= await _context.Users.FindAsync(Id);
 			return a;
         }
+		
 
 		
 	}

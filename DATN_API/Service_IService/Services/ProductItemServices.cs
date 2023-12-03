@@ -68,6 +68,7 @@ namespace DATN_API.Service_IService.Services
                             Id = prI.Id,
                             ProductId = prI.ProductId,
                             Name = pr.Name,
+                            ProductCode=pr.ProductCode,
                             ColorId = prI.ColorId,
                             ColorName = c.Name,
                             SizeId = prI.SizeId,

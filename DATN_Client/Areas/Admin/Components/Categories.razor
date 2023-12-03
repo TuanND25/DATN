@@ -1,7 +1,21 @@
-﻿
-<div class="row">
-    <div class="col-lg-8">
+﻿<div class="card">
+    <div class="card-body">
+        <div class="pagetitle">
+            <h1>Quản lý thể loại</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item">Quản lý thuộc tính</li>
+                    <li class="breadcrumb-item active">Thể loại</li>
+                </ol>
+            </nav>
+        </div><!-- End Breadcrumbs with a page title -->
+    </div>
+</div>
 
+
+<div class="row">
+    <div class="col-lg-6">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Quản lý Thể Loại</h5>
@@ -74,47 +88,52 @@
                 </EditForm>
             </div>
         </div>
+    </div>
 
-
-        @{
-            int count = 1;
-        }
+    <div class="col-lg-6">
         <div class="card">
             <div class="card-body">
-                <h4 style="margin-top:20px">List Thể Loại</h4>
-                <div class="pagetitle">
-                </div>
-                @if (cate == null)
-                {
-                    <p><em>Loading...</em></p>
+                @{
+                    int count = 1;
                 }
-                else
-                {
-                    <div style="height: 500px; overflow-y: auto;">
-                        <table class="table">
-                            <thead>
-                                <tr style="position: sticky;top:0">
-                                    <th scope="col">#</th>
-                                    <th scope="col">Màu</th>
-                                    <th scope="col">Trạng Thái</th>
-                                    <th scope="col">Chức năng</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var x in cate)
-                                {
-                                    <tr>
-                                        <td>@(count++)</td>
-                                        <td>@x.Name</td>
-                                        <td>@(x.Status == 1 ? "Hoạt động" : "Ngừng hoạt động")</td>
-                                        <td><button type="button" class="btn btn-outline-success" style="float:center" @onclick="()=>LoadForm(x)">Apply</button> </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+                <div class="card">
+                    <div class="card-body">
+                        <h4 style="margin-top:20px">List Thể Loại</h4>
+                        <div class="pagetitle">
+                        </div>
+                        @if (cate == null)
+                        {
+                            <p><em>Loading...</em></p>
+                        }
+                        else
+                        {
+                            <div style="height: 500px; overflow-y: auto;">
+                                <table class="table">
+                                    <thead>
+                                        <tr style="position: sticky;top:0">
+                                            <th scope="col">#</th>
+                                            <th scope="col">Màu</th>
+                                            <th scope="col">Trạng Thái</th>
+                                            <th scope="col">Chức năng</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var x in cate)
+                                        {
+                                            <tr>
+                                                <td>@(count++)</td>
+                                                <td>@x.Name</td>
+                                                <td>@(x.Status == 1 ? "Hoạt động" : "Ngừng hoạt động")</td>
+                                                <td><button type="button" class="btn btn-outline-success" style="float:center" @onclick="()=>LoadForm(x)">Apply</button> </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
 
+                            </div>
+                        }
                     </div>
-                }
+                </div>
             </div>
         </div>
     </div>

@@ -11,6 +11,7 @@ namespace DATN_Shared.ViewModel
 		public Guid Id { get; set; } // billitem
 		public Guid BillID { get; set; }
 		public Guid ProductItemId { get; set; }
+		public string ProductCode { get; set; }
 		public string Name { get; set; }
 		public Guid? ColorId { get; set; }
 		public string ColorName { get; set; }
@@ -22,6 +23,7 @@ namespace DATN_Shared.ViewModel
 		public string PaymentMethod { get; set; }
 		public int Quantity { get; set; }
 		public int? CostPrice { get; set; }
+		public DateTime? CreateDate { get; set; }
 		public int Status { get; set; }
 	}
 }

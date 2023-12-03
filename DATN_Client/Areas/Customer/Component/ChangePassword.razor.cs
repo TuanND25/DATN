@@ -40,6 +40,13 @@ namespace DATN_Client.Areas.Customer.Component
             //changePassword.UserId = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
             //if(changePassword.OldPassword!=null || changePassword.NewPassword!=null || changePassword.ConfirmNewPassword != null)
             //{
+            var a = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
+
+			if (a ==null || a== string.Empty)
+            {
+                _toastService.ShowError("Bạn cần đăng nhập để thực hiện chức năng này");
+                return;
+            }
             changePassword.UserId = User_VM.Id;
             var response = await _client.PutAsJsonAsync<ChangePassword_VM>("https://localhost:7141/api/user/change-password/", changePassword);
             if (response.IsSuccessStatusCode)
@@ -48,7 +55,7 @@ namespace DATN_Client.Areas.Customer.Component
             }
             else
             {
-                _toastService.ShowSuccess("Đổi mật khẩu thất bại");
+                _toastService.ShowError("Đổi mật khẩu thất bại");
             }
         }
         public void ShowPass()
