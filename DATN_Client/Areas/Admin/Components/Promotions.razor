@@ -110,7 +110,11 @@
                             <td>@a.StartDate</td>
                             <td>@a.EndDate</td>
                             <td>@a.Description</td>
-                            <td>@(a.Status==1?"Hoạt động":"Ngừng hoạt động")</td>
+                            <td>
+                                <span class="@(a.Status==1?"badge bg-success":"badge bg-danger")">
+                                    @(a.Status == 1 ? " Đang Hoạt động" : "Ngừng hoạt động")
+                                </span>
+                            </td>
                             <td>
                                 <div class=row>
                                     <button type="button" class="btn btn-outline-warning col-md-4" style="margin-right:5px;display: flex;justify-content: center;align-items: center;" @onclick="()=>NavigationUpdatePromotion(a)">
