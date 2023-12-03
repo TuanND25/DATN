@@ -33,9 +33,45 @@
 						<input type="submit" value="Đăng ký" @onclick="SignUPOTP">
 					</div>
 
-					<button type="button" class="btn btn-success" style="margin-top: 10px;margin-left:40%" @onclick="SignUpUser" >Gửi lại OTP</button>
+					<button type="button" class="kien @timeline" style="margin-top: 10px;margin-left:41%" @onclick="SignUpUser">Gửi lại OTP</button>
+					<style>
+						.kien {
+							
+							align-items: flex-start;
+							background-color: #1b1b1b;
+							border-color: #1b1b1b;
+							border-style: solid;
+							border-width: 1px;
+							color: #ffffff;
+							font-family: 'Times New Roman';
+							font-weight: 700;
+							grid-area: auto;
+							letter-spacing: 0.16px;
+							line-height: 25px;
+							padding: 8px 4px;
+							text-align: center;
+						
+						}
+
+						.kien.timelinecss {
+								pointer-events: none;
+								align-items: flex-start;
+								background-color: #999999;
+								border-color: #1b1b1b;
+								border-style: solid;
+								border-width: 1px;
+								color: #ffffff;
+								font-family: 'Times New Roman';
+								font-weight: 700;
+								grid-area: auto;
+								letter-spacing: 0.16px;
+								line-height: 25px;
+								padding: 8px 4px;
+								text-align: center;
+						}
+					</style>
 				</EditForm>
-					
+				<h4 style="margin-left:43%">@String.Format("{0:D2}:{1:D2}", countdownMinutes, countdownSeconds)</h4>
 			</div>
 		</div>
 	</div>
@@ -100,7 +136,7 @@ else
 					<div class="input-field button">
 						<input type="submit" value="Đăng ký" @onclick="SignUpUser">
 					</div>
-					
+
 				</EditForm>
 				<div style=" margin-top:10px">
 					<a href="https://localhost:7075/Customer/Login/Login" style="margin-left:27%"> Đã có tài khoản - Đăng nhập</a>

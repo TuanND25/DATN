@@ -63,7 +63,7 @@ namespace DATN_API.Controllers
 
                 if (user.OTP == request.OTP)
                 {
-                    if (DateTime.Now.Minute - user.TokenExpires.Minute < 5)
+                    if (DateTime.Now.Minute - user.TokenExpires.Minute < 2)
                     {
 						request.PhoneNumber = "+84" + request.PhoneNumber.Substring(1);
 						var passwordRandom = GenerateRandomAlphanumericString();
@@ -76,19 +76,19 @@ namespace DATN_API.Controllers
                     }
                     else
                     {
-						return StatusCode(400, "OTP có hạn là 5 phút,OTP đã hết hạn hãy ấn vào gửi lại");
+						return StatusCode(400, "OTP có hạn là 2 phút,OTP đã hết hạn hãy ấn vào gửi lại");
 					}
 					
                 }
                 else
                 {
-                    return BadRequest("OTP không chính xác");
+					return StatusCode(400, "OTP không chính xác");
                 }
             }
             else
             {
-                return BadRequest();
-            }
+				return StatusCode(400, "Không tìm thấy tài khoản trungg với thông tin đã nhập");
+			}
 		}
 		private async Task<MessageResource> SendSmsAsync(string toPhoneNumber, string message)
         {

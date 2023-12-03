@@ -179,7 +179,7 @@ namespace DATN_API.Service_IService.Services
             {   
                 if (check.OTP == user.OTP)
                 {
-                    if (DateTime.Now.Minute - check.TokenExpires.Minute < 5)
+                    if (DateTime.Now.Minute - check.TokenExpires.Minute < 2)
                     {
 						check.Status = 1;
 
@@ -200,7 +200,7 @@ namespace DATN_API.Service_IService.Services
 						{
 							IsSuccess = false,
 							StatusCode = 400,
-							Message = "OTP có hạn là 5 phút,OTP đã hết hạn hãy ấn vào gửi lại",
+							Message = "OTP có hạn là 2 phút,OTP đã hết hạn hãy ấn vào gửi lại",
 
 						};
 					}
@@ -211,7 +211,7 @@ namespace DATN_API.Service_IService.Services
 				{
 					IsSuccess = true,
 					StatusCode = 400,
-					Message = "Xác thực thất bại",
+					Message = "Xác thực thất bại1",
 
 				};
 
@@ -222,7 +222,7 @@ namespace DATN_API.Service_IService.Services
 				{
 					IsSuccess = false,
 					StatusCode = 400,
-					Message = "Xác thực thất bại",
+					Message = "Xác thực thất bại2",
 					
 				};
 

@@ -15,10 +15,10 @@ namespace DATN_Client.Areas.Customer.Component
         HttpClient _httpClient = new HttpClient();
         SignUpUser signUp = new SignUpUser();
         public string check { get; set; } = string.Empty;
-		private int countdownMinutes = 5;
+		private int countdownMinutes = 2;
 		private int countdownSeconds = 0;
-		private bool isCountingDown = false;
 		private System.Timers.Timer timer;
+		public string timeline { get; set; }
 		public async Task SignUpUser()
         {
                
@@ -28,6 +28,7 @@ namespace DATN_Client.Areas.Customer.Component
                 _toastService.ShowError("Vui lòng điền đầy đủ thông tin");
                 return;
             }
+			ToggleCountdown();
             Regex phoneNumberRegex = new Regex(@"^0\d{9}$");
             if (!phoneNumberRegex.IsMatch(signUp.PhoneNumber))
             {
@@ -77,8 +78,69 @@ namespace DATN_Client.Areas.Customer.Component
                 return;
 			}
         }
+		private string GetButtonText()
+		{
+			return "Reset and Start 2-minute Countdown";
+		}
 
-		
+		private void ToggleCountdown()
+		{
+			ResetCountdown();
+			StartCountdown();
+		}
+
+		private void StartCountdown()
+		{
+			InitializeTimer();
+		}
+
+		private void ResetCountdown()
+		{
+			countdownMinutes = 2;
+			countdownSeconds = 0;
+
+			if (timer != null)
+			{
+				timer.Stop();
+				timer.Dispose();
+			}
+
+			InvokeAsync(StateHasChanged);
+		}
+
+		private void InitializeTimer()
+		{
+			timer = new System.Timers.Timer(1000);
+			timer.Elapsed += TimerElapsed;
+			timer.AutoReset = true;
+			timer.Enabled = true;
+		}
+
+		private void TimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
+		{
+			if (countdownMinutes == 0 && countdownSeconds == 0)
+			{
+				timer.Stop();
+				timeline = string.Empty;
+				// Thực hiện hành động khi đồng hồ đếm ngược đạt đến 0.
+			}
+			else
+			{
+				if (countdownSeconds == 0)
+				{
+					countdownSeconds = 59;
+					countdownMinutes--;
+				}
+				else
+				{
+					countdownSeconds--;
+				}
+				timeline = "timelinecss";
+			}
+
+			InvokeAsync(StateHasChanged);
+		}
+
 	}
 }
 
