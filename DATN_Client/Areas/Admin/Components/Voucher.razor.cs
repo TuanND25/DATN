@@ -7,6 +7,7 @@ namespace DATN_Client.Areas.Admin.Components
     {
         HttpClient httpClient = new HttpClient();
         public Voucher_VM voucher_VM = new Voucher_VM();
+        public Voucher_VM voucher_VM1 = new Voucher_VM();
         [Inject] NavigationManager navigationManager { get; set; }
 
         List<Voucher_VM> vouchers = new List<Voucher_VM>();
@@ -62,16 +63,16 @@ namespace DATN_Client.Areas.Admin.Components
 
         public async Task LoadFormVoucher(Voucher_VM GetValueFromList)
         {
-            voucher_VM.Id = GetValueFromList.Id;
-            voucher_VM.Name = GetValueFromList.Name;
-            voucher_VM.Code = GetValueFromList.Code;
-            voucher_VM.Percent = GetValueFromList.Percent;
-            voucher_VM.Quantity = GetValueFromList.Quantity;
-            voucher_VM.Discount_Conditions = GetValueFromList.Discount_Conditions;
-            voucher_VM.Maximum_Reduction = GetValueFromList.Maximum_Reduction;
-            voucher_VM.StartDate = GetValueFromList.StartDate;
-            voucher_VM.EndDate = GetValueFromList.EndDate;
-            voucher_VM.Status = GetValueFromList.Status;
+            voucher_VM1.Id = GetValueFromList.Id;
+            voucher_VM1.Name = GetValueFromList.Name;
+            voucher_VM1.Code = GetValueFromList.Code;
+            voucher_VM1.Percent = GetValueFromList.Percent;
+            voucher_VM1.Quantity = GetValueFromList.Quantity;
+            voucher_VM1.Discount_Conditions = GetValueFromList.Discount_Conditions;
+            voucher_VM1.Maximum_Reduction = GetValueFromList.Maximum_Reduction;
+            voucher_VM1.StartDate = GetValueFromList.StartDate;
+            voucher_VM1.EndDate = GetValueFromList.EndDate;
+            voucher_VM1.Status = GetValueFromList.Status;
 
         }
     }

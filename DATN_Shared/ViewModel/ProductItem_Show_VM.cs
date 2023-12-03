@@ -10,6 +10,7 @@ namespace DATN_Shared.ViewModel
 	{
 		public Guid Id { get; set; }
 		public Guid ProductId { get; set; }
+		public string ProductCode { get; set; }
 		public string Name { get; set; }
 		public Guid? ColorId { get; set; }
 		public string ColorName { get; set; }

@@ -6,12 +6,12 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Dashboard - NiceAdmin Bootstrap Template</title>
+    <title>Admin</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="~/img/favicon.png" rel="icon" />
+    <link href="~/img/logo.png" rel="icon" />
     <link href="~/img/apple-touch-icon.png" rel="apple-touch-icon" />
 
     <!-- Google Fonts -->
@@ -19,8 +19,8 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
 
     <!-- Vendor CSS Files -->
-    <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="~/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    @*<link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">*@
     <link href="~/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
     <link href="~/vendor/quill/quill.snow.css" rel="stylesheet">
     <link href="~/css/SellStall.css" rel="stylesheet">
@@ -32,11 +32,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
     <link rel="stylesheet" href="~/DATN_Client.styles.css" asp-append-version="true" />
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="_content/Blazor.Bootstrap/blazor.bootstrap.css" rel="stylesheet" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" />
+
+
+
+    <link rel="stylesheet" data-purpose="Layout StyleSheet" title="Web Awesome" href="/css/app-wa-2e45578ecf3b28ce6383d10b8c0bf4d0.css?vsn=d" >
+      <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css">
+      <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-thin.css" >
+      <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-solid.css">
+      <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-regular.css">
+      <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-light.css">
+
 </head>
 
 <body>
@@ -47,17 +60,17 @@
         <div class="d-flex align-items-center justify-content-between">
             <a href="index.html" class="logo d-flex align-items-center">
                 <img src="~/img/logo.png" alt="">
-                <span class="d-none d-lg-block">NiceAdmin</span>
+                <span class="d-none d-lg-block">Bugs Hunter</span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->
 
-        <div class="search-bar">
+       @* <div class="search-bar">
             <form class="search-form d-flex align-items-center" method="POST" action="#">
                 <input type="text" name="query" placeholder="Search" title="Enter search keyword">
                 <button type="submit" title="Search"><i class="bi bi-search"></i></button>
             </form>
-        </div><!-- End Search Bar -->
+        </div><!-- End Search Bar -->*@
 
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
@@ -283,16 +296,22 @@
 
 
             <li class="nav-item">
-                <a class="nav-link collapsed" asp-area="Admin" asp-controller="Test" asp-action="Show">
-                    <i class="bi bi-question-circle"></i>
-                    <span>Quản lý Bán hàng</span>
+                <a class="nav-link collapsed" asp-area="Admin" asp-controller="SellStalls" asp-action="Index">
+                    <i class="fa-light fa-store"></i>   
+                    <span>Bán hàng tại quầy</span>
                 </a>
             </li><!-- End Quản lý Bán hàng Nav -->
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" asp-area="Admin" asp-controller="BillManagement" asp-action="Index">
+                    <i class="fa-light fa-ballot-check"></i>
+                    <span>Quản lý Hoá đơn</span>
+                </a>
+            </li><!-- End Quản lý Hoá đơn Nav -->
 
             <li class="nav-item">
                 <a class="nav-link collapsed" asp-area="Admin" asp-controller="ProductItem" asp-action="Index">
-                    <i class="bi bi-question-circle"></i>
+                    <i class="fa-light fa-books"></i>
                     <span>Quản lý Sản phẩm</span>
                 </a>
             </li><!-- End Quản lý sản phẩm Nav -->
@@ -302,7 +321,7 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-gem"></i><span>Quản lý thuộc tính</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <i class="fa-light fa-puzzle"></i></i><span>Quản lý thuộc tính</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
@@ -333,7 +352,7 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" asp-area="Admin" asp-controller="Promotion" asp-action="Index">
-                    <i class="bi bi-question-circle"></i>
+                    <i class="fa-light fa-badge-percent"></i>
                     <span>Quản lý khuyến mại</span>
                 </a>
             </li><!-- End Quản lý khuyến mãi -->
@@ -343,210 +362,37 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" asp-area="Admin" asp-controller="Voucher" asp-action="Index">
-                    <i class="bi bi-question-circle"></i>
+                    <i class="fa-light fa-tickets-perforated"></i>
                     <span>Quản lý Voucher</span>
                 </a>
             </li><!-- End Quản lý Voucher Nav -->
 
 
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" asp-area="Admin" asp-controller="BillManagement" asp-action="Index">
-                    <i class="bi bi-question-circle"></i>
-                    <span>Quản lý Hoá đơn</span>
-                </a>
-            </li><!-- End Quản lý Hoá đơn Nav -->
+            
 
 
             <li class="nav-item">
                 <a class="nav-link collapsed" asp-area="Admin" asp-controller="User" asp-action="Index">
-                    <i class="bi bi-question-circle"></i>
+                    <i class="fa-light fa-users"></i>
                     <span>Quản lý Người dùng</span>
                 </a>
             </li><!-- End Quản lý Người dùng Nav -->
-              <li class="nav-item">
-                <a class="nav-link collapsed" asp-area="Admin" asp-controller="SellStalls" asp-action="Index">
-                   <i class="bi bi-question-circle"></i>
-                    <span>Bán hàng tại quầy</span>
-                </a>
-            </li>
+            
 
             <li class="nav-item">
                 <a class="nav-link collapsed" asp-area="Admin" asp-controller="Formula" asp-action="Index">
-                    <i class="bi bi-question-circle"></i>
+                    <i class="fa-sharp fa-light fa-arrow-right-arrow-left"></i>
                     <span>Quản lý công thức tính điểm</span>
                 </a>
             </li> <!--Quản lý công thức tính điểm-->
-           
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-menu-button-wide"></i><span>Components</span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a href="components-alerts.html">
-                            <i class="bi bi-circle"></i><span>Alerts</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-accordion.html">
-                            <i class="bi bi-circle"></i><span>Accordion</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-badges.html">
-                            <i class="bi bi-circle"></i><span>Badges</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-breadcrumbs.html">
-                            <i class="bi bi-circle"></i><span>Breadcrumbs</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-buttons.html">
-                            <i class="bi bi-circle"></i><span>Buttons</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-cards.html">
-                            <i class="bi bi-circle"></i><span>Cards</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-carousel.html">
-                            <i class="bi bi-circle"></i><span>Carousel</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-list-group.html">
-                            <i class="bi bi-circle"></i><span>List group</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-modal.html">
-                            <i class="bi bi-circle"></i><span>Modal</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-tabs.html">
-                            <i class="bi bi-circle"></i><span>Tabs</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-pagination.html">
-                            <i class="bi bi-circle"></i><span>Pagination</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-progress.html">
-                            <i class="bi bi-circle"></i><span>Progress</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-spinners.html">
-                            <i class="bi bi-circle"></i><span>Spinners</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-tooltips.html">
-                            <i class="bi bi-circle"></i><span>Tooltips</span>
-                        </a>
-                    </li>
-                </ul>
-            </li><!-- End Components Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-journal-text"></i><span>Forms</span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a href="forms-elements.html">
-                            <i class="bi bi-circle"></i><span>Form Elements</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="forms-layouts.html">
-                            <i class="bi bi-circle"></i><span>Form Layouts</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="forms-editors.html">
-                            <i class="bi bi-circle"></i><span>Form Editors</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="forms-validation.html">
-                            <i class="bi bi-circle"></i><span>Form Validation</span>
-                        </a>
-                    </li>
-                </ul>
-            </li><!-- End Forms Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a href="tables-general.html">
-                            <i class="bi bi-circle"></i><span>General Tables</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="tables-data.html">
-                            <i class="bi bi-circle"></i><span>Data Tables</span>
-                        </a>
-                    </li>
-                </ul>
-            </li><!-- End Tables Nav -->
+            
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-bar-chart"></i><span>Charts</span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a href="charts-chartjs.html">
-                            <i class="bi bi-circle"></i><span>Chart.js</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="charts-apexcharts.html">
-                            <i class="bi bi-circle"></i><span>ApexCharts</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="charts-echarts.html">
-                            <i class="bi bi-circle"></i><span>ECharts</span>
-                        </a>
-                    </li>
-                </ul>
-            </li><!-- End Charts Nav -->
+         
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-gem"></i><span>Icons</span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a href="icons-bootstrap.html">
-                            <i class="bi bi-circle"></i><span>Bootstrap Icons</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="icons-remix.html">
-                            <i class="bi bi-circle"></i><span>Remix Icons</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="icons-boxicons.html">
-                            <i class="bi bi-circle"></i><span>Boxicons</span>
-                        </a>
-                    </li>
-                </ul>
-            </li><!-- End Icons Nav -->
+
 
             <li class="nav-heading">Pages</li>
 
@@ -571,12 +417,6 @@
                 </a>
             </li><!-- End Contact Page Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="pages-register.html">
-                    <i class="bi bi-card-list"></i>
-                    <span>Register</span>
-                </a>
-            </li><!-- End Register Page Nav -->
 
             <li class="nav-item">
                 <a class="nav-link collapsed" asp-area="Admin" asp-controller="Login" asp-action="Index">
@@ -585,17 +425,12 @@
                 </a>
             </li><!-- End Login Page Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="pages-error-404.html">
-                    <i class="bi bi-dash-circle"></i>
-                    <span>Error 404</span>
-                </a>
-            </li><!-- End Error 404 Page Nav -->
+
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="pages-blank.html">
                     <i class="bi bi-file-earmark"></i>
-                    <span>Blank</span>
+                    <span>LogOut</span>
                 </a>
             </li><!-- End Blank Page Nav -->
 
@@ -613,7 +448,7 @@
 
     <!-- Vendor JS Files -->
     <script src="~/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    @*<script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>*@
     <script src="~/vendor/chart.js/chart.umd.js"></script>
     <script src="~/vendor/echarts/echarts.min.js"></script>
     <script src="~/vendor/quill/quill.min.js"></script>
@@ -636,6 +471,13 @@
             document.documentElement.scrollTop = 0;
         }
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <!-- Add chart.js reference if chart components are used in your application. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.1/chart.umd.js" integrity="sha512-gQhCDsnnnUfaRzD8k1L5llCCV6O9HN09zClIzzeJ8OJ9MpGmIlCxm+pdCkqTwqJ4JcjbojFr79rl2F1mzcoLMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Add chartjs-plugin-datalabels.min.js reference if chart components with data label feature is used in your application. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="_content/Blazor.Bootstrap/blazor.bootstrap.js"></script>
 </body>
 
 </html>

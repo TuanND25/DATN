@@ -1,7 +1,21 @@
-﻿
-<div class="row">
-    <div class="col-lg-8">
+﻿<div class="card">
+    <div class="card-body">
+        <div class="pagetitle">
+            <h1>Quản lý màu sắc</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item">Quản lý thuộc tính</li>
+                    <li class="breadcrumb-item active">Màu sắc</li>
+                </ol>
+            </nav>
+        </div><!-- End Breadcrumbs with a page title -->
+    </div>
+</div>
 
+
+<div class="row">
+    <div class="col-lg-6">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Quản lý Size</h5>
@@ -74,47 +88,54 @@
                 </EditForm>
             </div>
         </div>
+    </div>
 
 
-        @{
-            int count = 1;
-        }
+    <div class="col-lg-6">
         <div class="card">
             <div class="card-body">
-                <h4 style="margin-top:20px">List Size</h4>
-                <div class="pagetitle">
-                </div>
-                @if (size == null)
-                {
-                    <p><em>Loading...</em></p>
-                }
-                else
-                {
-                    <div style="height: 500px; overflow-y: auto;">
-                        <table class="table">
-                            <thead>
-                                <tr style="position: sticky;top:0">
-                                    <th scope="col">#</th>
-                                    <th scope="col">Màu</th>
-                                    <th scope="col">Trạng Thái</th>
-                                    <th scope="col">Chức năng</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var x in size)
-                                {
-                                    <tr>
-                                        <td>@(count++)</td>
-                                        <td>@x.Name</td>
-                                        <td>@(x.Status == 1 ? "Hoạt động" : "Ngừng hoạt động")</td>
-                                        <td><button type="button" class="btn btn-outline-success" style="float:center" @onclick="()=>LoadForm(x)">Apply</button> </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
 
-                    </div>
+                @{
+                    int count = 1;
                 }
+                <div class="card">
+                    <div class="card-body">
+                        <h4 style="margin-top:20px">List Size</h4>
+                        <div class="pagetitle">
+                        </div>
+                        @if (size == null)
+                        {
+                            <p><em>Loading...</em></p>
+                        }
+                        else
+                        {
+                            <div style="height: 500px; overflow-y: auto;">
+                                <table class="table">
+                                    <thead>
+                                        <tr style="position: sticky;top:0">
+                                            <th scope="col">#</th>
+                                            <th scope="col">Màu</th>
+                                            <th scope="col">Trạng Thái</th>
+                                            <th scope="col">Chức năng</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var x in size)
+                                        {
+                                            <tr>
+                                                <td>@(count++)</td>
+                                                <td>@x.Name</td>
+                                                <td>@(x.Status == 1 ? "Hoạt động" : "Ngừng hoạt động")</td>
+                                                <td><button type="button" class="btn btn-outline-success" style="float:center" @onclick="()=>LoadForm(x)">Apply</button> </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
     </div>

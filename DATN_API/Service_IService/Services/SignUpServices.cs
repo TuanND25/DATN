@@ -3,6 +3,7 @@ using DATN_API.Data;
 using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Twilio;
@@ -63,10 +64,11 @@ namespace DATN_API.Service_IService.Services
                 usertemp.Sex = user.Sex;
                 usertemp.Email = user.Email;
                 usertemp.OTP = RandomOTP();
+                usertemp.TokenExpires= DateTime.Now;
                 _context.Users.Update(usertemp);
-               await _context.SaveChangesAsync();
+                 await _context.SaveChangesAsync();
 				usertemp.PhoneNumber = "+84" + usertemp.PhoneNumber.Substring(1);
-				await SendSmsOTP(usertemp.PhoneNumber, "OTP xác thực đăng kí :" + usertemp.OTP);
+				await SendSmsOTP(usertemp.PhoneNumber, "Hạn xác thực đăng kí là 5 phút,OTP xác thực đăng kí :" + usertemp.OTP);
                 return new ResponseMess
                 {
                     IsSuccess = true,
@@ -116,6 +118,7 @@ namespace DATN_API.Service_IService.Services
                 Name = user.Name,
                 PhoneNumber = user.PhoneNumber,
                 OTP=  RandomOTP(),
+                TokenExpires= DateTime.Now,
                 Sex= user.Sex,               
                 Status = 3
             };
@@ -173,20 +176,35 @@ namespace DATN_API.Service_IService.Services
 
             var check = await _context.Users.FirstOrDefaultAsync(p => p.UserName == user.UserName && p.Email == user.Email && p.PhoneNumber == user.PhoneNumber && p.Name == user.Name && p.Status==3);
 			if ( check!= null)
-            {
+            {   
                 if (check.OTP == user.OTP)
                 {
-					check.Status = 1;
-                    
-					_context.Users.UpdateRange(check);
-					await _context.SaveChangesAsync();
-					return new ResponseMess
-					{
-						IsSuccess = true,
-						StatusCode = 200,
-						Message = "Xác thực thành công",
+                    if (DateTime.Now.Minute - check.TokenExpires.Minute < 5)
+                    {
+						check.Status = 1;
 
-					};
+						_context.Users.UpdateRange(check);
+						await _context.SaveChangesAsync();
+						return new ResponseMess
+						{
+							IsSuccess = true,
+							StatusCode = 200,
+							Message = "Xác thực thành công",
+
+						};
+
+                    }
+                    else
+                    {
+						return new ResponseMess
+						{
+							IsSuccess = false,
+							StatusCode = 400,
+							Message = "OTP có hạn là 5 phút,OTP đã hết hạn hãy ấn vào gửi lại",
+
+						};
+					}
+				
 
 				}
 				return new ResponseMess

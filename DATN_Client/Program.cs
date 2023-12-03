@@ -5,13 +5,14 @@ using Blazored.Toast;
 using DATN_Shared.Models;
 using Microsoft.AspNetCore.Identity;
 using DATN_API.Data;
+using Syncfusion.Blazor;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddServerSideBlazor();
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddBlazorBootstrap();
 builder.Services.AddHttpClient();
 
 
@@ -33,7 +34,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<BanOnlineController, BanOnlineController>();
-
+builder.Services.AddSyncfusionBlazor();
 
 
 builder.Services.AddAuthentication()
@@ -60,7 +61,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mgo+DSMBMAY9C3t2VlhiQlVPd11dX2pWfFN0RnNadVp5flVAcC0sT3RfQF5iSHxadkFhWH9XcnRQQw==");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
