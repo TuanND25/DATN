@@ -146,18 +146,33 @@ namespace DATN_Client.Areas.Customer.Component
 
 		public async Task ThemVaoGiohang()
 		{
+			// call api kiểm tra số lượng ngay khi bấm thêm giỏ
+			var checkSl = await _client.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{_pi_S_VM.Id}");
+			// ko phải vãng lai
 			if (_iduser != null)
 			{
+				// lấy giỏ
 				_lstCI = await _client.GetFromJsonAsync<List<CartItems_VM>>($"https://localhost:7141/api/CartItems/{_iduser}");
-				var x = _pi_S_VM; // debug
+				if (checkSl.AvaiableQuantity == 0)
+				{
+					_toastService.ShowError("Số lượng tồn kho không đủ");
+					return;
+				}
+				// có trong giỏ thì cộng
 				if (_lstCI.Any(c => c.ProductItemId == _pi_S_VM.Id))
 				{
 					CartItems_VM ci = _lstCI.FirstOrDefault(c => c.ProductItemId == _pi_S_VM.Id);
+					if (ci.Quantity + _soLuong > checkSl.AvaiableQuantity)
+					{
+						_toastService.ShowError("Số lượng tồn kho không đủ");
+						return;
+					}
 					ci.Quantity += _soLuong;
 					var request1 = await _client.PutAsJsonAsync("https://localhost:7141/api/CartItems/update-CartItems", ci);
 					if (request1.IsSuccessStatusCode) _toastService.ShowSuccess("Sản phẩm đã được thêm vào giỏ hàng của bạn");
 					return;
 				}
+				// ko thì add
 				CartItems_VM cartItems = new CartItems_VM();
 				cartItems.Id = Guid.NewGuid();
 				cartItems.UserId = Guid.Parse(_iduser);
@@ -167,13 +182,25 @@ namespace DATN_Client.Areas.Customer.Component
 				var request2 = await _client.PostAsJsonAsync("https://localhost:7141/api/CartItems/add-CartItems", cartItems);
 				if (request2.IsSuccessStatusCode) _toastService.ShowSuccess("Sản phẩm đã được thêm vào giỏ hàng của bạn");
 			}
+			// vãng lai
 			if (_iduser == null)
 			{
+				// lấy giỏ session
 				_lstCI = SessionServices.GetLstFromSession_LstCI(_ss, "_lstCI_Vanglai");
-				var x = _pi_S_VM; // debug
+				if (checkSl.AvaiableQuantity == 0)
+				{
+					_toastService.ShowError("Số lượng tồn kho không đủ");
+					return;
+				}
+				// có trong giỏ thì cộng
 				if (_lstCI.Any(c => c.ProductItemId == _pi_S_VM.Id))
 				{
 					CartItems_VM ci = _lstCI.FirstOrDefault(c => c.ProductItemId == _pi_S_VM.Id);
+					if (ci.Quantity + _soLuong > checkSl.AvaiableQuantity)
+					{
+						_toastService.ShowError("Số lượng tồn kho không đủ");
+						return;
+					}
 					ci.Quantity += _soLuong;
 					var luuss1 = SessionServices.SetLstFromSession_LstCI(_ss, "_lstCI_Vanglai", _lstCI);
 					if (luuss1 == true)
@@ -183,10 +210,11 @@ namespace DATN_Client.Areas.Customer.Component
 					}
 					else
 					{
-						_toastService.ShowError("Đã có lỗi xảy ra");
+						_toastService.ShowError("Đã có lỗi xảy ra với Session");
 						return;
 					}
 				}
+				// k thì add
 				CartItems_VM cartItems = new CartItems_VM
 				{
 					Id = Guid.NewGuid(),
@@ -204,7 +232,7 @@ namespace DATN_Client.Areas.Customer.Component
 				}
 				else
 				{
-					_toastService.ShowError("Đã có lỗi xảy ra");
+					_toastService.ShowError("Đã có lỗi xảy ra với Session");
 					return;
 				}
 			}

@@ -189,6 +189,7 @@ button:focus {
         transform: translateY(0)
     }
 }
+
 @keyframes scroll-in {
     0% {
         top: 2px
@@ -1108,7 +1109,7 @@ PRODUCT DETAIL
     }
 
 #pro_sku {
-    font-size: 12px;
+    font-size: 14px;
     color: #a3a5a7;
 }
 
@@ -1538,3 +1539,63 @@ label[for="product-select-option-2"] {
 /* ------------------- Setting varian mÃ u sáº¯c -------------------- */
 
 
+.custom-radio-mau {
+    display: inline-block;
+    position: relative;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+    .custom-radio-mau input {
+        display: none;
+    }
+
+    .custom-radio-mau span {
+        display: inline-block;
+        padding: 8px;
+        background-color: #d9d9d9;
+        border: none;
+        border-radius: 20px;
+        color: #000;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 100px;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .custom-radio-mau input:checked + span {
+        background-color: #000;
+        color: #fff;
+    }
+
+
+.custom-radio-size {
+    display: inline-block;
+    position: relative;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+    .custom-radio-size input {
+        display: none;
+    }
+
+    .custom-radio-size span {
+        display: inline-block;
+        padding: 8px;
+        background-color: #d9d9d9;
+        border: none;
+        border-radius: 20px;
+        color: #000;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 100px;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .custom-radio-size input:checked + span {
+        background-color: #000;
+        color: #fff;
+    }

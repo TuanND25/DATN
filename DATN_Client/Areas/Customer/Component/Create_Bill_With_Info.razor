@@ -9,7 +9,7 @@
 <div class="row">
 	<div class="col-md-7">
 		<h4>Thông tin giao hàng</h4>
-		<div style="display:flex;margin-top:20px;height:60px;line-height:60px">
+		<div style="display:flex;margin-top:5px;height:60px;line-height:60px">
 			<div class="col-md-1">
 				<img src="/img/avartar_user.png" style="width:100%;height:100%;margin-right:20px" />
 			</div>
@@ -248,3 +248,26 @@
 					SuccessIcon="fa-solid fa-check"
 					ErrorIcon="fa-solid fa-triangle-exclamation" />
 </div>
+
+@if (isLoader)
+{
+	<div class="loader-container1">
+		<div class="loader1">
+			<svg viewBox="0 0 80 80">
+				<circle id="test" cx="40" cy="40" r="32"></circle>
+			</svg>
+		</div>
+
+		<div class="loader1 triangle">
+			<svg viewBox="0 0 86 80">
+				<polygon points="43 8 79 72 7 72"></polygon>
+			</svg>
+		</div>
+
+		<div class="loader1">
+			<svg viewBox="0 0 80 80">
+				<rect x="8" y="8" width="64" height="64"></rect>
+			</svg>
+		</div>
+	</div>
+}
