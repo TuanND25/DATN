@@ -177,16 +177,16 @@
 							}
 						</div>
 						<div class="col-md-10" style="text-align:center">
-								<a data-toggle="modal" data-target="#Add_P">
-									<img class="img-thumbnail" src="/images/@_path_Tam" alt="" style="width:600px;height:760px;margin-top:8.5px" />
-								</a>
+							<a data-toggle="modal" data-target="#Add_P">
+								<img class="img-thumbnail" src="/images/@_path_Tam" alt="" style="width:600px;height:760px;margin-top:8.5px" />
+							</a>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="product-title">
 						<h1>@_p_VM.Name</h1>
-						<span id="pro_sku">SKU: ATO1003</span>
+						<span id="pro_sku">SKU: @_p_VM.ProductCode</span>
 					</div>
 					<div class="product-price" id="price-preview">
 						@if (_percent > 0)
@@ -215,16 +215,20 @@
 					<div class="select-swatch clearfix">
 						<div id="variant-swatch-0" class="swatch clearfix" data-option="option1"
 							 data-option-index="0">
-							<div><span>Màu sắc: <b>@_chonMau</b></span></div>
+							<div style="margin-bottom:5px"><span>Màu sắc: <b>@_chonMau</b></span></div>
 							@foreach (var x in _lstColor)
 							{
-								<div class="select-swap">
-									<button class="n-sd swatch-element m  " @onclick="()=>ChonMau(x)">
-										<label for="swatch-0-m" class="">
-											<span>@x</span>
-										</label>
-									</button>
-								</div>
+								<label class="custom-radio-mau" @onclick="()=>ChonMau(x)">
+									<input type="radio" name="mau" id="mau @x"/>
+									<span class="">@x</span>
+								</label>
+								@* <div class="select-swap">
+							<button class="n-sd swatch-element m  " @onclick="()=>ChonMau(x)">
+							<label for="swatch-0-m" class="">
+							<span>@x</span>
+							</label>
+							</button>
+							</div> *@
 							}
 
 						</div>
@@ -234,20 +238,37 @@
 								<div class="col-md-6">
 									<h6>Kích thước: <b>@_chonSize</b></h6>
 								</div>
-								<div class="col-md-6">
-									<h6 class="chonSize" data-toggle="modal" data-target="#ChonSize">Hướng dẫn chọn size</h6>
+								<div class="col-md-6" style="display:flex;justify-content:end">
+									<span class="chonSize" data-toggle="modal" data-target="#ChonSize">Hướng dẫn chọn size</span>
 								</div>
 							</div>
 							@foreach (var x in _lstSize)
 							{
-								<div class="select-swap">
-									<button class="n-sd swatch-element m  " @onclick="()=>ChonSize(x)">
-										<label for="swatch-0-m" class="">
-											<span>@x</span>
-										</label>
+								bool abc = false;
+								if (!string.IsNullOrEmpty(_chonMau))
+								{
+									var check = 
+									_lstPrI_show_VM.
+									FirstOrDefault(c => 
+									c.ColorName == _chonMau && 
+									c.SizeName == x);
+									if (check.AvaiableQuantity == 0)
+									{
+										abc = true;
+									}
+								}
+								<label class="custom-radio-size">
+									<input type="radio" name="size" id="size @x" @onclick="()=>ChonSize(x)" disabled="@abc" />
+									<span class="">@x</span>
+								</label>
+								@* <div class="select-swap">
+							<button class="n-sd swatch-element m  " @onclick="()=>ChonSize(x)">
+							<label for="swatch-0-m" class="">
+							<span>@x</span>
+							</label>
 
-									</button>
-								</div>
+							</button>
+							</div> *@
 							}
 
 						</div>
