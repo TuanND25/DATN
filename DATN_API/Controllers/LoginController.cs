@@ -25,8 +25,8 @@ namespace DATN_API.Controllers
             }
             else
             {
-                return BadRequest(result);
-            }
+				return StatusCode(result.StatusCode, result.Message);
+			}
         }
     }
 }
