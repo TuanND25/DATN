@@ -42,11 +42,7 @@ namespace DATN_Client.Areas.Customer.Component
 				_toastService.ShowError("Xác nhận mật khẩu không chứa được các ký tự được biệt");
 				return;
 			}
-			if (hasSymbols.IsMatch(signUp.Email))
-			{
-				_toastService.ShowError("Email không chứa được các ký tự được biệt");
-				return;
-			}
+		
 			
 			if (signUp.UserName == string.Empty || signUp.Email == string.Empty || signUp.PhoneNumber == string.Empty || signUp.Password == string.Empty || signUp.ConfirmPassword == string.Empty || signUp.Name == string.Empty)
             {
