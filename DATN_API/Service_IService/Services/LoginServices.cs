@@ -2,10 +2,12 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using DATN_API.Data;
 using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DATN_API.Service_IService.Services
@@ -15,18 +17,29 @@ namespace DATN_API.Service_IService.Services
         private readonly UserManager<User> _userManager;
 
         private readonly IConfiguration _configuration;
+        private readonly ApplicationDbContext _context;
 
-        public LoginServices(UserManager<User> userManager, IConfiguration configuration)
+        public LoginServices(UserManager<User> userManager, IConfiguration configuration, ApplicationDbContext context)
         {
             _userManager = userManager;
 
             _configuration = configuration;
+            _context = context;
         }
 
         public async Task<ResponseMess> LoginAsync(LoginUser userLogin)
         {
-            var user = await _userManager.FindByNameAsync(userLogin.UserName);
-            if (user.Status==3)
+            var user = await _context.Users.FirstOrDefaultAsync(p =>p.UserName==userLogin.UserName);
+			if (user == null)
+			{
+				return new ResponseMess
+				{
+					IsSuccess = false,
+					Message = "Tên đăng nhập không tồn tại",
+					StatusCode = 400
+				};
+			}
+			if (user.Status==3)
             {
 				return new ResponseMess
 				{
@@ -35,15 +48,7 @@ namespace DATN_API.Service_IService.Services
 					StatusCode = 400
 				};
 			}
-            if (user == null)
-            {
-                return new ResponseMess
-                {
-                    IsSuccess = false,
-                    Message = "Tên đăng nhập không tồn tại",
-                    StatusCode = 400
-                };
-            }
+       
             else if (!await _userManager.CheckPasswordAsync(user, userLogin.Password))
             {
                 return new ResponseMess

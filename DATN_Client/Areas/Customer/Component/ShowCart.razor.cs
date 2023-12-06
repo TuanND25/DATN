@@ -10,11 +10,11 @@ namespace DATN_Client.Areas.Customer.Component
 		[Inject] private NavigationManager _navi { get; set; }
 		[Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
 		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
-		private List<CartItems_VM> _lstCI = new List<CartItems_VM>();
-		private List<Image_Join_ProductItem> _lstImg_PI = new List<Image_Join_ProductItem>();
-		private List<Image_Join_ProductItem> _lstImg_PI_tam = new List<Image_Join_ProductItem>();
-		private List<ProductItem_Show_VM> _lstPrI_show_VM = new List<ProductItem_Show_VM>();
-		private ProductItem_Show_VM? _pi_s_vm = new ProductItem_Show_VM();
+		private List<CartItems_VM> _lstCI = new();
+		private List<Image_Join_ProductItem> _lstImg_PI = new();
+		private List<Image_Join_ProductItem> _lstImg_PI_tam = new();
+		private List<ProductItem_Show_VM> _lstPrI_show_VM = new();
+		private ProductItem_Show_VM? _pi_s_vm = new();
 		public int? _tongTien { get; set; } = 0;
 		public string? _idUser { get; set; } = string.Empty;
 		public static string? _note { get; set; } = string.Empty;

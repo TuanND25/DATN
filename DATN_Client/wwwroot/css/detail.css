@@ -1599,3 +1599,17 @@ label[for="product-select-option-2"] {
         background-color: #000;
         color: #fff;
     }
+
+    .custom-radio-size.het span {
+        display: inline-block;
+        padding: 8px;
+        background-color: #F4F4F4;
+        border: none;
+        border-radius: 20px;
+        color: #B2B2B2;
+        cursor: not-allowed;
+        transition: background-color 0.3s ease;
+        width: 100px;
+        text-align: center;
+        font-size: 14px;
+    }

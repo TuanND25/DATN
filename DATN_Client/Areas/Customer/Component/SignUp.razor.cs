@@ -20,10 +20,31 @@ namespace DATN_Client.Areas.Customer.Component
 		private System.Timers.Timer timer;
 		public string timeline { get; set; }
 		public async Task SignUpUser()
-        {
-               
-        
-            if (signUp.UserName == string.Empty || signUp.Email == string.Empty || signUp.PhoneNumber == string.Empty || signUp.Password == string.Empty || signUp.ConfirmPassword == string.Empty || signUp.Name == string.Empty)
+		{
+			var hasSymbols = new Regex(@"[!@#$%^&*()_+=\[{\]};:<>|./?,-]");
+			if (hasSymbols.IsMatch(signUp.Name))
+			{
+				_toastService.ShowError("Tên người dùng không chứa được các ký tự được biệt");
+				return;
+			}
+			if (hasSymbols.IsMatch(signUp.UserName))
+			{
+				_toastService.ShowError("Tên đăng nhập không chứa được các ký tự được biệt");
+				return;
+			}
+			if (hasSymbols.IsMatch(signUp.Password))
+			{
+				_toastService.ShowError("Mật khẩu không chứa được các ký tự được biệt");
+				return;
+			}
+			if (hasSymbols.IsMatch(signUp.ConfirmPassword))
+			{
+				_toastService.ShowError("Xác nhận mật khẩu không chứa được các ký tự được biệt");
+				return;
+			}
+		
+			
+			if (signUp.UserName == string.Empty || signUp.Email == string.Empty || signUp.PhoneNumber == string.Empty || signUp.Password == string.Empty || signUp.ConfirmPassword == string.Empty || signUp.Name == string.Empty)
             {
                 _toastService.ShowError("Vui lòng điền đầy đủ thông tin");
                 return;

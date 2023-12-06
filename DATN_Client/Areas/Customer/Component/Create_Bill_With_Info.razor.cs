@@ -79,6 +79,7 @@ namespace DATN_Client.Areas.Customer.Component
 			_lstQuanHuyen_Data = await _httpClient.GetFromJsonAsync<List<District_VM>>("https://api.npoint.io/34608ea16bebc5cffd42");
 			_lstXaPhuong_Data = await _httpClient.GetFromJsonAsync<List<Ward_VM>>("https://api.npoint.io/dd278dc276e65c68cdf5");
 			_lstPayM = (await _httpClient.GetFromJsonAsync<List<PaymentMethod_VM>>("https://localhost:7141/api/paymentMethod/get_all_paymentMethod")).Where(c => c.Status == 1).ToList();
+			_lstPayM = _lstPayM.Where(x => x.Name == "Thanh toán Momo" || x.Name == "Thanh toán khi nhận hàng (COD)").ToList();
 			_lstPrI_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_VM>>("https://localhost:7141/api/productitem/get_all_productitem");
 			_lstHCP_VM = await _httpClient.GetFromJsonAsync<List<HistoryConsumerPoint_VM>>("https://localhost:7141/api/HistoryConsumerPoint/get-HistoryConsumerPoint");
 			_lstVchUser = await _httpClient.GetFromJsonAsync<List<VoucherUser_VM>>($"https://localhost:7141/api/voucher-user/get-voucherUser-by-userid/{_bill_validate_vm.UserId}"); // list voucher của user
@@ -375,5 +376,9 @@ namespace DATN_Client.Areas.Customer.Component
 		{
 			_bill_validate_vm.PaymentMethodId = id;
 		}
+		private void NavLogin()
+        {
+			_navi.NavigateTo("https://localhost:7075/customer/Login/login", true);
+        }
 	}
 }

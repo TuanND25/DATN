@@ -20,7 +20,7 @@ namespace DATN_Client.Areas.Customer.Component
 		public string timeline { get; set; }
 		public async Task ForgetPasswordMethor()
         {
-            if (ForgetPasswordUser.Email== string.Empty || ForgetPasswordUser.PhoneNumber == string.Empty || ForgetPasswordUser.Username == string.Empty)
+            if ( ForgetPasswordUser.PhoneNumber == string.Empty)
             {
                 _toastService.ShowError(" Vui lòng điền đẩy đủ thông tin");
                 return;
@@ -54,6 +54,7 @@ namespace DATN_Client.Areas.Customer.Component
 			if (response.IsSuccessStatusCode)
             {
                 _toastService.ShowSuccess("Mật khẩu đã được gửi về điện thoại của bạn");
+				await Task.Delay(2000);
 				NavigationManager.NavigateTo("https://localhost:7075/Customer/Login/Login", true);
             }
             else
