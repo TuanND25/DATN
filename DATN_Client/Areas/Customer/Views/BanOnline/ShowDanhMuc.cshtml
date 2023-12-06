@@ -7,7 +7,7 @@
 
 @{
 	ViewData["Title"] = "Index";
-	Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
+	Layout = @"~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
 }
 <style>
 	.pagination {
@@ -39,13 +39,12 @@
 			color: #fff;
 		}
 </style>
-@(await Html.RenderComponentAsync<ShowProduct>(RenderMode.Server))
-
+@(await Html.RenderComponentAsync<ShowDanhMuc>(RenderMode.Server))
+<div class="container">
 	<div class="row">
 		<div class="col-md-3"></div>
 		<div class="col-md-9">
-		@Html.PagedListPager(Model, page => Url.Action("ShowProduct", "BanOnline", new { page }))
+			@Html.PagedListPager(Model, page => Url.Action("ShowDanhMuc", "BanOnline", new { page }))
 		</div>
 	</div>
-
-
+</div>

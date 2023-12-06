@@ -18,6 +18,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
     <link href="~/css/style.css" rel="stylesheet">
     <link href="~/css/detail.css" rel="stylesheet">
+    <link href="~/css/ShowProduct.css" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -114,7 +115,7 @@
                 display: block;
                 z-index: 99;
                 /* left: -20px;*/
-                background-color: #fff;
+                background-color: #ffffff;
                 color: #000;
                 width: fit-content;
                 padding-left: 5px;
@@ -164,7 +165,7 @@
 </style>
 <body>
 	@*----*@
-    <div class="borderHeader">
+    <div class="borderHeader" style="background-color:#ffffff">
         <div class="hearderLogo container">
             <div class="telephone">
                 <i class="fa-solid fa-phone hinhtron" style="color: #ffffff;"></i>
@@ -197,7 +198,7 @@
             </div>
         </div>
     </div>
-    <div class="navbarHeader container" style="background-color:#ffffff">
+    <div class="navbarHeader container" style="background-color:#f6f9ff">
         <ul>
             <li><a class="aNavbar" asp-area="" asp-controller="Home" asp-action="Index">HOME</a></li>
             <li>
@@ -263,6 +264,100 @@
         </main>
     </div>
 
+    <div class="footer">
+        <footer class="text-center text-lg-start bg-light text-muted">
+            <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+                <div>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-google"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+                <!-- Right -->
+            </section>
+            <section class="">
+                <div class="container text-center text-md-start mt-5">
+                    <div class="row mt-3">
+                        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                            <h6 class="text-uppercase fw-bold mb-4">
+                                <i class="fas fa-gem me-3"></i>BH Unisex
+                            </h6>
+                            <p>
+                                Chúng mình xuất hiện để đem tới mọi người một chất lượng áo tốt nhất, với giá thành hấp dẫn nhất để đưa Outerity đến với tất cả lứa tuổi và khắp mọi vùng miền đất nước.
+                            </p>
+                        </div>
+                        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                            <h6 class="text-uppercase fw-bold mb-4">
+                                Products
+                            </h6>
+                            <p>
+                                <a href="#!" class="text-reset">HOODIE</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">SWEATER</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">POLO</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">TEE</a>
+                            </p>
+                        </div>
+                        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                            <h6 class="text-uppercase fw-bold mb-4">
+                                Chính sách
+                            </h6>
+                            <p>
+                                <a href="#" class="text-reset">Chính sách đổi trả</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Chính sách giao hàng</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Chính sách bảo mật </a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Hướng dẫn sử dụng</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Bảng Size</a>
+                            </p>
+                        </div>
+                        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                            <h6 class="text-uppercase fw-bold mb-4">Liên hệ</h6>
+                            <p><i class="fas fa-home me-3"></i> Trịnh Văn Bô</p>
+                            <p>
+                                <i class="fas fa-envelope me-3"></i>
+                                bhunisex@gmail.com
+                            </p>
+                            <p><i class="fas fa-phone me-3"></i>0367180646</p>
+                            <p><i class="fa-solid fa-paper-plane"></i>Comming soon</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Copyright -->
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                Copyright © 2023 BH Unisex. Powered by BH Team
+
+            </div>
+
+        </footer>
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
