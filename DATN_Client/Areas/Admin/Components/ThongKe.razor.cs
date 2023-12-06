@@ -417,10 +417,10 @@ namespace DATN_Client.Areas.Admin.Components
 
             options.Responsive = true;
 
-            options.Scales.X.Title.Text = "Overs";
+            options.Scales.X.Title.Text = "Ngày";
             options.Scales.X.Title.Display = true;
 
-            options.Scales.Y.Title.Text = "Runs";
+            options.Scales.Y.Title.Text = "Doanh thu";
             options.Scales.Y.Title.Display = true;
             await lineChart.InitializeAsync(data, options);
         }
