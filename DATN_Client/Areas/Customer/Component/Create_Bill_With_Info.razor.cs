@@ -50,8 +50,10 @@ namespace DATN_Client.Areas.Customer.Component
 		public string _voucherCode { get; set; } = string.Empty;
 		public int? _tiengiam { get; set; } = 0;
 		public string _afterClick { get; set; } = string.Empty;
+		private bool isLoader = false;
 		protected override async Task OnInitializedAsync()
 		{
+			isLoader = true;
 			_iduser = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
 			if (SessionServices.GetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai").Count == 0 && _iduser == null) _navi.NavigateTo("https://localhost:7075/cart", true);
 			//var token = _ihttpcontextaccessor.HttpContext.Session.GetString("Token"); // Gọi token
@@ -112,6 +114,7 @@ namespace DATN_Client.Areas.Customer.Component
 				_tongTienHang += x.Quantity * _pi_s_vm.PriceAfterReduction;
 			}
 			_tongTienAll = _tongTienHang + _bill_validate_vm.ShippingFee;
+			isLoader = false;
 		}
 
 		//public Guid Id { get; set; }

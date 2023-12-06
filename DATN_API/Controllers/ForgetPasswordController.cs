@@ -30,7 +30,7 @@ namespace DATN_API.Controllers
         [HttpPost("request")]
         public async Task<IActionResult> CheckUserForget(ForgetPasswordRequest request)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(p => p.Email == request.Email && p.PhoneNumber == request.PhoneNumber && p.UserName == request.Username);
+            var user = await _context.Users.FirstOrDefaultAsync(p =>  p.PhoneNumber == request.PhoneNumber );
             if (user != null)
             {
 				request.PhoneNumber = "+84" + request.PhoneNumber.Substring(1);
@@ -56,7 +56,7 @@ namespace DATN_API.Controllers
         [HttpPost("otp")]
         public async Task<IActionResult> ForgetPassword(ForgetPasswordRequest request)
         {
-			var user = await _context.Users.FirstOrDefaultAsync(p => p.Email == request.Email && p.PhoneNumber == request.PhoneNumber && p.UserName == request.Username);
+			var user = await _context.Users.FirstOrDefaultAsync(p=> p.PhoneNumber == request.PhoneNumber);
             if (user != null)
             {
               

@@ -18,7 +18,7 @@
     padding: 18px 30px;
     border: none;
     border-radius: 5px;
-    font-size:20px;
+    font-size: 20px;
 }
 
     .btnSuccesBill:hover {
@@ -26,22 +26,23 @@
         color: #fff;
     }
 
-    .btnSuccesBill.afterClick{
+    .btnSuccesBill.afterClick {
         background-color: darkgray;
-        color:black;
+        color: black;
     }
-    .img_Ab {
-        position: absolute;
-        background-color: #949491;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        text-align: center;
-        top: -10px;
-        right: -10px;
-        color: #fff;
-        opacity: 0.8;
-    }
+
+.img_Ab {
+    position: absolute;
+    background-color: #949491;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    top: -10px;
+    right: -10px;
+    color: #fff;
+    opacity: 0.8;
+}
 
 .countPrice {
     /* width: 70%; */
@@ -188,14 +189,100 @@
     padding: 8px 16px;
     transition: 0.2s;
     margin-bottom: 10px;
-    font-size:14px;
-    font-weight:600;
-    font-family:Arial;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: Arial;
 }
 
     .btn-voucher:active {
         box-shadow: none;
     }
+
     .btn-voucher:focus {
         border: 1px solid rgba(47, 90, 207, 0.4);
     }
+
+.loader-container1 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5); /* Màu nền với độ mờ 0.5 */
+    z-index: 9999; /* Đảm bảo loader hiển thị trên các phần tử khác */
+}
+
+.loader1 {
+    --path: #2f3545;
+    --dot: #5628ee;
+    --duration: 3s;
+    width: 44px;
+    height: 44px;
+    position: relative;
+}
+
+    .loader1:before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        position: absolute;
+        display: block;
+        background: var(--dot);
+        top: 37px;
+        left: 19px;
+        transform: translate(-18px, -18px);
+        animation: dotRect var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+    }
+
+    .loader1 svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+        .loader1 svg rect, .loader1 svg polygon, .loader1 svg circle {
+            fill: none;
+            stroke: var(--path);
+            stroke-width: 10px;
+            stroke-linejoin: round;
+            stroke-linecap: round;
+        }
+
+        .loader1 svg polygon {
+            stroke-dasharray: 145 76 145 76;
+            stroke-dashoffset: 0;
+            animation: pathTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+
+        .loader1 svg rect {
+            stroke-dasharray: 192 64 192 64;
+            stroke-dashoffset: 0;
+            animation: pathRect 3s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+
+        .loader1 svg circle {
+            stroke-dasharray: 150 50 150 50;
+            stroke-dashoffset: 75;
+            animation: pathCircle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+
+    .loader1.triangle {
+        width: 48px;
+    }
+
+        .loader1.triangle:before {
+            left: 21px;
+            transform: translate(-10px, -18px);
+            animation: dotTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+
+
+
+.loader1 {
+    display: inline-block;
+    margin: 0 16px;
+}

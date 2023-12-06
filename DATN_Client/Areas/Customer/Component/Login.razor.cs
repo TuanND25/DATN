@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 namespace DATN_Client.Areas.Customer.Component
 {
@@ -20,14 +21,28 @@ namespace DATN_Client.Areas.Customer.Component
         public List<User> Users { get; set; }
         LoginUser loginUser = new LoginUser();
         public string Idsession { get; set; } = string.Empty;
-        public async Task login()
+		
+		public async Task login()
         {
-
-            if (loginUser.UserName == null || loginUser.Password== null)
+            if (loginUser.UserName== string.Empty || loginUser.Password == string.Empty)
             {
-                _toastService.ShowError("vui lòng điền đầy đủ thông tin");
-                return ;
+				_toastService.ShowError("vui lòng điền đầy đủ thông tin");
+                return;
+
+			}
+			var hasSymbols = new Regex(@"[!@#$%^&*()_+=\[{\]};:<>|./?,-]");
+            if (hasSymbols.IsMatch(loginUser.UserName))
+            {
+                _toastService.ShowError("Tên đăng nhập không được chứa các ký tự đặc biệt");
+                return;
             }
+			if (hasSymbols.IsMatch(loginUser.Password))
+			{
+				_toastService.ShowError("Mật khẩu không được chứa các ký tự đặc biệt");
+                return;
+			}
+
+		
             var response = await _httpClient.PostAsJsonAsync<LoginUser>("https://localhost:7141/api/user/login/", loginUser);
             var result = response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
