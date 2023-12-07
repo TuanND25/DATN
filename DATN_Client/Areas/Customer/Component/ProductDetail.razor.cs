@@ -78,7 +78,7 @@ namespace DATN_Client.Areas.Customer.Component
 		public async Task ChonMau(string mau)
 		{
 			if (_chonMau == mau) return;
-			if (_chonSize == string.Empty)
+			if (string.IsNullOrEmpty(_chonSize))
 			{
 				_chonMau = mau;
 				var lsttam = new List<Image_Join_ProductItem>();
@@ -110,11 +110,12 @@ namespace DATN_Client.Areas.Customer.Component
 				_pi_S_VM = _lstPrI_show_VM.Where(c => c.ColorName == _chonMau && c.SizeName == _chonSize).FirstOrDefault();
 				if (_pi_S_VM == null)
 				{
-					_gia = "0đ";
-					_soluongton = 0;
-					_toastService.ShowError("Biến thể không tồn tại, vui lòng chọn biến thể khác");
-					return;
-				}
+                    _gia = "0đ";
+                    _soluongton = 0;
+                    _percent = 0;
+                    _toastService.ShowError("Biến thể không tồn tại, vui lòng chọn biến thể khác");
+                    return;
+                }
 				var prmi = await _client.GetFromJsonAsync<PromotionItem_VM>($"https://localhost:7141/api/PromotionItem/getPromotionItem_Percent_by_productItemID/{_pi_S_VM.Id}");
 				_percent = prmi.Percent;
 				_gia = _pi_S_VM.PriceAfterReduction?.ToString("#,##0") + "đ";
@@ -133,6 +134,7 @@ namespace DATN_Client.Areas.Customer.Component
 			{
 				_gia = "0đ";
 				_soluongton = 0;
+				_percent = 0;
 				_toastService.ShowError("Biến thể không tồn tại, vui lòng chọn biến thể khác");
 				return;
 			}
@@ -145,14 +147,19 @@ namespace DATN_Client.Areas.Customer.Component
 		}
 
 		public async Task ThemVaoGiohang()
-		{
+		{			
 			if (string.IsNullOrEmpty(_chonSize) || string.IsNullOrEmpty(_chonMau))
 			{
 				_toastService.ShowError("Vui lòng chọn biến thể");
 				return;
 			}
-			// call api kiểm tra số lượng ngay khi bấm thêm giỏ
-			var checkSl = await _client.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{_pi_S_VM.Id}");
+            if (_pi_S_VM == null)
+            {
+                _toastService.ShowError("Biến thể không tồn tại, vui lòng chọn biến thể khác");
+                return;
+            }
+            // call api kiểm tra số lượng ngay khi bấm thêm giỏ
+            var checkSl = await _client.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{_pi_S_VM.Id}");
 			// ko phải vãng lai
 			if (_iduser != null)
 			{
