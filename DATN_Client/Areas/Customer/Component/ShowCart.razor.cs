@@ -102,11 +102,7 @@ namespace DATN_Client.Areas.Customer.Component
 
 		public async Task CreateBill()
 		{
-			if (_tongTien == 0)
-			{
-				_toastService.ShowError("Giỏ hàng không có sản phẩm nào vui lòng chọn thêm sản phẩm");
-				return;
-			}
+			if (_tongTien == 0) return;
 			_navi.NavigateTo("https://localhost:7075/bill-info", true);
 		}
 

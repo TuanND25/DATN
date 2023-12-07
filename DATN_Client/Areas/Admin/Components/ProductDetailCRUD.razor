@@ -1,0 +1,44 @@
+﻿@if (_lst_pri == null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th style="text-align:center">Tên</th>
+				<th style="text-align:center">Mã</th>
+				<th style="text-align:center">Thể loại</th>
+				<th style="text-align:center">Màu sắc</th>
+				<th style="text-align:center">Size</th>
+				<th style="text-align:center">Số lượng tồn</th>
+				<th style="text-align:center">Giá bán</th>
+				<th style="text-align:center">Giá sau giảm</th>
+				<th style="text-align:center">Trạng thái</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var x in _lst_pri)
+			{
+				<tr>
+					<td style="vertical-align:middle">@x.Name</td>
+					<td style="vertical-align:middle">@x.ProductCode</td>
+					<td style="vertical-align:middle;text-align:center">@x.CategoryName</td>
+					<td style="vertical-align:middle;text-align:center">@x.ColorName</td>
+					<td style="vertical-align:middle;text-align:center">@x.SizeName</td>
+					<td style="vertical-align:middle;text-align:center">@x.AvaiableQuantity</td>
+					<td style="vertical-align:middle;text-align:center">@x.CostPrice</td>
+					<td style="vertical-align:middle;text-align:center">@x.PriceAfterReduction</td>
+					<td style="vertical-align:middle;text-align:center">@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
+					<td style="vertical-align:middle;text-align:center">
+						<button style="border: none;border-radius: 15px;" class="btn btn-primary">
+							<i class="fa fa-info"></i>
+						</button>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}

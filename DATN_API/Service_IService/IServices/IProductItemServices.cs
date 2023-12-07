@@ -11,7 +11,7 @@ namespace DATN_API.Service_IService.IServices
         public Task<List<ProductItems>> GetAllProductItems();
         public Task<List<ProductItem_Show_VM>> GetAllProductItems_Show();
         public Task<ProductItems> GetAllProductItemById(Guid Id);
-        public Task<List<ProductItems>> GetAllProductItemByProduct(Guid ProductId);
+        public Task<List<ProductItem_Show_VM>> GetAllProductItemByProduct(Guid ProductId);
         public Task<List<ProductItem_Show_VM>> GetAllProductItemPromotionItem_Show(Guid Id);
     }
 }
