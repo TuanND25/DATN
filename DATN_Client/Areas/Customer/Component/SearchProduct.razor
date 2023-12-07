@@ -1,0 +1,90 @@
+﻿@using DATN_Client.Areas.Customer.Controllers;
+@using Blazored.Toast.Configuration
+<BlazoredToasts Position="ToastPosition.TopRight"
+				Timeout="5"
+				IconType="IconType.FontAwesome"
+				SuccessClass="success-toast-override"
+				SuccessIcon="fa-solid fa-check"
+				ErrorIcon="fa-solid fa-triangle-exclamation" />
+<style>
+	.discount-label {
+		position: absolute;
+		top: 0;
+		right: 10px;
+		width: 40px;
+		height: 20px;
+		background-color: red;
+		color: white;
+		text-align: center;
+		line-height: 20px;
+		font-size: 12px;
+	}
+</style>
+<div class="row showsp">
+	<center>
+		<h1><b>Tìm kiếm</b></h1>
+	</center>
+	@if (@BanOnlineController._soKQ > 0)
+	{
+		<center>
+			<span>Có <b>@BanOnlineController._soKQ</b> kết quả hợp lệ cho từ khóa <b>"@BanOnlineController._valueSearch"</b></span>
+		</center>
+		@if (_lstPrI_show_VM == null)
+		{
+			<p><em>Loading...</em></p>
+		}
+		else
+		{
+			foreach (var x in BanOnlineController._pageList)
+			{
+				string img = _lstImg_PI.Where(c => c.ProductId == x.Id).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
+				var giamin = _lstPrI_show_VM.Where(c => c.ProductId == x.Id).Min(c => c.PriceAfterReduction);
+				var giamax = _lstPrI_show_VM.Where(c => c.ProductId == x.Id).Max(c => c.PriceAfterReduction);
+				int? percentMax = 0;
+                    var lsttam = BanOnlineController._lstpi_Percent.Where(c => c.ProductId == x.Id).ToList();
+                    if (lsttam.Count() > 0)
+                    {
+                        percentMax = lsttam.Max(c => c.Percent);
+                        if (percentMax == null) percentMax = 0;
+                    }
+				<div class="col-md-3" style="position: relative;">
+					<a href="/product-detail/@x.Id">
+						<img class="img-thumbnail" src="/images/@img" alt="" style="width:100%;height:400px">
+						 @if (percentMax > 0)
+                            {
+                                <div class="discount-label">-@(percentMax)%</div>
+                            }
+					</a>
+					@x.Name <br>
+					@{
+						if (giamin == giamax || giamin == null || giamax == null)
+						{
+							@(giamax?.ToString("#,##0") + " VND")
+						}
+						else
+						{
+							@(giamin?.ToString("#,##0") + " - " + giamax?.ToString("#,##0") + " VND")
+						}
+					}
+				</div>
+			}
+		}
+	}
+	else
+	{
+		<br />
+		<center>
+			<h2 style="font-size:16px">Không tìm thấy kết quả phù hợp với từ khóa <b>"@BanOnlineController._valueSearch"</b>. Vui lòng nhập từ khóa khác và thử lại!</h2>
+			</center>
+			<br />
+			<br />
+		<div class="row">
+			<center>
+				<div class="search" style="margin-left:30px;width:60%">
+					<input placeholder="Search..." type="text" style="width:100%" @bind-value="_searchProduct" required>
+					<button type="submit" @onclick="SearchPrd">Go</button>
+				</div>
+			</center>
+		</div>
+	}
+</div>

@@ -10,8 +10,9 @@ namespace DATN_Shared.ViewModel
     public class Categories_VM
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        [Required(ErrorMessage = "Tên thể loại không được để trống")]
-        public int Status { get; set; }
+		[Required(ErrorMessage = "Tên thể loại không được để trống")]
+		public string Name { get; set; }        
+		public string TenKhongDau { get; set; }
+		public int Status { get; set; }
     }
 }

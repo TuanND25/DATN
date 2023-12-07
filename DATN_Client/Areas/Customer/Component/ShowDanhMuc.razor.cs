@@ -6,15 +6,16 @@ using System.Text;
 
 namespace DATN_Client.Areas.Customer.Component
 {
-	public partial class ShowProduct
+	public partial class ShowDanhMuc
 	{
-		private HttpClient _client = new HttpClient();
+		private HttpClient _client = new();
 		[Inject] private NavigationManager _navigation { get; set; }
 		[Inject] private IToastService _toastService { get; set; }
 		private List<ProductItem_Show_VM> _lstPrI_show_VM = new();
 		private List<Image_Join_ProductItem> _lstImg_PI = new();
 		private List<Categories_VM> _lstCate = new();
 		private string? _searchProduct { get; set; }
+
 
 		protected override async Task OnInitializedAsync()
 		{
