@@ -3,6 +3,7 @@ using DATN_Shared.ViewModel;
 using DATN_Shared.ViewModel.DiaChi;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Build.Evaluation;
+using System.Globalization;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 
@@ -50,6 +51,22 @@ namespace DATN_Client.Areas.Admin.Components
         private List<ProductItem_Show_VM> _lstProductItemShow = new List<ProductItem_Show_VM>();
         private List<BillItemShowSellStall> _lstBillItemShow = new List<BillItemShowSellStall>();
 
+        public int Tongtienhang { get; set; } = 0;
+        public string TongtienhangText { get; set; } = "0";
+
+        public int Tongtien { get; set; } = 0;
+        public string TongtienText { get; set; } = "0";
+
+        public int InputTichDiem { get; set; } = 0;
+
+        public int InputTienMat { get; set; } = 0;
+        public int InputChuyenKhoan { get; set; } = 0;
+        public int CountPayment { get; set; } = 0;
+
+
+        public int tienRefund { get; set; } = 0;
+        public string tienRefundText { get; set; } = "0";
+        public string tienRefundFormat { get; set; } = "";
 
 
         public int? SoluongProductItem { get; set; } = 0;
@@ -131,7 +148,7 @@ namespace DATN_Client.Areas.Admin.Components
             {
                 _lstBill_Vm_show.Add(bill);
                 BillId = id;
-              await  GetBillItemShowOnBill(id);
+                await GetBillItemShowOnBill(id);
             }
 
 
@@ -145,20 +162,27 @@ namespace DATN_Client.Areas.Admin.Components
             }
             var _lstProductItem = (await _client.GetFromJsonAsync<List<BillItem_VM>>("https://localhost:7141/api/BillItem/getbilldetail/" + BillId)).ToList();
 
-          await  GetBillItemShowOnBill(id);
+            activeTabThemThongTin = false;
+            activeTienMat = false;
+            activeChuyenKhoan = false;
+            activeTabDungDiem = false;
+            InputTichDiem = default;
 
+
+            await GetBillItemShowOnBill(id);        
         }
         public void getPaymetMethod(int id)
         {
             paymentmethodid = id;
         }
-        public void closeBill(Guid id)
+        public async Task closeBill(Guid id)
         {
             var z = _lstBill_Vm_show.FirstOrDefault(x => x.Id == id);
             _lstBill_Vm_show.Remove(z);
             if (_lstBill_Vm_show.Count == 0)
             {
                 BillId = default;
+                _lstBillItemShow.Clear();
                 return;
             }
             if (_lstBill_Vm_show.Count > 0)
@@ -219,6 +243,17 @@ namespace DATN_Client.Areas.Admin.Components
         public void ClearInfoUser()
         {
             getuser = userKhachvanglai_bien;
+
+            InputTichDiem = 0;
+            if (activeTabThemThongTin==false)
+            {
+                Tongtien = Tongtienhang;
+                TongtienText = FormatNumber(Tongtien);
+            }
+
+            //GetBillItemShowOnBill(BillId);
+            CheckInputPayment();
+            CheckRefund();
         }
         public async Task ChonTinhTP(ChangeEventArgs e)
         {
@@ -250,11 +285,18 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public void CloseTabTienMat()
         {
+            InputTienMat = 0;
             activeTienMat = false;
+            CheckInputPayment();
+            CheckRefund();
         }
         public void CloseTabChuyenKhoan()
         {
+            InputChuyenKhoan = 0;
             activeChuyenKhoan = false;
+            CheckInputPayment();
+            CheckRefund();
+
         }
 
         public async Task getProductChooseSizeAndColor(Guid IdProduct)
@@ -347,28 +389,54 @@ namespace DATN_Client.Areas.Admin.Components
             billadd.Quantity = SoluongProductItemMua;
             billadd.Price = ProductItem.PriceAfterReduction;
             billadd.Status = 1;
-            var AddBillItemToDB = await _client.PostAsJsonAsync("https://localhost:7141/api/BillItem/Post-BillItem", billadd);
-            if (AddBillItemToDB.StatusCode.ToString() == "OK")
+
+            //check trùng sản phẩm 
+            //tìm xem có sản phẩm đó trong bill không 
+            var listbillItemInBilll = await _client.GetFromJsonAsync<List<BillItems>>("https://localhost:7141/api/BillItem/get_alll_bill_item");
+            var billItemInBill = listbillItemInBilll.FirstOrDefault(x=>x.ProductItemsId == billadd.ProductItemsId && x.BillId == BillId);
+
+            if (billItemInBill == null)
             {
-                await GetBillItemShowOnBill(BillId);
-                _toastService.ShowSuccess("Thêm sản phẩm thành công");
+                var AddBillItemToDB = await _client.PostAsJsonAsync("https://localhost:7141/api/BillItem/Post-BillItem", billadd);
+                if (AddBillItemToDB.StatusCode.ToString() == "OK")
+                {
+                    await GetBillItemShowOnBill(BillId);
+                    _toastService.ShowSuccess("Thêm sản phẩm thành công");
+                }
             }
+            else if (billItemInBill != null)
+            {
+                billItemInBill.Quantity += SoluongProductItemMua;
+             
+                var reponse = await _client.PutAsJsonAsync("https://localhost:7141/api/BillItem/Put-BillItems", billItemInBill);
+                if (reponse.StatusCode.ToString() == "OK")
+                {
+                    await GetBillItemShowOnBill(BillId);
+                    _toastService.ShowSuccess("Cập nhật số lượng thành công");
+                }
+               
+
+            }
+         
+
+
+           
         }
 
         public async Task RemoveBillItem(Guid IdBillItem)
         {
-            var RemoveProductItem = await _client.DeleteAsync("https://localhost:7141/api/BillItem/Delete-BillItem?Id="+IdBillItem.ToString());
-            if (RemoveProductItem.StatusCode.ToString()=="OK")
+            var RemoveProductItem = await _client.DeleteAsync("https://localhost:7141/api/BillItem/Delete-BillItem?Id=" + IdBillItem.ToString());
+            if (RemoveProductItem.StatusCode.ToString() == "OK")
             {
                 await GetBillItemShowOnBill(BillId);
                 _toastService.ShowWarning("Bạn vừa xóa một sản phẩm khỏi giỏ hàng");
             }
-           
+
 
         }
         public async Task AddQuantityToBillItem(Guid BillItemId)
         {
-            var BillItem = await _client.GetFromJsonAsync<BillItem_VM>("https://localhost:7141/api/BillItem/get_alll_billItem_byId?Id="+ BillItemId.ToString());
+            var BillItem = await _client.GetFromJsonAsync<BillItem_VM>("https://localhost:7141/api/BillItem/get_alll_billItem_byId?Id=" + BillItemId.ToString());
             BillItem.Quantity += 1;
             var ProductItem = await _client.GetFromJsonAsync<ProductItem_VM>("https://localhost:7141/api/productitem/get_all_productitem_byID/" + BillItem.ProductItemsId);
             int AvaiableQuantity = ProductItem.AvaiableQuantity ?? default(int);
@@ -427,8 +495,13 @@ namespace DATN_Client.Areas.Admin.Components
 
         public async Task GetBillItemShowOnBill(Guid IdBill)
         {
-             //  _lstBillItemShow.Clear();
-            //lấy các billItem của bill
+
+            _lstBillItemShow.Clear();
+            Tongtienhang = 0;
+            TongtienhangText = "0";
+            Tongtien = 0;
+            TongtienText = "0";
+
             var _lstBillItem = await _client.GetFromJsonAsync<List<BillItem_VM>>("https://localhost:7141/api/BillItem/get_alll_bill_item");
 
             var _lstBillItemOnBill = _lstBillItem.Where(x => x.BillId == IdBill).ToList();
@@ -437,7 +510,7 @@ namespace DATN_Client.Areas.Admin.Components
 
 
             _lstProductItemShow = await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
-            _lstBillItemShow.Clear();
+
 
             foreach (var item in _lstBillItemOnBill)
             {
@@ -457,13 +530,132 @@ namespace DATN_Client.Areas.Admin.Components
                 BillItemShowSellStall.Quantity = item.Quantity;
                 BillItemShowSellStall.Price = ProductItemShow.PriceAfterReduction;
                 BillItemShowSellStall.Status = 1;
-
                 _lstBillItemShow.Add(BillItemShowSellStall);
+                //Lấy thông tin tổng tiền hàng
+                var thanhtien = BillItemShowSellStall.Price * BillItemShowSellStall.Quantity;
+                Tongtienhang += thanhtien ?? default(int);
+                TongtienhangText = FormatNumber(Tongtienhang);
+
+                Tongtien = Tongtienhang;
             }
 
-            var a = 1;
+
+            if (activeTabDungDiem == true)
+            {
+                Tongtien -= InputTichDiem;
+            }
+            else if (activeTabDungDiem == false)
+            {
+                Tongtien = Tongtienhang;
+            }
+         
 
 
+
+            //Phai dat o cuoi
+            TongtienText = FormatNumber(Tongtien);
+            CheckRefund();
+        }
+
+        public void ChangeInputTichDiem(ChangeEventArgs e)
+        {
+            if (e.Value != "")
+            {
+                if (BillId != default )
+                {
+                    InputTichDiem = Convert.ToInt32(e.Value);          
+                    Tongtien = Tongtienhang;
+                    Tongtien -= InputTichDiem;
+                    TongtienText = FormatNumber(Tongtien);
+                }
+            }
+            CheckRefund();
+        }
+
+        public void CheckDungDiem(ChangeEventArgs e)
+        {
+            if ((bool)e.Value == false)
+            {
+                Tongtien = Tongtienhang;
+            }
+            else
+            {
+                Tongtien = Tongtienhang;
+                Tongtien -= InputTichDiem;
+            }
+
+
+            TongtienText = FormatNumber(Tongtien);
+            CheckRefund();
+        }
+
+        public void CheckInputPayment()
+        {
+            if (BillId != default &&  Tongtien > 0 )
+            {
+                if (activeTienMat == true && activeChuyenKhoan == false)
+                {
+                    CountPayment = InputTienMat;
+                }
+                else if (activeChuyenKhoan == true && activeTienMat == false)
+                {
+                    CountPayment = InputChuyenKhoan;
+                }
+                else if (activeChuyenKhoan == true && activeTienMat == true)
+                {
+                    CountPayment = InputTienMat + InputChuyenKhoan;
+                }
+                else if (activeChuyenKhoan == false && activeTienMat == false)
+                {
+                    CountPayment = 0;
+                }
+            }       
+        }
+
+        public void CheckRefund()
+        {
+            tienRefund = CountPayment - Tongtien;
+            if(CountPayment == 0 )
+            {
+                tienRefund = 0;
+            }
+            tienRefundText = FormatNumber(tienRefund);
+
+            if (tienRefund>0)
+            {
+                tienRefundFormat ="Bằng chữ: " + NumberToText(Convert.ToDouble(tienRefund));
+            }
+            else
+            {
+                tienRefundFormat = "";
+            }
+        }
+
+        public void CheckInputTienMat(ChangeEventArgs e)
+        {            
+            if (e.Value != "")
+            {
+                InputTienMat = Convert.ToInt32(e.Value);              
+            }
+            else
+            {
+                InputTienMat = 0;
+            }
+            CheckInputPayment();
+            CheckRefund();
+        }
+        public void CheckInputChuyenKhoan(ChangeEventArgs e)
+        {
+            if (e.Value != "")
+            {
+                InputChuyenKhoan = Convert.ToInt32(e.Value);
+            }
+            else 
+            {
+                InputChuyenKhoan = 0;
+            }         
+            CheckInputPayment();
+            CheckRefund();
         }
 
         public void PlusSoluongProduct()
@@ -508,6 +700,11 @@ namespace DATN_Client.Areas.Admin.Components
                 activeBtnAddProductToBill = true;
             }
         }
+        static string FormatNumber(int number)
+        {
+            // Sử dụng định dạng chuỗi để biến đổi số
+            return number.ToString("N0", CultureInfo.InvariantCulture);
+        }
         public static string RemoveUnicode(string text)
         {
             string[] arr1 = new string[] { "á", "à", "ả", "ã", "ạ", "â", "ấ", "ầ", "ẩ", "ẫ", "ậ", "ă", "ắ", "ằ", "ẳ", "ẵ", "ặ",
@@ -531,6 +728,94 @@ namespace DATN_Client.Areas.Admin.Components
             }
             return text;
         }
+
+        private static string NumberToText(double inputNumber, bool suffix = true)
+        {
+            string[] unitNumbers = new string[] { "không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín" };
+            string[] placeValues = new string[] { "", "nghìn", "triệu", "tỷ" };
+            bool isNegative = false;
+
+            // -12345678.3445435 => "-12345678"
+            string sNumber = inputNumber.ToString("#");
+            double number = Convert.ToDouble(sNumber);
+            if (number < 0)
+            {
+                number = -number;
+                sNumber = number.ToString();
+                isNegative = true;
+            }
+            int ones, tens, hundreds;
+
+            int positionDigit = sNumber.Length;   // last -> first
+
+            string result = " ";
+
+            if (positionDigit == 0)
+                result = unitNumbers[0] + result;
+            else
+            {
+                // 0:       ###
+                // 1: nghìn ###,###
+                // 2: triệu ###,###,###
+                // 3: tỷ    ###,###,###,###
+                int placeValue = 0;
+
+                while (positionDigit > 0)
+                {
+                    // Check last 3 digits remain ### (hundreds tens ones)
+                    tens = hundreds = -1;
+                    ones = Convert.ToInt32(sNumber.Substring(positionDigit - 1, 1));
+                    positionDigit--;
+                    if (positionDigit > 0)
+                    {
+                        tens = Convert.ToInt32(sNumber.Substring(positionDigit - 1, 1));
+                        positionDigit--;
+                        if (positionDigit > 0)
+                        {
+                            hundreds = Convert.ToInt32(sNumber.Substring(positionDigit - 1, 1));
+                            positionDigit--;
+                        }
+                    }
+
+                    if ((ones > 0) || (tens > 0) || (hundreds > 0) || (placeValue == 3))
+                        result = placeValues[placeValue] + result;
+
+                    placeValue++;
+                    if (placeValue > 3) placeValue = 1;
+
+                    if ((ones == 1) && (tens > 1))
+                        result = "một " + result;
+                    else
+                    {
+                        if ((ones == 5) && (tens > 0))
+                            result = "lăm " + result;
+                        else if (ones > 0)
+                            result = unitNumbers[ones] + " " + result;
+                    }
+                    if (tens < 0)
+                        break;
+                    else
+                    {
+                        if ((tens == 0) && (ones > 0)) result = "lẻ " + result;
+                        if (tens == 1) result = "mười " + result;
+                        if (tens > 1) result = unitNumbers[tens] + " mươi " + result;
+                    }
+                    if (hundreds < 0) break;
+                    else
+                    {
+                        if ((hundreds > 0) || (tens > 0) || (ones > 0))
+                            result = unitNumbers[hundreds] + " trăm " + result;
+                    }
+                    result = " " + result;
+                }
+            }
+            result = result.Trim();
+            if (isNegative) result = "Âm " + result;
+            return result + (suffix ? " đồng chẵn" : "");
+        }
+
+
+
     }
 
 }

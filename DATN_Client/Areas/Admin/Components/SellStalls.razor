@@ -57,8 +57,13 @@ else
                 }
                 <i class="fa-solid fa-circle-plus" style="font-size:35px;cursor:pointer" @onclick="()=>addBill()"></i>
             </div>
-            <div style="overflow-y: scroll;">
-                <table style="width:100%" class="table-sellStall">
+                        @{
+                             int a = 1;
+                        }
+                @if(_lstBillItemShow.Count !=0 )
+                {
+<div style="overflow-y: scroll;height:100%">
+                            <table style="width:100%" class="table-sellStall">
                     <thead style="background-color:#f2f2f2;color:#000">
                     <th style="width:5%">STT</th>
                     <th style="width:30%">Sản phẩm</th>
@@ -71,17 +76,21 @@ else
                     <th style="width:15%">Giá</th>
                     <th>Thành tiền</th>
                     </thead>
-                    <tbody>
-                       @if (_lstBillItemShow.Count != 0 )
+                    <tbody>                     
+                       @if ( _lstBillItemShow != null  &&  _lstBillItemShow.Count != 0)
                             {
                                  @foreach (var x in _lstBillItemShow)
                             {
                                 <tr>
-                            <td style="text-align:center">1</td>
-                            <td style="overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 1;">
-                                <i class="fa-solid fa-trash-can" style="color: #ee4444;margin-right:5px;cursor:pointer" @onclick="()=>RemoveBillItem(x.Id)">
+                            <td style="text-align:center">@a  </td>
+                            <td style="overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 1; border:none">
+                               <div>
+                                    <i class="fa-solid fa-trash-can" style="color: #ee4444;margin-right:5px;cursor:pointer" @onclick="()=>RemoveBillItem(x.Id)">
 
-                                </i>@x.ProductName</td>
+                                </i>@x.ProductName 
+                               </div>
+
+                                </td>
                             <td style="text-align:center">@x.SizeName</td>
                             <td style="text-align:center">@x.ColorName</td>
                             <td class="" style="padding:0px">
@@ -103,11 +112,19 @@ else
                             <td style="text-align:right;">@x.Price</td>
                             <td style="text-align:right;">@(x.Price*x.Quantity)</td>
                         </tr>
+                        a++;
                             }
                             }
                     </tbody>
                 </table>
-            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="show-image-no-product-cart">
+                            <img src="/images/noProductInCart.png" style="width:20%;margin-bottom:100px "/>
+                        </div>
+                    }
            </div>
            <div style="background-color:#fff;width:100%;height:30vh">
                <input type="text" style="width:30%;border-radius:7px;margin-bottom:10px" 
@@ -121,7 +138,7 @@ else
                                 string img = _lstImg_PI.Where(c => c.ProductId == x.Id).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
                             }
                             <div style="display:flex;flex-direction:column;width:100px;grid-column: span 1 / span 8;">
-                               <img src="/images/@img"
+                               <img src="/images/1.png"
                                class="imagelistShow"/>
                                <span class="titleNameProduct">
                                    @x.Name
@@ -130,7 +147,6 @@ else
                             </div>
                        </div>
                     }
-
             </div>
            </div>
         </div>
@@ -171,20 +187,22 @@ else
                <span >Tổng tiền hàng</span>
            </div>
            <div class="col-7" style="text-align:right">
-               <span >100,000,000đ</span>
+               <span >@TongtienhangText đ</span>
            </div>
        </div>
         @if (getuser.Id != default && getuser.UserName.ToString() != "khachvanglai")
             {
                  <div class="row" style="margin-top:5px;">
            <div class="col-5" style="display:flex;gap:5px;align-items:center">
-               <span>Dùng điểm</span><input type="checkbox" @bind-value="activeTabDungDiem"/>
+               <span>Dùng điểm</span><input type="checkbox" @bind-value="activeTabDungDiem" @oninput="CheckDungDiem"/>
            </div>
            <div class="col-7" style="display:flex;justify-content:flex-end;align-items:center">
-              <input type="number" style="text-align:right;width:60%" readonly="@(!@activeTabDungDiem)" />
+              <input type="number" style="text-align:right;width:60%" readonly="@(!@activeTabDungDiem)" @oninput="ChangeInputTichDiem" />
            </div>
        </div>
-       <div class="row" style="margin-top:5px;">
+   @*  if (activeTabDungDiem==true)
+                    {
+                          <div class="row" style="margin-top:5px;">
            <div class="col-5" style="display:flex;gap:5px">
                <span>Điểm quy đổi</span>
            </div>
@@ -192,26 +210,15 @@ else
               <span>10,000đ</span>
            </div>
        </div>  
+                    }
+                    else
+                    {
+                    }*@
             }
             
         @if (activeTabThemThongTin==true)
             {
-                   <div class="row" style="margin-top:5px;">
-           <div class="col-5" style="display:flex;gap:5px;align-items:center">
-               <span>Người nhận</span>
-           </div>
-           <div class="col-7" style="display:flex;justify-content:flex-end">
-              <input type="text"/>
-           </div>
-       </div>
-       <div class="row" style="margin-top:5px;align-items:center">
-           <div class="col-5" style="display:flex;gap:5px">
-               <span>Số điện thoại</span>
-           </div>
-           <div class="col-7" style="display:flex;justify-content:flex-end">
-              <input type="number"/>
-           </div>
-       </div>
+               
        <div class="row" style="margin-top:5px;align-items:center">
            <div class="col-5"><button class="col-4 btn_searchUser" data-target="#AddressShipSellStall" data-toggle="modal">
                 Địa chỉ
@@ -235,13 +242,14 @@ else
                <span>Tổng tiền</span>
            </div>
            <div class="col-7" style="display:flex;justify-content:flex-end">
-              <span>1,000,000đ</span>
+              <span>@TongtienText đ</span>
            </div>
        </div>
          <div class="row" style="margin-top:5px;align-items:center">
            <div class="col-12" style="display:flex;gap:5px">
                <span>Phương thức thanh toán</span>
            </div>       
+         
        </div>
         <div class="row" style="margin-top:5px;align-items:center;margin-top:10px">
            <div class="col-12" style="display:flex;gap:5px">
@@ -254,7 +262,7 @@ else
           <div class="row " style="margin-top:5px;margin-top:10px" >
            <div class="col-12" style="display:flex;gap:5px;justify-content:end;align-items:center">
                <i class="fa-solid fa-money-bill" style="color: #5cb85c;"></i>
-                <input type="number" style=" padding:0px;"/>
+                <input type="number" style=" padding:0px;" @oninput="CheckInputTienMat"/>
                 <i class="fa-solid fa-x"  style="color: #ee4444;cursor:pointer" @onclick="CloseTabTienMat"></i>
            </div>       
        </div>
@@ -264,7 +272,7 @@ else
                   <div class="row" style="margin-top:5px;margin-top:10px">
            <div class="col-12" style="display:flex;gap:5px;justify-content:end;align-items:center">
                <i class="fa-solid fa-credit-card" style="color: #5cb85c;"></i>
-                <input type="number" style=" padding:0px;"/>
+                <input type="number" style=" padding:0px;" @oninput="CheckInputChuyenKhoan"/>
                 <i class="fa-solid fa-x"  style="color: #ee4444;cursor:pointer" @onclick="CloseTabChuyenKhoan"></i>
            </div>       
        </div>
@@ -274,7 +282,7 @@ else
                <span>Tiền khách đưa</span>
            </div>
            <div class="col-7" style="display:flex;justify-content:flex-end;text-align:end">
-              <span>1,000,000đ</span>
+              <span> @CountPayment đ</span>
            </div>
        </div>
          <div class="row" style="margin-top:5px;align-items:center">
@@ -282,8 +290,11 @@ else
                <span>Tiền trả lại</span>
            </div>
            <div class="col-7" style="display:flex;justify-content:flex-end;text-align:end">
-              <span>1,000,000đ</span>
+              <span>@tienRefundText đ</span>
            </div>
+       </div>
+       <div style="margin-top:5px">
+           @tienRefundFormat
        </div>
 
         <div class="row" style="margin-top:25px;display:flex;justify-content:center;align-items:center;padding:0px">
@@ -316,7 +327,25 @@ else
             </div>
            <div>
                <div style="margin-top:15px;padding-left:20px">
-					<div class="row">
+
+                       <div class="row" style="margin-top:5px;">
+           <div class="col-3" style="display:flex;gap:5px;align-items:center">
+               <span>Người nhận</span>
+           </div>
+           <div class="col-7" style="display:flex;justify-content:flex-end">
+              <input type="text" style="width:100%"/>
+           </div>
+       </div>
+       <div class="row" style="margin-top:5px;align-items:center">
+           <div class="col-3" style="display:flex;gap:5px">
+               <span>Số điện thoại</span>
+           </div>
+           <div class="col-7" style="display:flex;justify-content:flex-end">
+              <input type="number" style="width:100%"/>
+           </div>
+       </div>
+
+					<div class="row" style="margin-top:15px">
                          <div class="col-3">
 						   <span>Tỉnh thành</span>				
 					    </div>
