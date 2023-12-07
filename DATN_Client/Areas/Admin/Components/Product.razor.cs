@@ -5,10 +5,10 @@ namespace DATN_Client.Areas.Admin.Components
 {
     public partial class Product
     {
-        HttpClient _httpClient = new HttpClient();
-        public Products_VM products_VM = new Products_VM();
+        HttpClient _httpClient = new();
+        public Products_VM products_VM = new();
         [Inject] NavigationManager navigationManager { get; set; }
-        List<Products_VM> products = new List<Products_VM>();
+        List<Products_VM> products = new();
         public string Message { get; set; } = string.Empty;
         protected override async Task OnInitializedAsync()
         {
@@ -38,6 +38,10 @@ namespace DATN_Client.Areas.Admin.Components
             products_VM.Id = rvm.Id;
             products_VM.Name = rvm.Name;
             products_VM.Status = rvm.Status;
+        }
+        public void RedirectCRUD(Guid id)
+        {
+            navigationManager.NavigateTo($"https://localhost:7075/product/{id}",true);
         }
     }
 }

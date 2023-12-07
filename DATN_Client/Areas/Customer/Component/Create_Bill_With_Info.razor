@@ -330,14 +330,20 @@ else
                         <div class="col-md-5"><label>Tạm tính</label></div>
                         <div class="col-md-7" style="text-align:right;"><label>@(_tongTienHang?.ToString("#,##0"))đ</label></div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-5"><label>Giảm giá</label></div>
-                        <div class="col-md-7" style="text-align:right;"><label>@(_tiengiam?.ToString("#,##0"))đ</label></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5"><label>Phí vận chuyển</label></div>
-                        <div class="col-md-7" style="text-align:right;"><label>@(_bill_validate_vm.ShippingFee?.ToString("#,##0"))đ</label></div>
-                    </div>
+                    @if (_tiengiam > 0)
+                    {
+                        <div class="row">
+                            <div class="col-md-5"><label>Giảm giá</label></div>
+                            <div class="col-md-7" style="text-align:right;"><label>@(_tiengiam?.ToString("#,##0"))đ</label></div>
+                        </div>
+                    }
+                    @if (_bill_validate_vm.ShippingFee > 0)
+                    {
+                        <div class="row">
+                            <div class="col-md-5"><label>Phí vận chuyển</label></div>
+                            <div class="col-md-7" style="text-align:right;"><label>@(_bill_validate_vm.ShippingFee?.ToString("#,##0"))đ</label></div>
+                        </div>
+                    }
                     <div class="row">
                         <div class="col-md-5">
                             <h5>Tổng cộng</h5>
