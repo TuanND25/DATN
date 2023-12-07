@@ -151,7 +151,18 @@ namespace DATN_API.Service_IService.Services
                 };
                 await _context.Carts.AddAsync(newCart);
                 await _context.SaveChangesAsync();
-                return new ResponseMess
+
+                ConsumerPoint consumerPoint = new ConsumerPoint()
+                { 
+                    UserID= id,
+                    Point =string.Empty,
+                    Status= 1,
+
+                };
+				await _context.ConsumerPoints.AddAsync(consumerPoint);
+				await _context.SaveChangesAsync();
+
+				return new ResponseMess
                 {
                     IsSuccess = true,
                     StatusCode = 201,
