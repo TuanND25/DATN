@@ -253,7 +253,7 @@
 									FirstOrDefault(c => 
 									c.ColorName == _chonMau && 
 									c.SizeName == x);
-									if (check.AvaiableQuantity == 0)
+									if (check ==null||check.AvaiableQuantity == 0)
 									{
 										checkSoLuongInput = true;
 										checkSoLuongInput_class = "het";
