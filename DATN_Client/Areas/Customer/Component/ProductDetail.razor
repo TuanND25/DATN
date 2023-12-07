@@ -244,7 +244,8 @@
 							</div>
 							@foreach (var x in _lstSize)
 							{
-								bool abc = false;
+								bool checkSoLuongInput = false;
+								string checkSoLuongInput_class = string.Empty;
 								if (!string.IsNullOrEmpty(_chonMau))
 								{
 									var check = 
@@ -254,11 +255,12 @@
 									c.SizeName == x);
 									if (check.AvaiableQuantity == 0)
 									{
-										abc = true;
+										checkSoLuongInput = true;
+										checkSoLuongInput_class = "het";
 									}
 								}
-								<label class="custom-radio-size">
-									<input type="radio" name="size" id="size @x" @onclick="()=>ChonSize(x)" disabled="@abc" />
+								<label class="custom-radio-size @checkSoLuongInput_class">
+									<input type="radio" name="size" id="size @x" @onclick="()=>ChonSize(x)" disabled="@checkSoLuongInput" />
 									<span class="">@x</span>
 								</label>
 								@* <div class="select-swap">
@@ -302,41 +304,7 @@
 						</div>
 						<div class="description-content">
 							<div class="description-productdetail">
-								<p>
-									<br>🔹 Bảng size Outerity<br>S : Dài 69 Rộng 52.5 | 1m50 - 1m65, 45 - 55Kg,<br>M
-									: Dài 73 Rộng 55 | 1m60 - 1m75, 50 - 65Kg<br>L: Dài : 76.5 Rộng: 57.5 | 1m7 -
-									1m8, 65Kg - 80Kg<br>👉 Nếu chưa biết lựa size bạn có thể inbox để được chúng
-									mình tư vấn.
-								</p>
-								<p>
-									‼️LƯU Ý ▪️Khi giặt sản phẩm bằng tay: Vui lòng hoà tan kĩ nước giặt, bột giặt với
-									nước sau đó mới cho sản phẩm vào. ▪️Khi giặt sản phẩm bằng máy giặt: Vui lòng đổ
-									nước giặt, bột giặt vào khay của máy.
-								</p>
-								<p>
-									&nbsp;🚫TUYỆT ĐỐI KHÔNG đổ nước giặt, bột giặt trực tiếp vào sản phẩm. Như vậy sẽ
-									ảnh hưởng đến màu sắc của sản phẩm và làm cho áo có tình trạng loang màu.
-									Outerity xin cảm ơn ạ🖤
-								</p>
-								<p>
-									🔹 Chính sách đổi trả Outerity.<br>– Miễn phí đổi hàng cho khách mua ở Outerity
-									trong trường hợp bị lỗi từ nhà sản xuất, giao nhầm hàng, nhầm size.<br>- Quay
-									video mở sản phẩm khi nhận hàng, nếu không có video unbox, khi phát hiện lỗi
-									phải báo ngay cho Outerity trong 1 ngày tính từ ngày giao hàng thành công. Qua 1
-									ngày chúng mình không giải quyết khi không có video unbox.<br>– Sản phẩm đổi
-									trong thời gian 3 ngày kể từ ngày nhận hàng<br>– Sản phẩm còn mới nguyên tem,
-									tags, sản phẩm chưa giặt và không dơ bẩn, hư hỏng bởi những tác nhân bên ngoài
-									cửa hàng sau khi mua hàng.<br>👉 Đặc biệt:<br>- Meow | Tết Ấm Project là dự án
-									từ thiện đem lại 1 mùa Tết ấm áp hơn cho những hoàn cảnh khó khăn nên chúng mình
-									sẽ trích 10% lợi nhuận từ mỗi đơn hàng để phục vụ cho dự án trên.&nbsp;<br>– Tất
-									cả sản phẩm ver 3.0 sẽ được hỗ trợ trả hàng hoàn tiền trong vòng 05 ngày kể từ
-									ngày nhận hàng nếu có trải nghiệm không tốt, không hài lòng về sản phẩm<br>–
-									Chấp nhận trả hàng hoàn tiền với sản phẩm đã qua sử dụng, không còn nguyên tag
-									tuy nhiên sản phẩm phải còn nguyên vẹn, không bị rách, bung chỉ, bạc màu do quá
-									trình sử dụng<br>🔹<br>Liên hệ: 0862642568<br>/ Web / Outerity.com<br>/ IG /
-									<br>/ FB / Outerity<br>#ao #thun #unisex #local #brand #outerity
-									#nam #nu #aophong #form #rong #tay #lo
-								</p>
+								- Mô tả...
 							</div>
 						</div>
 					</div>

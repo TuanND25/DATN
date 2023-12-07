@@ -13,15 +13,15 @@ namespace DATN_Client.Areas.Customer.Component
 		private HttpClient _client = new HttpClient();
 		[Inject] private NavigationManager _navigation { get; set; }
 		[Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
-		private List<ProductItem_Show_VM> _lstPrI_show_VM = new List<ProductItem_Show_VM>();
-		private List<Image_Join_ProductItem> _lstImg_PI = new List<Image_Join_ProductItem>();
-		private List<Image_Join_ProductItem> _lstImg_PI_tam = new List<Image_Join_ProductItem>();
-		private List<CartItems_VM> _lstCI = new List<CartItems_VM>();
-		private List<string> _lstColor = new List<string>();
-		private List<string> _lstSize = new List<string>();
-		private ProductItem_Show_VM _pi_S_VM = new ProductItem_Show_VM();
-		private Products_VM _p_VM = new Products_VM();
-		private User_VM _user = new User_VM();
+		private List<ProductItem_Show_VM> _lstPrI_show_VM = new();
+		private List<Image_Join_ProductItem> _lstImg_PI = new();
+		private List<Image_Join_ProductItem> _lstImg_PI_tam = new();
+		private List<CartItems_VM> _lstCI = new();
+		private List<string> _lstColor = new();
+		private List<string> _lstSize = new();
+		private ProductItem_Show_VM _pi_S_VM = new();
+		private Products_VM _p_VM = new();
+		private User_VM _user = new();
 		public string _path_Tam { get; set; }
 		public string _nameP { get; set; }
 		public string _nameCate { get; set; }
@@ -37,7 +37,7 @@ namespace DATN_Client.Areas.Customer.Component
 		public string? _iduser { get; set; }
 		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
 		private ISession? _ss { get; set; }
-		List<string> _lstSizeSample = new List<string> { "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL" };
+		List<string> _lstSizeSample = new() { "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL" };
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -52,7 +52,7 @@ namespace DATN_Client.Areas.Customer.Component
 			_giaMin = _lstPrI_show_VM.Min(c => c.PriceAfterReduction);
 			_giaMax = _lstPrI_show_VM.Max(c => c.PriceAfterReduction);
 			_gia = _giaMin < _giaMax ? _giaMin?.ToString("#,##0") + "đ - " + _giaMax?.ToString("#,##0") + "đ" : _giaMax?.ToString("#,##0") + "đ";
-			_lstColor = _lstPrI_show_VM.Select(c => c.ColorName).Distinct().OrderBy(c=>c).ToList();
+			_lstColor = _lstPrI_show_VM.Select(c => c.ColorName).Distinct().OrderBy(c => c).ToList();
 			_lstSize = _lstPrI_show_VM.Select(c => c.SizeName).Distinct().ToList();
 			_lstSize = _lstSize.OrderBy(c => _lstSizeSample.IndexOf(c)).ToList();
 		}
@@ -116,7 +116,7 @@ namespace DATN_Client.Areas.Customer.Component
 					return;
 				}
 				var prmi = await _client.GetFromJsonAsync<PromotionItem_VM>($"https://localhost:7141/api/PromotionItem/getPromotionItem_Percent_by_productItemID/{_pi_S_VM.Id}");
-				 _percent = prmi.Percent;
+				_percent = prmi.Percent;
 				_gia = _pi_S_VM.PriceAfterReduction?.ToString("#,##0") + "đ";
 				_giaBanDau = _pi_S_VM.CostPrice?.ToString("#,##0") + "đ";
 				_soluongton = 0;
@@ -146,6 +146,11 @@ namespace DATN_Client.Areas.Customer.Component
 
 		public async Task ThemVaoGiohang()
 		{
+			if (string.IsNullOrEmpty(_chonSize) || string.IsNullOrEmpty(_chonMau))
+			{
+				_toastService.ShowError("Vui lòng chọn biến thể");
+				return;
+			}
 			// call api kiểm tra số lượng ngay khi bấm thêm giỏ
 			var checkSl = await _client.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{_pi_S_VM.Id}");
 			// ko phải vãng lai
