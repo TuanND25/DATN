@@ -23,7 +23,7 @@ namespace DATN_Client.Areas.Customer.Component
 		private List<Image_Join_ProductItem> _lstImg_PI_tam = new();
 		private List<ProductItem_Show_VM> _lstPrI_show_VM = new();
 		private List<PaymentMethod_VM> _lstPayM = new();
-		public static Bill_DataAnotation_VM _bill_validate_vm = new();
+		public static Bill_DataAnotation_VM _bill_validate_vm = new Bill_DataAnotation_VM();
 		private User_VM? _user_vm = new();
 		private ProductItem_Show_VM _pi_s_vm = new();
 		private OrderInfoModel _ord = new();
@@ -162,8 +162,11 @@ namespace DATN_Client.Areas.Customer.Component
 				return;
 			}
 			var regexPN = @"^0\d{9,10}$"; // regex số đt
-			if (String.IsNullOrEmpty(_bill_validate_vm.Recipient) || String.IsNullOrEmpty(_bill_validate_vm.NumberPhone) || String.IsNullOrEmpty(_bill_validate_vm.ToAddress) || String.IsNullOrEmpty(_bill_validate_vm.Province) || String.IsNullOrEmpty(_bill_validate_vm.District) || String.IsNullOrEmpty(_bill_validate_vm.WardName) || !Regex.IsMatch(_bill_validate_vm.NumberPhone, regexPN)) return;
-			_datHangThanhCong = true;
+
+
+            if (String.IsNullOrEmpty(_bill_validate_vm.Recipient) || String.IsNullOrEmpty(_bill_validate_vm.NumberPhone) || String.IsNullOrEmpty(_bill_validate_vm.ToAddress) || String.IsNullOrEmpty(_bill_validate_vm.Province) || String.IsNullOrEmpty(_bill_validate_vm.District) || String.IsNullOrEmpty(_bill_validate_vm.WardName) || !Regex.IsMatch(_bill_validate_vm.NumberPhone, regexPN)) return;
+
+            _datHangThanhCong = true;
 			_afterClick = "afterClick";
 			var codeToday = DateTime.Now.ToString().Replace("/", "").Substring(0, 4) +
 								DateTime.Now.Year.ToString().Substring(2);

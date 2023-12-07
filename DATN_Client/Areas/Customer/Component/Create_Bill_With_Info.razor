@@ -53,19 +53,22 @@
     }
 
     .scoll {
-        margin-top:20px;
+        margin-top: 20px;
         max-height: 310px; /* Đặt chiều cao tối đa của phần tử cha */
         overflow-y: scroll;
-        overflow-x:hidden;
-        margin-bottom:20px;
+        overflow-x: hidden;
+        margin-bottom: 20px;
     }
-    .noscoll{
-        margin-bottom:20px;
-        margin-top:20px;
+
+    .noscoll {
+        margin-bottom: 20px;
+        margin-top: 20px;
     }
-    .checkone{
-        margin-top:15px;
+
+    .checkone {
+        margin-top: 15px;
     }
+
     .btnTrongSuot {
         background-color: transparent;
         color: blue;
@@ -73,93 +76,97 @@
         font-family: inherit;
         font-size: 15px;
         font-weight: 500;
-        /*margin-left:20px; */ 
+        /*margin-left:20px; */
         /*margin-bottom:4px;  */
-        
     }
 </style>
-@if(isLoader)
+@if (isLoader)
 {
     <div class="loader-overlay">
-    <div class="loader-container">
-      <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
-        <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
-        <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
-        <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
-        <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
-      </svg>
-    </div></div>
+        <div class="loader-container">
+            <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
+                <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+                <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+                <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+                <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+            </svg>
+        </div>
+    </div>
 }
 else
 {
-<div class="all">
-    <div class="row" style="position: relative;">
-        <div class="col-md-8" style="margin-top: 15px;">
-            <div class="row logo1">
-                <lable class="logo">BUGS HUNTER</lable>
-            </div>
-            <div class="row">
-                <div class="col-md-7" style="padding-left:100px;">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <label style=" margin-top:5px;font-weight:700; margin-bottom:15px;">Thông tin nhận hàng</label>
-                        </div>
-                        <div class="col-md-5" style="text-align:right;">
-                            @if (_user_vm.Name == null || _user_vm.Name == string.Empty)
-                            {
-                                <button class="btnTrongSuot" @onclick="NavLogin">
-                                Đăng nhập
-                                </button>
-                            }
-                            else
-                            {
-                                <label data-toggle="modal" class="btnTrongSuot" data-target="#ChonDiaChi">Địa chỉ khác</label>
-                            }
-                        </div>
-                </div>
-                    
-                    
 
-                    <div style="">
-                        @if (_user_vm.Name == null || _user_vm.Name == string.Empty)
-                        {
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="floatingName" value="Chưa có thông tin người dùng" disabled readonly>
-                                <label style="color:#999999;" for="floatingName">Tài khoản</label>
-                            </div>
-                        }
-                        else
-                        {
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="floatingName" @bind-value="_user_vm.Name">
-                                    <label style="color:#999999;" for="floatingName">Tài khoản</label>
-                                </div>
-                        }
+
+    <div class="all">
+        <EditForm Model="_bill_validate_vm">
+            <DataAnnotationsValidator />
+            <div class="row" style="position: relative;">
+                <div class="col-md-8" style="margin-top: 15px;">
+                    <div class="row logo1">
+                        <lable class="logo">BUGS HUNTER</lable>
                     </div>
-                    <EditForm Model="_bill_validate_vm">
-                        <DataAnnotationsValidator />
-                        <div style="margin-top:10px;">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="floatingName1" @bind-value="_bill_validate_vm.Recipient" placeholder="Tên người nhận">
-                                <label style="color:#999999;" for="floatingName1">Tên người nhận</label>
+                    <div class="row">
+                        <div class="col-md-7" style="padding-left:100px;">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <label style=" margin-top:5px;font-weight:700; margin-bottom:15px;">Thông tin nhận hàng</label>
+                                </div>
+                                <div class="col-md-5" style="text-align:right;">
+                                    @if (_user_vm.Name == null || _user_vm.Name == string.Empty)
+                                    {
+                                        <button class="btnTrongSuot" @onclick="NavLogin">
+                                            Đăng nhập
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <label data-toggle="modal" class="btnTrongSuot" data-target="#ChonDiaChi">Địa chỉ khác</label>
+                                    }
+                                </div>
                             </div>
-                            <ValidationMessage For="()=>_bill_validate_vm.Recipient" />
-                        </div>
-                        <div style="margin-top:10px;">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="floatingName2" @bind-value="_bill_validate_vm.NumberPhone" placeholder="Số điện thoại" maxlength="10">
-                                <label style="color:#999999;" for="floatingName2">Số điện thoại</label>
-                            </div>
-                            <ValidationMessage For="()=>_bill_validate_vm.NumberPhone" />
-                        </div>
 
-                        <div class="form-floating" style="margin-top:10px;">
-                            <InputSelect class="form-select" @bind-Value="@_bill_validate_vm.Province" @onclick="ChonTinhTP" id="floatingSelect" aria-label="Tỉnh/Thành phố">
-                                <option value="@string.Empty" style="color:#999999;" selected>--Tỉnh/Thành phố--</option>
-                                @foreach (var x in _lstTinhTp)
+
+
+                            <div style="">
+                                @if (_user_vm.Name == null || _user_vm.Name == string.Empty)
                                 {
-                                    <option value="@x.Name">@x.Name</option>
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="floatingName" value="Chưa có thông tin người dùng" disabled readonly>
+                                        <label style="color:#999999;" for="floatingName">Tài khoản</label>
+                                    </div>
                                 }
+                                else
+                                {
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="floatingName" @bind-value="_user_vm.Name">
+                                        <label style="color:#999999;" for="floatingName">Tài khoản</label>
+                                    </div>
+                                }
+                            </div>
+
+                            <div style="margin-top:10px;">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="floatingName1" @bind-value="_bill_validate_vm.Recipient" placeholder="Tên người nhận">
+                                    <label style="color:#999999;" for="floatingName1">Tên người nhận</label>
+                                </div>
+                                <ValidationMessage For="()=>_bill_validate_vm.Recipient" />
+                            </div>
+
+                            <div style="margin-top:10px;">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="floatingName2" @bind-value="_bill_validate_vm.NumberPhone" placeholder="Số điện thoại" maxlength="10">
+                                    <label style="color:#999999;" for="floatingName2">Số điện thoại</label>
+                                </div>
+                                <ValidationMessage For="()=>_bill_validate_vm.NumberPhone" />
+                            </div>
+
+                            <div class="form-floating" style="margin-top:10px;">
+                                <InputSelect class="form-select" @bind-Value="@_bill_validate_vm.Province" @onclick="ChonTinhTP" id="floatingSelect" aria-label="Tỉnh/Thành phố">
+                                    <option value="@string.Empty" style="color:#999999;" selected>--Tỉnh/Thành phố--</option>
+                                    @foreach (var x in _lstTinhTp)
+                                    {
+                                    <option value="@x.Name">@x.Name</option>
+                                    }
                             </InputSelect>
                             <label style="color:#999999;" for="floatingSelect">Tỉnh/Thành phố</label>
                         </div>
@@ -169,9 +176,9 @@ else
                             <InputSelect class="form-select" @bind-Value="@_bill_validate_vm.District" @onclick="ChonQuanHuyen" id="floatingSelect1" aria-label="Quận/Huyện">
                                 <option value="@string.Empty" style="color:#999999;" selected>--Quận/Huyện--</option>
                                 @foreach (var x in _lstQuanHuyen)
-                                {
+                                    {
                                     <option value="@x.Name">@x.Name</option>
-                                }
+                                    }
                             </InputSelect>
                             <label style="color:#999999;" for="floatingSelect1">Quận/Huyện</label>
                         </div>
@@ -181,9 +188,9 @@ else
                             <InputSelect class="form-select" @bind-Value="@_bill_validate_vm.WardName" id="floatingSelect2" aria-label="Phường/Xã">
                                 <option value="@string.Empty" style="color:#999999;" selected>--Phường/Xã--</option>
                                 @foreach (var x in _lstXaPhuong)
-                                {
+                                    {
                                     <option value="@x.Name">@x.Name</option>
-                                }
+                                    }
                             </InputSelect>
                             <label style="color:#999999;" for="floatingSelect2">Phường/Xã</label>
                         </div>
@@ -207,197 +214,192 @@ else
 
 
 
-                    </EditForm>
-                </div>
-                <div class="col-md-5">
-                    <EditForm Model="_bill_validate_vm">
+                    </div>
+                    <div class="col-md-5">
                         <label style=" margin-top:5px;font-weight:700;">Phương thức thanh toán</label>
                         <div class="paymentMethods" style="margin-top:15px;">
                             <InputRadioGroup @bind-Value="_bill_validate_vm.PaymentMethodId" class="form-control">
                                 @foreach (var a in _lstPayM)
-                                {
+                                    {
                                     <label class="radio-button" @onclick="()=>SetDataPayMId(a.Id)">
                                         <InputRadio Value="a.Id" />
                                         <div class="radio-circle"></div>
                                         <span class="radio-label">@a.Name</span>
                                     </label>
                                     @if (a.Name == "Thanh toán khi nhận hàng (COD)" && _lstPayM.Where(c => c.Id == _bill_validate_vm.PaymentMethodId).FirstOrDefault().Name == "Thanh toán khi nhận hàng (COD)")
-                                    {
+                                        {
                                         <div>
                                             <p class="titleCOD">
                                                 1. Khi click vào nút <b>Hoàn tất đơn hàng</b> thì đơn hàng sẽ được hệ thống tự động xác nhận mà không cần phải gọi qua điện thoại, nếu điền thông tin địa chỉ và số điện thoại chính xác thì đơn hàng sẽ được vận chuyển từ 3-4-5 ngày tùy vùng miền.<br>
                                                 2. Trường hợp đặt hàng xong nhưng muốn HỦY ĐƠN, vui lòng soạn tin nhắn theo cú pháp: SĐT ĐÃ ĐẶT ĐƠN (hoặc MÃ ĐƠN hoặc GMAIL ĐƠN HÀNG) + TÊN NGƯỜI NHẬN sau đó gửi qua các kênh online: Page Facebook, Intagram. Nhân viên check tin nhắn sẽ xử lý hủy giúp Quý KH.
                                             </p>
                                         </div>
-                                    }
+                                        }
                                     @if (a.Name == "Thanh toán Momo" && _lstPayM.Where(c => c.Id == _bill_validate_vm.PaymentMethodId).FirstOrDefault().Name == "Thanh toán Momo")
-                                    {
+                                        {
                                         <div>
                                             <p class="titleCOD">
                                                 Sau khi bấm nút <b>Hoàn tất đơn hàng</b> bạn sẽ được chuyển hướng đến trang thanh toán của Momo. Vui lòng thanh toán để hoàn tất đơn hàng
                                             </p>
                                         </div>
+                                        }
                                     }
-                                }
                             </InputRadioGroup>
                         </div>
-                    </EditForm>
+                    </div>
                 </div>
             </div>
-        </div>
-        @{
-            int d = 0;
-            int e = 0;
-            foreach(var x in _lstCI)
-            {
-                d += x.Quantity;
-            }
-            e = _lstCI.Count();
-        }
-        <div class="col-md-4 yeah">
-            <p class="lbDatHang">Đơn hàng: @d sản phẩm </p>
-            <hr />
-            <div class="@(e>4?"scoll":"noscoll")">
-                @foreach (var x in _lstCI)
-                {
-                    _pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
-                    var lst_chonmau = _lstPrI_show_VM.Where(c => c.ColorId == _pi_s_vm.ColorId).ToList();
-                    _lstImg_PI_tam.Clear();
-                    foreach (var mau in lst_chonmau)
+            @{
+                    int d = 0;
+                    int e = 0;
+                    foreach (var x in _lstCI)
                     {
-                        var a = _lstImg_PI.Where(c => c.ProductItemId == mau.Id);
-                        _lstImg_PI_tam.AddRange(a);
+                        d += x.Quantity;
                     }
-                    var img = _lstImg_PI_tam.Where(c => c.ProductId == _pi_s_vm.ProductId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
+                    e = _lstCI.Count();
+                }
+                <div class="col-md-4 yeah">
+                    <p class="lbDatHang">Đơn hàng: @d sản phẩm </p>
+                    <hr />
+                    <div class="@(e>4?"scoll":"noscoll")">
+                        @foreach (var x in _lstCI)
+                        {
+                            _pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
+                            var lst_chonmau = _lstPrI_show_VM.Where(c => c.ColorId == _pi_s_vm.ColorId).ToList();
+                            _lstImg_PI_tam.Clear();
+                            foreach (var mau in lst_chonmau)
+                            {
+                                var a = _lstImg_PI.Where(c => c.ProductItemId == mau.Id);
+                                _lstImg_PI_tam.AddRange(a);
+                            }
+                            var img = _lstImg_PI_tam.Where(c => c.ProductId == _pi_s_vm.ProductId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
 
-                    <div class="row">
-                        <div class="col-md-8" style="margin-top:10px">
-                            <div style="display:flex;">
-                                <div style="position:relative">
-                                    <img src="/images/1.png" alt="" style="width:60px;height:60px;border-radius:8px">
-                                    @*<img src="/images/@img" alt="" style="width:60px;height:60px;border-radius:8px">*@
-                                    <div class="img_Ab">@x.Quantity</div>
-                                </div>
-                                <div style="display:flex; justify-content:space-between;flex-direction:column;height:60%;margin-top:auto;margin-bottom:auto;margin-left:20px">
-                                    <label style="font-size:12px">@_pi_s_vm.Name</label>
-                                    <div style="display:flex; justify-content:space-between;flex-direction:column;font-size:12px">
-                                        <label>@_pi_s_vm.SizeName</label>
-                                        <label>@_pi_s_vm.ColorName</label>
+                            <div class="row">
+                                <div class="col-md-8" style="margin-top:10px">
+                                    <div style="display:flex;">
+                                        <div style="position:relative">
+                                            <img src="/images/1.png" alt="" style="width:60px;height:60px;border-radius:8px">
+                                            @*<img src="/images/@img" alt="" style="width:60px;height:60px;border-radius:8px">*@
+                                            <div class="img_Ab">@x.Quantity</div>
+                                        </div>
+                                        <div style="display:flex; justify-content:space-between;flex-direction:column;height:60%;margin-top:auto;margin-bottom:auto;margin-left:20px">
+                                            <label style="font-size:12px">@_pi_s_vm.Name</label>
+                                            <div style="display:flex; justify-content:space-between;flex-direction:column;font-size:12px">
+                                                <label>@_pi_s_vm.SizeName</label>
+                                                <label>@_pi_s_vm.ColorName</label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="col-md-3" style="margin-top:auto;margin-bottom:auto;margin-left:29px;">
+                                    <h6 style="text-align:right;font-size:15px">
+                                        @((x.Quantity * _pi_s_vm.PriceAfterReduction)?.ToString("#,##0"))đ<br>
+                                        @*<del style="color:grey">@((x.Quantity * _pi_s_vm.CostPrice)?.ToString("#,##0"))đ</del>*@
+                                    </h6>
+                                </div>
+
                             </div>
+                            <div style="height:1px;background-color:#000;margin-top:12px">
                             </div>
-                            <div class="col-md-3" style="margin-top:auto;margin-bottom:auto;margin-left:29px;">
-                                <h6 style="text-align:right;font-size:15px">
-                                    @((x.Quantity * _pi_s_vm.PriceAfterReduction)?.ToString("#,##0"))đ<br>
-                                    @*<del style="color:grey">@((x.Quantity * _pi_s_vm.CostPrice)?.ToString("#,##0"))đ</del>*@
-                                </h6>
-                            </div>
-                        
+                        }
                     </div>
-                    <div style="height:1px;background-color:#000;margin-top:12px">
-                    </div>
-                }
-            </div>
-            <button class="btn-voucher">
-                <i class="fa-solid fa-ticket fa-lg" style="color: #2b56a1;"></i> <span>Ví Voucher</span>
-            </button>
-            <div class="input-container">
-                <input type="text" placeholder="Nhập mã giảm giá" @bind-value="_voucherCode">
-                <button class="invite-btn" type="button" @onclick="ApDungVoucher">
-                    Áp dụng
-                </button>
-            </div>
-            @* !string.IsNullOrEmpty(_voucherCode) && !_lstVchUser.Any(c => c.VoucherId == _v_vm.Id && c.Status == 0) && _v_vm.Quantity > 0 && _tongTienHang > _v_vm.Discount_Conditions *@
-            @if (_tiengiam > 0)
-            {
-                <div style="display:flex;background-color:#fdf4ed;border:1px solid #A09F9E;border-radius:5px;padding:10px 10px;vertical-align:middle">
-                    <div class="col-md-11">
-                        <span>
-                            Mã giảm giá <b>@_voucherCode.ToUpper()</b> đã giúp bạn tiết kiệm @(_tiengiam?.ToString("#,##0"))đ.
-                        </span>
-                    </div>
-                    <div class="col-md-1" style="text-align:unset">
-                        <span @onclick="XoaVoucher"><b>Hủy</b></span>
-                    </div>
-                </div>
-            }
-            <div class="row">
-                <div class="col-md-5"><label>Tạm tính</label></div>
-                <div class="col-md-7" style="text-align:right;"><label>@(_tongTienHang?.ToString("#,##0"))đ</label></div>
-            </div>
-            <div class="row">
-                <div class="col-md-5"><label>Giảm giá</label></div>
-                <div class="col-md-7" style="text-align:right;"><label>@(_tiengiam?.ToString("#,##0"))đ</label></div>
-            </div>
-            <div class="row">
-                <div class="col-md-5"><label>Phí vận chuyển</label></div>
-                <div class="col-md-7" style="text-align:right;"><label>@(_bill_validate_vm.ShippingFee?.ToString("#,##0"))đ</label></div>
-            </div>
-            <div class="row">
-                <div class="col-md-5">
-                    <h5>Tổng cộng</h5>
-                </div>
-                <div class="col-md-7">
-                    <h5 style="text-align:right;">@(_tongTienAll?.ToString("#,##0"))đ</h5>
-                </div>
-            </div>
-            <div class="row">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:25px">
-                    <div>
-                        <a style="color:#7dccff;cursor:pointer;" @onclick="BackToCart">Quay lại giỏ hàng</a>
-                    </div>
-                    <div>
-                        <button class="btnSuccesBill1 @_afterClick" @onclick="Btn_DatHang" disabled="@_datHangThanhCong">
-                            Hoàn tất đơn hàng
+                    <button class="btn-voucher">
+                        <i class="fa-solid fa-ticket fa-lg" style="color: #2b56a1;"></i> <span>Ví Voucher</span>
+                    </button>
+                    <div class="input-container">
+                        <input type="text" placeholder="Nhập mã giảm giá" @bind-value="_voucherCode">
+                        <button class="invite-btn" type="button" @onclick="ApDungVoucher">
+                            Áp dụng
                         </button>
                     </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-
-
-
-
-<div class="modal fade" id="ChonDiaChi">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Phần tiêu đề của popup -->
-            <div class="modal-header">
-                <h4 class="modal-title">Chọn địa chỉ</h4>
-                <button type="button" class="close" style="background-color:transparent;border:none;" data-dismiss="modal">&times;</button>
-            </div>
-
-            <!-- Nội dung của popup -->
-            <div class="modal-body">
-                @foreach (var item in _lst_adrS_User.OrderByDescending(c => c.Status))
-                {
-                    <div class="row" style="height:60px; margin-bottom:30px;">
-                        <div class="col-md-10">
-                            @item.Recipient | @item.NumberPhone <br>
-                            @(item.ToAddress + ", " + item.WardName + ", " + item.District + ", " + item.Province)
+                    @* !string.IsNullOrEmpty(_voucherCode) && !_lstVchUser.Any(c => c.VoucherId == _v_vm.Id && c.Status == 0) && _v_vm.Quantity > 0 && _tongTienHang > _v_vm.Discount_Conditions *@
+                    @if (_tiengiam > 0)
+                    {
+                        <div style="display:flex;background-color:#fdf4ed;border:1px solid #A09F9E;border-radius:5px;padding:10px 10px;vertical-align:middle">
+                            <div class="col-md-11">
+                                <span>
+                                    Mã giảm giá <b>@_voucherCode.ToUpper()</b> đã giúp bạn tiết kiệm @(_tiengiam?.ToString("#,##0"))đ.
+                                </span>
+                            </div>
+                            <div class="col-md-1" style="text-align:unset">
+                                <span @onclick="XoaVoucher"><b>Hủy</b></span>
+                            </div>
                         </div>
-                        <div class="col-md-2" style="text-align:center;vertical-align:middle;">
-                            <button class="btn btn-primary" data-dismiss="modal" @onclick="()=>ChonDiaChiTuList(item)">Chọn</button>
+                    }
+                    <div class="row">
+                        <div class="col-md-5"><label>Tạm tính</label></div>
+                        <div class="col-md-7" style="text-align:right;"><label>@(_tongTienHang?.ToString("#,##0"))đ</label></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5"><label>Giảm giá</label></div>
+                        <div class="col-md-7" style="text-align:right;"><label>@(_tiengiam?.ToString("#,##0"))đ</label></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5"><label>Phí vận chuyển</label></div>
+                        <div class="col-md-7" style="text-align:right;"><label>@(_bill_validate_vm.ShippingFee?.ToString("#,##0"))đ</label></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <h5>Tổng cộng</h5>
+                        </div>
+                        <div class="col-md-7">
+                            <h5 style="text-align:right;">@(_tongTienAll?.ToString("#,##0"))đ</h5>
                         </div>
                     </div>
-                }
+                    <div class="row">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:25px">
+                            <div>
+                                <a style="color:#7dccff;cursor:pointer;" @onclick="BackToCart">Quay lại giỏ hàng</a>
+                            </div>
+                            <div>
+                                <button class="btnSuccesBill1 @_afterClick" @onclick="Btn_DatHang" disabled="@_datHangThanhCong">
+                                    Hoàn tất đơn hàng
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-            <!-- Phần chân của popup -->
+        </EditForm>
+    </div>
+
+
+    <div class="modal fade" id="ChonDiaChi">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Phần tiêu đề của popup -->
+            <div class="modal-header">
+                    <h4 class="modal-title">Chọn địa chỉ</h4>
+                    <button type="button" class="close" style="background-color:transparent;border:none;" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Nội dung của popup -->
+            <div class="modal-body">
+                    @foreach (var item in _lst_adrS_User.OrderByDescending(c => c.Status))
+                    {
+                        <div class="row" style="height:60px; margin-bottom:30px;">
+                            <div class="col-md-10">
+                                @item.Recipient | @item.NumberPhone <br>
+                                @(item.ToAddress + ", " + item.WardName + ", " + item.District + ", " + item.Province)
+                            </div>
+                            <div class="col-md-2" style="text-align:center;vertical-align:middle;">
+                                <button class="btn btn-primary" data-dismiss="modal" @onclick="()=>ChonDiaChiTuList(item)">Chọn</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <!-- Phần chân của popup -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
             </div>
         </div>
-    </div>
-    <BlazoredToasts Position="ToastPosition.TopRight"
+        <BlazoredToasts Position="ToastPosition.TopRight"
                     Timeout="5"
                     IconType="IconType.FontAwesome"
                     SuccessClass="success-toast-override"
                     SuccessIcon="fa-solid fa-check"
                     ErrorIcon="fa-solid fa-triangle-exclamation" />
-</div>
+    </div>
 }
