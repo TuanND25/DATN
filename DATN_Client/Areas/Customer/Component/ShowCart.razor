@@ -102,8 +102,22 @@
 					<a href="https://localhost:7075/product-detail/@_pi_s_vm.ProductId"><img src="/images/@img" alt="" style="width:110px;height:110px;"></a>
 					<div style="display:flex;flex-direction:column;justify-content:space-between;color:#333333;font-weight:700;font-size:17px;text-align:left;margin-left:20px">
 						<label>@_pi_s_vm.Name</label>
-						<label style="font-weight:500">@(_pi_s_vm.ColorName + ", " + _pi_s_vm.SizeName)</label>
-						<label style="font-weight:500">@((_pi_s_vm.PriceAfterReduction)?.ToString("#,##0"))đ</label>
+						<label style="font-weight:500">@(_pi_s_vm.ColorName + ", " + _pi_s_vm.SizeName)</label>						
+						@if (_pi_s_vm.PriceAfterReduction != _pi_s_vm.CostPrice)
+						{
+							<label>
+								<b style="font-weight:600">
+									@((_pi_s_vm.PriceAfterReduction)?.ToString("#,##0"))đ
+								</b><del style="font-weight:500;margin-left:5px;color:grey">@((_pi_s_vm.CostPrice)?.ToString("#,##0"))đ</del>
+							</label>
+						}
+						else
+						{
+							<b style="font-weight:600">
+								@((_pi_s_vm.PriceAfterReduction)?.ToString("#,##0"))đ
+							</b>
+						}
+
 						<div class="number-input">
 							<div class="input-wrapper">
 								<button class="minus-button" @onclick="()=>SL_Tru(x)">-</button>

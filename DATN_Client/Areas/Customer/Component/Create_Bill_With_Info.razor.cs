@@ -143,6 +143,19 @@ namespace DATN_Client.Areas.Customer.Component
 		//public int? ShippingFee { get; set; }
 		public async Task Btn_DatHang()
 		{
+			_lstPrI_show_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
+			bool checkSl = false;			
+			foreach (var a in _lstCI)
+			{
+				var pi = _lstPrI_show_VM.FirstOrDefault(c => c.Id == a.ProductItemId);	
+				if (a.Quantity > pi.AvaiableQuantity)
+				{
+					if (pi.AvaiableQuantity == 0) _toastService.ShowError($"Sản phẩm {pi.Name} - {pi.ColorName} - {pi.SizeName} hiện đã tạm hết hàng");
+					else _toastService.ShowError($"Sản phẩm {pi.Name} - {pi.ColorName} - {pi.SizeName} vượt quá số lượng tồn kho. Quý khách vui lòng giảm số lượng sản phẩm!");
+					checkSl = true;
+				}
+			}
+			if (checkSl == true) return;
 			if (_lstVchUser.Any(c => c.VoucherId == _bill_validate_vm.VoucherId && c.Status == 0))
 			{
 				_toastService.ShowError("Bạn đã sử dụng mã giảm giá này rồi, vui lòng chọn mã giảm giá khác!");
@@ -377,8 +390,8 @@ namespace DATN_Client.Areas.Customer.Component
 			_bill_validate_vm.PaymentMethodId = id;
 		}
 		private void NavLogin()
-        {
+		{
 			_navi.NavigateTo("https://localhost:7075/customer/Login/login", true);
-        }
+		}
 	}
 }
