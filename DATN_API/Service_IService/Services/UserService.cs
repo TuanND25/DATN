@@ -135,7 +135,17 @@ namespace DATN_API.Service_IService.Services
 
         public async Task<ResponseMess> AddEmployeeOrAdmin(AddUserByAdmin user)
         {
-            if (await _userManager.FindByEmailAsync(user.email) != null)
+			if (await _userManager.Users.FirstOrDefaultAsync(p => p.PhoneNumber == user.phonenumber && p.Status == 1) != null)
+			{
+				return new ResponseMess
+				{
+					IsSuccess = false,
+					StatusCode = 403,
+					Message = "Số điện thoại đã tồn tại"
+
+				};
+			}
+			if (await _userManager.FindByEmailAsync(user.email) != null)
             {
                 return new ResponseMess
                 {
