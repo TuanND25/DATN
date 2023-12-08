@@ -6,6 +6,7 @@ namespace DATN_Client.Areas.Admin.Controllers
 	public class ProductController : Controller
 	{
 		public static Guid _productID { get;set; }
+		[Route("product-manager")]
 		public IActionResult Index()
 		{
 			return View();

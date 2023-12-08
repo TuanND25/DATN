@@ -1,4 +1,7 @@
-﻿@if (_lst_pri == null)
+﻿<button class="btn btn-primary" @onclick="BackToManager">Trở lại</button>
+
+<h2>Danh sách sản phẩm</h2>
+@if (_lst_pri == null)
 {
 	<p><em>Loading...</em></p>
 }
@@ -7,11 +10,10 @@ else
 	<table class="table">
 		<thead>
 			<tr>
-				<th style="text-align:center">Tên</th>
+				<th style="width:3%;text-align:center">#</th>
+				<th style="text-align:center">Sản phẩm</th>
 				<th style="text-align:center">Mã</th>
 				<th style="text-align:center">Thể loại</th>
-				<th style="text-align:center">Màu sắc</th>
-				<th style="text-align:center">Size</th>
 				<th style="text-align:center">Số lượng tồn</th>
 				<th style="text-align:center">Giá bán</th>
 				<th style="text-align:center">Giá sau giảm</th>
@@ -20,14 +22,14 @@ else
 			</tr>
 		</thead>
 		<tbody>
+			@{int sttLstSP = 1;}
 			@foreach (var x in _lst_pri)
 			{
 				<tr>
-					<td style="vertical-align:middle">@x.Name</td>
+					<td style="vertical-align:middle;text-align:center">@(sttLstSP++)</td>
+					<td style="vertical-align:middle">@x.Name - @x.ColorName - @x.SizeName</td>
 					<td style="vertical-align:middle">@x.ProductCode</td>
 					<td style="vertical-align:middle;text-align:center">@x.CategoryName</td>
-					<td style="vertical-align:middle;text-align:center">@x.ColorName</td>
-					<td style="vertical-align:middle;text-align:center">@x.SizeName</td>
 					<td style="vertical-align:middle;text-align:center">@x.AvaiableQuantity</td>
 					<td style="vertical-align:middle;text-align:center">@x.CostPrice</td>
 					<td style="vertical-align:middle;text-align:center">@x.PriceAfterReduction</td>
