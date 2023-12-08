@@ -1,12 +1,12 @@
 ﻿<div class="card">
     <div class="card-body">
-        <h1 style="margin-top:20px">Update Promotion</h1>
+       <h3 style="margin-top:20px">Cập nhật khuyến mại</h3>
         <div class="pagetitle">
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item">Promotion</li>
-                    <li class="breadcrumb-item">Update Promotion</li>
+                    <li class="breadcrumb-item">Khuyến mại</li>
+                    <li class="breadcrumb-item">Cập nhật khuyến mại</li>
                 </ol>
             </nav>
         </div>
@@ -21,13 +21,13 @@
 
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">General Form Elements</h4>
+                    <h4 class="card-title">Cập nhật</h4>
 
                     <!-- General Form Elements -->
                     <EditForm Model="_promotion">
                                                 <DataAnnotationsValidator/>
                         <div class="row mb-3">
-                            <label for="inputText" class="col-sm-4 col-form-label">Tên khuyến mãi</label>
+                            <label for="inputText" class="col-sm-4 col-form-label">Tên khuyến mại</label>
                             <div class="col-sm-8">
                                 <InputText class="form-control" @bind-Value="_promotion.Name" />
                                 <ValidationMessage  For="()=>_promotion.Name" />
@@ -42,6 +42,17 @@
                                 <ValidationMessage  For="()=>_promotion.Percent" />
                             </div>
                         </div>
+
+                        <div class="row mb-3">
+                            <label for="inputNumber" class="col-sm-4 col-form-label">Số lượng</label>
+                            <div class="col-sm-8">
+                                <InputNumber class="form-control" @bind-Value="_promotion.Percent" />
+                                <ValidationMessage  For="()=>_promotion.Percent" />
+                            </div>
+                        </div>
+
+
+
                         <div class="row mb-3">
                             <label for="inputDate" class="col-sm-4 col-form-label">Ngày bắt đầu</label>
                             <div class="col-sm-8">
@@ -87,14 +98,14 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label class="col-sm-4 col-form-label">Submit </label>
+                            <label class="col-sm-4 col-form-label"></label>
                             <div class="col-sm-4">
-                                <button type="submit" class="btn btn-primary" @onclick="Update">Update</button>
+                                <button type="submit" class="btn btn-primary" @onclick="Update">Cập nhật</button>
                             </div>
                             <div class="col-sm-4">                              
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ExtralargeModal" @onclick="()=>LoadPromotionItem(_promotion.Id)">
+@*                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ExtralargeModal" @onclick="()=>LoadPromotionItem(_promotion.Id)">
                                     Apply product
-                                </button>
+                                </button>*@
 
                                 <div class="modal fade" id="ExtralargeModal" tabindex="-1">
                                     <div class="modal-dialog modal-xl">
@@ -143,14 +154,15 @@
                                                                         @{
                                                                             var img = _lstImg.Where(c => c.ProductItemId == x.Id).Select(c => c.PathImage).FirstOrDefault();
                                                                             // var img2 = _lstImg.FirstOrDefault(c => c.ProductItemId == x.Id).PathImage;
-                                                                            if (img == null)
-                                                                            {
-                                                                                <td>Chưa có ảnh</td>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <td><img src="/images/@img" alt="" style="width:100px;height: 110px;"></td>
-                                                                            }
+                                                                            //if (img == null)
+                                                                            //{
+                                                                            //    <td>Chưa có ảnh</td>
+                                                                            //}
+                                                                            //else
+                                                                            //{
+                                                                                //<td><img src="/images/@img" alt="" style="width:100px;height: 110px;"></td>
+                                                                                <td><img src="/images/1.png" alt="" style="width:100px;height: 100px;"></td>
+                                                                            //}
                                                                         }
                                                                         <td>@x.Name</td>
                                                                         <td>@x.CategoryName</td>
@@ -200,7 +212,7 @@
                         <!-- Default Table -->
                         <div style="height: 445px; overflow-y: auto;">
                             <table class="table">
-                                <thead>
+                                <thead style="background-color:orange">
                                     <tr style="position: sticky;top:0">
                                         <th scope="col">
                                             <input type="checkbox" style="transform: scale(1.5);" @IsChecked=() />
@@ -219,7 +231,7 @@
                                                 <input type="checkbox" style="transform: scale(1.5);" value="@a.Id" checked="@_lstProductSelect.Contains(a.Id)" @onchange="()=>ToggleProductSelection(a.Id)" />
                                             </th>
                                             <td>@(count++)</td>
-                                            <td>Designe</td>
+                                            <td><img src="/images/1.png" alt="" style="width:70px;height:70px" /></td>
                                             <td>@a.Name</td>
                                         </tr>
                                     }
@@ -308,7 +320,7 @@
 
                                         @{
                                             var img = _lstImg.Where(c => c.ProductItemId == x.Id).Select(c => c.PathImage).FirstOrDefault();
-                                            // var img2 = _lstImg.FirstOrDefault(c => c.ProductItemId == x.Id).PathImage;
+                                             var img2 = _lstImg.FirstOrDefault(c => c.ProductItemId == x.Id).PathImage;
                                             if (img == null)
                                             {
                                                 <td>Chưa có ảnh</td>
