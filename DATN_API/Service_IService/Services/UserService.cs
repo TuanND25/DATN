@@ -165,9 +165,10 @@ namespace DATN_API.Service_IService.Services
 
                 };
             }
-
+			var id = Guid.NewGuid();
             User newUser = new User
             {
+				Id = id,
                 UserName = user.username,
                 Email = user.email,
                 Name = user.name,
@@ -192,7 +193,25 @@ namespace DATN_API.Service_IService.Services
 
                 }
                 await _userManager.AddToRoleAsync(newUser,user.role);
-                return new ResponseMess
+				Cart newCart = new Cart()
+				{
+					UserId = id,
+					Description = null,
+					Status = 1
+				};
+				await _context.Carts.AddAsync(newCart);
+				await _context.SaveChangesAsync();
+
+				ConsumerPoint consumerPoint = new ConsumerPoint()
+				{
+					UserID = id,
+					Point = string.Empty,
+					Status = 1,
+
+				};
+				await _context.ConsumerPoints.AddAsync(consumerPoint);
+				await _context.SaveChangesAsync();
+				return new ResponseMess
                 {
                     IsSuccess = true,
                     StatusCode = 201,

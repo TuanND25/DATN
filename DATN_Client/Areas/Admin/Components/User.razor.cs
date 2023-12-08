@@ -114,7 +114,7 @@ namespace DATN_Client.Areas.Admin.Components
 			if (response.IsSuccessStatusCode)
 			{
 				_toastService.ShowSuccess(result.Result);
-				Task.Delay(2000);
+				await Task.Delay(2000);
 				navigationManager.NavigateTo("https://localhost:7075/Admin/User",true);
 			}
 			else
