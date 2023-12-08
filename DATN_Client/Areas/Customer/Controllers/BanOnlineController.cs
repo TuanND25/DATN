@@ -72,6 +72,7 @@ namespace DATN_Client.Areas.Customer.Controllers
 		{
 			HttpContext.Session.SetString($"{Guid.NewGuid()}", JsonConvert.SerializeObject(Guid.NewGuid()));
 			_lstPrI_show_VM = await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
+			_lstpi_Percent = await _client.GetFromJsonAsync<List<PromotionItem_VM>>($"https://localhost:7141/api/PromotionItem/getLstPromotionItem_Percent_by_productItemID");
 			_lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
 			// Lấy list sp ko có spct
 			foreach (var a in _lstP)

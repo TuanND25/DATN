@@ -83,7 +83,6 @@ namespace DATN_API.Service_IService.Services
                         join s in await _context.Sizes.ToListAsync() on prI.SizeId equals s.Id
                         join c in await _context.Colors.ToListAsync() on prI.ColorId equals c.Id
                         join cate in await _context.Categories.ToListAsync() on prI.CategoryId equals cate.Id
-                        join h in await _context.PromotionsItem.ToListAsync() on prI.Id equals h.ProductItemsId
                         select new ProductItem_Show_VM()
                         {
                             Id = prI.Id,
@@ -100,7 +99,6 @@ namespace DATN_API.Service_IService.Services
                             PriceAfterReduction = prI.PriceAfterReduction,
                             CostPrice = prI.CostPrice,
                             Status = prI.Status,
-                            PromotionItemId = h.PromotionsId,
                         }).Where(x => x.PromotionItemId == Id).ToList();
             return list;
         }
@@ -118,7 +116,6 @@ namespace DATN_API.Service_IService.Services
                         join s in await _context.Sizes.ToListAsync() on prI.SizeId equals s.Id
                         join c in await _context.Colors.ToListAsync() on prI.ColorId equals c.Id
                         join cate in await _context.Categories.ToListAsync() on prI.CategoryId equals cate.Id
-                        join h in await _context.PromotionsItem.ToListAsync() on prI.Id equals h.ProductItemsId
                         select new ProductItem_Show_VM()
                         {
                             Id = prI.Id,
@@ -135,7 +132,6 @@ namespace DATN_API.Service_IService.Services
                             PriceAfterReduction = prI.PriceAfterReduction,
                             CostPrice = prI.CostPrice,
                             Status = prI.Status,
-                            PromotionItemId = h.PromotionsId,
                         }).ToList();
             return list;
         }

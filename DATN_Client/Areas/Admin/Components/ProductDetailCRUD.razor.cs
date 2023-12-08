@@ -14,5 +14,10 @@ namespace DATN_Client.Areas.Admin.Components
         {
             _lst_pri = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>($"https://localhost:7141/api/productitem/get_all_productitem_byProduct/{ProductController._productID}");
         }
+
+        private void BackToManager()
+        {
+            _navi.NavigateTo("/product-manager",true);
+        }
     }
 }
