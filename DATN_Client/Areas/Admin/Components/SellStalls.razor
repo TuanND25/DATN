@@ -4,7 +4,8 @@
 				IconType="IconType.FontAwesome"
 				SuccessClass="success-toast-override"
 				SuccessIcon="fa-solid fa-check"
-				ErrorIcon="fa-solid fa-triangle-exclamation" />
+				ErrorIcon="fa-solid fa-triangle-exclamation" 
+                />
 
 
 @if(isLoader)
@@ -22,6 +23,7 @@
 else
 {
 <div class="row" style="height:100vh;">
+      
     <div class="col-9" style="height:100%;display:flex;flex-direction:column">
         <div style="width:100%">
            <div style="height:55vh;margin-bottom:20px;background-color:#fff">
@@ -133,7 +135,7 @@ else
             <div class="showlistProduct">             
             @foreach (var x in _lstP)
                     {
-                       <div data-target="#ChooseSizeAndColor" data-toggle="modal" @onclick="()=>getProductChooseSizeAndColor(x.Id)">
+                       <div data-target="#ChooseSizeAndColor" data-toggle="@(checkBillIsNull == false ? "modal":"")" @onclick="()=>getProductChooseSizeAndColor(x.Id)">
                             @{
                                 string img = _lstImg_PI.Where(c => c.ProductId == x.Id).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
                             }
@@ -159,7 +161,7 @@ else
         <div style="display:flex;"><span style="margin-right:5px">Thêm thông tin</span><input type="checkbox" @bind-value="activeTabThemThongTin"/></div>
         <div class="row" style="margin-top:5px;" >
             <div class="col-5" style="display:flex;justify-content:center;align-items:center">
-                <button class="col-4 btn_searchUser" data-target="#CancelOrder" data-toggle="modal">  
+                <button class="col-4 btn_searchUser" data-target="#CancelOrder" data-toggle="modal" @onclick="getAllUser">  
                 Khách hàng
                 </button>
             </div>
@@ -262,7 +264,7 @@ else
           <div class="row " style="margin-top:5px;margin-top:10px" >
            <div class="col-12" style="display:flex;gap:5px;justify-content:end;align-items:center">
                <i class="fa-solid fa-money-bill" style="color: #5cb85c;"></i>
-                <input type="number" style=" padding:0px;" @oninput="CheckInputTienMat"/>
+                <input type="number" style=" padding:0px;" @oninput="CheckInputTienMat" />
                 <i class="fa-solid fa-x"  style="color: #ee4444;cursor:pointer" @onclick="CloseTabTienMat"></i>
            </div>       
        </div>
@@ -318,6 +320,13 @@ else
 
 
 <div class="modal fade" id="AddressShipSellStall">
+        <BlazoredToasts Position="ToastPosition.BottomRight"
+				Timeout="8"
+				IconType="IconType.FontAwesome"
+				SuccessClass="success-toast-override"
+				SuccessIcon="fa-solid fa-check"
+				ErrorIcon="fa-solid fa-triangle-exclamation" 
+                />
     <div class="modal-dialog">
         <div class="modal-content">
             <!-- Phần tiêu đề của popup -->
@@ -333,7 +342,7 @@ else
                <span>Người nhận</span>
            </div>
            <div class="col-7" style="display:flex;justify-content:flex-end">
-              <input type="text" style="width:100%"/>
+              <input type="text" style="width:100%" placeholder="Tên người nhận" @oninput="checkNameNguoiNhan" />
            </div>
        </div>
        <div class="row" style="margin-top:5px;align-items:center">
@@ -341,7 +350,7 @@ else
                <span>Số điện thoại</span>
            </div>
            <div class="col-7" style="display:flex;justify-content:flex-end">
-              <input type="number" style="width:100%"/>
+              <input type="number" style="width:100%" placeholder="Số điện thoại" maxlength="10" @oninput="checkPhoneNumberNguoiNhan"/>
            </div>
        </div>
 
@@ -380,7 +389,7 @@ else
 						   <span>Phường xã</span>				
 					    </div>
                         <div class="col-7">
-						  <select class="form-select">
+						  <select class="form-select" @oninput="@ChonXaPhuong">
 							<option value="@string.Empty" selected>--Phường/Xã--</option>
 							@foreach (var x in _lstXaPhuong)
 							{
@@ -393,22 +402,25 @@ else
                          <div class="col-3" style="display:flex;align-items:center">
 						   <span style="white-space: nowrap;">Địa chỉ chi tiết</span	</div> 
                          <div class="col-7">
-						    <input type="text" style="width:100%" placeholder="Vd:123 Phương Canh"/>				
+						    <input type="text" style="width:100%"
+                            placeholder="Vd:123 Phương Canh" @oninput="checkAddressDetail"/>				
 					    </div>   
                     </div>
 				  <div class="row" style="margin-top:15px">
                          <div class="col-3" style="display:flex;align-items:center">
 						   <span style="white-space: nowrap;">Ghi chú</span	</div> 
                          <div class="col-7">
-						    <textarea rows="4" style="width:100%"/>				
+						    <textarea rows="4" style="width:100%" @oninput="checkNoteAddresShip"/>				
 					    </div>   
                   </div>
-                  <div style="display:flex;justify-content:center;align-items:center;margin-top:15px">
-                      <button class="col-4 btn_searchUser" data-dismiss="modal" style="width:fit-content;padding:10px 50px">
+               
+				</div>
+                   <div style="display:flex;justify-content:center;align-items:center;margin-top:15px">
+                      <button class="btn_searchUser" @onclick="checkValidateAddress" 
+                      data-dismiss="@(checkPopupAddress == false ? "modal" : "")" style="width:fit-content;padding:10px 50px" >
                 Địa chỉ
                 </button>
                   </div>
-				</div>
            </div>
         </div>
     </div>
@@ -419,6 +431,7 @@ else
 
 
 <div class="modal fade" id="CancelOrder">
+
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -431,7 +444,9 @@ else
             <div class="container">
                 <div style="display:flex;align-items:center">
                     <input type="text" @oninput="SearchUser" class="input_SearchUser" placeholder="Nhập tên hoặc số điện thoại khách hàng"/>
-                    <i class="fa-solid fa-user-plus" style="cursor:pointer"></i>
+                    <i class="fa-solid fa-user-plus" style="cursor:pointer" data-toggle="modal" data-target="#AddUserVangLai" data-dismiss="modal"
+                    @onclick="getAllUser"
+                    ></i>
                 </div>
                 @{
                     Guid id = Guid.Parse("3de28ff2-c838-481e-bd90-1925a4bf452a");
@@ -459,11 +474,62 @@ else
 
 
 
+<div class="modal fade" id="AddUserVangLai">   
+     <BlazoredToasts Position="ToastPosition.BottomRight"
+				Timeout="8"
+				IconType="IconType.FontAwesome"
+				SuccessClass="success-toast-override"
+				SuccessIcon="fa-solid fa-check"
+				ErrorIcon="fa-solid fa-triangle-exclamation" 
+                />
+    <div class="modal-dialog ">
+        <div class="modal-content ">
+
+            <!-- Phần tiêu đề của popup -->
+            <div class="modal-header" style="background-color:#f2cc8c">
+                <h6 class="modal-title">Thêm thông tin sản phẩm</h6>
+                <i class="fa-solid fa-xmark close" style="cursor: pointer;" data-dismiss="modal"></i>
+            </div>
+            <!-- Nội dung của popup -->
+            <div class="container">
+                    <div class="row" style="margin-top:5px;">
+           <div class="col-3" style="display:flex;gap:5px;align-items:center">
+               <span>Khách hàng</span>
+           </div>
+           <div class="col-7" style="display:flex;justify-content:flex-end">
+              <input type="text" style="width:100%" placeholder="Tên khách hàng" @oninput="checkNameKhachHang" @bind-value="nameKhachhang"/>
+           </div>
+       </div>
+            <div class="row" style="margin-top:5px;">
+           <div class="col-3" style="display:flex;gap:5px;align-items:center">
+               <span>Số điện thoại</span>
+           </div>
+           <div class="col-7" style="display:flex;justify-content:flex-end">
+              <input type="number" style="width:100%" placeholder="Số điện thoại" @oninput="checkPhoneNumberKhachHang" @bind-value="numberPhoneKhachHang"/>
+           </div>
+       </div>
+        <div class="row" style="margin-top:40px">
+                    <div style="display:flex;justify-content:center;align-items:center;margin-top:10px">
+                      <button class="btn_searchUser" @onclick="checkValidateAddUser" 
+                      data-dismiss="@(checkPopupAddUser == false ? "modal" : "")"      
+                        style="width:fit-content;padding:10px 50px" >
+                         Địa chỉ
+                </button>
+                  </div>             
+               </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
 
-<div class="modal fade" id="ChooseSizeAndColor">
+
+
+
+<div class="modal fade" id="ChooseSizeAndColor">   
+    
     <div class="modal-dialog">
         <div class="modal-content">
 

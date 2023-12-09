@@ -416,4 +416,11 @@ input[readonly] {
     justify-content:center;
     align-items:center;
 }
+/*.modal {
+    z-index: 1050 !important; 
+}
+
+.toast {
+    z-index: 1060 !important;
+}*/
 

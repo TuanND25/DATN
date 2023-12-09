@@ -3,9 +3,13 @@ using DATN_Shared.ViewModel;
 using DATN_Shared.ViewModel.DiaChi;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Build.Evaluation;
+using Microsoft.IdentityModel.Tokens;
+using NuGet.Protocol;
 using System.Globalization;
 using System.Net.Http;
 using System.Net.NetworkInformation;
+using System.Text.RegularExpressions;
+using Twilio.Types;
 
 
 namespace DATN_Client.Areas.Admin.Components
@@ -25,8 +29,10 @@ namespace DATN_Client.Areas.Admin.Components
         List<Bill_VM> _lstBill_Vm_show = new List<Bill_VM>();
         List<User_VM> _lstUser = new List<User_VM>();
         List<User_VM> _lstUser_1 = new List<User_VM>();
+        List<User_VM> _lstUser_2 = new List<User_VM>();
         User_VM getuser = new User_VM();
         User_VM userKhachvanglai_bien = new User_VM();
+
 
         public int ActiveTabSearchUser { get; set; } = 1;
         public int paymentmethodid { get; set; } = 2;
@@ -76,10 +82,27 @@ namespace DATN_Client.Areas.Admin.Components
         public Guid IdColor { get; set; }
 
 
-        public Guid BillId { get; set; }
+
+        public string nameNguoiNhan { get; set; } = "";
+        public string phoneNumberNguoinhan { get; set; } = "";
         public string _TinhTp { get; set; }
         public string _QuanHuyen { get; set; }
         public string _PhuongXa { get; set; }
+
+        public string AddressDetail { get; set; } = "";
+        public string NoteAddresShip { get; set; } = "";
+
+
+
+
+
+        public string nameKhachhang { get; set; } = "";
+        public string numberPhoneKhachHang { get; set; } = "";
+
+
+
+        public Guid BillId { get; set; }
+
         public bool activeTabThemThongTin { get; set; }
         public bool activeTabDungDiem { get; set; }
         public bool activeTienMat { get; set; } = false;
@@ -88,6 +111,10 @@ namespace DATN_Client.Areas.Admin.Components
         public bool activePlus { get; set; } = false;
         public Guid activeSize { get; set; }
         public Guid activeColor { get; set; }
+        public bool checkPopupAddress { get; set; } = true;
+        public bool checkBillIsNull { get; set; } = true;
+
+        public bool checkPopupAddUser { get; set; } = true;
 
         public bool isLoader { get; set; } = false;
 
@@ -149,6 +176,7 @@ namespace DATN_Client.Areas.Admin.Components
                 _lstBill_Vm_show.Add(bill);
                 BillId = id;
                 await GetBillItemShowOnBill(id);
+                checkBillIsNull = false;
             }
 
 
@@ -169,7 +197,7 @@ namespace DATN_Client.Areas.Admin.Components
             InputTichDiem = default;
 
 
-            await GetBillItemShowOnBill(id);        
+            await GetBillItemShowOnBill(id);
         }
         public void getPaymetMethod(int id)
         {
@@ -183,6 +211,7 @@ namespace DATN_Client.Areas.Admin.Components
             {
                 BillId = default;
                 _lstBillItemShow.Clear();
+                checkBillIsNull = true;
                 return;
             }
             if (_lstBill_Vm_show.Count > 0)
@@ -245,7 +274,7 @@ namespace DATN_Client.Areas.Admin.Components
             getuser = userKhachvanglai_bien;
 
             InputTichDiem = 0;
-            if (activeTabThemThongTin==false)
+            if (activeTabThemThongTin == false)
             {
                 Tongtien = Tongtienhang;
                 TongtienText = FormatNumber(Tongtien);
@@ -255,26 +284,9 @@ namespace DATN_Client.Areas.Admin.Components
             CheckInputPayment();
             CheckRefund();
         }
-        public async Task ChonTinhTP(ChangeEventArgs e)
-        {
-            _TinhTp = e.Value.ToString();
-            _lstQuanHuyen.Clear();
-            _lstXaPhuong.Clear();
 
-            _QuanHuyen = string.Empty;
-            _PhuongXa = string.Empty;
-            var chon = _lstTinhTp_Data.FirstOrDefault(x => x.Name == _TinhTp);
-            _lstQuanHuyen = _lstQuanHuyen_Data.Where(x => x.ProvinceId == chon.Id).ToList();
-        }
-        public async Task ChonQuanHuyen(ChangeEventArgs e)
-        {
-            _QuanHuyen = e.Value.ToString();
-            _lstXaPhuong.Clear();
-            _PhuongXa = string.Empty;
-            var chon = _lstQuanHuyen.FirstOrDefault(x => x.Name == _QuanHuyen);
-            _lstXaPhuong = _lstXaPhuong_Data.Where(x => x.DistrictId == chon.Id).ToList();
 
-        }
+
         public void ActiveTabTienMat()
         {
             activeTienMat = true;
@@ -303,6 +315,7 @@ namespace DATN_Client.Areas.Admin.Components
         {
             if (BillId == default)
             {
+                checkBillIsNull = true;
                 _toastService.ShowError("Vui lòng thêm hóa đơn");
                 return;
             }
@@ -393,7 +406,7 @@ namespace DATN_Client.Areas.Admin.Components
             //check trùng sản phẩm 
             //tìm xem có sản phẩm đó trong bill không 
             var listbillItemInBilll = await _client.GetFromJsonAsync<List<BillItems>>("https://localhost:7141/api/BillItem/get_alll_bill_item");
-            var billItemInBill = listbillItemInBilll.FirstOrDefault(x=>x.ProductItemsId == billadd.ProductItemsId && x.BillId == BillId);
+            var billItemInBill = listbillItemInBilll.FirstOrDefault(x => x.ProductItemsId == billadd.ProductItemsId && x.BillId == BillId);
 
             if (billItemInBill == null)
             {
@@ -407,20 +420,20 @@ namespace DATN_Client.Areas.Admin.Components
             else if (billItemInBill != null)
             {
                 billItemInBill.Quantity += SoluongProductItemMua;
-             
+
                 var reponse = await _client.PutAsJsonAsync("https://localhost:7141/api/BillItem/Put-BillItems", billItemInBill);
                 if (reponse.StatusCode.ToString() == "OK")
                 {
                     await GetBillItemShowOnBill(BillId);
                     _toastService.ShowSuccess("Cập nhật số lượng thành công");
                 }
-               
+
 
             }
-         
 
 
-           
+
+
         }
 
         public async Task RemoveBillItem(Guid IdBillItem)
@@ -548,7 +561,7 @@ namespace DATN_Client.Areas.Admin.Components
             {
                 Tongtien = Tongtienhang;
             }
-         
+
 
 
 
@@ -561,9 +574,9 @@ namespace DATN_Client.Areas.Admin.Components
         {
             if (e.Value != "")
             {
-                if (BillId != default )
+                if (BillId != default)
                 {
-                    InputTichDiem = Convert.ToInt32(e.Value);          
+                    InputTichDiem = Convert.ToInt32(e.Value);
                     Tongtien = Tongtienhang;
                     Tongtien -= InputTichDiem;
                     TongtienText = FormatNumber(Tongtien);
@@ -591,7 +604,8 @@ namespace DATN_Client.Areas.Admin.Components
 
         public void CheckInputPayment()
         {
-            if (BillId != default &&  Tongtien > 0 )
+
+            if (BillId != default && Tongtien > 0)
             {
                 if (activeTienMat == true && activeChuyenKhoan == false)
                 {
@@ -609,21 +623,21 @@ namespace DATN_Client.Areas.Admin.Components
                 {
                     CountPayment = 0;
                 }
-            }       
+            }
         }
 
         public void CheckRefund()
         {
             tienRefund = CountPayment - Tongtien;
-            if(CountPayment == 0 )
+            if (CountPayment == 0)
             {
                 tienRefund = 0;
             }
             tienRefundText = FormatNumber(tienRefund);
 
-            if (tienRefund>0)
+            if (tienRefund > 0)
             {
-                tienRefundFormat ="Bằng chữ: " + NumberToText(Convert.ToDouble(tienRefund));
+                tienRefundFormat = "Bằng chữ: " + NumberToText(Convert.ToDouble(tienRefund));
             }
             else
             {
@@ -632,31 +646,58 @@ namespace DATN_Client.Areas.Admin.Components
         }
 
         public void CheckInputTienMat(ChangeEventArgs e)
-        {            
-            if (e.Value != "")
+        {
+
+            if (int.TryParse(e.Value.ToString(), out int inputValue))
             {
-                InputTienMat = Convert.ToInt32(e.Value);              
+                if (inputValue < 0)
+                {
+                    _toastService.ClearAll();
+                    _toastService.ShowError("Vui lòng không nhập dấu nhỏ hơn 0");
+                    return;
+
+                }
+                if (inputValue != 0 || inputValue != null)
+                {
+                    InputTienMat = inputValue;
+                }
+                else
+                {
+                    InputTienMat = 0;
+                }
+                CheckInputPayment();
+                CheckRefund();
             }
-            else
-            {
-                InputTienMat = 0;
-            }
-            CheckInputPayment();
-            CheckRefund();
+
         }
         public void CheckInputChuyenKhoan(ChangeEventArgs e)
         {
-            if (e.Value != "")
+            if (int.TryParse(e.Value.ToString(), out int inputValue))
             {
-                InputChuyenKhoan = Convert.ToInt32(e.Value);
+                if (inputValue < 0)
+                {
+                    _toastService.ClearAll();
+                    _toastService.ShowError("Vui lòng không nhập dấu nhỏ hơn 0");
+
+                }
+                if (inputValue != 0 || inputValue != null)
+                {
+                    InputChuyenKhoan = inputValue;
+                }
+                else
+                {
+                    InputChuyenKhoan = 0;
+                }
+                CheckInputPayment();
+                CheckRefund();
             }
-            else 
-            {
-                InputChuyenKhoan = 0;
-            }         
-            CheckInputPayment();
-            CheckRefund();
         }
+        public void HandleSubmitAddress()
+        {
+            checkPopupAddress = true;
+            _toastService.ShowSuccess("Thêm địa chỉ thành công");
+        }
+
 
         public void PlusSoluongProduct()
         {
@@ -700,6 +741,325 @@ namespace DATN_Client.Areas.Admin.Components
                 activeBtnAddProductToBill = true;
             }
         }
+
+
+
+        //validate AddressShip
+
+        public void checkNameNguoiNhan(ChangeEventArgs e)
+        {
+            nameNguoiNhan = "";
+            if (!String.IsNullOrEmpty(e.Value.ToString()))
+            {
+                nameNguoiNhan = e.Value.ToString().Trim();
+            }
+            var regex = @"[!@#$%^&*()_+=\[{\]};:<>|./?,-]";
+            if (Regex.IsMatch(nameNguoiNhan, regex))
+            {
+                nameNguoiNhan = "kytudacbiet";
+            }
+            checkPopupAddress = checkShowPopupAddress();
+        }
+        public void checkPhoneNumberNguoiNhan(ChangeEventArgs e)
+        {
+            phoneNumberNguoinhan = "";
+
+            //var regexPhoneNumber = @"^(0[35789])[0-9]{9}$";
+            var regexPhoneNumber = @"^(0|84)(2(0[3-9]|1[0-6|8|9]|2[0-2|5-9]|3[2-9]|4[0-9]|5[1|2|4-9]|6[0-3|9]|7[0-7]|8[0-9]|9[0-4|6|7|9])|3[2-9]|5[5|6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])([0-9]{7})$";
+
+            if (!String.IsNullOrEmpty(e.Value.ToString()))
+            {
+                if (Regex.IsMatch(e.Value.ToString().Trim(), regexPhoneNumber))
+                {
+                    phoneNumberNguoinhan = e.Value.ToString().Trim();
+                    if (phoneNumberNguoinhan.StartsWith("84"))
+                    {
+                        // Chuyển đổi số điện thoại bắt đầu bằng "84" thành "0"
+                        phoneNumberNguoinhan = "0" + phoneNumberNguoinhan.Substring(2);
+                    }
+                }
+            }
+            checkPopupAddress = checkShowPopupAddress();
+        }
+        public async Task ChonTinhTP(ChangeEventArgs e)
+        {
+            _TinhTp = e.Value.ToString();
+            _lstQuanHuyen.Clear();
+            _lstXaPhuong.Clear();
+
+            _QuanHuyen = string.Empty;
+            _PhuongXa = string.Empty;
+            var chon = _lstTinhTp_Data.FirstOrDefault(x => x.Name == _TinhTp);
+            if (chon != null)
+            {
+                _lstQuanHuyen = _lstQuanHuyen_Data.Where(x => x.ProvinceId == chon.Id).ToList();
+            }
+            checkPopupAddress = checkShowPopupAddress();
+        }
+        public async Task ChonQuanHuyen(ChangeEventArgs e)
+        {
+            _QuanHuyen = e.Value.ToString();
+            _lstXaPhuong.Clear();
+            _PhuongXa = string.Empty;
+            var chon = _lstQuanHuyen.FirstOrDefault(x => x.Name == _QuanHuyen);
+            if (chon != null)
+            {
+                _lstXaPhuong = _lstXaPhuong_Data.Where(x => x.DistrictId == chon.Id).ToList();
+            }
+            checkPopupAddress = checkShowPopupAddress();
+
+        }
+        public void ChonXaPhuong(ChangeEventArgs e)
+        {
+            _PhuongXa = e.Value.ToString();
+            checkPopupAddress = checkShowPopupAddress();
+        }
+        public void checkAddressDetail(ChangeEventArgs e)
+        {
+            AddressDetail = "";
+            if (!String.IsNullOrEmpty(e.Value.ToString()))
+            {
+                AddressDetail = e.Value.ToString().Trim();
+            }
+            var regex = @"[!@#$%^&*()_+=\[{\]};:<>|./?,-]";
+            if (Regex.IsMatch(AddressDetail, regex))
+            {
+                AddressDetail = "kytudacbiet";
+            }
+            checkPopupAddress = checkShowPopupAddress();
+        }
+        public void checkNoteAddresShip(ChangeEventArgs e)
+        {
+            NoteAddresShip = "";
+            if (!String.IsNullOrEmpty(e.Value.ToString()))
+            {
+                NoteAddresShip = e.Value.ToString().Trim();
+            }
+            checkPopupAddress = checkShowPopupAddress();
+        }
+
+
+        public void checkValidateAddress()
+        {
+            List<String> listContentShow = new List<String>();
+            if (
+                String.IsNullOrEmpty(nameNguoiNhan) ||
+                nameNguoiNhan == "kytudacbiet" ||
+                 String.IsNullOrEmpty(phoneNumberNguoinhan) ||
+                 //phoneNumberNguoinhan.Length != 10 ||
+                 String.IsNullOrEmpty(_TinhTp) ||
+                String.IsNullOrEmpty(_QuanHuyen) ||
+                 String.IsNullOrEmpty(_PhuongXa) ||
+                 String.IsNullOrEmpty(AddressDetail) ||
+                  AddressDetail == "kytudacbiet"
+                 )
+            {
+                if (String.IsNullOrEmpty(nameNguoiNhan) || nameNguoiNhan == "kytudacbiet")
+                {
+                    if (String.IsNullOrEmpty(nameNguoiNhan))
+                    {
+                        listContentShow.Add("Tên");
+                    }
+                    else if (nameNguoiNhan == "kytudacbiet")
+                    {
+                        listContentShow.Add("Tên có ký tự đặc biệt");
+                    }
+
+                }
+                if (String.IsNullOrEmpty(phoneNumberNguoinhan))
+                {
+                    listContentShow.Add("Số điện thoại");
+                }
+                if (String.IsNullOrEmpty(_TinhTp))
+                {
+                    listContentShow.Add("Tỉnh thành");
+                }
+                if (String.IsNullOrEmpty(_QuanHuyen))
+                {
+                    listContentShow.Add("Quận huyện");
+                }
+                if (String.IsNullOrEmpty(_PhuongXa))
+                {
+                    listContentShow.Add("Phường Xã");
+                }
+                if (String.IsNullOrEmpty(AddressDetail) || AddressDetail == "kytudacbiet")
+                {
+                    if (AddressDetail == "kytudacbiet")
+                    {
+                        listContentShow.Add("Địa chỉ có ký tự đặc biệt");
+                    }
+                    else if (String.IsNullOrEmpty(AddressDetail))
+                    {
+                        listContentShow.Add("Địa chỉ chi tiết");
+                    }
+                }
+
+                string result = string.Join(", ", listContentShow);
+                string ContentShow = "Vui lòng kiểm tra lại: " + result;
+                _toastService.ShowError(ContentShow);
+                checkPopupAddress = true;
+            }
+            else
+            {
+                checkPopupAddress = false;
+            }
+        }
+        public bool checkShowPopupAddress()
+        {
+            if (
+               String.IsNullOrEmpty(nameNguoiNhan) ||
+               String.IsNullOrEmpty(phoneNumberNguoinhan) ||
+                //phoneNumberNguoinhan.Length != 10 ||
+                String.IsNullOrEmpty(_TinhTp) ||
+               String.IsNullOrEmpty(_QuanHuyen) ||
+                String.IsNullOrEmpty(_PhuongXa) ||
+                String.IsNullOrEmpty(AddressDetail)
+                )
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        // addUser Khách hàng
+        public void checkNameKhachHang(ChangeEventArgs e)
+        {
+            nameKhachhang = "";
+            if (!String.IsNullOrEmpty(e.Value.ToString()))
+            {
+                nameKhachhang = e.Value.ToString().Trim();
+            }
+            var regex = @"[!@#$%^&*()_+=\[{\]};:<>|./?,-]";
+            if (Regex.IsMatch(nameNguoiNhan, regex))
+            {
+                nameKhachhang = "kytudacbiet";
+            }
+            checkPopupAddUser = checkShowPopupAddUser();
+        }
+        public void checkPhoneNumberKhachHang(ChangeEventArgs e)
+        {
+            numberPhoneKhachHang = "";
+
+            //var regexPhoneNumber = @"^(0[35789])[0-9]{9}$";
+            var regexPhoneNumber = @"^(0|84)(2(0[3-9]|1[0-6|8|9]|2[0-2|5-9]|3[2-9]|4[0-9]|5[1|2|4-9]|6[0-3|9]|7[0-7]|8[0-9]|9[0-4|6|7|9])|3[2-9]|5[5|6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])([0-9]{7})$";
+
+            if (!String.IsNullOrEmpty(e.Value.ToString()))
+            {
+                if (Regex.IsMatch(e.Value.ToString().Trim(), regexPhoneNumber))
+                {
+                    numberPhoneKhachHang = e.Value.ToString().Trim();
+                    if (numberPhoneKhachHang.StartsWith("84"))
+                    {
+                        // Chuyển đổi số điện thoại bắt đầu bằng "84" thành "0"
+                        numberPhoneKhachHang = "0" + numberPhoneKhachHang.Substring(2);
+                    }
+                }
+            }
+            checkPopupAddUser = checkShowPopupAddUser();
+        }
+
+        public async Task getAllUser()
+        {
+            _lstUser_1 = await _client.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
+            numberPhoneKhachHang = "";
+            nameKhachhang = "";
+        }
+        public async Task checkValidateAddUser()
+        {
+            List<String> listContentShow = new List<String>();
+            if (String.IsNullOrEmpty(nameKhachhang) || String.IsNullOrEmpty(numberPhoneKhachHang) || nameKhachhang == "kytudacbiet")
+            {
+                if (String.IsNullOrEmpty(nameKhachhang) || nameKhachhang == "kytudacbiet")
+                {
+                    if (nameKhachhang == "kytudacbiet")
+                    {
+                        listContentShow.Add("Tên người nhận có ký tự đặc biệt");
+                    }
+                    else
+                    {
+                        listContentShow.Add("Tên người nhận");
+                    }
+
+                }
+                if (String.IsNullOrEmpty(numberPhoneKhachHang))
+                {
+                    listContentShow.Add("Số điện thoại");
+                }
+                string result = string.Join(", ", listContentShow);
+                string ContentShow = "Vui lòng kiểm tra lại: " + result;
+                _toastService.ShowError(ContentShow);
+                checkPopupAddUser = true;
+            }
+            else
+            {
+                string email = numberPhoneKhachHang.ToString() + "@gmail.com";
+                string username = "khachtaiquay" + numberPhoneKhachHang.ToString();
+
+                AddUserByAdmin userAdd = new AddUserByAdmin();
+                Guid idUser = Guid.NewGuid();
+                userAdd.id = idUser;
+                userAdd.username = username;
+                userAdd.password = "123456";
+                userAdd.email = email;
+                userAdd.phonenumber = numberPhoneKhachHang;
+                userAdd.name = nameKhachhang;
+                userAdd.role = "User";
+                userAdd.status = 10;
+                userAdd.sex = true;
+
+                var reponse = await _client.PostAsJsonAsync("https://localhost:7141/api/user/add-employee-admin", userAdd);
+                string a = reponse.StatusCode.ToString();
+
+                if (reponse.StatusCode.ToString() == "Created")
+                {
+                    _lstUser_1 = await _client.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
+                   getuser = _lstUser_1.FirstOrDefault(x => x.PhoneNumber == numberPhoneKhachHang);
+                    _toastService.ShowSuccess("Thêm khách hàng thành công");
+                    checkPopupAddUser = true;
+                }
+                else
+                {
+                    //string err = reponse.ToJson();
+                    _toastService.ShowError("Đã có lỗi xảy ra");
+                }
+            }
+
+        }
+        public bool checkShowPopupAddUser()
+        {
+            if (String.IsNullOrEmpty(nameKhachhang) || String.IsNullOrEmpty(numberPhoneKhachHang) || nameKhachhang == "kytudacbiet")
+            {
+                return true;
+            }
+            else
+            {
+                if (_lstUser_1.Count > 0)
+                {
+                    var user = _lstUser_1.FirstOrDefault(x => x.PhoneNumber == numberPhoneKhachHang);
+                    if (user != null)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return true;
+                }
+
+            }
+        }
+
+
+
+        //Format
         static string FormatNumber(int number)
         {
             // Sử dụng định dạng chuỗi để biến đổi số
