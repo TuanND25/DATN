@@ -12,13 +12,14 @@ namespace DATN_Shared.ViewModel
 		public Guid ProductId { get; set; }
 		public string ProductCode { get; set; }
 		public string Name { get; set; }
+		public string Description { get; set; }
 		public Guid? ColorId { get; set; }
 		public string ColorName { get; set; }
 		public Guid? SizeId { get; set; }
 		public string SizeName { get; set; }
 		public Guid CategoryID { get; set; }
 		public string CategoryName { get; set; }
-		public Guid PromotionItemId { get; set; }
+		public Guid? PromotionItemId { get; set; }
 		public int?AvaiableQuantity { get; set; }
 		public int? PriceAfterReduction { get; set; }
 		public int? CostPrice { get; set; }

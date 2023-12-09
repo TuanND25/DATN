@@ -9,8 +9,8 @@ namespace DATN_Shared.ViewModel
     public class Size_VM
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        [Required(ErrorMessage = "Size không được để trống")]
+		[Required(ErrorMessage = "Size không được để trống")]
+		public string Name { get; set; }     
         public int Status { get; set; }
     }
 }

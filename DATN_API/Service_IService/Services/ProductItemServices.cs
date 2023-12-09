@@ -51,12 +51,12 @@ namespace DATN_API.Service_IService.Services
 
         public async Task<List<ProductItem_Show_VM>> GetAllProductItemByProduct(Guid ProductId)
         {
-            var list = (from prI in await _context.ProductItems.ToListAsync()
-                        join pr in await _context.Products.ToListAsync() on prI.ProductId equals pr.Id
-                        join s in await _context.Sizes.ToListAsync() on prI.SizeId equals s.Id
-                        join c in await _context.Colors.ToListAsync() on prI.ColorId equals c.Id
-                        join cate in await _context.Categories.ToListAsync() on prI.CategoryId equals cate.Id
-                        select new ProductItem_Show_VM()
+            var list = (from prI in _context.ProductItems
+						join pr in _context.Products on prI.ProductId equals pr.Id
+						join s in _context.Sizes on prI.SizeId equals s.Id
+						join c in _context.Colors on prI.ColorId equals c.Id
+						join cate in _context.Categories on prI.CategoryId equals cate.Id
+						select new ProductItem_Show_VM()
                         {
                             Id = prI.Id,
                             ProductId = prI.ProductId,
@@ -72,17 +72,19 @@ namespace DATN_API.Service_IService.Services
                             PriceAfterReduction = prI.PriceAfterReduction,
                             CostPrice = prI.CostPrice,
                             Status = prI.Status,
+                            Description = pr.Description,
                         }).Where(c => c.ProductId == ProductId).ToList();
             return list;
         }
 
         public async Task<List<ProductItem_Show_VM>> GetAllProductItemPromotionItem_Show(Guid Id)
         {
-            var list = (from prI in await _context.ProductItems.ToListAsync()
-                        join pr in await _context.Products.ToListAsync() on prI.ProductId equals pr.Id
-                        join s in await _context.Sizes.ToListAsync() on prI.SizeId equals s.Id
-                        join c in await _context.Colors.ToListAsync() on prI.ColorId equals c.Id
-                        join cate in await _context.Categories.ToListAsync() on prI.CategoryId equals cate.Id
+            var list = (from prI in  _context.ProductItems
+                        join pr in  _context.Products on prI.ProductId equals pr.Id
+                        join s in  _context.Sizes on prI.SizeId equals s.Id
+                        join c in _context.Colors on prI.ColorId equals c.Id
+                        join cate in _context.Categories on prI.CategoryId equals cate.Id
+                        join promotion in _context.PromotionsItem on prI.Id equals promotion.ProductItemsId
                         select new ProductItem_Show_VM()
                         {
                             Id = prI.Id,
@@ -99,7 +101,9 @@ namespace DATN_API.Service_IService.Services
                             PriceAfterReduction = prI.PriceAfterReduction,
                             CostPrice = prI.CostPrice,
                             Status = prI.Status,
-                        }).Where(x => x.PromotionItemId == Id).ToList();
+							Description = pr.Description,
+							PromotionItemId = promotion.Id,
+						}).Where(x => x.PromotionItemId == Id).ToList();
             return list;
         }
 
@@ -111,12 +115,12 @@ namespace DATN_API.Service_IService.Services
 
         public async Task<List<ProductItem_Show_VM>> GetAllProductItems_Show()
         {
-            var list = (from prI in await _context.ProductItems.ToListAsync()
-                        join pr in await _context.Products.ToListAsync() on prI.ProductId equals pr.Id
-                        join s in await _context.Sizes.ToListAsync() on prI.SizeId equals s.Id
-                        join c in await _context.Colors.ToListAsync() on prI.ColorId equals c.Id
-                        join cate in await _context.Categories.ToListAsync() on prI.CategoryId equals cate.Id
-                        select new ProductItem_Show_VM()
+            var list = (from prI in _context.ProductItems
+						join pr in _context.Products on prI.ProductId equals pr.Id
+						join s in _context.Sizes on prI.SizeId equals s.Id
+						join c in _context.Colors on prI.ColorId equals c.Id
+						join cate in _context.Categories on prI.CategoryId equals cate.Id
+						select new ProductItem_Show_VM()
                         {
                             Id = prI.Id,
                             ProductId = prI.ProductId,
@@ -132,7 +136,8 @@ namespace DATN_API.Service_IService.Services
                             PriceAfterReduction = prI.PriceAfterReduction,
                             CostPrice = prI.CostPrice,
                             Status = prI.Status,
-                        }).ToList();
+							Description = pr.Description,
+						}).ToList();
             return list;
         }
 
