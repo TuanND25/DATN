@@ -1,11 +1,11 @@
 ﻿<div class="card">
     <div class="card-body">
-        <h1 style="margin-top:20px">Promotion</h1>
+        <h3 style="margin-top:20px">Khuyến mại</h3>
         <div class="pagetitle">
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item">Promotion</li>
+                    <li class="breadcrumb-item">Khuyến mại</li>
                 </ol>
             </nav>
 
@@ -51,7 +51,7 @@
                     </div>
                     <div class="col-sm-4"></div>
                     <div class="col-sm-2">
-                        <button type="button" class="btn btn-outline-success" style="float:right" @onclick="NavigationAddPromotion">Create Promotion</button>
+                        <button type="button" class="btn btn-outline-success" style="float:right" @onclick="NavigationAddPromotion">Tạo mới</button>
                     </div>
                 </div>
             </EditForm>
@@ -92,6 +92,7 @@
                         <th scope="col">#</th>
                         <th scope="col">Tên</th>
                         <th scope="col">Phần trăm giảm</th>
+                        <th scope="col">Số lượng</th>
                         <th scope="col">Ngày bắt đầu</th>
                         <th scope="col">Ngày kết thúc</th>
                         <th scope="col">Mô tả</th>
@@ -107,6 +108,7 @@
                             <td>@(count++)</td>
                             <td>@a.Name</td>
                             <td>@a.Percent</td>
+                            <td>@a.Percent</td> @*sửa lại số lượng ở chỗ này *@
                             <td>@a.StartDate</td>
                             <td>@a.EndDate</td>
                             <td>@a.Description</td>

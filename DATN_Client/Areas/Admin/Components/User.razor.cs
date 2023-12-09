@@ -1,4 +1,5 @@
-﻿using DATN_Client.Areas.Customer.Component;
+﻿using System.Text.RegularExpressions;
+using DATN_Client.Areas.Customer.Component;
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -63,12 +64,25 @@ namespace DATN_Client.Areas.Admin.Components
 				_toastService.ShowError("Vui lòng điền đầy đủ thông tin");
 				return;
 			}
+			Regex phoneNumberRegex = new Regex(@"^0\d{9}$");
+			if (!phoneNumberRegex.IsMatch(userbyadmin.phonenumber))
+			{
+				_toastService.ShowError("Số điện thoại không hợp lệ");
+				return;
+
+			}
+			Regex emailRegex = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+			if (!emailRegex.IsMatch(userbyadmin.email))
+			{
+				_toastService.ShowError("Email không hợp lệ");
+				return;
+			}
 			var response = await httpClient.PostAsJsonAsync<AddUserByAdmin>("https://localhost:7141/api/user/add-employee-admin", userbyadmin);
 			var result = response.Content.ReadAsStringAsync();
 			if (response.IsSuccessStatusCode)
 			{
 				_toastService.ShowSuccess(result.Result);
-				Task.Delay(2000);
+				await Task.Delay(2000);
 				navigationManager.NavigateTo("https://localhost:7075/Admin/User",true);
 			}
 			else
@@ -100,7 +114,7 @@ namespace DATN_Client.Areas.Admin.Components
 			if (response.IsSuccessStatusCode)
 			{
 				_toastService.ShowSuccess(result.Result);
-				Task.Delay(2000);
+				await Task.Delay(2000);
 				navigationManager.NavigateTo("https://localhost:7075/Admin/User",true);
 			}
 			else

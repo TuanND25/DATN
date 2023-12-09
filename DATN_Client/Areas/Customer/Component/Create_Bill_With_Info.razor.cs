@@ -23,7 +23,7 @@ namespace DATN_Client.Areas.Customer.Component
 		private List<Image_Join_ProductItem> _lstImg_PI_tam = new();
 		private List<ProductItem_Show_VM> _lstPrI_show_VM = new();
 		private List<PaymentMethod_VM> _lstPayM = new();
-		public static Bill_DataAnotation_VM _bill_validate_vm = new();
+		public static Bill_DataAnotation_VM _bill_validate_vm = new Bill_DataAnotation_VM();
 		private User_VM? _user_vm = new();
 		private ProductItem_Show_VM _pi_s_vm = new();
 		private OrderInfoModel _ord = new();
@@ -67,7 +67,6 @@ namespace DATN_Client.Areas.Customer.Component
 			else
 			{
 				_bill_validate_vm.UserId = Guid.Parse(_iduser);
-				//_lstUser = await _httpClient.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
 				_user_vm = await _httpClient.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get_user_by_id/{_iduser}");
 				_lstCI = await _httpClient.GetFromJsonAsync<List<CartItems_VM>>($"https://localhost:7141/api/CartItems/{_bill_validate_vm.UserId}");
 				_lst_adrS_User = await _httpClient.GetFromJsonAsync<List<AddressShip_VM>>($"https://localhost:7141/api/AddressShip/get_address_by_UserID/{_bill_validate_vm.UserId}"); // list địa chỉ của user
@@ -117,30 +116,6 @@ namespace DATN_Client.Areas.Customer.Component
 			isLoader = false;
 		}
 
-		//public Guid Id { get; set; }
-		//public Guid UserId { get; set; }
-		//public Guid? HistoryConsumerPointID { get; set; }
-		//public Guid PaymentMethodId { get; set; }
-		//public Guid? VoucherId { get; set; }
-		//public string BillCode { get; set; }
-		//public int? TotalAmount { get; set; }
-		//public int? ReducedAmount { get; set; }
-		//public int? Cash { get; set; }  // tiền mặt
-		//public int? CustomerPayment { get; set; } // tiền khách đưa
-		//public int? FinalAmount { get; set; } // tiền khách đưa
-		//public DateTime? CreateDate { get; set; }
-		//public DateTime? ConfirmationDate { get; set; }
-		//public DateTime? CompletionDate { get; set; }
-		//public int Type { get; set; }
-		//public string? Note { get; set; }
-		//public string Recipient { get; set; } // Người nhận
-		//public string District { get; set; } // Quận/Huyện
-		//public string Province { get; set; } // Tỉnh/ TP
-		//public string WardName { get; set; } // Phường/ Xã
-		//public string ToAddress { get; set; } // Địa chỉ chi tiết
-		//public string NumberPhone { get; set; } // SDT
-		//public int Status { get; set; }
-		//public int? ShippingFee { get; set; }
 		public async Task Btn_DatHang()
 		{
 			_lstPrI_show_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
@@ -162,8 +137,11 @@ namespace DATN_Client.Areas.Customer.Component
 				return;
 			}
 			var regexPN = @"^0\d{9,10}$"; // regex số đt
-			if (String.IsNullOrEmpty(_bill_validate_vm.Recipient) || String.IsNullOrEmpty(_bill_validate_vm.NumberPhone) || String.IsNullOrEmpty(_bill_validate_vm.ToAddress) || String.IsNullOrEmpty(_bill_validate_vm.Province) || String.IsNullOrEmpty(_bill_validate_vm.District) || String.IsNullOrEmpty(_bill_validate_vm.WardName) || !Regex.IsMatch(_bill_validate_vm.NumberPhone, regexPN)) return;
-			_datHangThanhCong = true;
+
+
+            if (String.IsNullOrEmpty(_bill_validate_vm.Recipient) || String.IsNullOrEmpty(_bill_validate_vm.NumberPhone) || String.IsNullOrEmpty(_bill_validate_vm.ToAddress) || String.IsNullOrEmpty(_bill_validate_vm.Province) || String.IsNullOrEmpty(_bill_validate_vm.District) || String.IsNullOrEmpty(_bill_validate_vm.WardName) || !Regex.IsMatch(_bill_validate_vm.NumberPhone, regexPN)) return;
+
+            _datHangThanhCong = true;
 			_afterClick = "afterClick";
 			var codeToday = DateTime.Now.ToString().Replace("/", "").Substring(0, 4) +
 								DateTime.Now.Year.ToString().Substring(2);
@@ -180,7 +158,6 @@ namespace DATN_Client.Areas.Customer.Component
 				_bill_validate_vm.Status = 1;
 			}
 			if (_bill_validate_vm.Note == string.Empty) _bill_validate_vm.Note = "Không có ghi chú";
-			//_bill_validate_vm.HistoryConsumerPointID = _lstHCP_VM.FirstOrDefault().Id;
 			if (_bill_validate_vm.Recipient == string.Empty) _bill_validate_vm.Recipient = _user_vm.Name;
 			if (_lstBill.Count == 0) _bill_validate_vm.BillCode = codeToday + "1";
 			else _bill_validate_vm.BillCode = codeToday + _lstBill.Max(c => int.Parse(c.BillCode.Substring(6)) + 1).ToString();

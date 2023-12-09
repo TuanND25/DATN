@@ -5,7 +5,6 @@ using Blazored.Toast;
 using DATN_Shared.Models;
 using Microsoft.AspNetCore.Identity;
 using DATN_API.Data;
-using Syncfusion.Blazor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,22 +33,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<BanOnlineController, BanOnlineController>();
-builder.Services.AddSyncfusionBlazor();
 
 
-builder.Services.AddAuthentication()
-    .AddCookie()
-    .AddGoogle(googleOptions =>
-    {
 
-        IConfigurationSection googleAuthNSection = builder.Configuration.GetSection("Authentication:Google");
-        googleOptions.ClientId = "83122337541-1p5sbfd774vu6tm6gak4u8jajdliaohh.apps.googleusercontent.com";
-        googleOptions.ClientSecret = "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";
-
-
-        googleOptions.CallbackPath = "https://localhost:7075/signin-google";
-
-    });
 
 builder.Services.AddBlazoredToast();
 var app = builder.Build();
@@ -61,7 +47,6 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mgo+DSMBMAY9C3t2VlhiQlVPd11dX2pWfFN0RnNadVp5flVAcC0sT3RfQF5iSHxadkFhWH9XcnRQQw==");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

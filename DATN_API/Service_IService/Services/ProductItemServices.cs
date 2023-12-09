@@ -45,14 +45,35 @@ namespace DATN_API.Service_IService.Services
 
         public async Task<ProductItems> GetAllProductItemById(Guid Id)
         {
-            var a = await _context.ProductItems.FirstOrDefaultAsync(a=>a.Id==Id);
+            var a = await _context.ProductItems.FirstOrDefaultAsync(a => a.Id == Id);
             return a;
         }
 
-        public async Task<List<ProductItems>> GetAllProductItemByProduct(Guid ProductId)
+        public async Task<List<ProductItem_Show_VM>> GetAllProductItemByProduct(Guid ProductId)
         {
-            var a = await _context.ProductItems.Where(a => a.ProductId==ProductId).ToListAsync();
-            return a; 
+            var list = (from prI in await _context.ProductItems.ToListAsync()
+                        join pr in await _context.Products.ToListAsync() on prI.ProductId equals pr.Id
+                        join s in await _context.Sizes.ToListAsync() on prI.SizeId equals s.Id
+                        join c in await _context.Colors.ToListAsync() on prI.ColorId equals c.Id
+                        join cate in await _context.Categories.ToListAsync() on prI.CategoryId equals cate.Id
+                        select new ProductItem_Show_VM()
+                        {
+                            Id = prI.Id,
+                            ProductId = prI.ProductId,
+                            ProductCode = pr.ProductCode,
+                            Name = pr.Name,
+                            ColorId = prI.ColorId,
+                            ColorName = c.Name,
+                            SizeId = prI.SizeId,
+                            SizeName = s.Name,
+                            CategoryID = prI.CategoryId,
+                            CategoryName = cate.Name,
+                            AvaiableQuantity = prI.AvaiableQuantity,
+                            PriceAfterReduction = prI.PriceAfterReduction,
+                            CostPrice = prI.CostPrice,
+                            Status = prI.Status,
+                        }).Where(c => c.ProductId == ProductId).ToList();
+            return list;
         }
 
         public async Task<List<ProductItem_Show_VM>> GetAllProductItemPromotionItem_Show(Guid Id)
@@ -62,13 +83,12 @@ namespace DATN_API.Service_IService.Services
                         join s in await _context.Sizes.ToListAsync() on prI.SizeId equals s.Id
                         join c in await _context.Colors.ToListAsync() on prI.ColorId equals c.Id
                         join cate in await _context.Categories.ToListAsync() on prI.CategoryId equals cate.Id
-                        join h in await _context.PromotionsItem.ToListAsync() on prI.Id equals h.ProductItemsId
                         select new ProductItem_Show_VM()
                         {
                             Id = prI.Id,
                             ProductId = prI.ProductId,
                             Name = pr.Name,
-                            ProductCode=pr.ProductCode,
+                            ProductCode = pr.ProductCode,
                             ColorId = prI.ColorId,
                             ColorName = c.Name,
                             SizeId = prI.SizeId,
@@ -76,10 +96,9 @@ namespace DATN_API.Service_IService.Services
                             CategoryID = prI.CategoryId,
                             CategoryName = cate.Name,
                             AvaiableQuantity = prI.AvaiableQuantity,
-							PriceAfterReduction = prI.PriceAfterReduction,
+                            PriceAfterReduction = prI.PriceAfterReduction,
                             CostPrice = prI.CostPrice,
                             Status = prI.Status,
-                            PromotionItemId = h.PromotionsId,
                         }).Where(x => x.PromotionItemId == Id).ToList();
             return list;
         }
@@ -90,44 +109,45 @@ namespace DATN_API.Service_IService.Services
             return a;
         }
 
-		public async Task<List<ProductItem_Show_VM>> GetAllProductItems_Show()
-		{
-			var list = (from prI in await _context.ProductItems.ToListAsync()
-						join pr in await _context.Products.ToListAsync() on prI.ProductId equals pr.Id
-						join s in await _context.Sizes.ToListAsync() on prI.SizeId equals s.Id
-						join c in await _context.Colors.ToListAsync() on prI.ColorId equals c.Id
-						join cate in await _context.Categories.ToListAsync() on prI.CategoryId equals cate.Id
-						select new ProductItem_Show_VM()
-						{
-							Id = prI.Id,
-							ProductId = prI.ProductId,
-							Name = pr.Name,
-							ColorId = prI.ColorId,
-							ColorName = c.Name,
-							SizeId = prI.SizeId,
-							SizeName = s.Name,
-							CategoryID = prI.CategoryId,
-							CategoryName = cate.Name,
-							AvaiableQuantity = prI.AvaiableQuantity,
-							PriceAfterReduction = prI.PriceAfterReduction,
-							CostPrice = prI.CostPrice,
-							Status = prI.Status,
-						}).ToList();
-			return list;
-		}
+        public async Task<List<ProductItem_Show_VM>> GetAllProductItems_Show()
+        {
+            var list = (from prI in await _context.ProductItems.ToListAsync()
+                        join pr in await _context.Products.ToListAsync() on prI.ProductId equals pr.Id
+                        join s in await _context.Sizes.ToListAsync() on prI.SizeId equals s.Id
+                        join c in await _context.Colors.ToListAsync() on prI.ColorId equals c.Id
+                        join cate in await _context.Categories.ToListAsync() on prI.CategoryId equals cate.Id
+                        select new ProductItem_Show_VM()
+                        {
+                            Id = prI.Id,
+                            ProductId = prI.ProductId,
+                            Name = pr.Name,
+                            ProductCode = pr.ProductCode,
+                            ColorId = prI.ColorId,
+                            ColorName = c.Name,
+                            SizeId = prI.SizeId,
+                            SizeName = s.Name,
+                            CategoryID = prI.CategoryId,
+                            CategoryName = cate.Name,
+                            AvaiableQuantity = prI.AvaiableQuantity,
+                            PriceAfterReduction = prI.PriceAfterReduction,
+                            CostPrice = prI.CostPrice,
+                            Status = prI.Status,
+                        }).ToList();
+            return list;
+        }
 
-		public async Task<ProductItems> UpdateProductItem(ProductItems item)
+        public async Task<ProductItems> UpdateProductItem(ProductItems item)
         {
             try
             {
                 var a = await _context.ProductItems.FindAsync(item.Id);
                 a.AvaiableQuantity = item.AvaiableQuantity;
                 a.CategoryId = item.CategoryId;
-                a.ColorId= item.ColorId;
+                a.ColorId = item.ColorId;
                 a.SizeId = item.SizeId;
-                a.ProductId= item.ProductId;
+                a.ProductId = item.ProductId;
                 a.PriceAfterReduction = item.PriceAfterReduction;
-                a.CostPrice= item.CostPrice;
+                a.CostPrice = item.CostPrice;
                 a.Status = item.Status;
                 _context.ProductItems.Update(a);
                 _context.SaveChanges();

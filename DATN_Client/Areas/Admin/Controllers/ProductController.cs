@@ -2,12 +2,20 @@
 
 namespace DATN_Client.Areas.Admin.Controllers
 {
-    public class ProductController : Controller
-    {
-        [Area("Admin")]
-        public IActionResult Index()
-        {
+	[Area("Admin")]
+	public class ProductController : Controller
+	{
+		public static Guid _productID { get;set; }
+		[Route("product-manager")]
+		public IActionResult Index()
+		{
+			return View();
+		}
+		[Route("product/{Id}")]
+		public IActionResult DetailProduct(Guid Id)
+		{
+			_productID = Id;
             return View();
-        }
-    }
+		}
+	}
 }
