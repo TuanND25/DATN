@@ -222,7 +222,7 @@ namespace DATN_API.Service_IService.Services
 				{
 					IsSuccess = true,
 					StatusCode = 400,
-					Message = "Xác thực thất bại1",
+					Message = "Xác thực thất bại",
 
 				};
 
@@ -233,7 +233,7 @@ namespace DATN_API.Service_IService.Services
 				{
 					IsSuccess = false,
 					StatusCode = 400,
-					Message = "Xác thực thất bại2",
+					Message = "Xác thực thất bại",
 					
 				};
 

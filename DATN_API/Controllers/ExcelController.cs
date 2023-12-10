@@ -25,8 +25,7 @@ namespace DATN_API.Controllers
 		[HttpGet("export")]
 		public IActionResult ExportExcel()
 		{
-			try
-			{
+			
 				var data = GetList(); // Replace this with your actual data retrieval logic
 
 				var sheetName = "Sheet1";
@@ -34,13 +33,6 @@ namespace DATN_API.Controllers
 				string Path = "C:\\Users\\Code Toi Sang\\Source\\Repos\\DATN_keni\\DATN_Client\\wwwroot\\excel\\"; 
 				System.IO.File.WriteAllBytes(Path, excelBytes);
 				return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "exported_data.xlsx");
-			}
-			catch(Exception ex)
-			{
-				return StatusCode(500, $"Internal Server Error: {ex.Message}");
-			}
-			
-
 		
 		}
 
