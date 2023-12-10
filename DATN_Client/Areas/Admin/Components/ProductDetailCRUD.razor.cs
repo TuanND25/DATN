@@ -1,16 +1,22 @@
 ﻿using DATN_Client.Areas.Admin.Controllers;
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.JSInterop;
+using System.ComponentModel.DataAnnotations;
+using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 
 namespace DATN_Client.Areas.Admin.Components
 {
 	public partial class ProductDetailCRUD
 	{
 		private HttpClient _httpClient = new();
+		[Inject] IJSRuntime JsRuntime { get; set; }
 		[Inject] private NavigationManager _navi { get; set; }
 		[Inject] private Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
 		private List<ProductItem_Show_VM>? _lst_pri = new();
 		private List<ProductItem_Show_VM>? _lst_pri_Add = new();
+		private List<ProductItem_Show_VM>? _lstPri_ChonMau = new();
 		private string _nameProduct { get; set; }
 		private List<Color_VM> _lstColor = new();
 		private List<Size_VM> _lstSize = new();
@@ -18,7 +24,11 @@ namespace DATN_Client.Areas.Admin.Components
 		private List<Color_VM> _lstColor_Add = new();
 		private List<Size_VM> _lstSize_Add = new();
 		private List<Categories_VM> _lstCate_Add = new();
+		private List<Image_Join_ProductItem> _lstImg_PI = new();
+		private List<Image_VM> _lstImg_them = new();
+		private List<Image_VM> _lstImg = new();
 		private List<string> _lstSizeSample = new List<string> { "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL" };
+		private List<string> _lstColor_string = new();
 		private Categories_VM _Cate_VM = new();
 		private Color_VM _C_VM = new();
 		private Size_VM _S_VM = new();
@@ -31,6 +41,9 @@ namespace DATN_Client.Areas.Admin.Components
 		private bool isModalOpenAddCate = false;
 		private bool isModalOpenAddColor = false;
 		private bool isModalOpenAddSize = false;
+		private bool isModalOpenAddImage = false;
+		private IBrowserFile _file { get; set; }
+		private string _chonMau { get; set; } = string.Empty;
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -51,27 +64,24 @@ namespace DATN_Client.Areas.Admin.Components
 				case "AddCate_Tam":
 					isModalOpenAddCate_Tam = isOpen;
 					break;
-
 				case "AddColor_Tam":
 					isModalOpenAddColor_Tam = isOpen;
 					break;
-
 				case "AddSize_Tam":
 					isModalOpenAddSize_Tam = isOpen;
 					break;
-
 				case "AddCate":
 					isModalOpenAddCate = isOpen;
 					break;
-
 				case "AddColor":
 					isModalOpenAddColor = isOpen;
 					break;
-
 				case "AddSize":
 					isModalOpenAddSize = isOpen;
 					break;
-
+				case "AddImage":
+					isModalOpenAddImage = isOpen;
+					break;
 				default:
 					break;
 			}
@@ -94,6 +104,7 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task AddMauListTam()
 		{
+			if (_idColorChon == Guid.Parse("00000000-0000-0000-0000-000000000000")) return;
 			var color = await _httpClient.GetFromJsonAsync<Color_VM>($"https://localhost:7141/api/Color/ById?Id={_idColorChon}");
 			if (!_lstColor_Add.Any(c => c.Id == color.Id))
 			{
@@ -122,9 +133,9 @@ namespace DATN_Client.Areas.Admin.Components
 									CategoryID = a.Id,
 									CategoryName = a.Name,
 									Status = 1,
-									AvaiableQuantity = 10,
-									CostPrice = 100000,
-									PriceAfterReduction = 100000
+									AvaiableQuantity = 0,
+									CostPrice = 0,
+									PriceAfterReduction = 0
 								});
 							}
 						}
@@ -136,6 +147,7 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task AddCateListTam()
 		{
+			if (_idCateChon == Guid.Parse("00000000-0000-0000-0000-000000000000")) return;
 			var cate = await _httpClient.GetFromJsonAsync<Categories_VM>($"https://localhost:7141/api/Categories/ById?Id={_idCateChon}");
 			if (!_lstCate_Add.Any(c => c.Id == cate.Id))
 			{
@@ -164,9 +176,9 @@ namespace DATN_Client.Areas.Admin.Components
 									CategoryID = a.Id,
 									CategoryName = a.Name,
 									Status = 1,
-									AvaiableQuantity = 10,
-									CostPrice = 100000,
-									PriceAfterReduction = 100000
+									AvaiableQuantity = 0,
+									CostPrice = 0,
+									PriceAfterReduction = 0
 								});
 							}
 						}
@@ -178,6 +190,7 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task AddSizeListTam()
 		{
+			if (_idSizeChon == Guid.Parse("00000000-0000-0000-0000-000000000000")) return;
 			var size = await _httpClient.GetFromJsonAsync<Size_VM>($"https://localhost:7141/api/Size/Id?Id={_idSizeChon}");
 			if (!_lstSize_Add.Any(c => c.Id == size.Id))
 			{
@@ -206,9 +219,9 @@ namespace DATN_Client.Areas.Admin.Components
 									CategoryID = a.Id,
 									CategoryName = a.Name,
 									Status = 1,
-									AvaiableQuantity = 10,
-									CostPrice = 100000,
-									PriceAfterReduction = 100000
+									AvaiableQuantity = 0,
+									CostPrice = 0,
+									PriceAfterReduction = 0
 								});
 							}
 						}
@@ -229,7 +242,7 @@ namespace DATN_Client.Areas.Admin.Components
 				}
 			}
 			_lst_pri_Add = lst;
-			_lstColor_Add.Remove(cl);			
+			_lstColor_Add.Remove(cl);
 		}
 
 		private void RemoveSizeListTam(Size_VM sz)
@@ -292,8 +305,15 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task MoAddSize()
 		{
+			await ChonMau(_chonMau);
 			_S_VM.Name = string.Empty;
 			OpenPopup("AddSize");
+		}
+
+		private void Mo_AddImage()
+		{			
+			_lstColor_string = _lst_pri.Select(c => c.ColorName).Distinct().OrderBy(c => c).ToList();
+			OpenPopup("AddImage");
 		}
 
 		private async Task Add_C()
@@ -368,9 +388,51 @@ namespace DATN_Client.Areas.Admin.Components
 			else _toastService.ShowError("Thêm không thành công");
 		}
 
-		private void Check12()
+		private async Task AddPI()
 		{
-			var a = _lst_pri_Add;
+
+			//	public Guid Id { get; set; }
+			//public Guid ProductId { get; set; }
+			//public Guid? ColorId { get; set; }
+			//public Guid? SizeId { get; set; }
+			//public Guid CategoryId { get; set; }
+			//public int? AvaiableQuantity { get; set; }
+			//public int? PriceAfterReduction { get; set; }
+			//public int? CostPrice { get; set; }
+			//public int Status { get; set; } = 0;
+
+			bool checkAdd = true;
+			foreach (var item in _lst_pri_Add)
+			{
+				ProductItem_VM pri_vm = new ProductItem_VM()
+				{
+					Id = Guid.NewGuid(),
+					ProductId = item.ProductId,
+					ColorId = item.ColorId,
+					SizeId = item.SizeId,
+					CategoryId = item.CategoryID,
+					AvaiableQuantity = item.AvaiableQuantity,
+					CostPrice = item.CostPrice,
+					PriceAfterReduction = item.CostPrice,
+					Status = 1
+				};
+				var a = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/productitem/add_productitem", pri_vm);
+				if (a.StatusCode != System.Net.HttpStatusCode.OK) checkAdd = false;
+			}
+			if (checkAdd = true)
+			{
+				_lstCate_Add.Clear();
+				_lstSize_Add.Clear();
+				_lstColor_Add.Clear();
+				_lst_pri_Add.Clear();
+				_lst_pri = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>($"https://localhost:7141/api/productitem/get_all_productitem_byProduct/{ProductController._productID}");
+				await JsRuntime.InvokeVoidAsync("OnScrollEvent");
+				_toastService.ShowSuccess("Thêm thành công");
+			}
+			if (checkAdd = false)
+			{
+				_toastService.ShowSuccess("Thêm thất bại");
+			}
 		}
 
 		private void DeletePITam(ProductItem_Show_VM pi)
@@ -381,12 +443,12 @@ namespace DATN_Client.Areas.Admin.Components
 			_lst_pri_Add.Remove(pi);
 			foreach (var a in _lstSize_Add)
 			{
-				if (_lst_pri_Add.Any(c=>c.SizeId==a.Id))
+				if (_lst_pri_Add.Any(c => c.SizeId == a.Id))
 				{
 					lstSz.Add(a);
 				}
 			}
-			_lstSize_Add=lstSz.Distinct().ToList();
+			_lstSize_Add = lstSz.Distinct().ToList();
 			foreach (var a in _lstColor_Add)
 			{
 				if (_lst_pri_Add.Any(c => c.ColorId == a.Id))
@@ -394,7 +456,7 @@ namespace DATN_Client.Areas.Admin.Components
 					lstCl.Add(a);
 				}
 			}
-			_lstColor_Add=lstCl.Distinct().ToList();
+			_lstColor_Add = lstCl.Distinct().ToList();
 			foreach (var a in _lstCate_Add)
 			{
 				if (_lst_pri_Add.Any(c => c.CategoryID == a.Id))
@@ -402,7 +464,110 @@ namespace DATN_Client.Areas.Admin.Components
 					lstCate.Add(a);
 				}
 			}
-			_lstCate_Add=lstCate.Distinct().ToList();
+			_lstCate_Add = lstCate.Distinct().ToList();
+		}
+
+		private async Task ChonMau(string mau)
+		{
+			_chonMau = mau;
+			_lstPri_ChonMau.Clear();
+			_lstPri_ChonMau = _lst_pri.Where(c => c.ColorName == mau).ToList();
+			var lstImg = await _httpClient.GetFromJsonAsync<List<Image_VM>>("https://localhost:7141/api/Image");
+			_lstImg.Clear();
+			foreach (var a in _lstPri_ChonMau)
+			{
+				foreach (var b in lstImg)
+				{
+					if (a.Id == b.ProductItemId)
+					{
+						if (!_lstImg.Any(c => c.PathImage == b.PathImage))
+						{
+							_lstImg.Add(b);
+						}
+					}
+				}
+			}
+		}
+
+		public async Task ChangeEv(InputFileChangeEventArgs e)
+		{
+			var lstImg = await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem");
+			Image_VM imgTam = new Image_VM();
+			_file = e.File;
+			if (_file != null)
+			{
+				// Trỏ tới thư mục wwwroot để lát nữa thực hiện việc copy sang
+				var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", _file.Name);
+				using (var stream = new FileStream(path, FileMode.Create))
+				{
+					// Thực hiện copy ảnh vừa chọn sang thư mục mới (wwwroot)
+					try
+					{
+
+						await _file.OpenReadStream(2048 * 1024).CopyToAsync(stream);
+					}
+					catch (Exception)
+					{
+
+						_toastService.ShowError("Ảnh có kích thước quá lớn, vui lòng chọn ảnh khác");
+						return;
+					}
+				}
+				// Gán lại giá trị cho Description của đối tượng bằng tên file ảnh đã được sao chép
+				imgTam.PathImage = _file.Name;
+				//_pathImg = _file.Name;
+				imgTam.Id = Guid.NewGuid();
+				//_idImg_Tam = imgTam.Id;
+				imgTam.Name = "";
+				//if (lstImg.Count == 0) imgTam.STT = 1;
+				//else imgTam.STT = _lstImg_Tam.Count == 0
+				//			? _lstImg.Max(c => c.STT) + 1
+				//			: (_lstImg.Max(c => c.STT) > _lstImg_Tam.Max(c => c.STT)
+				//			? _lstImg.Max(c => c.STT) + 1
+				//			: _lstImg_Tam.Max(c => c.STT) + 1);
+				//if (_idPI.ToString() == "00000000-0000-0000-0000-000000000000") imgTam.ProductItemId = _idPI_Tam;
+				//else imgTam.ProductItemId = _idPI;
+				//imgTam.Status = 1;
+				_lstImg_them.Add(imgTam);
+				_lstImg.Add(imgTam);
+				_toastService.ShowSuccess("Ảnh đã được tải lên thành công");
+			}
+		}
+
+		private void XoaAnhTam(Image_VM img)
+		{
+			_lstImg.Remove(img);
+		}
+
+		private async Task XacNhanAddImg()
+		{
+			//public Guid Id { get; set; }
+			//public Guid? ReviewId { get; set; }
+			//public string Name { get; set; }
+			//public int STT { get; set; }
+			//public string PathImage { get; set; }
+			//public Guid ProductItemId { get; set; }
+			//public int Status { get; set; }
+			bool checkAdd = true;
+			foreach (var a in _lstPri_ChonMau)
+			{
+				foreach (var b in _lstImg_them)
+				{
+					Image_VM img = new()
+					{
+						Id = Guid.NewGuid(),
+						Name = "",
+						STT = await _httpClient.GetFromJsonAsync<int>("https://localhost:7141/api/Image/GetSttMax"),
+						PathImage = b.PathImage,
+						ProductItemId = a.Id,
+						Status = 1
+					};
+					var add = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/Image/Post-Image", img);
+					if (add.StatusCode!=System.Net.HttpStatusCode.OK) checkAdd = false;
+				}
+			}
+			if (checkAdd == true) _toastService.ShowSuccess("Thêm ảnh minh họa thành công");
+			else _toastService.ShowError("Thao tác thất bại");
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿@using Blazored.Toast.Configuration
-<BlazoredToasts Position="ToastPosition.TopRight"
-				Timeout="10"
+<BlazoredToasts Position="ToastPosition.BottomRight"
+				Timeout="5"
 				IconType="IconType.FontAwesome"
 				SuccessClass="success-toast-override"
 				SuccessIcon="fa-solid fa-check"
@@ -11,8 +11,8 @@
 	}
 </style>
 <button class="btn btn-primary" @onclick="BackToManager">Trở lại</button>
-<button class="btn btn-primary" @onclick="BackToManager">Tạo mới</button>
-<h4>@_nameProduct</h4>
+<button class="btn btn-primary" @onclick="Mo_AddImage">Thêm ảnh minh họa</button>
+<h1>@_nameProduct</h1>
 <h2>Thuộc tính</h2>
 <div style="border:1px solid black">
 	<div style="display:flex;height:60px;">
@@ -79,7 +79,7 @@
 		</div>
 	</div>
 </div>
-@if (_lst_pri_Add.Count>0)
+@if (_lst_pri_Add.Count > 0)
 {
 	<h2>Danh sách tạo mới</h2>
 	<table class="table">
@@ -100,12 +100,37 @@
 			}
 			@foreach (var x in _lst_pri_Add)
 			{
+				string textErr_TonTai = string.Empty;
+				string textErr_SoLuong = string.Empty;
+				string textErr_GiaBan = string.Empty;
+				if (_lst_pri.Where(a => a.ColorId == x.ColorId && a.SizeId == x.SizeId && a.CategoryID == x.CategoryID).Count() > 0)
+				{
+					textErr_TonTai = "=> Biến thể đã tồn tại. Vui lòng sử dụng chức năng cập nhật sản phẩm chi tiết";
+				}
+				if (x.AvaiableQuantity <= 0 || string.IsNullOrEmpty(x.AvaiableQuantity.ToString()))
+				{
+					textErr_SoLuong = "=> Số lượng phải lớn hơn 0";
+				}
+				if (x.CostPrice <= 0 || string.IsNullOrEmpty(x.CostPrice.ToString()))
+				{
+					textErr_GiaBan = "=> Giá bán phải lớn hơn 0";
+				}
 				<tr>
-					<td style="vertical-align:middle;text-align:center">@(sttLstSP++)</td>
+					<td style="vertical-align:middle;text-align:center;width:20px">@(sttLstSP++)</td>
 					<td style="vertical-align:middle">@x.Name - @x.ColorName - @x.SizeName</td>
 					<td style="vertical-align:middle;text-align:center">@x.CategoryName</td>
-					<td style="vertical-align:middle;text-align:center"><input type="number" @bind="x.AvaiableQuantity" /></td>
-					<td style="vertical-align:middle;text-align:center"><input type="number" @bind="x.CostPrice" /></td>
+					<td style="vertical-align:middle;text-align:center">
+						<div class="input-group">
+							<input type="number" class="form-control" style="text-align:center" aria-label="Dollar amount (with dot and two decimal places)" @bind="x.AvaiableQuantity" />
+							<span class="input-group-text">cái</span>
+						</div>
+					</td>
+					<td style="vertical-align:middle;text-align:center">
+						<div class="input-group">
+							<input type="number" class="form-control" style="text-align:center" aria-label="Dollar amount (with dot and two decimal places)" @bind="x.CostPrice" />
+							<span class="input-group-text">đ</span>
+						</div>
+					</td>
 					<td style="vertical-align:middle;text-align:center">@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
 					<td style="vertical-align:middle;text-align:center">
 						<button style="border: none;border-radius: 15px;" class="btn btn-primary" @onclick="()=>DeletePITam(x)">
@@ -113,11 +138,35 @@
 						</button>
 					</td>
 				</tr>
+				if (!string.IsNullOrEmpty(textErr_TonTai) || !string.IsNullOrEmpty(textErr_SoLuong) || !string.IsNullOrEmpty(textErr_GiaBan))
+				{
+					<tr>
+						<td colspan="10">
+
+							<p style="font-style:italic;color:red;margin-bottom:0px">
+								@textErr_TonTai
+							</p>
+
+
+							<p style="font-style:italic;color:red;margin-bottom:0px">
+								@textErr_SoLuong
+							</p>
+
+
+							<p style="font-style:italic;color:red;margin-bottom:0px">
+								@textErr_GiaBan
+							</p>
+
+
+
+						</td>
+					</tr>
+				}
 			}
 		</tbody>
 	</table>
 	<div style="display:flex;justify-content:right">
-		<button class="btn btn-primary" @onclick="Check12">Tạo mới</button>
+		<button class="btn btn-primary" @onclick="AddPI">Tạo mới</button>
 	</div>
 }
 <h2>Danh sách sản phẩm chi tiết</h2>
@@ -197,7 +246,7 @@ else
 
 		</div>
 	</div>
-	<BlazoredToasts Position="ToastPosition.TopRight"
+	<BlazoredToasts Position="ToastPosition.BottomRight"
 					Timeout="5"
 					IconType="IconType.FontAwesome"
 					SuccessClass="success-toast-override"
@@ -239,8 +288,8 @@ else
 
 		</div>
 	</div>
-	<BlazoredToasts Position="ToastPosition.TopRight"
-					Timeout="10"
+	<BlazoredToasts Position="ToastPosition.BottomRight"
+					Timeout="5"
 					IconType="IconType.FontAwesome"
 					SuccessClass="success-toast-override"
 					SuccessIcon="fa-solid fa-check"
@@ -281,7 +330,7 @@ else
 
 		</div>
 	</div>
-	<BlazoredToasts Position="ToastPosition.TopRight"
+	<BlazoredToasts Position="ToastPosition.BottomRight"
 					Timeout="5"
 					IconType="IconType.FontAwesome"
 					SuccessClass="success-toast-override"
@@ -315,7 +364,7 @@ else
 			</EditForm>
 		</div>
 	</div>
-	<BlazoredToasts Position="ToastPosition.TopRight"
+	<BlazoredToasts Position="ToastPosition.BottomRight"
 					Timeout="5"
 					IconType="IconType.FontAwesome"
 					SuccessClass="success-toast-override"
@@ -348,7 +397,7 @@ else
 			</EditForm>
 		</div>
 	</div>
-	<BlazoredToasts Position="ToastPosition.TopRight"
+	<BlazoredToasts Position="ToastPosition.BottomRight"
 					Timeout="5"
 					IconType="IconType.FontAwesome"
 					SuccessClass="success-toast-override"
@@ -382,7 +431,73 @@ else
 			</EditForm>
 		</div>
 	</div>
-	<BlazoredToasts Position="ToastPosition.TopRight"
+	<BlazoredToasts Position="ToastPosition.BottomRight"
+					Timeout="5"
+					IconType="IconType.FontAwesome"
+					SuccessClass="success-toast-override"
+					SuccessIcon="fa-solid fa-check"
+					ErrorIcon="fa-solid fa-triangle-exclamation" />
+</div>
+@* popup add image *@
+<div class="modal fade @(isModalOpenAddImage ? "show back" : "")"
+	 tabindex="-1"
+	 aria-hidden="@(isModalOpenAddImage ? "" : "true")"
+	 style="display: @(isModalOpenAddImage ? "block" : "none")"
+	 aria-modal="@(isModalOpenAddImage ? "true" : "none")"
+	 role="@(isModalOpenAddImage ? "dialog" : "none")">
+	<div class="modal-dialog modal-dialog-centered modal-lg" style="width:150%">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Thêm ảnh minh họa</h4>
+				<button style="border:none;background-color:#fff" class="close" @onclick='()=>ClosePopup("AddImage")'>&times;</button>
+			</div>
+			<div class="modal-body">
+				<div>
+					<h3>
+						Chọn màu sắc
+					</h3>
+				</div>
+				<div>
+					@foreach (var x in _lstColor_string)
+					{
+						<label class="custom-radio-mau" @onclick="()=>ChonMau(x)">
+							<input type="radio" name="mau" id="mau @x" />
+							<span class="">@x</span>
+						</label>
+					}
+				</div>
+				@if (!string.IsNullOrEmpty(_chonMau))
+				{
+					<div>
+						<div>
+							<h3>
+								Ảnh hiện tại
+							</h3>
+						</div>
+						<div>
+							@foreach (var img in _lstImg.OrderBy(c=>c.STT))
+							{
+
+								<img class="img-thumbnail position-relative" src="/images/@img.PathImage" style="width: 100px;height:110px;vertical-align:top;margin-right:-5px;margin-bottom:15px" />
+								<span class="position-absolute translate-middle badge rounded-pill bg-danger" @onclick="()=>XoaAnhTam(img)" style="cursor:pointer">
+									<i class="fa-solid fa-xmark"></i>
+								</span>
+								<span>&emsp;&ensp;</span>
+							}
+							<InputFile class="a1" id="customFile" OnChange="ChangeEv" />
+							<label class="a2" for="customFile"></label>
+						</div>
+					</div>
+				}
+			</div>
+			<!-- Phần chân của popup -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" @onclick='()=>ClosePopup("AddImage")'>Đóng</button>
+				<button type="button" class="btn btn-primary" @onclick="XacNhanAddImg">Xác nhận</button>
+			</div>
+		</div>
+	</div>
+	<BlazoredToasts Position="ToastPosition.BottomRight"
 					Timeout="5"
 					IconType="IconType.FontAwesome"
 					SuccessClass="success-toast-override"
