@@ -72,6 +72,19 @@ namespace DATN_API.Service_IService.Services
 			return await _context.Images.FindAsync(Id);
 		}
 
+		public async Task<int> GetImage_STT_Max()
+		{
+			try
+			{
+				var sttmax = await _context.Images.MaxAsync(c => c.STT);
+				return sttmax + 1;
+			}
+			catch (Exception)
+			{
+				return 1;
+			}
+		}
+
 		public async Task<Image> PostImage(Image image)
 		{
 			await _context.Images.AddAsync(image);

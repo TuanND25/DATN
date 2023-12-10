@@ -32,6 +32,21 @@ namespace DATN_API.Controllers
             }
 
         }
+		[HttpGet("GetSttMax")]
+		public async Task<ActionResult<int>> GetSttMax()
+		{
+			try
+			{
+				var sttmax = await _iImageService.GetImage_STT_Max();
+				return Ok(sttmax);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest("Liên hệ Thai để sửa 0349198240");
+
+			}
+
+		}
 		[HttpGet("GetAllImage_PrductItem")]
 		public async Task<ActionResult<Image>> GetAllImage_PrductItem()
 		{
