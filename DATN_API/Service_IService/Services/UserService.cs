@@ -173,8 +173,8 @@ namespace DATN_API.Service_IService.Services
                 Email = user.email,
                 Name = user.name,
 				PhoneNumber= user.phonenumber,
-				Sex= user.	sex,
-				Status =1 
+				Sex= user.sex,
+				Status =user.status
 				
             };
             if (await _roleManager.RoleExistsAsync(user.role))

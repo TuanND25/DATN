@@ -11,8 +11,9 @@ namespace DATN_Shared.ViewModel
     {
         public Guid Id { get; set; }
         public string ProductCode { get; set; }
-        public string Name { get; set; }
-        [Required(ErrorMessage = "Tên sản phẩm không được để trống")]
-        public int Status { get; set; }
+		[Required(ErrorMessage = "Tên sản phẩm không được để trống")]
+		public string Name { get; set; }       
+		public string Description { get; set; }
+		public int Status { get; set; }
     }
 }

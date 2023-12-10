@@ -1,6 +1,126 @@
-﻿<button class="btn btn-primary" @onclick="BackToManager">Trở lại</button>
-
-<h2>Danh sách sản phẩm</h2>
+﻿@using Blazored.Toast.Configuration
+<BlazoredToasts Position="ToastPosition.TopRight"
+				Timeout="10"
+				IconType="IconType.FontAwesome"
+				SuccessClass="success-toast-override"
+				SuccessIcon="fa-solid fa-check"
+				ErrorIcon="fa-solid fa-triangle-exclamation" />
+<style>
+	.back {
+		background-color: rgba(0,0,0,0.7);
+	}
+</style>
+<button class="btn btn-primary" @onclick="BackToManager">Trở lại</button>
+<button class="btn btn-primary" @onclick="BackToManager">Tạo mới</button>
+<h4>@_nameProduct</h4>
+<h2>Thuộc tính</h2>
+<div style="border:1px solid black">
+	<div style="display:flex;height:60px;">
+		<div class="col-md-1" style="display:flex;align-items:center;border-right:1px solid black;border-bottom:1px solid black;justify-content:center">
+			<span>Màu</span>
+		</div>
+		<div class="col-md-11" style="display:flex;border-bottom:1px solid black;align-items:center">
+			@foreach (var item in _lstColor_Add)
+			{
+				<button type="button" class="position-relative" style="border:none;background-color:#0d6efd;color:#fff;border-radius:0.25rem;display:inline-block;font-weight:400;line-height:1.5;text-decoration:none;vertical-align:middle;padding:0.375rem 0.75rem;margin-right:5px;margin-left:10px">
+					@item.Name
+					<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" @onclick="()=>RemoveMauListTam(item)">
+						<i class="fa-solid fa-xmark"></i>
+					</span>
+				</button>
+			}
+			<button class="btn btn-primary"
+					style="background-color:#ffffff;color:black;margin-left:10px"
+					@onclick="Mo_AddColor_Tam">
+				<i class="fa-solid fa-plus"></i>
+			</button>
+		</div>
+	</div>
+	<div style="display:flex;height:60px;">
+		<div class="col-md-1" style="display:flex;align-items:center;border-right:1px solid black;border-bottom:1px solid black;justify-content:center">
+			<span>Kích thước</span>
+		</div>
+		<div class="col-md-11" style="display:flex;border-bottom:1px solid black;align-items:center">
+			@foreach (var item in _lstSize_Add)
+			{
+				<button type="button" class="position-relative" style="border:none;background-color:#0d6efd;color:#fff;border-radius:0.25rem;display:inline-block;font-weight:400;line-height:1.5;text-decoration:none;vertical-align:middle;padding:0.375rem 0.75rem;margin-right:5px;margin-left:10px">
+					@item.Name
+					<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" @onclick="()=>RemoveSizeListTam(item)">
+						<i class="fa-solid fa-xmark"></i>
+					</span>
+				</button>
+			}
+			<button class="btn btn-primary"
+					style="background-color:#ffffff;color:black;margin-left:10px"
+					@onclick="Mo_AddSize_Tam">
+				<i class="fa-solid fa-plus"></i>
+			</button>
+		</div>
+	</div>
+	<div style="display:flex;height:60px;">
+		<div class="col-md-1" style="display:flex;align-items:center;border-right:1px solid black;justify-content:center">
+			<span>Thể loại</span>
+		</div>
+		<div class="col-md-11" style="display:flex;align-items:center">
+			@foreach (var item in _lstCate_Add)
+			{
+				<button type="button" class="position-relative" style="border:none;background-color:#0d6efd;color:#fff;border-radius:0.25rem;display:inline-block;font-weight:400;line-height:1.5;text-decoration:none;vertical-align:middle;padding:0.375rem 0.75rem;margin-right:5px;margin-left:10px">
+					@item.Name
+					<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" @onclick="()=>RemoveCateListTam(item)">
+						<i class="fa-solid fa-xmark"></i>
+					</span>
+				</button>
+			}
+			<button class="btn btn-primary"
+					style="background-color:#ffffff;color:black;margin-left:10px"
+					@onclick="Mo_AddCate_Tam">
+				<i class="fa-solid fa-plus"></i>
+			</button>
+		</div>
+	</div>
+</div>
+@if (_lst_pri_Add.Count>0)
+{
+	<h2>Danh sách tạo mới</h2>
+	<table class="table">
+		<thead>
+			<tr>
+				<th style="width:3%;text-align:center">#</th>
+				<th style="text-align:center">Sản phẩm</th>
+				<th style="text-align:center">Thể loại</th>
+				<th style="text-align:center">Số lượng tồn</th>
+				<th style="text-align:center">Giá bán</th>
+				<th style="text-align:center">Trạng thái</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@{
+				int sttLstSP = 1;
+			}
+			@foreach (var x in _lst_pri_Add)
+			{
+				<tr>
+					<td style="vertical-align:middle;text-align:center">@(sttLstSP++)</td>
+					<td style="vertical-align:middle">@x.Name - @x.ColorName - @x.SizeName</td>
+					<td style="vertical-align:middle;text-align:center">@x.CategoryName</td>
+					<td style="vertical-align:middle;text-align:center"><input type="number" @bind="x.AvaiableQuantity" /></td>
+					<td style="vertical-align:middle;text-align:center"><input type="number" @bind="x.CostPrice" /></td>
+					<td style="vertical-align:middle;text-align:center">@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
+					<td style="vertical-align:middle;text-align:center">
+						<button style="border: none;border-radius: 15px;" class="btn btn-primary" @onclick="()=>DeletePITam(x)">
+							<i class="fa-solid fa-trash-xmark"></i>
+						</button>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	<div style="display:flex;justify-content:right">
+		<button class="btn btn-primary" @onclick="Check12">Tạo mới</button>
+	</div>
+}
+<h2>Danh sách sản phẩm chi tiết</h2>
 @if (_lst_pri == null)
 {
 	<p><em>Loading...</em></p>
@@ -12,27 +132,25 @@ else
 			<tr>
 				<th style="width:3%;text-align:center">#</th>
 				<th style="text-align:center">Sản phẩm</th>
-				<th style="text-align:center">Mã</th>
 				<th style="text-align:center">Thể loại</th>
 				<th style="text-align:center">Số lượng tồn</th>
 				<th style="text-align:center">Giá bán</th>
-				<th style="text-align:center">Giá sau giảm</th>
 				<th style="text-align:center">Trạng thái</th>
 				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			@{int sttLstSP = 1;}
+			@{
+				int sttLstSP = 1;
+			}
 			@foreach (var x in _lst_pri)
 			{
 				<tr>
 					<td style="vertical-align:middle;text-align:center">@(sttLstSP++)</td>
 					<td style="vertical-align:middle">@x.Name - @x.ColorName - @x.SizeName</td>
-					<td style="vertical-align:middle">@x.ProductCode</td>
 					<td style="vertical-align:middle;text-align:center">@x.CategoryName</td>
 					<td style="vertical-align:middle;text-align:center">@x.AvaiableQuantity</td>
 					<td style="vertical-align:middle;text-align:center">@x.CostPrice</td>
-					<td style="vertical-align:middle;text-align:center">@x.PriceAfterReduction</td>
 					<td style="vertical-align:middle;text-align:center">@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
 					<td style="vertical-align:middle;text-align:center">
 						<button style="border: none;border-radius: 15px;" class="btn btn-primary">
@@ -44,3 +162,230 @@ else
 		</tbody>
 	</table>
 }
+@* popup add color tạm *@
+<div class="modal fade @(isModalOpenAddColor_Tam ? "show back" : "")"
+	 tabindex="-1"
+	 aria-hidden="@(isModalOpenAddColor_Tam ? "" : "true")"
+	 style="display: @(isModalOpenAddColor_Tam ? "block" : "none")"
+	 aria-modal="@(isModalOpenAddColor_Tam ? "true" : "none")"
+	 role="@(isModalOpenAddColor_Tam ? "dialog" : "none")">
+	<div class="modal-dialog modal-dialog-centered" style="width:150%">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Chọn màu</h4>
+				<button style="border:none;background-color:#fff" class="close" @onclick='()=>ClosePopup("AddColor_Tam")'>&times;</button>
+			</div>
+			<div class="modal-body">
+				<div style="display:flex">
+					<select class="form-select" @bind="_idColorChon">
+						<option value="00000000-0000-0000-0000-000000000000" selected>--Chọn--</option>
+						@foreach (var x in _lstColor)
+						{
+							<option value="@x.Id">@x.Name</option>
+						}
+					</select>
+					<button type="button" class="btn btn-primary" @onclick="MoAddColor">
+						<i class="fa-solid fa-plus"></i>
+					</button>
+				</div>
+			</div>
+			<!-- Phần chân của popup -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" @onclick='()=>ClosePopup("AddColor_Tam")'>Đóng</button>
+				<button type="button" class="btn btn-primary" @onclick="AddMauListTam">Chọn</button>
+			</div>
+
+		</div>
+	</div>
+	<BlazoredToasts Position="ToastPosition.TopRight"
+					Timeout="5"
+					IconType="IconType.FontAwesome"
+					SuccessClass="success-toast-override"
+					SuccessIcon="fa-solid fa-check"
+					ErrorIcon="fa-solid fa-triangle-exclamation" />
+</div>
+@* popup add cate tạm *@
+<div class="modal fade @(isModalOpenAddCate_Tam ? "show back" : "")"
+	 tabindex="-1"
+	 aria-hidden="@(isModalOpenAddCate_Tam ? "" : "true")"
+	 style="display: @(isModalOpenAddCate_Tam ? "block" : "none")"
+	 aria-modal="@(isModalOpenAddCate_Tam ? "true" : "none")"
+	 role="@(isModalOpenAddCate_Tam ? "dialog" : "none")">
+	<div class="modal-dialog modal-dialog-centered" style="width:150%">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Chọn thể loại</h4>
+				<button style="border:none;background-color:#fff" class="close" @onclick='()=>ClosePopup("AddCate_Tam")'>&times;</button>
+			</div>
+			<div class="modal-body">
+				<div style="display:flex">
+					<select class="form-select" @bind="_idCateChon">
+						<option value="00000000-0000-0000-0000-000000000000" selected>--Chọn--</option>
+						@foreach (var x in _lstCate)
+						{
+							<option value="@x.Id">@x.Name</option>
+						}
+					</select>
+					<button type="button" class="btn btn-primary" @onclick="MoAddCate">
+						<i class="fa-solid fa-plus"></i>
+					</button>
+				</div>
+			</div>
+			<!-- Phần chân của popup -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" @onclick='()=>ClosePopup("AddCate_Tam")'>Đóng</button>
+				<button type="button" class="btn btn-primary" @onclick="AddCateListTam">Chọn</button>
+			</div>
+
+		</div>
+	</div>
+	<BlazoredToasts Position="ToastPosition.TopRight"
+					Timeout="10"
+					IconType="IconType.FontAwesome"
+					SuccessClass="success-toast-override"
+					SuccessIcon="fa-solid fa-check"
+					ErrorIcon="fa-solid fa-triangle-exclamation" />
+</div>
+@* popup add size tạm *@
+<div class="modal fade @(isModalOpenAddSize_Tam ? "show back" : "")"
+	 tabindex="-1"
+	 aria-hidden="@(isModalOpenAddSize_Tam ? "" : "true")"
+	 style="display: @(isModalOpenAddSize_Tam ? "block" : "none")"
+	 aria-modal="@(isModalOpenAddSize_Tam ? "true" : "none")"
+	 role="@(isModalOpenAddSize_Tam ? "dialog" : "none")">
+	<div class="modal-dialog modal-dialog-centered" style="width:150%">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Chọn kích thước</h4>
+				<button style="border:none;background-color:#fff" class="close" @onclick='()=>ClosePopup("AddSize_Tam")'>&times;</button>
+			</div>
+			<div class="modal-body">
+				<div style="display:flex">
+					<select class="form-select" @bind="_idSizeChon">
+						<option value="00000000-0000-0000-0000-000000000000" selected>--Chọn--</option>
+						@foreach (var x in _lstSize)
+						{
+							<option value="@x.Id">@x.Name</option>
+						}
+					</select>
+					<button type="button" class="btn btn-primary" @onclick="MoAddSize">
+						<i class="fa-solid fa-plus"></i>
+					</button>
+				</div>
+			</div>
+			<!-- Phần chân của popup -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" @onclick='()=>ClosePopup("AddSize_Tam")'>Đóng</button>
+				<button type="button" class="btn btn-primary" @onclick="AddSizeListTam">Chọn</button>
+			</div>
+
+		</div>
+	</div>
+	<BlazoredToasts Position="ToastPosition.TopRight"
+					Timeout="5"
+					IconType="IconType.FontAwesome"
+					SuccessClass="success-toast-override"
+					SuccessIcon="fa-solid fa-check"
+					ErrorIcon="fa-solid fa-triangle-exclamation" />
+</div>
+
+@* popup add color *@
+<div class="modal fade @(isModalOpenAddColor ? "show back" : "")"
+	 tabindex="-1"
+	 aria-hidden="@(isModalOpenAddColor ? "" : "true")"
+	 style="display: @(isModalOpenAddColor ? "block" : "none")"
+	 aria-modal="@(isModalOpenAddColor ? "true" : "none")"
+	 role="@(isModalOpenAddColor ? "dialog" : "none")">
+	<div class="modal-dialog modal-dialog-centered" style="width:150%">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Thêm màu sắc</h4>
+				<button style="border:none;background-color:#fff" class="close" @onclick='()=>ClosePopup("AddColor")'>&times;</button>
+			</div>
+			<EditForm Model="_C_VM">
+				<div class="modal-body">
+					Tên màu sắc
+					<InputText class="form-control" @bind-Value="@_C_VM.Name" />
+				</div>
+				<!-- Phần chân của popup -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" @onclick='()=>ClosePopup("AddColor")'>Đóng</button>
+					<button type="button" class="btn btn-primary" @onclick="Add_C">Thêm</button>
+				</div>
+			</EditForm>
+		</div>
+	</div>
+	<BlazoredToasts Position="ToastPosition.TopRight"
+					Timeout="5"
+					IconType="IconType.FontAwesome"
+					SuccessClass="success-toast-override"
+					SuccessIcon="fa-solid fa-check"
+					ErrorIcon="fa-solid fa-triangle-exclamation" />
+</div>
+
+<div class="modal fade @(isModalOpenAddCate ? "show back" : "")"
+	 tabindex="-1"
+	 aria-hidden="@(isModalOpenAddCate ? "" : "true")"
+	 style="display: @(isModalOpenAddCate ? "block" : "none")"
+	 aria-modal="@(isModalOpenAddCate ? "true" : "none")"
+	 role="@(isModalOpenAddCate ? "dialog" : "none")">
+	<div class="modal-dialog modal-dialog-centered" style="width:150%">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Thêm thể loại</h4>
+				<button style="border:none;background-color:#fff" class="close" @onclick='()=>ClosePopup("AddCate")'>&times;</button>
+			</div>
+			<EditForm Model="_Cate_VM">
+				<div class="modal-body">
+					Tên thể loại
+					<InputText class="form-control" @bind-Value="@_Cate_VM.Name" />
+				</div>
+				<!-- Phần chân của popup -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" @onclick='()=>ClosePopup("AddCate")'>Đóng</button>
+					<button type="button" class="btn btn-primary" @onclick="Add_Cate">Thêm</button>
+				</div>
+			</EditForm>
+		</div>
+	</div>
+	<BlazoredToasts Position="ToastPosition.TopRight"
+					Timeout="5"
+					IconType="IconType.FontAwesome"
+					SuccessClass="success-toast-override"
+					SuccessIcon="fa-solid fa-check"
+					ErrorIcon="fa-solid fa-triangle-exclamation" />
+</div>
+
+@* popup add size *@
+<div class="modal fade @(isModalOpenAddSize ? "show back" : "")"
+	 tabindex="-1"
+	 aria-hidden="@(isModalOpenAddSize ? "" : "true")"
+	 style="display: @(isModalOpenAddSize ? "block" : "none")"
+	 aria-modal="@(isModalOpenAddSize ? "true" : "none")"
+	 role="@(isModalOpenAddSize ? "dialog" : "none")">
+	<div class="modal-dialog modal-dialog-centered" style="width:150%">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Thêm kích thước</h4>
+				<button style="border:none;background-color:#fff" class="close" @onclick='()=>ClosePopup("AddSize")'>&times;</button>
+			</div>
+			<EditForm Model="_S_VM">
+				<div class="modal-body">
+					Tên kích thước
+					<InputText class="form-control" @bind-Value="@_S_VM.Name" />
+				</div>
+				<!-- Phần chân của popup -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" @onclick='()=>ClosePopup("AddSize")'>Đóng</button>
+					<button type="button" class="btn btn-primary" @onclick="Add_S">Thêm</button>
+				</div>
+			</EditForm>
+		</div>
+	</div>
+	<BlazoredToasts Position="ToastPosition.TopRight"
+					Timeout="5"
+					IconType="IconType.FontAwesome"
+					SuccessClass="success-toast-override"
+					SuccessIcon="fa-solid fa-check"
+					ErrorIcon="fa-solid fa-triangle-exclamation" />
+</div>
