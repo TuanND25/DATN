@@ -155,7 +155,7 @@ namespace DATN_API.Service_IService.Services
                 ConsumerPoint consumerPoint = new ConsumerPoint()
                 { 
                     UserID= id,
-                    Point =string.Empty,
+                    Point ="0",
                     Status= 1,
 
                 };
