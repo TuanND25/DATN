@@ -158,7 +158,8 @@ else
             <span style="font-weight:700;font-size:18px">
             THANH TOÁN ĐƠN HÀNG
         </span>
-        <div style="display:flex;"><span style="margin-right:5px">Thêm thông tin</span><input type="checkbox" @bind-value="activeTabThemThongTin"/></div>
+        <div style="display:flex;"><span style="margin-right:5px">Thêm thông tin</span
+        ><input type="checkbox" @bind="activeTabThemThongTin"/></div>
         <div class="row" style="margin-top:5px;" >
             <div class="col-5" style="display:flex;justify-content:center;align-items:center">
                 <button class="col-4 btn_searchUser" data-target="#CancelOrder" data-toggle="modal" @onclick="getAllUser">  
@@ -172,7 +173,7 @@ else
                   <div style="display:flex;flex-direction:column">
                     <label class="nameUser">@getuser.Name</label>
                     <label>@getuser.PhoneNumber</label>                
-                    <label>1000 điểm </label>                             
+                    <label>@pointKhachhang điểm</label>                             
                   </div>
                 }
                 else if(getuser.Id != default && getuser.UserName.ToString() == "khachvanglai")
@@ -196,10 +197,17 @@ else
             {
                  <div class="row" style="margin-top:5px;">
            <div class="col-5" style="display:flex;gap:5px;align-items:center">
-               <span>Dùng điểm</span><input type="checkbox" @bind-value="activeTabDungDiem" @oninput="CheckDungDiem"/>
+              <div style="display:flex; flex-direction:column">
+                <div style="display:flex;align-items:center">
+                    <span style="margin-right:5px">Dùng điểm</span><input type="checkbox" @bind="activeTabDungDiem" @oninput="CheckDungDiem"/>
+                </div>
+                <span style="font-size:14px;color:#9d9e9f">
+                   @( DiemToiDa != 0  && activeTabDungDiem == true ?   "Tối đa "+ @DiemToiDa+ " điểm" : "" ) 
+                </span>
+              </div>
            </div>
            <div class="col-7" style="display:flex;justify-content:flex-end;align-items:center">
-              <input type="number" style="text-align:right;width:60%" readonly="@(!@activeTabDungDiem)" @oninput="ChangeInputTichDiem" />
+              <input type="number" style="text-align:right;width:60%" readonly="@(!@activeTabDungDiem)" @oninput="ChangeInputTichDiem" @bind="InputTichDiem"/>
            </div>
        </div>
    @*  if (activeTabDungDiem==true)
@@ -226,8 +234,21 @@ else
                 Địa chỉ
                 </button>
             </div>
-           <div class="col-12" style="display:flex;justify-content:flex-end;margin-top:10px">
-               <span style="font-weight:700">123 Phương Canh, Xuân Phương, Nam Từ Liêm, Hà Nội</span>
+           <div class="col-12" style="display:flex;flex-direction:column;margin-top:10px">
+               @if (ShowDiaChi != "")
+               {
+               <span style="font-weight:700">                  
+                @ShowDiaChi                    
+               </span>
+               <span style="display:flex;flex-direction:column">
+                  <span>
+                       Người nhận: @nameNguoiNhan
+                  </span>
+                  <span>
+                       Số điện thoại: @phoneNumberNguoinhan
+                  </span>
+               </span>
+                }
            </div>
        </div>
        <div class="row" style="margin-top:5px;align-items:center">
@@ -235,7 +256,7 @@ else
                <span>Phí vận chuyển</span>
            </div>
            <div class="col-7" style="display:flex;justify-content:flex-end">
-              <input type="number"/>
+              <input type="number" @oninput="checkPhiShip" @bind="PhiShip"/>
            </div>
        </div>
             }
@@ -264,7 +285,7 @@ else
           <div class="row " style="margin-top:5px;margin-top:10px" >
            <div class="col-12" style="display:flex;gap:5px;justify-content:end;align-items:center">
                <i class="fa-solid fa-money-bill" style="color: #5cb85c;"></i>
-                <input type="number" style=" padding:0px;" @oninput="CheckInputTienMat" />
+                <input type="number" style=" padding:0px;" @oninput="CheckInputTienMat" @bind="InputTienMat"/>
                 <i class="fa-solid fa-x"  style="color: #ee4444;cursor:pointer" @onclick="CloseTabTienMat"></i>
            </div>       
        </div>
@@ -274,8 +295,8 @@ else
                   <div class="row" style="margin-top:5px;margin-top:10px">
            <div class="col-12" style="display:flex;gap:5px;justify-content:end;align-items:center">
                <i class="fa-solid fa-credit-card" style="color: #5cb85c;"></i>
-                <input type="number" style=" padding:0px;" @oninput="CheckInputChuyenKhoan"/>
-                <i class="fa-solid fa-x"  style="color: #ee4444;cursor:pointer" @onclick="CloseTabChuyenKhoan"></i>
+                <input type="number" style=" padding:0px;" @oninput="CheckInputChuyenKhoan" @bind="InputChuyenKhoan"/>
+                <i class="fa-solid fa-x"  style="color: #ee4444;cursor:pointer" @onclick="CloseTabChuyenKhoan" ></i>
            </div>       
        </div>
             }
@@ -301,7 +322,7 @@ else
 
         <div class="row" style="margin-top:25px;display:flex;justify-content:center;align-items:center;padding:0px">
            <div class="col-12" style="padding:0px">
-               <button class="btnEndBill" >
+               <button class="btnEndBill" @onclick="ThanhToan" >
                     Thanh Toán
                </button>
            </div>
@@ -497,7 +518,7 @@ else
                <span>Khách hàng</span>
            </div>
            <div class="col-7" style="display:flex;justify-content:flex-end">
-              <input type="text" style="width:100%" placeholder="Tên khách hàng" @oninput="checkNameKhachHang" @bind-value="nameKhachhang"/>
+              <input type="text" style="width:100%" placeholder="Tên khách hàng" @oninput="checkNameKhachHang" @bind-value="nameKhachhangdefault"/>
            </div>
        </div>
             <div class="row" style="margin-top:5px;">
@@ -505,15 +526,15 @@ else
                <span>Số điện thoại</span>
            </div>
            <div class="col-7" style="display:flex;justify-content:flex-end">
-              <input type="number" style="width:100%" placeholder="Số điện thoại" @oninput="checkPhoneNumberKhachHang" @bind-value="numberPhoneKhachHang"/>
+              <input type="number" style="width:100%" placeholder="Số điện thoại" @oninput="checkPhoneNumberKhachHang" @bind-value="numberPhoneKhachHangdefault"/>
            </div>
        </div>
-        <div class="row" style="margin-top:40px">
+        <div class="row" style="margin-top:20px">
                     <div style="display:flex;justify-content:center;align-items:center;margin-top:10px">
                       <button class="btn_searchUser" @onclick="checkValidateAddUser" 
                       data-dismiss="@(checkPopupAddUser == false ? "modal" : "")"      
                         style="width:fit-content;padding:10px 50px" >
-                         Địa chỉ
+                         Thêm khách hàng
                 </button>
                   </div>             
                </div>
