@@ -231,9 +231,9 @@ namespace DATN_Client.Areas.Customer.Component
 				{
 					// Order
 					_ord.OrderId = Guid.NewGuid().ToString();
-					if (_user_vm.Name == null) _ord.FullName = _bill_validate_vm.Recipient;
+					if (_user_vm.Name == null) _ord.FullName = "Không có thông tin khách hàng";
 					else _ord.FullName = _user_vm.Name;
-					_ord.OrderInfo = _bill_validate_vm.Note;
+					_ord.OrderInfo =_bill_validate_vm.Note+ $". Mã hóa đơn: {_bill_validate_vm.BillCode}";
 					_ord.Amount = _tongTienAll;
 					var reponse1 = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/Momo/CreatePaymentAsync", _ord);
 					var reponse2 = await reponse1.Content.ReadFromJsonAsync<MomoCreatePaymentResponseModel>();

@@ -17,26 +17,25 @@ namespace DATN_Client.Areas.Admin.Components
         public async Task AddProduct()
         {
             products_VM.Id = Guid.NewGuid();
-
             await _httpClient.PostAsJsonAsync<Products_VM>("https://localhost:7141/api/product/add_product", products_VM);
-            navigationManager.NavigateTo("https://localhost:7075/Admin/Product", true);
-
-
+            navigationManager.NavigateTo("/product-manager", true);
         }
         public async Task UpdateProduct(Products_VM products)
         {
             await _httpClient.PutAsJsonAsync<Products_VM>("https://localhost:7141/api/product/update_product", products);
-            navigationManager.NavigateTo("https://localhost:7075/Admin/Product", true);
+            navigationManager.NavigateTo("/product-manager", true);
         }
         public async void DeleteProduct(Guid Id)
         {
             await _httpClient.DeleteAsync("https://localhost:7141/api/product/delete_product/" + Id);
-            navigationManager.NavigateTo("https://localhost:7075/Admin/Product", true);
+            navigationManager.NavigateTo("/product-manager", true);
         }
         public async Task LoadForm(Products_VM rvm)
         {
             products_VM.Id = rvm.Id;
             products_VM.Name = rvm.Name;
+            products_VM.ProductCode = rvm.ProductCode;
+            products_VM.Description = rvm.Description;
             products_VM.Status = rvm.Status;
         }
         public void RedirectCRUD(Guid id)

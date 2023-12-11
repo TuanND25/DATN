@@ -62,6 +62,8 @@ namespace DATN_API.Service_IService.Services
                 var a = await _context.Products.FindAsync(item.Id);
                 a.Status = item.Status;
                 a.Name = item.Name;
+                a.Description = item.Description;
+                a.ProductCode = item.ProductCode;
                 _context.Products.Update(a);
                 _context.SaveChanges();
                 return item;
