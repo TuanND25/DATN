@@ -347,6 +347,18 @@
                     this.classList.add('focus');
                 });
             }
+
+        window.onload = function () {
+            autoResizeTextarea();
+        };
+
+        function autoResizeTextarea() {
+            var textarea = document.getElementById('auto-resize-textarea');
+            if (textarea) {
+                textarea.style.height = 'auto';
+                textarea.style.height = (textarea.scrollHeight) + 'px';
+            }
+        }
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)

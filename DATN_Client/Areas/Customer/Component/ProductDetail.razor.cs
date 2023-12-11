@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using Microsoft.JSInterop;
 
 namespace DATN_Client.Areas.Customer.Component
 {
@@ -38,7 +39,7 @@ namespace DATN_Client.Areas.Customer.Component
 		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
 		private ISession? _ss { get; set; }
 		List<string> _lstSizeSample = new() { "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL" };
-
+		private ElementReference myTextarea;
 		protected override async Task OnInitializedAsync()
 		{
 			_ss = _ihttpcontextaccessor.HttpContext.Session;
@@ -55,6 +56,13 @@ namespace DATN_Client.Areas.Customer.Component
 			_lstColor = _lstPrI_show_VM.Select(c => c.ColorName).Distinct().OrderBy(c => c).ToList();
 			_lstSize = _lstPrI_show_VM.Select(c => c.SizeName).Distinct().ToList();
 			_lstSize = _lstSize.OrderBy(c => _lstSizeSample.IndexOf(c)).ToList();
+			//_chonMau = _lstColor.FirstOrDefault();
+			//await ChonMau(_chonMau);			
+		}		
+
+		protected override async Task OnAfterRenderAsync(bool firstRender)
+		{
+			await _JsRuntime.InvokeVoidAsync("autoResizeTextarea");
 		}
 
 		public async Task LoadAnh(Guid ID)
@@ -71,7 +79,6 @@ namespace DATN_Client.Areas.Customer.Component
 		public async Task SL_Tru()
 		{
 			if (_soLuong == 1) return;
-
 			_soLuong -= 1;
 		}
 
@@ -110,12 +117,12 @@ namespace DATN_Client.Areas.Customer.Component
 				_pi_S_VM = _lstPrI_show_VM.Where(c => c.ColorName == _chonMau && c.SizeName == _chonSize).FirstOrDefault();
 				if (_pi_S_VM == null)
 				{
-                    _gia = "0đ";
-                    _soluongton = 0;
-                    _percent = 0;
-                    _toastService.ShowError("Biến thể không tồn tại, vui lòng chọn biến thể khác");
-                    return;
-                }
+					_gia = "0đ";
+					_soluongton = 0;
+					_percent = 0;
+					_toastService.ShowError("Biến thể không tồn tại, vui lòng chọn biến thể khác");
+					return;
+				}
 				var prmi = await _client.GetFromJsonAsync<PromotionItem_VM>($"https://localhost:7141/api/PromotionItem/getPromotionItem_Percent_by_productItemID/{_pi_S_VM.Id}");
 				_percent = prmi.Percent;
 				_gia = _pi_S_VM.PriceAfterReduction?.ToString("#,##0") + "đ";
@@ -147,19 +154,19 @@ namespace DATN_Client.Areas.Customer.Component
 		}
 
 		public async Task ThemVaoGiohang()
-		{			
+		{
 			if (string.IsNullOrEmpty(_chonSize) || string.IsNullOrEmpty(_chonMau))
 			{
 				_toastService.ShowError("Vui lòng chọn biến thể");
 				return;
 			}
-            if (_pi_S_VM == null)
-            {
-                _toastService.ShowError("Biến thể không tồn tại, vui lòng chọn biến thể khác");
-                return;
-            }
-            // call api kiểm tra số lượng ngay khi bấm thêm giỏ
-            var checkSl = await _client.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{_pi_S_VM.Id}");
+			if (_pi_S_VM == null)
+			{
+				_toastService.ShowError("Biến thể không tồn tại, vui lòng chọn biến thể khác");
+				return;
+			}
+			// call api kiểm tra số lượng ngay khi bấm thêm giỏ
+			var checkSl = await _client.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{_pi_S_VM.Id}");
 			// ko phải vãng lai
 			if (_iduser != null)
 			{

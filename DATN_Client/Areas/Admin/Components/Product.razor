@@ -18,17 +18,34 @@
 
 		<div class="card">
 			<div class="card-body">
-				<h5 class="card-title">Product</h5>
+				<h5 class="card-title">Thuộc tính sản phẩm</h5>
 				<EditForm Model="products_VM">
-					<div class="row mb-3">
-						<label for="inputText" class="col-sm-4 col-form-label">Name: </label>
-						<div class="col-sm-8">
+					<div class="row">
+						<div class="col-md-4"><span>Tên</span></div>
+						<div class="col-md-8">
 							<InputText class="form-control" @bind-Value="@products_VM.Name" />
 						</div>
 					</div>
-					<div class="row mb-3">
-						<label class="col-sm-4 col-form-label">Trạng thái: </label>
-						<div class="col-sm-8">
+					<br />
+					<div class="row">
+						<div class="col-md-4"><span>Mã</span></div>
+						<div class="col-md-8">
+							<InputText class="form-control" @bind-Value="@products_VM.ProductCode" />
+						</div>
+					</div>
+					<br />
+					<div class="row" style="height:245px">
+						<div class="col-md-4"><span>Mô tả</span></div>
+						<div class="col-md-8 mb-3" style="display:flex">
+							<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+										   @bind="@products_VM.Description">
+							</textarea>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-md-4"><span>Trạng thái</span></div>
+						<div class="col-md-8">
 							<div class="row">
 								<InputRadioGroup @bind-Value="@products_VM.Status" class="form-control">
 									<div class="col-sm-6">
@@ -41,6 +58,7 @@
 							</div>
 						</div>
 					</div>
+					<br />
 					<div class="row mb-3">
 						<!--popup-->
 						<label class="col-sm-4 col-form-label">Submit </label>
@@ -56,11 +74,11 @@
 											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 										</div>
 										<div class="modal-body">
-											Bạn có xác nhận thêm mới san pham hay không ?
+											Bạn có xác nhận thêm mới sản phẩm hay không ?
 										</div>
 										<div class="modal-footer">
-											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-											<button type="button" class="btn btn-primary" @onclick="AddProduct">Save changes</button>
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+											<button type="button" class="btn btn-primary" @onclick="AddProduct">Xác nhận</button>
 										</div>
 									</div>
 								</div>
@@ -74,7 +92,7 @@
 											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 										</div>
 										<div class="modal-body">
-											Bạn có xác nhận update ten san pham hay không ?
+											Bạn có xác nhận cập nhật sản phẩm hay không ?
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -96,49 +114,61 @@
 				@{
 					int count = 1;
 				}
-				<div class="card">
-					<div class="card-body">
-						<h4 style="margin-top:20px">List Product</h4>
-						<div class="pagetitle">
-						</div>
-						@if (products == null)
-						{
-							<p><em>Loading...</em></p>
-						}
-						else
-						{
-							<div style="height: 500px; overflow-y: auto;">
-								<table class="table">
-									<thead>
-										<tr style="position: sticky;top:0">
-											<th scope="col">#</th>
-											<th scope="col">Màu</th>
-											<th scope="col">Trạng Thái</th>
-											<th scope="col">Chức năng</th>
-										</tr>
-									</thead>
-									<tbody>
-										@foreach (var x in products)
-										{
-											<tr>
-												<td>@(count++)</td>
-												<td>@x.Name</td>
-												<td>@(x.Status == 1 ? "Hoạt động" : "Ngừng hoạt động")</td>
-												<td>
-													<button type="button" class="btn btn-outline-success" style="float:center" @onclick="()=>LoadForm(x)">Apply</button>
-													<button class="btn btn-primary" @onclick="()=>RedirectCRUD(x.Id)">
-														Chi tiết
-													</button>
-												</td>
-											</tr>
-										}
-									</tbody>
-								</table>
 
-							</div>
-						}
-					</div>
+				<h4 style="margin-top:20px">List Product</h4>
+				<div class="pagetitle">
 				</div>
+				@if (products == null)
+				{
+					<p><em>Loading...</em></p>
+				}
+				else
+				{
+					<div style="height: 500px; overflow-y: auto;">
+						<table class="table">
+							<thead>
+								<tr>
+									<th style="text-align:center">#</th>
+									<th style="text-align:center">Tên</th>
+									<th style="text-align:center">Mã</th>
+									<th style="text-align:center">Trạng Thái</th>
+									<th style="text-align:center">Chức năng</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach (var x in products)
+								{
+									<tr>
+										<td style="text-align:center;vertical-align:middle">
+											@(count++)
+										</td>
+										<td style="text-align:center;vertical-align:middle">
+											@x.Name
+										</td>
+										<td style="text-align:center;vertical-align:middle">
+											@x.ProductCode
+										</td>
+										<td style="text-align:center;vertical-align:middle">
+											@(x.Status == 1 ? "Hoạt động" : "Ngừng hoạt động")
+										</td>
+										<td style="text-align:center;vertical-align:middle">
+											<button style="width:45px;height:45px"
+													class="btn btn-warning"
+													@onclick="()=>LoadForm(x)">
+												<i class="fa-solid fa-wrench"></i>
+											</button>
+											<button style="width:45px;height:45px;"
+													class="btn btn-primary"
+													@onclick="()=>RedirectCRUD(x.Id)">
+												<i class="fa fa-info"></i>
+											</button>
+										</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					</div>
+				}
 			</div>
 		</div>
 	</div>

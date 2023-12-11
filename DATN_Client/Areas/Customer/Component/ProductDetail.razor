@@ -1,4 +1,4 @@
-﻿@inject IJSRuntime JsRuntime
+﻿@inject IJSRuntime _JsRuntime
 @using Blazored.Toast.Configuration
 <BlazoredToasts Position="ToastPosition.BottomRight"
 				Timeout="10"
@@ -219,7 +219,7 @@
 							@foreach (var x in _lstColor)
 							{
 								<label class="custom-radio-mau" @onclick="()=>ChonMau(x)">
-									<input type="radio" name="mau" id="mau @x"/>
+									<input type="radio" name="mau" id="mau @x" />
 									<span class="">@x</span>
 								</label>
 								@* <div class="select-swap">
@@ -248,12 +248,12 @@
 								string checkSoLuongInput_class = string.Empty;
 								if (!string.IsNullOrEmpty(_chonMau))
 								{
-									var check = 
+									var check =
 									_lstPrI_show_VM.
-									FirstOrDefault(c => 
-									c.ColorName == _chonMau && 
+									FirstOrDefault(c =>
+									c.ColorName == _chonMau &&
 									c.SizeName == x);
-									if (check ==null||check.AvaiableQuantity == 0)
+									if (check == null || check.AvaiableQuantity == 0)
 									{
 										checkSoLuongInput = true;
 										checkSoLuongInput_class = "het";
@@ -298,14 +298,12 @@
 						</button>
 					</div>
 					@*Mô tả sản phẩm - Giới thiệu*@
-					<div class="product-description">
-						<span>Mô tả</span>
-						<div class="description-content">
-							<div class="description-productdetail">
-								@_p_VM.Description
-							</div>
+					
+						<div class="description-productdetail">
+						<textarea id="auto-resize-textarea" class="txt-description">@_p_VM.Description</textarea>
+						@* <>@_p_VM.Description</> *@
 						</div>
-					</div>
+					
 				</div>
 			</div>
 		</div>
