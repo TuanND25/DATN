@@ -18,7 +18,7 @@ namespace DATN_Shared.Models
         public int? TotalAmount { get; set; }
         public int? ReducedAmount { get; set; }
         public int? Cash { get; set; }  // tiền mặt
-        public int? CustomerPayment { get; set; } // tiền khách đưa
+        public int? CustomerPayment { get; set; } // đây chính là cái m cần 
         public int? FinalAmount { get; set; } // tiền khách đưa
         public DateTime? CreateDate { get; set; }
         public DateTime? ConfirmationDate { get; set; }

@@ -45,6 +45,7 @@ namespace DATN_API.Controllers
 			Promotion.Id = rvm.Id;
 			Promotion.Name = rvm.Name;
 			Promotion.Percent = rvm.Percent;
+			Promotion.Quantity = rvm.Quantity;
 			Promotion.StartDate = rvm.StartDate;
 			Promotion.EndDate = rvm.EndDate;
 			Promotion.Description = rvm.Description;
@@ -58,6 +59,7 @@ namespace DATN_API.Controllers
 			Promotions Promotion = await _Promotion.GetAllPromotionsById(rvm.Id);
 			Promotion.Name = rvm.Name;
 			Promotion.Percent = rvm.Percent;
+			Promotion.Quantity = rvm.Quantity;
 			Promotion.StartDate = rvm.StartDate;
 			Promotion.EndDate = rvm.EndDate;
 			Promotion.Description = rvm.Description;

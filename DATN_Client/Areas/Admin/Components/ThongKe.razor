@@ -227,13 +227,29 @@ else
                             </div>
                         </div>
                     </div>
-                     <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <LineChart @ref="lineChart" class="col-md-12" />
-                            </div>
+
+                    <div class="col-12">
+                        <div class="card top-selling overflow-auto">
+                            <EditForm Model="count3">
+                                <div class="filter">
+                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                        <li class="dropdown-header text-start">
+                                            <h6>Filter</h6>
+                                        </li>
+                                        <li><a class="dropdown-item" @onclick="()=>RenderWormAsync(0)">Tháng này</a></li>
+                                        <li><a class="dropdown-item" @onclick="()=>RenderWormAsync(1)">3 Tháng gần nhất</a></li>
+                                        <li><a class="dropdown-item" @onclick="()=>RenderWormAsync(2)">Năm nay</a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="card-body pb-0" style="">
+                                    <h5 class="card-title">Doanh thu  <span>| @count4.Tittle</span></h5>
+                                  <LineChart @ref="lineChart" class="col-md-12" />
+                                </div>
+                            </EditForm>
                         </div>
-                    </div>
+                    </div><!-- End Top Selling -->
 
                     <!-- Top Selling -->
                 <div class="col-12">
