@@ -18,6 +18,9 @@ namespace DATN_Client.Areas.Admin.Components
         Count count1 = new Count();
         Count count2 = new Count();
         Count count3 = new Count();
+        Count count4 = new Count(); // biểu đồ line
+        Count count5 = new Count();
+        Count count6 = new Count();
         List<Count> productCounts = new List<Count>();
         List<Count> _billCounts = new List<Count>();
         List<Count> _RevenueCounts = new List<Count>();
@@ -36,6 +39,7 @@ namespace DATN_Client.Areas.Admin.Components
 
         private BarChart barChart=new BarChart();
         private LineChart lineChart =new LineChart();
+        private int currentChartId = 0;
         protected override async Task OnInitializedAsync()
         {
             //isLoader = true;
@@ -55,9 +59,34 @@ namespace DATN_Client.Areas.Admin.Components
             if (firstRender)
             {
                 await RenderManhattanAsync();
-                await RenderWormAsync();
+                await RenderWormAsync(currentChartId);
             }
+            await RenderWormAsync(currentChartId);
             await base.OnAfterRenderAsync(firstRender);
+            
+        }
+
+        private async Task RenderWormAsync(int option)
+        {
+            currentChartId=option;
+            if (currentChartId == 0)
+            {
+                await RenderWormAsyncThisMonth();
+                count4.Tittle = "Tháng này";
+                StateHasChanged();
+            }
+            else if (currentChartId == 1)
+            {
+                await RenderWormAsyncThis3Month();
+                count4.Tittle = "3 tháng gần đây";
+                StateHasChanged();
+            }
+            else
+            {
+                await RenderWormAsyncThisYeah();
+                count4.Tittle = "Năm nay";
+                StateHasChanged();
+            }
         }
         public async Task Sale(int option)
         {
@@ -342,7 +371,9 @@ namespace DATN_Client.Areas.Admin.Components
             await barChart.InitializeAsync(data, options);
         }
 
-        private async Task RenderWormAsync()
+       
+          
+        public async Task RenderWormAsyncThisMonth()
         {
             DateTime startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             DateTime endDate = startDate.AddMonths(1).AddDays(-1);
@@ -359,7 +390,7 @@ namespace DATN_Client.Areas.Admin.Components
                 Count count = new Count { Dem1 = (int)totalRevenue, Date = date.ToString("dd") };
                 _RevenueCounts.Add(count);
             }
-        
+
             var data = new ChartData
             {
                 Labels = _RevenueCounts.Select(x => x.Date).ToList(),
@@ -367,33 +398,7 @@ namespace DATN_Client.Areas.Admin.Components
                 {
                     new LineChartDataset()
                     {
-                        Label = "Tháng 10",
-                        Data = new List<double>{ 1, 1, 8, 19, 24, 266, 39, 47, 56, 66, 75, 88, 95, 1000000, 109, 114, 124, 129, 140, 142 },
-                        BackgroundColor = new List<string>{ "rgb(0, 176, 168)" },
-                        BorderColor = new List<string>{ "rgb(0, 176, 168)" },
-                        BorderWidth = new List<double>{2},
-                        HoverBorderWidth = new List<double>{4},
-                        PointBackgroundColor = new List<string>{ "rgb(0, 176, 168)" },
-                        PointBorderColor = new List<string>{ "rgb(0, 176, 168)" },
-                        PointRadius = new List<int>{0}, // hide points
-                        PointHoverRadius = new List<int>{4},
-                    },                   
-                    new LineChartDataset()
-                    {
-                        Label = "Tháng 11",
-                        Data = new List<double>{ 1, 1, 8, 19, 24, 266, 39, 47, 56, 66, 75, 88, 95, 100, 109, 114, 124, 129, 140, 142 },
-                        BackgroundColor = new List<string>{ "rgb(255, 166, 0)" },
-                        BorderColor = new List<string>{ "rgb(255, 166, 0)" },
-                        BorderWidth = new List<double>{2},
-                        HoverBorderWidth = new List<double>{4},
-                        PointBackgroundColor = new List<string>{ "rgb(255, 166, 0)" },
-                        PointBorderColor = new List<string>{ "rgb(255, 166, 0)" },
-                        PointRadius = new List<int>{0}, // hide points
-                        PointHoverRadius = new List<int>{4},
-                    },
-                    new LineChartDataset()
-                    {
-                        Label = "Tháng 12",
+                        Label = Convert.ToString(startDate.Month),
                         Data =_RevenueCounts.Select(x=>x.Dem1).ToList(),
                         BackgroundColor = new List<string>{ "rgb(88, 80, 141)" },
                         BorderColor = new List<string>{ "rgb(88, 80, 141)" },
@@ -411,7 +416,7 @@ namespace DATN_Client.Areas.Admin.Components
 
             options.Interaction.Mode = InteractionMode.Index;
 
-            options.Plugins.Title.Text = "Doanh thu 3 tháng gần nhất";
+            options.Plugins.Title.Text = "Doanh thu tháng này";
             options.Plugins.Title.Display = true;
             options.Plugins.Title.Font.Size = 20;
 
@@ -424,6 +429,136 @@ namespace DATN_Client.Areas.Admin.Components
             options.Scales.Y.Title.Display = true;
             await lineChart.InitializeAsync(data, options);
         }
+        public async Task RenderWormAsyncThis3Month()
+        {
+            DateTime startDate = DateTime.Now.AddMonths(-2).AddDays(1 - DateTime.Now.Day);
+            DateTime endDate = DateTime.Now;
+
+            var data = new ChartData
+            {
+                Labels = new List<string>(),
+                Datasets = new List<IChartDataset>()
+            };
+
+            // Mảng các màu cố định cho các line
+            string[] colors = { "rgb(88, 80, 141)", "rgb(18, 110, 130)", "rgb(135, 58, 84)" };
+
+            // Duyệt qua từng tháng trong 3 tháng gần đây
+            for (DateTime date = startDate; date <= endDate; date = date.AddMonths(1))
+            {
+                var monthlyData = new LineChartDataset()
+                {
+                    Label = date.ToString("MM/yyyy"),
+                    Data = new List<double>(),
+                    BackgroundColor = new List<string> { colors[data.Datasets.Count % colors.Length] },
+                    BorderColor = new List<string> { colors[data.Datasets.Count % colors.Length] },
+                    BorderWidth = new List<double> { 2 },
+                    HoverBorderWidth = new List<double> { 4 },
+                    PointBackgroundColor = new List<string> { colors[data.Datasets.Count % colors.Length] },
+                    PointBorderColor = new List<string> { colors[data.Datasets.Count % colors.Length] },
+                    PointRadius = new List<int> { 0 },
+                    PointHoverRadius = new List<int> { 4 },
+                };
+
+                int daysInMonth = DateTime.DaysInMonth(date.Year, date.Month);
+
+                // Duyệt qua từng ngày trong tháng
+                for (int day = 1; day <= daysInMonth; day++)
+                {
+                    // Thống kê doanh thu trong ngày
+                    DateTime monthDate = new DateTime(date.Year, date.Month, day);
+                    int? a = _lstBill
+                        .Where(bill => bill.CreateDate?.Date == monthDate.Date)
+                        .Sum(bill => bill.TotalAmount);
+                    double totalRevenue = Convert.ToDouble(a);
+                    monthlyData.Data.Add(totalRevenue);
+                }
+
+                data.Datasets.Add(monthlyData);
+            }
+
+            // Thêm danh sách labels từ 1 đến 31
+            data.Labels.AddRange(Enumerable.Range(1, 31).Select(day => day.ToString()));
+
+            var options = new LineChartOptions();
+
+            options.Interaction.Mode = InteractionMode.Index;
+
+            options.Plugins.Title.Text = "Doanh thu 3 tháng gần đây";
+            options.Plugins.Title.Display = true;
+            options.Plugins.Title.Font.Size = 20;
+
+            options.Responsive = true;
+
+            options.Scales.X.Title.Text = "Ngày";
+            options.Scales.X.Title.Display = true;
+
+            options.Scales.Y.Title.Text = "Doanh thu";
+            options.Scales.Y.Title.Display = true;
+
+            await lineChart.InitializeAsync(data, options);
+        }
+        public async Task RenderWormAsyncThisYeah()
+        {
+            DateTime startDate = new DateTime(DateTime.Now.Year, 1, 1);
+            DateTime endDate = new DateTime(DateTime.Now.Year, 12, 31);
+
+            List<Count> countList = new List<Count>();
+
+            // Duyệt qua từng tháng trong năm
+            for (DateTime date = startDate; date <= endDate; date = date.AddMonths(1))
+            {
+                // Thống kê doanh thu trong tháng
+                int? totalRevenue = _lstBill
+                    .Where(bill => bill.CreateDate?.Year == date.Year && bill.CreateDate?.Month == date.Month)
+                    .Sum(bill => bill.TotalAmount);
+
+                // Tạo đối tượng Count và thêm vào danh sách countList
+                Count count = new Count { Dem1 = (int)totalRevenue, Date = date.ToString("MM/yyyy") };
+                countList.Add(count);
+            }
+
+            var data = new ChartData
+            {
+                Labels = countList.Select(x => x.Date).ToList(),
+                Datasets = new List<IChartDataset>()
+        {
+            new LineChartDataset()
+            {
+                Label = DateTime.Now.Year.ToString(),
+                Data = countList.Select(x => x.Dem1).ToList(),
+                BackgroundColor = new List<string> { "rgb(88, 80, 141)" },
+                BorderColor = new List<string> { "rgb(88, 80, 141)" },
+                BorderWidth = new List<double> { 2 },
+                HoverBorderWidth= new List<double> { 4 },
+                PointBackgroundColor = new List<string> { "rgb(88, 80, 141)" },
+                PointBorderColor = new List<string> { "rgb(88, 80, 141)" },
+                PointRadius = new List<int> { 0 }, // hide points
+                PointHoverRadius = new List<int> { 4 },
+            }
+        }
+            };
+
+            var options = new LineChartOptions();
+
+            options.Interaction.Mode = InteractionMode.Index;
+
+            options.Plugins.Title.Text = "Doanh thu năm " + DateTime.Now.Year.ToString();
+            options.Plugins.Title.Display = true;
+            options.Plugins.Title.Font.Size = 20;
+
+            options.Responsive = true;
+
+            options.Scales.X.Title.Text = "Tháng";
+            options.Scales.X.Title.Display = true;
+
+            options.Scales.Y.Title.Text = "Doanh thu";
+            options.Scales.Y.Title.Display = true;
+
+            await lineChart.InitializeAsync(data, options);
+        }
+
+
 
 
 

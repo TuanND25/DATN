@@ -17,7 +17,8 @@ namespace DATN_Client.Controllers
 
 		public IActionResult Index()
 		{
-			return RedirectToAction("ShowProduct", "BanOnline", new { Area = "Customer" });
+			//return RedirectToAction("ShowProduct", "BanOnline", new { Area = "Customer" });
+			return RedirectToAction("Index", "Home", new { Area = "Customer" });
 		}
 
 		public IActionResult Privacy()
