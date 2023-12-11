@@ -12,5 +12,6 @@ namespace DATN_API.Service_IService.IServices
         public Task<IEnumerable<Image>> GetAddressShipByProductItemId(Guid ProductItemId);
         public Task<IEnumerable<Image>> GetAllImage();
         public Task<List<Image_Join_ProductItem>> GetAllImage_PrductItem();
+        public Task<int> GetImage_STT_Max();
     }
 }

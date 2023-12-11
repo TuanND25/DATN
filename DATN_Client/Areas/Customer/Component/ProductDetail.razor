@@ -185,7 +185,7 @@
 				</div>
 				<div class="col-md-4">
 					<div class="product-title">
-						<h1>@_p_VM.Name</h1>
+						<h1 style="font-size:30px">@_p_VM.Name</h1>
 						<span id="pro_sku">SKU: @_p_VM.ProductCode</span>
 					</div>
 					<div class="product-price" id="price-preview">
@@ -299,12 +299,10 @@
 					</div>
 					@*Mô tả sản phẩm - Giới thiệu*@
 					<div class="product-description">
-						<div class="title-bl">
-							<h2>Mô tả</h2>
-						</div>
+						<span>Mô tả</span>
 						<div class="description-content">
 							<div class="description-productdetail">
-								- Mô tả...
+								@_p_VM.Description
 							</div>
 						</div>
 					</div>
