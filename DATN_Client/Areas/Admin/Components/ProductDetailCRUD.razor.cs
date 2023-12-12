@@ -27,6 +27,7 @@ namespace DATN_Client.Areas.Admin.Components
 		private List<Image_Join_ProductItem> _lstImg_PI = new();
 		private List<Image_VM> _lstImg_them = new();
 		private List<Image_VM> _lstImg = new();
+		private List<Image_VM> _lstImg_xoa = new();
 		private List<string> _lstSizeSample = new List<string> { "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL" };
 		private List<string> _lstColor_string = new();
 		private Categories_VM _Cate_VM = new();
@@ -305,13 +306,15 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task MoAddSize()
 		{
-			await ChonMau(_chonMau);
 			_S_VM.Name = string.Empty;
 			OpenPopup("AddSize");
 		}
 
-		private void Mo_AddImage()
-		{			
+		private async Task Mo_AddImage()
+		{
+			await ChonMau(_chonMau);
+			_lstImg_them.Clear();
+			_lstImg_xoa.Clear();
 			_lstColor_string = _lst_pri.Select(c => c.ColorName).Distinct().OrderBy(c => c).ToList();
 			OpenPopup("AddImage");
 		}
@@ -469,6 +472,7 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task ChonMau(string mau)
 		{
+			if (string.IsNullOrEmpty(mau)) return;
 			_chonMau = mau;
 			_lstPri_ChonMau.Clear();
 			_lstPri_ChonMau = _lst_pri.Where(c => c.ColorName == mau).ToList();
@@ -503,8 +507,7 @@ namespace DATN_Client.Areas.Admin.Components
 					// Thực hiện copy ảnh vừa chọn sang thư mục mới (wwwroot)
 					try
 					{
-
-						await _file.OpenReadStream(2048 * 1024).CopyToAsync(stream);
+						await _file.OpenReadStream(5120 * 1024).CopyToAsync(stream);
 					}
 					catch (Exception)
 					{
@@ -516,15 +519,9 @@ namespace DATN_Client.Areas.Admin.Components
 				// Gán lại giá trị cho Description của đối tượng bằng tên file ảnh đã được sao chép
 				imgTam.PathImage = _file.Name;
 				//_pathImg = _file.Name;
-				imgTam.Id = Guid.NewGuid();
 				//_idImg_Tam = imgTam.Id;
-				imgTam.Name = "";
-				//if (lstImg.Count == 0) imgTam.STT = 1;
-				//else imgTam.STT = _lstImg_Tam.Count == 0
-				//			? _lstImg.Max(c => c.STT) + 1
-				//			: (_lstImg.Max(c => c.STT) > _lstImg_Tam.Max(c => c.STT)
-				//			? _lstImg.Max(c => c.STT) + 1
-				//			: _lstImg_Tam.Max(c => c.STT) + 1);
+				if (_lstImg.Count == 0) imgTam.STT = 1;
+				else imgTam.STT = _lstImg.Max(c => c.STT) + 1;
 				//if (_idPI.ToString() == "00000000-0000-0000-0000-000000000000") imgTam.ProductItemId = _idPI_Tam;
 				//else imgTam.ProductItemId = _idPI;
 				//imgTam.Status = 1;
@@ -536,37 +533,62 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private void XoaAnhTam(Image_VM img)
 		{
+			_lstImg_xoa.Add(img);
 			_lstImg.Remove(img);
+			_lstImg_them.Remove(img);
 		}
 
 		private async Task XacNhanAddImg()
 		{
-			//public Guid Id { get; set; }
-			//public Guid? ReviewId { get; set; }
-			//public string Name { get; set; }
-			//public int STT { get; set; }
-			//public string PathImage { get; set; }
-			//public Guid ProductItemId { get; set; }
-			//public int Status { get; set; }
-			bool checkAdd = true;
+			bool checkAddDelete = true;
+			var lstImg = await _httpClient.GetFromJsonAsync<List<Image_VM>>("https://localhost:7141/api/Image");
+			List<Image_VM> lstTam1 = new();
+			List<Image_VM> lstXoa = new();
 			foreach (var a in _lstPri_ChonMau)
 			{
-				foreach (var b in _lstImg_them)
+				foreach (var b in lstImg)
+				{
+					if (a.Id == b.ProductItemId)
+					{
+						lstTam1.Add(b);						
+					}
+				}
+			}
+			foreach (var a in lstTam1)
+			{
+				foreach (var b in _lstImg_xoa)
+				{
+					if (a.PathImage == b.PathImage)
+					{
+						var delete = await _httpClient.DeleteAsync($"https://localhost:7141/api/Image/Delete-Image/{a.Id}");
+						if (delete.StatusCode != System.Net.HttpStatusCode.OK) checkAddDelete = false;
+					}
+				}
+			}			
+			foreach (var a in _lstPri_ChonMau)
+			{				
+				foreach (var c in _lstImg_them)
 				{
 					Image_VM img = new()
 					{
 						Id = Guid.NewGuid(),
 						Name = "",
 						STT = await _httpClient.GetFromJsonAsync<int>("https://localhost:7141/api/Image/GetSttMax"),
-						PathImage = b.PathImage,
+						PathImage = c.PathImage,
 						ProductItemId = a.Id,
 						Status = 1
 					};
 					var add = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/Image/Post-Image", img);
-					if (add.StatusCode!=System.Net.HttpStatusCode.OK) checkAdd = false;
+					if (add.StatusCode != System.Net.HttpStatusCode.OK) checkAddDelete = false;
 				}
 			}
-			if (checkAdd == true) _toastService.ShowSuccess("Thêm ảnh minh họa thành công");
+			if (checkAddDelete == true)
+			{
+				_lstImg_them.Clear();
+				_lstImg_xoa.Clear();
+				_toastService.ShowSuccess("Thay đổi ảnh minh họa thành công");
+				ClosePopup("AddImage");
+			}
 			else _toastService.ShowError("Thao tác thất bại");
 		}
 	}

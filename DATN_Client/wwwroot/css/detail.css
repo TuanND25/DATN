@@ -1252,31 +1252,6 @@ button.btn-addtocart {
         font-weight: 700;
     }
 
-.description-productdetail * {
-    max-width: 100% !important;
-}
-
-.description-productdetail ul {
-    list-style: initial;
-    padding-left: 20px;
-}
-
-.description-productdetail ol {
-    list-style-type: decimal;
-    padding-left: 20px;
-}
-
-.description-productdetail ul ul {
-    list-style-type: circle;
-}
-
-..description-productdetail ul ul ul {
-    list-style-type: square;
-}
-
-..description-productdetail ul li, .description-productdetail ol li {
-    margin: 5px 0;
-}
 
 .product-gallery__thumbs-container {
     width: 9%;
@@ -1613,3 +1588,11 @@ label[for="product-select-option-2"] {
         text-align: center;
         font-size: 14px;
     }
+
+.txt-description {
+    width: 100%;
+    border: none;
+    pointer-events:none;
+    overflow-y: hidden;
+    resize: none;
+}
