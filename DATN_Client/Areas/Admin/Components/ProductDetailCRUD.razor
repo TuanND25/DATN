@@ -105,7 +105,7 @@
 				string textErr_GiaBan = string.Empty;
 				if (_lst_pri.Where(a => a.ColorId == x.ColorId && a.SizeId == x.SizeId && a.CategoryID == x.CategoryID).Count() > 0)
 				{
-					textErr_TonTai = "=> Biến thể đã tồn tại. Vui lòng sử dụng chức năng cập nhật sản phẩm chi tiết";
+					textErr_TonTai = "=> Biến thể đã tồn tại. Vui lòng sử dụng chức năng cập nhật sản phẩm chi tiết!";
 				}
 				if (x.AvaiableQuantity <= 0 || string.IsNullOrEmpty(x.AvaiableQuantity.ToString()))
 				{
@@ -121,19 +121,26 @@
 					<td style="vertical-align:middle;text-align:center">@x.CategoryName</td>
 					<td style="vertical-align:middle;text-align:center">
 						<div class="input-group">
-							<input type="number" class="form-control" style="text-align:center" aria-label="Dollar amount (with dot and two decimal places)" @bind="x.AvaiableQuantity" />
+							<input type="number" class="form-control" style="text-align:center" aria-label="Dollar amount (with dot and two decimal places)" @bind="x.AvaiableQuantity" oninput="limitLength(this, 9)" />
 							<span class="input-group-text">cái</span>
 						</div>
 					</td>
 					<td style="vertical-align:middle;text-align:center">
 						<div class="input-group">
-							<input type="number" class="form-control" style="text-align:center" aria-label="Dollar amount (with dot and two decimal places)" @bind="x.CostPrice" />
+							<input type="number" class="form-control" style="text-align:center" aria-label="Dollar amount (with dot and two decimal places)" @bind="x.CostPrice" oninput="limitLength(this, 9)" />
 							<span class="input-group-text">đ</span>
 						</div>
 					</td>
-					<td style="vertical-align:middle;text-align:center">@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
 					<td style="vertical-align:middle;text-align:center">
-						<button style="border: none;border-radius: 15px;" class="btn btn-primary" @onclick="()=>DeletePITam(x)">
+						<select class="form-select" @bind="@x.Status">							
+							<option value="1">Còn hàng</option>
+							<option value="2">Hết hàng</option>
+							<option value="0">Ngừng kinh doanh</option>
+						</select>
+					</td>
+					<td style="vertical-align:middle;text-align:center">
+						<button style="width:45px;height:45px;" class="btn btn-primary"
+								@onclick="()=>DeletePITam(x)">
 							<i class="fa-solid fa-trash-xmark"></i>
 						</button>
 					</td>
@@ -156,9 +163,6 @@
 							<p style="font-style:italic;color:red;margin-bottom:0px">
 								@textErr_GiaBan
 							</p>
-
-
-
 						</td>
 					</tr>
 				}
@@ -201,13 +205,21 @@ else
 					<td style="vertical-align:middle;text-align:center">@x.AvaiableQuantity</td>
 					<td style="vertical-align:middle;text-align:center">@x.CostPrice</td>
 					<td style="vertical-align:middle;text-align:center">@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
-					<td style="vertical-align:middle;text-align:center">
-						<button style="border: none;border-radius: 15px;" class="btn btn-primary">
+					<td style="text-align:center;vertical-align:middle">
+						<button style="width:45px;height:45px"
+								class="btn btn-danger"
+								@onclick="()=>MoDungHDPI(x)">
+							<i class="fa-solid fa-ban"></i>
+						</button>
+						<button style="width:45px;height:45px;"
+								class="btn btn-primary"
+								@onclick="()=>MoUpdatePI(x)">
 							<i class="fa fa-info"></i>
 						</button>
 					</td>
 				</tr>
 			}
+
 		</tbody>
 	</table>
 }
@@ -475,7 +487,7 @@ else
 							</h3>
 						</div>
 						<div>
-							@foreach (var img in _lstImg.OrderBy(c=>c.STT))
+							@foreach (var img in _lstImg.OrderBy(c => c.STT))
 							{
 
 								<img class="img-thumbnail position-relative" src="/images/@img.PathImage" style="width: 100px;height:110px;vertical-align:top;margin-right:-5px;margin-bottom:15px" />
@@ -494,6 +506,128 @@ else
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" @onclick='()=>ClosePopup("AddImage")'>Đóng</button>
 				<button type="button" class="btn btn-primary" @onclick="XacNhanAddImg">Xác nhận</button>
+			</div>
+		</div>
+	</div>
+	<BlazoredToasts Position="ToastPosition.BottomRight"
+					Timeout="5"
+					IconType="IconType.FontAwesome"
+					SuccessClass="success-toast-override"
+					SuccessIcon="fa-solid fa-check"
+					ErrorIcon="fa-solid fa-triangle-exclamation" />
+</div>
+@* popup update PI *@
+<div class="modal fade @(isModalOpenUpdatePI ? "show back" : "")"
+	 tabindex="-1"
+	 aria-hidden="@(isModalOpenUpdatePI ? "" : "true")"
+	 style="display: @(isModalOpenUpdatePI ? "block" : "none")"
+	 aria-modal="@(isModalOpenUpdatePI ? "true" : "none")"
+	 role="@(isModalOpenUpdatePI ? "dialog" : "none")">
+	<div class="modal-dialog modal-dialog-centered modal-lg" style="width:150%">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Cập nhật</h4>
+				<button style="border:none;background-color:#fff" class="close" @onclick='()=>ClosePopup("UpdatePI")'>&times;</button>
+			</div>
+			<div class="modal-body">
+				<div class="form-floating">
+					<input type="text" class="form-control" placeholder="Sản phẩm" @bind="_pri_s_vm_Update.Name" disabled>
+					<label>Sản phẩm</label>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-floating">
+							<select class="form-select" @bind="_pri_s_vm_Update.ColorId">
+								@foreach (var item in _lstColor)
+								{
+									<option value="@item.Id">@item.Name</option>
+								}
+							</select>
+							<label for="floatingSelect">Màu</label>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-floating">
+							<select class="form-select" @bind="_pri_s_vm_Update.SizeId">
+								@foreach (var item in _lstSize)
+								{
+									<option value="@item.Id">@item.Name</option>
+								}
+							</select>
+							<label for="floatingSelect">Kích thước</label>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						<div class="input-group">
+							<div class="form-floating">
+								<input type="number" class="form-control" placeholder="Số lượng tồn"
+									   @bind="_pri_s_vm_Update.AvaiableQuantity" oninput="limitLength(this, 9)">
+								<label>Số lượng tồn</label>
+							</div>
+							<span class="input-group-text">cái</span>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="input-group">
+							<div class="form-floating">
+								<input type="number" class="form-control" placeholder="Giá bán"
+									   @bind="_pri_s_vm_Update.CostPrice" oninput="limitLength(this, 9)">
+								<label>Giá bán</label>
+							</div>
+							<span class="input-group-text">đồng</span>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-floating">
+							<select class="form-select" @bind="_pri_s_vm_Update.Status">
+								<option value="1">Còn hàng</option>
+								<option value="2">Hết hàng</option>
+								<option value="0">Ngừng kinh doanh</option>
+							</select>
+							<label for="floatingSelect">Trạng thái</label>
+						</div>
+					</div>
+				</div>				
+			</div>
+			<!-- Phần chân của popup -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" @onclick='()=>ClosePopup("UpdatePI")'>Đóng</button>
+				<button type="button" class="btn btn-primary" @onclick="XacNhanUpdate">Xác nhận</button>
+			</div>
+		</div>
+	</div>
+	<BlazoredToasts Position="ToastPosition.BottomRight"
+					Timeout="5"
+					IconType="IconType.FontAwesome"
+					SuccessClass="success-toast-override"
+					SuccessIcon="fa-solid fa-check"
+					ErrorIcon="fa-solid fa-triangle-exclamation" />
+</div>
+
+@* popup xoa PI *@
+<div class="modal fade @(isModalOpenXoaPI ? "show back" : "")"
+	 tabindex="-1"
+	 aria-hidden="@(isModalOpenXoaPI ? "" : "true")"
+	 style="display: @(isModalOpenXoaPI ? "block" : "none")"
+	 aria-modal="@(isModalOpenXoaPI ? "true" : "none")"
+	 role="@(isModalOpenXoaPI ? "dialog" : "none")">
+	<div class="modal-dialog modal-dialog-centered" style="width:150%">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Thông báo</h4>
+				<button style="border:none;background-color:#fff" class="close" @onclick='()=>ClosePopup("XoaPI")'>&times;</button>
+			</div>		
+				<div class="modal-body">
+				<span>Bạn có chắc muốn chuyển trạng thái thành ngừng kinh doanh?</span>
+				</div>
+				<!-- Phần chân của popup -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" @onclick='()=>ClosePopup("XoaPI")'>Đóng</button>
+				<button type="button" class="btn btn-primary" @onclick="XacNhanXoaPI">Xác nhận</button>
 			</div>
 		</div>
 	</div>

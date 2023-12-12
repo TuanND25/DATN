@@ -62,8 +62,28 @@ namespace DATN_API.Service_IService.Services
 							PathImage = img.PathImage,
 							ProductItemId = img.ProductItemId,
 							Status = img.Status,
-							ProductId = prI.ProductId
+							ProductId = prI.ProductId,
+							ColorId = prI.ColorId
 						}).ToList();
+			return list;
+		}
+
+		public async Task<List<Image_Join_ProductItem>> GetAllImage_PrductItem_ByProductId(Guid ProductId)
+		{
+			var list = (from img in _context.Images
+						join prI in _context.ProductItems on img.ProductItemId equals prI.Id
+						select new Image_Join_ProductItem()
+						{
+							Id = img.Id,
+							ReviewId = img.ReviewId,
+							Name = img.Name,
+							STT = img.STT,
+							PathImage = img.PathImage,
+							ProductItemId = img.ProductItemId,
+							Status = img.Status,
+							ProductId = prI.ProductId,
+							ColorId = prI.ColorId
+						}).Where(c=>c.ProductId==ProductId).ToList();
 			return list;
 		}
 

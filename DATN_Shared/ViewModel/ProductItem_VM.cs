@@ -23,7 +23,6 @@ namespace DATN_Shared.ViewModel
 		public int? PriceAfterReduction { get; set; } 
 		[Required(ErrorMessage = "Giá bán không được để trống")]
 		public int? CostPrice { get; set; }
-		[Range(1, int.MaxValue, ErrorMessage = "Vui lòng chọn trạng thái!")]
-		public int Status { get; set; } = 0;
+		public int Status { get; set; }
 	}
 }

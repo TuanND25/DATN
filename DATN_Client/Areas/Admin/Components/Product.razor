@@ -1,4 +1,5 @@
-﻿<div class="card">
+﻿@inject IJSRuntime _JsRuntime
+<div class="card">
 	<div class="card-body">
 		<div class="pagetitle">
 			<h1>Quản lý sản phẩm</h1>
@@ -34,10 +35,12 @@
 						</div>
 					</div>
 					<br />
-					<div class="row" style="height:245px">
+					<div class="row" style="height:100%;">
 						<div class="col-md-4"><span>Mô tả</span></div>
 						<div class="col-md-8 mb-3" style="display:flex">
-							<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+							<textarea class="form-control" 
+							style="overflow-y: hidden;resize: none;" oninput="autoResizeTextarea()" 
+							id="auto-resize-textarea" rows="3"
 										   @bind="@products_VM.Description">
 							</textarea>
 						</div>
