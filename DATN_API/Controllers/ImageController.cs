@@ -48,11 +48,27 @@ namespace DATN_API.Controllers
 
 		}
 		[HttpGet("GetAllImage_PrductItem")]
-		public async Task<ActionResult<Image>> GetAllImage_PrductItem()
+		public async Task<ActionResult<Image_Join_ProductItem>> GetAllImage_PrductItem()
 		{
 			try
 			{
 				var lst = await _iImageService.GetAllImage_PrductItem();
+				return Ok(lst);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest("Liên hệ Thai để sửa 0349198240");
+
+			}
+
+		}
+
+		[HttpGet("GetAllImage_PrductItem_ByProductId/{productID}")]
+		public async Task<ActionResult<Image_Join_ProductItem>> GetAllImage_PrductItem_ByProductId(Guid productID)
+		{
+			try
+			{
+				var lst = await _iImageService.GetAllImage_PrductItem_ByProductId(productID);
 				return Ok(lst);
 			}
 			catch (Exception ex)

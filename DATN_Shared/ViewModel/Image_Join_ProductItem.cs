@@ -16,5 +16,6 @@ namespace DATN_Shared.ViewModel
 		public Guid ProductItemId { get; set; }
 		public int Status { get; set; }
 		public Guid ProductId { get; set; }
+		public Guid? ColorId { get; set; }
 	}
 }

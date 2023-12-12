@@ -9,11 +9,11 @@ namespace DATN_Client.Areas.Admin.Controllers
 		
         public IActionResult Index()
         {
-			
-			if (Login.Roleuser == "Admin" || Login.Roleuser== "Staff")
+            return View();
+            if (Login.Roleuser == "Admin" || Login.Roleuser== "Staff")
 			{
-				return View();
-			}
+                return View();
+            }
 			else
 			{
 				return Unauthorized();
