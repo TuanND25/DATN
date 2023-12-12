@@ -207,7 +207,9 @@
         color: #fff;
     }
 
-.table-sellStall table, th, td {
+.table-sellStall table,
+.table-sellStall th,
+.table-sellStall td {
     border: 1px solid #D3D3D3 !important;
     border-collapse: collapse !important;
 }
@@ -271,7 +273,7 @@
     -webkit-line-clamp: 1;
 }
 
-input[type=number] {
+.input-Number input[type=number] {
     -moz-appearance: textfield;
 }
 
@@ -281,7 +283,7 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
-input[type=text] {
+.input-text input[type=text] {
     appearance: none;
     border: none;
     outline: none;
@@ -292,7 +294,7 @@ input[type=text] {
     color: #000;
 }
 
-input[type=number] {
+.input-Number input[type=number] {
     appearance: none;
     border: none;
     outline: none;

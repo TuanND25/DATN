@@ -135,7 +135,7 @@ else
             <div class="showlistProduct">             
             @foreach (var x in _lstP)
                     {
-                       <div data-target="#ChooseSizeAndColor" data-toggle="@(checkBillIsNull == false ? "modal":"")" @onclick="()=>getProductChooseSizeAndColor(x.Id)">
+                       <div data-target="#ChooseSizeAndColor" data-toggle="@(checkBillIsNull == false ? "modal":"")" @onclick=" () => getProductChooseSizeAndColor(x.Id)">
                             @{
                                 string img = _lstImg_PI.Where(c => c.ProductId == x.Id).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
                             }
@@ -206,8 +206,8 @@ else
                 </span>
               </div>
            </div>
-           <div class="col-7" style="display:flex;justify-content:flex-end;align-items:center">
-              <input type="number" style="text-align:right;width:60%" readonly="@(!@activeTabDungDiem)" @oninput="ChangeInputTichDiem" @bind="InputTichDiem"/>
+           <div class="col-7 input-Number" style="display:flex;justify-content:flex-end;align-items:center">
+              <input type="number" class="" style="text-align:right;width:60%" readonly="@(!@activeTabDungDiem)" @oninput="ChangeInputTichDiem" @bind="InputTichDiem"/>
            </div>
        </div>
    @*  if (activeTabDungDiem==true)
@@ -255,7 +255,7 @@ else
            <div class="col-5" style="display:flex;gap:5px">
                <span>Phí vận chuyển</span>
            </div>
-           <div class="col-7" style="display:flex;justify-content:flex-end">
+           <div class="col-7 input-Number" style="display:flex;justify-content:flex-end">
               <input type="number" @oninput="checkPhiShip" @bind="PhiShip"/>
            </div>
        </div>
@@ -283,7 +283,7 @@ else
        @if (activeTienMat==true)
             {
           <div class="row " style="margin-top:5px;margin-top:10px" >
-           <div class="col-12" style="display:flex;gap:5px;justify-content:end;align-items:center">
+           <div class="col-12 input-Number" style="display:flex;gap:5px;justify-content:end;align-items:center">
                <i class="fa-solid fa-money-bill" style="color: #5cb85c;"></i>
                 <input type="number" style=" padding:0px;" @oninput="CheckInputTienMat" @bind="InputTienMat"/>
                 <i class="fa-solid fa-x"  style="color: #ee4444;cursor:pointer" @onclick="CloseTabTienMat"></i>
@@ -293,7 +293,7 @@ else
             @if (activeChuyenKhoan==true)
             {
                   <div class="row" style="margin-top:5px;margin-top:10px">
-           <div class="col-12" style="display:flex;gap:5px;justify-content:end;align-items:center">
+           <div class="col-12 input-Number" style="display:flex;gap:5px;justify-content:end;align-items:center">
                <i class="fa-solid fa-credit-card" style="color: #5cb85c;"></i>
                 <input type="number" style=" padding:0px;" @oninput="CheckInputChuyenKhoan" @bind="InputChuyenKhoan"/>
                 <i class="fa-solid fa-x"  style="color: #ee4444;cursor:pointer" @onclick="CloseTabChuyenKhoan" ></i>
@@ -362,7 +362,7 @@ else
            <div class="col-3" style="display:flex;gap:5px;align-items:center">
                <span>Người nhận</span>
            </div>
-           <div class="col-7" style="display:flex;justify-content:flex-end">
+           <div class="col-7 input-text" style="display:flex;justify-content:flex-end">
               <input type="text" style="width:100%" placeholder="Tên người nhận" @oninput="checkNameNguoiNhan" />
            </div>
        </div>
@@ -370,7 +370,7 @@ else
            <div class="col-3" style="display:flex;gap:5px">
                <span>Số điện thoại</span>
            </div>
-           <div class="col-7" style="display:flex;justify-content:flex-end">
+           <div class="col-7 input-Number" style="display:flex;justify-content:flex-end">
               <input type="number" style="width:100%" placeholder="Số điện thoại" maxlength="10" @oninput="checkPhoneNumberNguoiNhan"/>
            </div>
        </div>
@@ -422,7 +422,7 @@ else
                       <div class="row" style="margin-top:15px">
                          <div class="col-3" style="display:flex;align-items:center">
 						   <span style="white-space: nowrap;">Địa chỉ chi tiết</span	</div> 
-                         <div class="col-7">
+                         <div class="col-7 input-text">
 						    <input type="text" style="width:100%"
                             placeholder="Vd:123 Phương Canh" @oninput="checkAddressDetail"/>				
 					    </div>   
@@ -463,7 +463,7 @@ else
             </div>
             <!-- Nội dung của popup -->
             <div class="container">
-                <div style="display:flex;align-items:center">
+                <div style="display:flex;align-items:center" class="input-text">
                     <input type="text" @oninput="SearchUser" class="input_SearchUser" placeholder="Nhập tên hoặc số điện thoại khách hàng"/>
                     <i class="fa-solid fa-user-plus" style="cursor:pointer" data-toggle="modal" data-target="#AddUserVangLai" data-dismiss="modal"
                     @onclick="getAllUser"
@@ -517,7 +517,7 @@ else
            <div class="col-3" style="display:flex;gap:5px;align-items:center">
                <span>Khách hàng</span>
            </div>
-           <div class="col-7" style="display:flex;justify-content:flex-end">
+           <div class="col-7 input-text" style="display:flex;justify-content:flex-end">
               <input type="text" style="width:100%" placeholder="Tên khách hàng" @oninput="checkNameKhachHang" @bind-value="nameKhachhangdefault"/>
            </div>
        </div>
@@ -525,7 +525,7 @@ else
            <div class="col-3" style="display:flex;gap:5px;align-items:center">
                <span>Số điện thoại</span>
            </div>
-           <div class="col-7" style="display:flex;justify-content:flex-end">
+           <div class="col-7 .input-Number" style="display:flex;justify-content:flex-end">
               <input type="number" style="width:100%" placeholder="Số điện thoại" @oninput="checkPhoneNumberKhachHang" @bind-value="numberPhoneKhachHangdefault"/>
            </div>
        </div>
@@ -594,7 +594,7 @@ else
                 <div class="row" style="margin-top:20px">
                    <div class="col-3 ">Số lượng</div>
                    <div class="col-8">
-                      <div class="div-quantity">
+                      <div class="div-quantity input-Number">
                             <div class="minus-plus-hover" @onclick="MinusSoluongProduct">
                                 <span class="fa-solid fa-minus minus-plus-hover" style="width:100%;height:100%;display:flex;justify-content:center;align-items:center"></span>
                             </div>
