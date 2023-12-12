@@ -10,6 +10,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Net.Http.Headers;
 using System.Net.WebSockets;
+using DATN_Client.Areas.Customer.Component;
 
 namespace DATN_Client.Areas.Customer.Controllers
 {
@@ -23,7 +24,9 @@ namespace DATN_Client.Areas.Customer.Controllers
 		}
         public IActionResult Index()
         {
-            return View();
+			HttpContext.Session.SetString($"{Guid.NewGuid()}", JsonConvert.SerializeObject(Guid.NewGuid()));
+			
+			return View();
         }
 	}
 }
