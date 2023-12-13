@@ -1,6 +1,7 @@
 ﻿using DATN_API.Data;
 using DATN_API.Service_IService.IServices;
 using DATN_Shared.Models;
+using DATN_Shared.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace DATN_API.Service_IService.Services
@@ -72,6 +73,37 @@ namespace DATN_API.Service_IService.Services
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        public async Task<Promotions> UpdateQuantityPromotion(Guid producitemId)
+        {
+            try
+            {
+                var a = (from b in _context.Promotions
+                         join c in _context.PromotionsItem on b.Id equals c.PromotionsId
+                         where c.ProductItemsId == producitemId
+                         select new PromotionItem_VM
+                         {
+                             Id = b.Id,
+                             PromotionsId = b.Id,
+                             ProductItemsId = c.ProductItemsId,
+                             Quantity = b.Quantity,
+                         }).FirstOrDefault();
+                if (a != null)
+                {
+                    var s = await _context.Promotions.FindAsync(a.Id);
+                    s.Quantity = a.Quantity - 1;
+                    _context.Promotions.Update(s);
+                    _context.SaveChanges();
+                    return s;
+                }
+                return null;
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
     }

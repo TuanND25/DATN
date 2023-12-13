@@ -67,7 +67,14 @@ namespace DATN_API.Controllers
 			await _Promotion.UpdatePromotions(Promotion);
 			return Ok();
 		}
-		[HttpDelete("Id")]
+
+		[HttpPut("update_quantity_promotion/{productitemId}")]
+        public async Task<ActionResult<Promotions>> UpdatePromotionQuantity(Guid productitemId)
+        {
+            await _Promotion.UpdateQuantityPromotion(productitemId);
+			return Ok();
+        }
+        [HttpDelete("Id")]
 		public async Task<ActionResult<Promotions>> Delete(Guid id)
 		{
 			await _Promotion.DeletePromotions(id);
