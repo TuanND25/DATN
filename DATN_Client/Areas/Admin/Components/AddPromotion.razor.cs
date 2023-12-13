@@ -85,6 +85,7 @@ namespace DATN_Client.Areas.Admin.Components
         public async Task AddPromotionItem()
         {
             var c = _promotion.Id = Guid.NewGuid();
+            _promotion.Quantity = quantityValue;
             var a = await _httpClient.PostAsJsonAsync<Promotions_VM>("https://localhost:7141/api/promotion/Add", _promotion);
 
             if (a.IsSuccessStatusCode)
@@ -95,6 +96,7 @@ namespace DATN_Client.Areas.Admin.Components
                     _promotionItem.PromotionsId = c;
                     _promotionItem.ProductItemsId = item;
                     _promotionItem.Status = 1;
+
                     var b = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/PromotionItem/Add", _promotionItem);
 
                     var productItem = await _httpClient.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{item}");
