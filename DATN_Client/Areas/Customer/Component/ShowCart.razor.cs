@@ -36,16 +36,24 @@ namespace DATN_Client.Areas.Customer.Component
 
 		public async Task SL_Cong(CartItems_VM ci)
 		{
-
+			var checkSl = await _client.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{ci.ProductItemId}");
 			if (_idUser == null)
 			{
-				if (ci.Quantity == 99) return;
+				if (ci.Quantity + 1 > checkSl.AvaiableQuantity)
+				{
+					_toastService.ShowError("Số lượng tồn kho không đủ");
+					return;
+				}
 				ci.Quantity += 1;
 				SessionServices.SetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai", _lstCI);
 			}
 			else
 			{
-				if (ci.Quantity == 99) return;
+				if (ci.Quantity + 1 > checkSl.AvaiableQuantity)
+				{
+					_toastService.ShowError("Số lượng tồn kho không đủ");
+					return;
+				}
 				ci.Quantity += 1;
 				await _client.PutAsJsonAsync("https://localhost:7141/api/CartItems/update-CartItems", ci);
 			}
@@ -102,6 +110,18 @@ namespace DATN_Client.Areas.Customer.Component
 
 		public async Task CreateBill()
 		{
+			bool check = true;
+			foreach (var x in _lstCI)
+			{
+				var checkSl = await _client.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{x.ProductItemId}");
+				if (x.Quantity > checkSl.AvaiableQuantity)
+				{
+					ProductItem_Show_VM pi = _lstPrI_show_VM.FirstOrDefault(c=>c.Id == x.ProductItemId);
+					_toastService.ShowError($"Số lượng tồn kho của sản phẩm {pi.Name} - {pi.ColorName} - {pi.SizeName} không đủ");
+					check = false;
+				}
+			}
+			if (check == false) return;
 			if (_tongTien == 0) return;
 			_navi.NavigateTo("https://localhost:7075/bill-info", true);
 		}
