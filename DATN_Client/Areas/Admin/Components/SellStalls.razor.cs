@@ -393,11 +393,13 @@ namespace DATN_Client.Areas.Admin.Components
 			activeColor = default;
 			activeColor = IdColor;
 
-			SoluongProductItem = _lstProductItem.FirstOrDefault(x => x.ColorId == IdColor && x.SizeId == activeSize).AvaiableQuantity;
+			var a = _lstProductItem.FirstOrDefault(x => x.ColorId == IdColor && x.SizeId == activeSize);
 
-			var _lstBillItem = await _client.GetFromJsonAsync<List<BillItem_VM>>("https://localhost:7141/api/BillItem/get_alll_bill_item_show");
+            SoluongProductItem = a.AvaiableQuantity;
 
-			var checkroductItemInBillItem = _lstBillItem.FirstOrDefault(x => x.ProductItemsId == _lstProductItem.FirstOrDefault(x => x.ColorId == IdColor && x.SizeId == activeSize).Id);
+			List<BillItem_VM> _lstBillItem = await _client.GetFromJsonAsync<List<BillItem_VM>>("https://localhost:7141/api/BillItem/get_alll_bill_item_show");
+
+			var checkroductItemInBillItem = _lstBillItem.FirstOrDefault(x => x.ProductItemsId == a.Id && BillId == x.Id);
 			if (checkroductItemInBillItem != null)
 			{
 				SoluongProductItem -= checkroductItemInBillItem.Quantity;
