@@ -1,6 +1,7 @@
 ﻿using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
 using DATN_Shared.ViewModel.DiaChi;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Build.Evaluation;
 using Microsoft.IdentityModel.Tokens;
@@ -98,9 +99,6 @@ namespace DATN_Client.Areas.Admin.Components
 		public int PhiShip { get; set; } = 0;
 
 		public string ShowDiaChi { get; set; } = "";
-
-
-
 
 
 		public string nameKhachhang { get; set; } = "";
@@ -397,14 +395,13 @@ namespace DATN_Client.Areas.Admin.Components
 
             SoluongProductItem = a.AvaiableQuantity;
 
-			List<BillItem_VM> _lstBillItem = await _client.GetFromJsonAsync<List<BillItem_VM>>("https://localhost:7141/api/BillItem/get_alll_bill_item_show");
+			List<BillDetailShow> _lstBillItem = await _client.GetFromJsonAsync<List<BillDetailShow>>("https://localhost:7141/api/BillItem/get_alll_bill_item_show");
 
-			var checkroductItemInBillItem = _lstBillItem.FirstOrDefault(x => x.ProductItemsId == a.Id && BillId == x.Id);
-			if (checkroductItemInBillItem != null)
+			var checkroductItemInBillItem = _lstBillItem.FirstOrDefault(q => q.ProductItemId == a.Id && q.BillID == BillId);
+            if (checkroductItemInBillItem != null)
 			{
 				SoluongProductItem -= checkroductItemInBillItem.Quantity;
             }
-
 
 			if (SoluongProductItem < SoluongProductItemMua)
 			{
@@ -629,10 +626,20 @@ namespace DATN_Client.Areas.Admin.Components
 		{
 			if ((bool)e.Value == false)
 			{
-				Tongtien = Tongtienhang;
+				InputTichDiem = 0;
+                Tongtien = Tongtienhang;
 			}
 			else
 			{
+				
+				if (pointKhachhang > Tongtienhang/10)
+				{
+					InputTichDiem = Tongtienhang / 10;
+                }
+				else
+				{
+                    InputTichDiem = pointKhachhang;
+                }
 				Tongtien = Tongtienhang;
 				Tongtien -= InputTichDiem;
 			}
@@ -877,13 +884,37 @@ namespace DATN_Client.Areas.Admin.Components
 
 		public void checkPhiShip(ChangeEventArgs e)
 		{
-			PhiShip = 0;
-			if (int.TryParse(e.Value.ToString(), out int inputValue))
+			if (PhiShip == 0 || String.IsNullOrEmpty(e.Value.ToString()))
+			{
+                if (activeTabDungDiem == true)
+                {
+                    PhiShip = 0;
+                    Tongtien = Tongtienhang - InputTichDiem;
+                }
+                else
+                {
+                    PhiShip = 0;
+                    Tongtien = Tongtienhang;
+                }
+            }
+            if (activeTabDungDiem == true)
+            {
+                PhiShip = 0;
+                Tongtien = Tongtienhang - InputTichDiem;
+            }
+            else
+            {
+                PhiShip = 0;
+                Tongtien = Tongtienhang;
+            }
+            TongtienText = FormatNumber(Tongtien);
+            if (int.TryParse(e.Value.ToString(), out int inputValue))
 			{
 				var regex = @"^[0-9]+$";
 				if (Regex.IsMatch(inputValue.ToString(), regex))
 				{
-					PhiShip = inputValue;
+                    PhiShip = 0;
+                    PhiShip = inputValue;
 					Tongtien += PhiShip;
 					TongtienText = FormatNumber(Tongtien);
 				}
@@ -1241,11 +1272,12 @@ namespace DATN_Client.Areas.Admin.Components
 			var lstPaymentMethod = await _client.GetFromJsonAsync<List<PaymentMethod_VM>>("https://localhost:7141/api/paymentMethod/get_all_paymentMethod");
 
 			var lstbill = await _client.GetFromJsonAsync<List<Bill_VM>>("https://localhost:7141/api/Bill/get_alll_bill");
+
 			Bill_VM billMua = lstbill.FirstOrDefault(x => x.Id == BillId);
 
 			if (billMua == null)
 			{
-				_toastService.ShowError("Đã có lỗi xảy ra");
+				_toastService.ShowError("Đã có lỗi xảy ra 1");
 				return;
 			}
 			if (activeTabThemThongTin == true)
@@ -1265,7 +1297,7 @@ namespace DATN_Client.Areas.Admin.Components
 				bill.PaymentMethodId = lstPaymentMethod.FirstOrDefault(x => x.Name == "Tiền mặt").Id;
 				if (bill.PaymentMethodId == default || bill.PaymentMethodId == null)
 				{
-					_toastService.ShowError("Đã có lỗi xảy ra");
+					_toastService.ShowError("Đã có lỗi xảy ra 2");
 					return;
 				}
 			}
@@ -1274,7 +1306,7 @@ namespace DATN_Client.Areas.Admin.Components
 				bill.PaymentMethodId = lstPaymentMethod.FirstOrDefault(x => x.Name == "Chuyển khoản").Id;
 				if (bill.PaymentMethodId == default || bill.PaymentMethodId == null)
 				{
-					_toastService.ShowError("Đã có lỗi xảy ra");
+					_toastService.ShowError("Đã có lỗi xảy ra 3");
 					return;
 				}
 			}
@@ -1283,46 +1315,185 @@ namespace DATN_Client.Areas.Admin.Components
 				bill.PaymentMethodId = lstPaymentMethod.FirstOrDefault(x => x.Name == "Chuyển khoản và tiền mặt").Id;
 				if (bill.PaymentMethodId == default || bill.PaymentMethodId == null)
 				{
-					_toastService.ShowError("Đã có lỗi xảy ra");
+					_toastService.ShowError("Đã có lỗi xảy ra 4");
 					return;
 				}
 			}
+			
+			//tiêu điểm cho khách hàng nếu có 
+			if (activeTabDungDiem==true)
+			{
+				var _lstPoint = await _client.GetFromJsonAsync<List<CustomerPoint_VM>>("https://localhost:7141/api/CustomerPoint/getAllCustomerPoint");
+				CustomerPoint_VM PointId = _lstPoint.FirstOrDefault(x => x.UserID == getuser.Id);
 
-			billMua.TotalAmount = Tongtien;
+				//them ban ghi history tiêu điểm 
+				HistoryConsumerPoint_VM htsCustomerPoint = new HistoryConsumerPoint_VM();
+				htsCustomerPoint.Id = Guid.NewGuid();
+				htsCustomerPoint.ConsumerPointId = PointId.UserID;
+				htsCustomerPoint.FormulaId = default;
+				htsCustomerPoint.Point = InputTichDiem;
+				htsCustomerPoint.Status = 1;
+
+				var reponsePostHtsCtm = await _client.PostAsJsonAsync("https://localhost:7141/api/HistoryConsumerPoint/add-HistoryConsumerPoint", htsCustomerPoint);
+				if (reponsePostHtsCtm.StatusCode.ToString() != "OK" )
+				{
+					_toastService.ShowError("Đã có lỗi xảy ra 5");
+					return;
+				}
+				// update số điểm 
+				PointId.Point = (Convert.ToInt32(PointId.Point) - htsCustomerPoint.Point).ToString();
+				var reponseUpdatePointUser = await _client.PutAsJsonAsync("https://localhost:7141/api/CustomerPoint/putCustomerPoint", PointId);
+				if (reponseUpdatePointUser.StatusCode.ToString()!="OK")
+				{
+					_toastService.ShowError("Đã có lỗi xảy ra 6");
+					return;
+				};
+
+            }
+
+			//tích điểm cho khách hàng nếu có
+			if (getuser != null)
+			{
+                //lấy công thức tính điểm
+                var _lstFomula = await _client.GetFromJsonAsync<List<Formula_VM>>("https://localhost:7141/api/Formula/get_formula");
+                var Congthuctinhdiem = _lstFomula.FirstOrDefault(x => x.Status == 1);
+                // lay ban ghi bang diem cua khách hàng 
+                var _lstPoint = await _client.GetFromJsonAsync<List<CustomerPoint_VM>>("https://localhost:7141/api/CustomerPoint/getAllCustomerPoint");
+                CustomerPoint_VM PointId = _lstPoint.FirstOrDefault(x => x.UserID == getuser.Id);
+
+                //them ban ghi history tiêu điểm 
+                HistoryConsumerPoint_VM htsCustomerPoint = new HistoryConsumerPoint_VM();
+                htsCustomerPoint.Id = Guid.NewGuid();
+                htsCustomerPoint.ConsumerPointId = PointId.UserID;
+                htsCustomerPoint.FormulaId = Congthuctinhdiem.Id;
+                htsCustomerPoint.Point = Tongtien/Congthuctinhdiem.Coefficient;
+                htsCustomerPoint.Status = 1;
+
+                var reponsePostHtsCtm = await _client.PostAsJsonAsync("https://localhost:7141/api/HistoryConsumerPoint/add-HistoryConsumerPoint", htsCustomerPoint);
+                if (reponsePostHtsCtm.StatusCode.ToString() != "OK")
+                {
+                    _toastService.ShowError("Đã có lỗi xảy ra 7");
+                    return;
+                }
+                // update số điểm 
+                PointId.Point = (Convert.ToInt32(PointId.Point) + htsCustomerPoint.Point).ToString();
+                var reponseUpdatePointUser = await _client.PutAsJsonAsync("https://localhost:7141/api/CustomerPoint/putCustomerPoint", PointId);
+                if (reponseUpdatePointUser.StatusCode.ToString() != "OK")
+                {
+                    _toastService.ShowError("Đã có lỗi xảy ra 8");
+                    return;
+                };
+
+
+            }
+
+            billMua.TotalAmount = Tongtien;
 			billMua.Cash = InputTienMat;
 			billMua.CustomerPayment = InputChuyenKhoan;
 			billMua.CreateDate = DateTime.Now;
 			billMua.Status = 2;
+			billMua.Type = 2;
+
+			
+
+
+
 			//check số lượng sản phẩm trong db xem còn không
 			//Gett all bill Item 
-			var _lstBillItem = await _client.GetFromJsonAsync<List<BillItem_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
-			var _lstPrductItem = await _client.GetFromJsonAsync<List<ProductItem_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
-			foreach (var x in _lstBillItem)
+			var _lstBillItem = await _client.GetFromJsonAsync<List<BillDetailShow>>("https://localhost:7141/api/BillItem/get_alll_bill_item_show");
+			var _lstBillItem1 = _lstBillItem.Where(x => x.BillID == BillId).ToList();
+
+            var _lstPrductItem = await _client.GetFromJsonAsync<List<ProductItem_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
+			foreach (var x in _lstBillItem1)
 			{
-				foreach (var y in _lstPrductItem)
-				{
-					var productItem = _lstPrductItem.FirstOrDefault(z => z.Id == x.ProductItemsId);
+				
+					var productItem = _lstPrductItem.FirstOrDefault(z => z.Id == x.ProductItemId);
 					if (productItem == null)
 					{
-						_toastService.ShowError("Đã có lỗi xảy ra");
+						_toastService.ShowError("Đã có lỗi xảy ra 9");
 						return;
-					}
+					}					
 					if (x.Quantity > productItem.AvaiableQuantity)
 					{
-						_toastService.ShowError("Đã có lỗi xảy ra");
+						_toastService.ShowError("Đã có lỗi xảy ra 10");
 						return;
 					}
-				}
-			}
-			//update trạng thái bill thành 1;
-			var reponse = await _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", billMua);
-			if (reponse.StatusCode.ToString() == "201")
-			{
+				productItem.AvaiableQuantity -= x.Quantity;
 
+                var reponseUpdateQuantity = await _client.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", productItem);
+
+
+
+					if (reponseUpdateQuantity.StatusCode.ToString()!="OK")
+					{
+						_toastService.ShowError("Đã có lỗi xảy ra 11");
+						return;
+					}
+                    var reponseUpdatePromotion = await _client.PutAsJsonAsync("https://localhost:7141/api/promotion/update_quantity_promotion/d16e6a1f-e30c-4cb2-9bfc-6aa812478b2d", productItem.Id);
+					if (reponseUpdatePromotion.StatusCode.ToString()!="OK")
+					{
+						_toastService.ShowError("Đã có lỗi xảy ra 12");
+						return;
+					}
+                
 			}
 			//trừ số lượng sp trong db
-			//tích điểm nếu có
+			
+			
+            //update trạng thái bill thành 1;
+            var reponseUpdateBill = await _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", billMua);
+			if (reponseUpdateBill.StatusCode.ToString() == "OK")
+			{
+				_toastService.ShowSuccess("Đơn hàng đã thanh toán thành công");
+				//reset các biến cần thiết
+				var billXoa = _lstBill_Vm_show.FirstOrDefault(x => x.Id == billMua.Id);
+				_lstBill_Vm_show.Remove(billXoa);
 
+				if (_lstBill_Vm_show.Count > 0)
+				{
+					BillId = _lstBill_Vm_show[0].Id;
+				}
+				else
+				{
+					BillId = default;
+				}
+				await GetBillItemShowOnBill(BillId);
+				//clear daichi
+				activeTabThemThongTin = false;
+				nameNguoiNhan = "";
+				phoneNumberNguoinhan = "";
+				_TinhTp = string.Empty;
+				_PhuongXa = string.Empty;
+				_QuanHuyen = string.Empty;
+				AddressDetail = "";
+				NoteAddresShip = "";
+				PhiShip = 0;
+				//clear khach hang
+				ClearInfoUser();
+				// clear dung diem
+				activeTabDungDiem = false;
+				InputTichDiem = 0;
+				// clear tiền khách đưa 
+				activeTienMat = false;
+				activeChuyenKhoan = false;
+				InputTienMat = 0;
+				InputChuyenKhoan = 0;
+				// clear text tien khach dua và refund
+				TongtienText = "0";
+				tienRefundText = "0";
+				tienRefundFormat = "";
+				CountPayment = 0;
+
+
+
+            }
+			else
+			{
+				_toastService.ShowError("Đã thanh toán đc r hehe");
+				return;
+			}
+			
+			
 
 		}
 

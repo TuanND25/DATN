@@ -210,20 +210,6 @@ else
               <input type="number" class="" style="text-align:right;width:60%" readonly="@(!@activeTabDungDiem)" @oninput="ChangeInputTichDiem" @bind="InputTichDiem"/>
            </div>
        </div>
-   @*  if (activeTabDungDiem==true)
-                    {
-                          <div class="row" style="margin-top:5px;">
-           <div class="col-5" style="display:flex;gap:5px">
-               <span>Điểm quy đổi</span>
-           </div>
-           <div class="col-7" style="display:flex;justify-content:flex-end">
-              <span>10,000đ</span>
-           </div>
-       </div>  
-                    }
-                    else
-                    {
-                    }*@
             }
             
         @if (activeTabThemThongTin==true)
@@ -305,7 +291,7 @@ else
                <span>Tiền khách đưa</span>
            </div>
            <div class="col-7" style="display:flex;justify-content:flex-end;text-align:end">
-              <span> @CountPayment đ</span>
+              <span> @(FormatNumber(CountPayment)) đ</span>
            </div>
        </div>
          <div class="row" style="margin-top:5px;align-items:center">
