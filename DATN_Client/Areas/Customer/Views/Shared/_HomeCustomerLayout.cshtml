@@ -1,0 +1,368 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DATN_Client</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/ShowInfoUser.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/DATN_Client.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    @* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" /> *@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" integrity="sha512-ZnR2wlLbSbr8/c9AgLg3jQPAattCUImNsae6NHYnS9KrIwRdcY9DxFotXhNAKIKbAXlRnujIqUWoXXwqyFOeIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@200;300;400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="~/css/login.css" />
+    <link rel="stylesheet" href="~/css/create_bill.css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet">
+    <link href="~/css/detail.css" rel="stylesheet">
+    <link href="~/css/ShowProduct.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<style>
+    .imgInHeader {
+        width: 25%;
+        cursor: pointer;
+    }
+
+    .hinhtron {
+        border-radius: 50%;
+        background-color: #7dccff;
+        padding: 10px;
+        margin-right: 10px;
+    }
+
+    .hearderLogo {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 30px;
+    }
+
+    .telephone {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Futura;
+        cursor: pointer;
+    }
+
+    .imgUserHeader {
+        width: 150%;
+        cursor: pointer;
+    }
+
+    .imgCartHeader {
+        width: 150%;
+        cursor: pointer;
+    }
+
+    .countCart {
+        position: absolute;
+        background-color: red;
+        padding: 2px 5px 2px 5px;
+        border-radius: 50%;
+        font-size: 10px;
+        color: white;
+        top: -10px;
+        right: -20px;
+    }
+
+    .borderHeader {
+        border-bottom: 2px solid #f3f3f3;
+        padding-bottom: 10px;
+    }
+
+    .navbarHeader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .aNavbar {
+        text-decoration: none;
+        color: #333333;
+        padding: 15px
+    }
+
+        .aNavbar:hover {
+            color: #7dccff;
+        }
+
+    .navbarHeader ul {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        .navbarHeader ul li {
+            position: relative;
+        }
+
+            .navbarHeader ul li ul {
+                display: none;
+            }
+
+            .navbarHeader ul li:hover ul {
+                position: absolute;
+                display: flex;
+                flex-direction: column;
+                display: block;
+                z-index: 99;
+                /* left: -20px;*/
+                background-color: #ffffff;
+                color: #000;
+                width: fit-content;
+                padding-left: 5px;
+                font-size: 15px;
+            }
+
+            .navbarHeader ul li ul li {
+                text-align: left;
+                color: #000;
+                padding-left: 0px;
+            }
+
+                .navbarHeader ul li ul li:hover a {
+                    color: #7dccff;
+                    text-align: left;
+                    background-color: #f1f1f1;
+                }
+
+                .navbarHeader ul li ul li a {
+                    display: block;
+                    width: 100%;
+                    color: #000;
+                    text-align: left;
+                    padding: 10px;
+                    align-items: flex-start;
+                }
+
+    .absoluteContent {
+        display: none;
+        position: absolute;
+        right: -10px;
+        z-index: 98;
+    }
+
+
+    .contentUser {
+        display: flex;
+        justify-content: space-between;
+        width: 150px;
+        background-color: red;
+        padding: 10px 5px 10px 5px;
+    }
+
+    .relativeContent:hover .absoluteContent {
+        display: block;
+    }
+</style>
+<body>
+    @*----*@
+    <div class="borderHeader" style="background-color:#ffffff">
+        <div class="hearderLogo container">
+            <div class="telephone">
+                <i class="fa-solid fa-phone hinhtron" style="color: #ffffff;"></i>
+                <label style="color: #7dccff">0349198240</label>
+            </div>
+            <img src="/img/titleLogo.png" class="imgInHeader" />
+            <div style="display:flex">
+                <div style="margin-right:25px">
+                    <div style="position:relative" class="relativeContent">
+
+                        <a asp-area="Customer" asp-controller="UserManagement" asp-action="Index"><img src="/img/user.svg" class="imgUserHeader" /></a>
+                        @* <div class="absoluteContent">
+                            <div class="contentUser">
+                            <label style="margin-right:10px;">Đăng xuất</label>
+                            <img src="/img/iconLogOut.svg" style="transform: rotate(3.142rad);" />
+                            </div>
+                            <div class="contentUser">
+                            <label style="margin-right:10px;">Hóa đơn</label>
+                            <img src="/img/iconBill.svg" />
+                            </div>
+                            </div>*@
+                    </div>
+                </div>
+                <div style=" position: relative">
+
+                    <a asp-area="Customer" asp-controller="BanOnline" asp-action="ShowCart"><img src="/img/iconCart.svg" class="imgCartHeader" /></a>
+                    @*<label class="countCart">12</label>*@
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="navbarHeader container" style="background-color:#ffffff">
+        <ul>
+            <li><a class="aNavbar" asp-area="" asp-controller="Home" asp-action="Index">HOME</a></li>
+            <li>
+                <a class="aNavbar" asp-area="" asp-controller="Home" asp-action="Index">SHOP</a>
+                <ul>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">T-SHIRT</a></li>
+                    <li><a asp-area="Customer" asp-controller="Login" asp-action="Login">Login</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">JEAN</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">PERFOMANT</a></li>
+                </ul>
+            </li>
+            <li><a class="aNavbar" asp-area="" asp-controller="Home" asp-action="Index">BLOG</a></li>
+            <li><a class="aNavbar" asp-area="" asp-controller="Home" asp-action="Index">CONTACT</a></li>
+            <li><a class="aNavbar" asp-area="" asp-controller="Home" asp-action="Index">ABOUT</a></li>
+            <li><a class="aNavbar" asp-area="" asp-controller="Home" asp-action="Index">BHGROUP</a></li>
+        </ul>
+    </div>
+    <header>
+    </header>
+    <div >
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <div class="footer">
+        <footer class="text-center text-lg-start bg-light text-muted">
+            <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+                <div>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-google"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+                <!-- Right -->
+            </section>
+            <section class="">
+                <div class="container text-center text-md-start mt-5">
+                    <div class="row mt-3">
+                        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                            <h6 class="text-uppercase fw-bold mb-4">
+                                <i class="fas fa-gem me-3"></i>BH Unisex
+                            </h6>
+                            <p>
+                                Chúng mình xuất hiện để đem tới mọi người một chất lượng áo tốt nhất, với giá thành hấp dẫn nhất để đưa Outerity đến với tất cả lứa tuổi và khắp mọi vùng miền đất nước.
+                            </p>
+                        </div>
+                        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                            <h6 class="text-uppercase fw-bold mb-4">
+                                Products
+                            </h6>
+                            <p>
+                                <a href="#!" class="text-reset">HOODIE</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">SWEATER</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">POLO</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">TEE</a>
+                            </p>
+                        </div>
+                        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                            <h6 class="text-uppercase fw-bold mb-4">
+                                Chính sách
+                            </h6>
+                            <p>
+                                <a href="#" class="text-reset">Chính sách đổi trả</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Chính sách giao hàng</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Chính sách bảo mật </a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Hướng dẫn sử dụng</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Bảng Size</a>
+                            </p>
+                        </div>
+                        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                            <h6 class="text-uppercase fw-bold mb-4">Liên hệ</h6>
+                            <p><i class="fas fa-home me-3"></i> Trịnh Văn Bô</p>
+                            <p>
+                                <i class="fas fa-envelope me-3"></i>
+                                bhunisex@gmail.com
+                            </p>
+                            <p><i class="fas fa-phone me-3"></i>0367180646</p>
+                            <p><i class="fa-solid fa-paper-plane me-3"></i>Comming soon</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Copyright -->
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                Copyright © 2023 BH Unisex. Powered by BH Team
+
+            </div>
+
+        </footer>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src=~/js/Login.js></script>
+
+    <base href="~/" />
+    <script src="_framework/blazor.server.js"></script>
+    <!-- Thư viện JavaScript Bootstrap -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+            function OnScrollEvent() {
+                document.documentElement.scrollTop = 0;
+            }
+            // Lấy tất cả các nút button có class "custom-button"
+            var buttons = document.getElementsByClassName('custom-button');
+
+            // Gán sự kiện click cho từng nút button
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].addEventListener('click', function () {
+                    // Xóa lớp CSS "focus" từ tất cả các nút button
+                    for (var j = 0; j < buttons.length; j++) {
+                        buttons[j].classList.remove('focus');
+                    }
+                    // Thêm lớp CSS "focus" cho nút button hiện tại
+                    this.classList.add('focus');
+                });
+            }
+
+        window.onload = function () {
+            autoResizeTextarea();
+        };
+
+        function autoResizeTextarea() {
+            var textarea = document.getElementById('auto-resize-textarea');
+            if (textarea) {
+                textarea.style.height = 'auto';
+                textarea.style.height = (textarea.scrollHeight) + 'px';
+            }
+        }
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>
+

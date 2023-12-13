@@ -19,30 +19,27 @@ namespace DATN_Client.Areas.Customer.Component
 
         protected override async Task OnInitializedAsync()
         {
-            _lstProductItem = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
-            _lstProductItem = _lstProductItem.Where(x=>x.Status!=0).ToList();
-
-
+            _lstProductItem = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_product_home");
             await ListProduct();
         }
         public async Task ListProduct()
         {
             _lstProductItem = _lstProductItem
-            .Where(pi => pi.PriceAfterReduction != null && pi.PriceAfterReduction > 0)
+            .Where(pi => pi.PriceAfterReduction != null && pi.PriceAfterReduction > 0 && pi.Status != 0)
             .GroupBy(pi => pi.ProductId)
             .Select(g => new ProductItem_Show_VM
             {
                 Id = g.Min(pi => pi.Id),
                 ProductId = g.Key,
                 Name = _lstProductItem.FirstOrDefault(x => x.ProductId == g.Key)?.Name,
-                CategoryID = _lstProductItem.FirstOrDefault(x=>x.ProductId==g.Key).CategoryID,
-                CategoryName = _lstProductItem.FirstOrDefault(x=>x.ProductId==g.Key)?.CategoryName,
+                CategoryID = _lstProductItem.FirstOrDefault(x => x.ProductId == g.Key).CategoryID,
+                CategoryName = _lstProductItem.FirstOrDefault(x => x.ProductId == g.Key)?.CategoryName,
                 PriceAfterReduction = g.Min(pi => pi.PriceAfterReduction),
                 CostPrice = g.FirstOrDefault(pi => pi.PriceAfterReduction == null || pi.PriceAfterReduction == g.Min(pi => pi.PriceAfterReduction))?.CostPrice,
-                Percent = _lstProductItem.Where(pi => pi.ProductId==g.Key).Max(pi => pi.Percent)
-            }).ToList();
+                Percent = _lstProductItem.Where(pi => pi.ProductId == g.Key).Max(pi => pi.Percent)
+            }).OrderByDescending(x => x.Percent).ToList();
 
-            _lstCate= _lstProductItem.GroupBy(p => p.CategoryID)
+            _lstCate = _lstProductItem.GroupBy(p => p.CategoryID)
                                       .Select(g => new Categories_VM { Id = g.Key, Name = g.First().CategoryName })
                                       .ToList();
             SetTenKhongDau(_lstCate);

@@ -44,12 +44,16 @@ namespace DATN_Client.Areas.Admin.Components
             _lstProduct = await _httpClient.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
             _lstImg = await _httpClient.GetFromJsonAsync<List<Image_VM>>("https://localhost:7141/api/Image");
             _lstPromotionItem = await _httpClient.GetFromJsonAsync<List<PromotionItem_VM>>($"https://localhost:7141/api/PromotionItem/PromotionItem_By_Promotion/{_promotion.Id}");
+
             _lstPrI_show_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
+
             _lstProductItem = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
+
+
             _lstCate = await _httpClient.GetFromJsonAsync<List<Categories_VM>>("https://localhost:7141/api/Categories");
-			_lstC = await _httpClient.GetFromJsonAsync<List<Color_VM>>("https://localhost:7141/api/Color/get_color");
-			_lstS = await _httpClient.GetFromJsonAsync<List<Size_VM>>("https://localhost:7141/api/Size/get_size");
-			foreach (var a in _lstPromotionItem)
+            _lstC = await _httpClient.GetFromJsonAsync<List<Color_VM>>("https://localhost:7141/api/Color/get_color");
+            _lstS = await _httpClient.GetFromJsonAsync<List<Size_VM>>("https://localhost:7141/api/Size/get_size");
+            foreach (var a in _lstPromotionItem)
             {
                 _lstProductItemSelect.Add(a.ProductItemsId);
 
@@ -102,7 +106,7 @@ namespace DATN_Client.Areas.Admin.Components
         }
 
 
-        
+
         private void ToggleUnlimited(ChangeEventArgs e)   // số lượng có giới hạn hay không 
         {
             isUnlimited = (bool)e.Value;
@@ -135,7 +139,7 @@ namespace DATN_Client.Areas.Admin.Components
             {
                 foreach (var a in _lstPromotionItem)
                 {
-                    _lstProductItemSelect.Add(a.ProductItemsId); 
+                    _lstProductItemSelect.Add(a.ProductItemsId);
                 }
                 _lstProductItemSelect_Xoa.Clear();
                 _lstProductSelect.Add(productId);
@@ -187,22 +191,22 @@ namespace DATN_Client.Areas.Admin.Components
                 _lstProductItemSelect.Clear();
             }
         }
-        private void ToggleAllProduct(ChangeEventArgs e)
-        {
+        //private void ToggleAllProduct(ChangeEventArgs e)
+        //{
 
-            if ((bool)e.Value == true)
-            {
-                _lstProductSelect = _lstProduct.Select(x => x.Id).ToList();
-            }
-            else
-            {
-                _lstProductSelect.Clear();
-                //_lstProductItemSelect_Xoa.Clear();
-                //_lstProductItemSelect_Xoa = _lstProductItem.Select(x => x.Id).ToList();
-                //_lstProductItemSelect_Them.Clear();
-                //_lstProductItemSelect.Clear();
-            }
-        }
+        //    if ((bool)e.Value == true)
+        //    {
+        //        _lstProductSelect = _lstProduct.Select(x => x.Id).ToList();
+        //    }
+        //    else
+        //    {
+        //        _lstProductSelect.Clear();
+        //        //_lstProductItemSelect_Xoa.Clear();
+        //        //_lstProductItemSelect_Xoa = _lstProductItem.Select(x => x.Id).ToList();
+        //        //_lstProductItemSelect_Them.Clear();
+        //        //_lstProductItemSelect.Clear();
+        //    }
+        //}
 
 
 
@@ -218,18 +222,18 @@ namespace DATN_Client.Areas.Admin.Components
                 }
             }
         }
-        private bool SelectAllChangedProduct
-        {
-            get => SelectAllCheckboxProduct;
-            set
-            {
-                SelectAllCheckboxProduct = value;
-                if (SelectAllCheckboxProduct)
-                {
-                    _lstProductSelect = _lstProduct.Select(x => x.Id).Distinct().ToList();
-                }
-            }
-        }
+        //private bool SelectAllChangedProduct
+        //{
+        //    get => SelectAllCheckboxProduct;
+        //    set
+        //    {
+        //        SelectAllCheckboxProduct = value;
+        //        if (SelectAllCheckboxProduct)
+        //        {
+        //            _lstProductSelect = _lstProduct.Select(x => x.Id).Distinct().ToList();
+        //        }
+        //    }
+        //}
 
 
         public async Task LocHangLoat()
@@ -246,7 +250,7 @@ namespace DATN_Client.Areas.Admin.Components
                                 c.SizeName == _PM_S_VM.SizeName) &&
                                 (_PM_S_VM.ColorName == null ||
                                 _PM_S_VM.ColorName == "0" ||
-                                c.ColorName == _PM_S_VM.ColorName)).OrderBy(x=>x.Name).ToList();
+                                c.ColorName == _PM_S_VM.ColorName)).OrderBy(x => x.Name).ToList();
         }
 
     }

@@ -39,7 +39,6 @@ namespace DATN_Client.Areas.Admin.Components
 
         private BarChart barChart=new BarChart();
         private LineChart lineChart =new LineChart();
-        private int currentChartId = 0;
         protected override async Task OnInitializedAsync()
         {
             //isLoader = true;
@@ -53,29 +52,29 @@ namespace DATN_Client.Areas.Admin.Components
             await TopSale(1);
             //isLoader = false;
             //StateHasChanged();
+            await RenderWormAsync(1);
         }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
                 await RenderManhattanAsync();
-                await RenderWormAsync(currentChartId);
+                await RenderWormAsync(1);
             }
-            await RenderWormAsync(currentChartId);
+            //await RenderWormAsync(currentChartId);
             await base.OnAfterRenderAsync(firstRender);
             
         }
 
         private async Task RenderWormAsync(int option)
         {
-            currentChartId=option;
-            if (currentChartId == 0)
+            if (option == 0)
             {
                 await RenderWormAsyncThisMonth();
                 count4.Tittle = "Tháng này";
                 StateHasChanged();
             }
-            else if (currentChartId == 1)
+            else if (option == 1)
             {
                 await RenderWormAsyncThis3Month();
                 count4.Tittle = "3 tháng gần đây";
@@ -302,9 +301,11 @@ namespace DATN_Client.Areas.Admin.Components
         private async Task RenderManhattanAsync()
         {
             var b = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>("https://localhost:7141/api/BillItem/get_alll_bill_item_show");
+
+
             DateTime startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             DateTime endDate = startDate.AddMonths(1).AddDays(-1);
-            // Duyệt qua từng ngày trong tháng
+
             for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
             {
                 // Thống kê số đơn và số sản phẩm bán ra trong ngày
@@ -329,6 +330,28 @@ namespace DATN_Client.Areas.Admin.Components
             }
             var d = _billCounts.ToList();
             var a = productCounts.ToList();
+
+
+            //List<Count> doanhSoHangThang = new List<Count>();
+
+            //// Lặp qua từng tháng trong năm
+            //for (int thang = 1; thang <= 12; thang++)
+            //{
+            //    // Lấy ngày bắt đầu và ngày kết thúc cho tháng hiện tại
+            //    DateTime ngayBatDau = new DateTime(DateTime.Now.Year, thang, 1);
+            //    DateTime ngayKetThuc = ngayBatDau.AddMonths(1).AddDays(-1);
+
+            //    // Thống kê số lượng hóa đơn trong tháng
+            //    int soLuongHoaDon = b
+            //        .Count(item => item.CreateDate?.Date >= ngayBatDau.Date && item.CreateDate?.Date <= ngayKetThuc.Date);
+
+            //    // Tạo đối tượng Count và thêm vào danh sách doanhSoHangThang
+            //    Count count = new Count { Dem1 = soLuongHoaDon, Date = ngayBatDau.ToString("MM/yyyy") };
+            //    doanhSoHangThang.Add(count);
+            //}
+
+
+
             var data = new ChartData
             {
                 Labels = productCounts.Select(x=>x.Date).ToList(),

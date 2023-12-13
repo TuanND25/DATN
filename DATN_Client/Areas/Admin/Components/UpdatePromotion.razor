@@ -320,7 +320,7 @@
 
                                         @{
                                             var img = _lstImg.Where(c => c.ProductItemId == x.Id).Select(c => c.PathImage).FirstOrDefault();
-                                             var img2 = _lstImg.FirstOrDefault(c => c.ProductItemId == x.Id).PathImage;
+                                             //var img2 = _lstImg.FirstOrDefault(c => c.ProductItemId == x.Id).PathImage;
                                             if (img == null)
                                             {
                                                 <td>Chưa có ảnh</td>
