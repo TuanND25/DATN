@@ -14,5 +14,6 @@ namespace DATN_Shared.ViewModel
         public int Status { get; set; }
 		public Guid ProductId { get; set; }
 		public int Percent { get; set; }
+        public int Quantity { get; set; }
 	}
 }

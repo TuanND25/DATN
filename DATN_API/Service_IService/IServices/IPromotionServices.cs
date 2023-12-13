@@ -9,5 +9,7 @@ namespace DATN_API.Service_IService.IServices
         public Task<bool> DeletePromotions(Guid Id);
         public Task<List<Promotions>> GetAllPromotions();
         public Task<Promotions> GetAllPromotionsById(Guid Id);
+        public Task<Promotions> UpdateQuantityPromotion(Guid producitemId);
+
     }
 }
