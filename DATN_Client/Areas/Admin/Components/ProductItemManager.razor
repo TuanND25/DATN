@@ -347,12 +347,12 @@
 						</div>
 						<div class="col-md-6" style="height:60px">
 							<h4>Trạng thái</h4>
-							<InputSelect class="form-select" @bind-Value="@_PI_VM.Status">
+							<select class="form-select" @bind="@_PI_VM.Status">
 								<option value="0" selected>--Chọn--</option>
 								<option value="1">Còn hàng</option>
 								<option value="2">Hết hàng</option>
 								<option value="3">Ngừng kinh doanh</option>
-							</InputSelect>
+							</select>
 							<ValidationMessage For="@(()=>_PI_VM.Status)" style="color:red;" />
 						</div>
 					</div>

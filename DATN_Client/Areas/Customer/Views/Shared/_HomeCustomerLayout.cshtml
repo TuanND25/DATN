@@ -218,7 +218,7 @@
     </div>
     <header>
     </header>
-    <div style="width:80%;margin:auto">
+    <div >
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -348,6 +348,10 @@
                 });
             }
 
+        window.onload = function () {
+            autoResizeTextarea();
+        };
+
         function autoResizeTextarea() {
             var textarea = document.getElementById('auto-resize-textarea');
             if (textarea) {
@@ -361,3 +365,4 @@
 
 </body>
 </html>
+

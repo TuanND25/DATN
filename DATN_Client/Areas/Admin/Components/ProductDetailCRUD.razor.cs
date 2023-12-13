@@ -1,5 +1,6 @@
 ﻿using DATN_Client.Areas.Admin.Controllers;
 using DATN_Shared.ViewModel;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
@@ -43,8 +44,11 @@ namespace DATN_Client.Areas.Admin.Components
 		private bool isModalOpenAddColor = false;
 		private bool isModalOpenAddSize = false;
 		private bool isModalOpenAddImage = false;
+		private bool isModalOpenUpdatePI = false;
+		private bool isModalOpenXoaPI = false;
 		private IBrowserFile _file { get; set; }
 		private string _chonMau { get; set; } = string.Empty;
+		private ProductItem_Show_VM _pri_s_vm_Update = new();
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -82,6 +86,12 @@ namespace DATN_Client.Areas.Admin.Components
 					break;
 				case "AddImage":
 					isModalOpenAddImage = isOpen;
+					break;
+				case "UpdatePI":
+					isModalOpenUpdatePI = isOpen;
+					break;
+				case "XoaPI":
+					isModalOpenXoaPI = isOpen;
 					break;
 				default:
 					break;
@@ -319,6 +329,34 @@ namespace DATN_Client.Areas.Admin.Components
 			OpenPopup("AddImage");
 		}
 
+		private async Task MoUpdatePI(ProductItem_Show_VM pi)
+		{
+			_pri_s_vm_Update.Id = pi.Id;
+			_pri_s_vm_Update.ProductId = pi.ProductId;
+			_pri_s_vm_Update.ColorId = pi.ColorId;
+			_pri_s_vm_Update.SizeId = pi.SizeId;
+			_pri_s_vm_Update.CategoryID = pi.CategoryID;
+			_pri_s_vm_Update.AvaiableQuantity = pi.AvaiableQuantity;
+			_pri_s_vm_Update.PriceAfterReduction = pi.PriceAfterReduction;
+			_pri_s_vm_Update.CostPrice = pi.CostPrice;
+			_pri_s_vm_Update.Status = pi.Status;
+			OpenPopup("UpdatePI");
+		}
+
+		private async Task MoDungHDPI(ProductItem_Show_VM pi)
+		{
+			_pri_s_vm_Update.Id = pi.Id;
+			_pri_s_vm_Update.ProductId = pi.ProductId;
+			_pri_s_vm_Update.ColorId = pi.ColorId;
+			_pri_s_vm_Update.SizeId = pi.SizeId;
+			_pri_s_vm_Update.CategoryID = pi.CategoryID;
+			_pri_s_vm_Update.AvaiableQuantity = pi.AvaiableQuantity;
+			_pri_s_vm_Update.PriceAfterReduction = pi.PriceAfterReduction;
+			_pri_s_vm_Update.CostPrice = pi.CostPrice;
+			_pri_s_vm_Update.Status = 0;
+			OpenPopup("XoaPI");
+		}
+
 		private async Task Add_C()
 		{
 			if (string.IsNullOrEmpty(_C_VM.Name))
@@ -393,7 +431,7 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task AddPI()
 		{
-
+			bool checkAdd = true;
 			//	public Guid Id { get; set; }
 			//public Guid ProductId { get; set; }
 			//public Guid? ColorId { get; set; }
@@ -403,26 +441,56 @@ namespace DATN_Client.Areas.Admin.Components
 			//public int? PriceAfterReduction { get; set; }
 			//public int? CostPrice { get; set; }
 			//public int Status { get; set; } = 0;
-
-			bool checkAdd = true;
-			foreach (var item in _lst_pri_Add)
+			foreach (var x in _lst_pri_Add)
+			{
+				if (_lst_pri.Where(a => a.ColorId == x.ColorId && a.SizeId == x.SizeId && a.CategoryID == x.CategoryID).Count() > 0 || x.AvaiableQuantity <= 0 || x.CostPrice <= 0)
+				{
+					_toastService.ShowError("Tạo mới không thành công. Vui lòng thỏa mãn các điều kiện cần thiết!");
+					return;
+				}
+			}			
+			foreach (var a in _lst_pri_Add)
 			{
 				ProductItem_VM pri_vm = new ProductItem_VM()
 				{
 					Id = Guid.NewGuid(),
-					ProductId = item.ProductId,
-					ColorId = item.ColorId,
-					SizeId = item.SizeId,
-					CategoryId = item.CategoryID,
-					AvaiableQuantity = item.AvaiableQuantity,
-					CostPrice = item.CostPrice,
-					PriceAfterReduction = item.CostPrice,
-					Status = 1
-				};
-				var a = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/productitem/add_productitem", pri_vm);
-				if (a.StatusCode != System.Net.HttpStatusCode.OK) checkAdd = false;
+					ProductId = a.ProductId,
+					ColorId = a.ColorId,
+					SizeId = a.SizeId,
+					CategoryId = a.CategoryID,
+					AvaiableQuantity = a.AvaiableQuantity,
+					CostPrice = a.CostPrice,
+					PriceAfterReduction = a.CostPrice,
+					Status = a.Status
+				};				
+				var addPI = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/productitem/add_productitem", pri_vm);
+				if (addPI.StatusCode != System.Net.HttpStatusCode.OK) checkAdd = false;
+				var lstImg = await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>($"https://localhost:7141/api/Image/GetAllImage_PrductItem_ByProductId/{ProductController._productID}");
+				var lstImgMoiTam = lstImg.Where(c => c.ColorId == pri_vm.ColorId).ToList();
+				List<Image_Join_ProductItem> lstImgMoi = new();
+				foreach (var b in lstImgMoiTam)
+				{
+					if (!lstImgMoi.Any(c => c.PathImage == b.PathImage))
+					{
+						lstImgMoi.Add(b);
+					}
+				}
+				foreach (var b in lstImgMoi)
+				{
+					Image_VM img = new()
+					{
+						Id = Guid.NewGuid(),
+						Name = "",
+						STT = await _httpClient.GetFromJsonAsync<int>("https://localhost:7141/api/Image/GetSttMax"),
+						PathImage = b.PathImage,
+						ProductItemId = pri_vm.Id,
+						Status = 1
+					};
+					var addImg = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/Image/Post-Image", img);
+					if (addImg.StatusCode != System.Net.HttpStatusCode.OK) checkAdd = false;
+				}				
 			}
-			if (checkAdd = true)
+			if (checkAdd == true)
 			{
 				_lstCate_Add.Clear();
 				_lstSize_Add.Clear();
@@ -432,9 +500,9 @@ namespace DATN_Client.Areas.Admin.Components
 				await JsRuntime.InvokeVoidAsync("OnScrollEvent");
 				_toastService.ShowSuccess("Thêm thành công");
 			}
-			if (checkAdd = false)
+			if (checkAdd == false)
 			{
-				_toastService.ShowSuccess("Thêm thất bại");
+				_toastService.ShowError("Thêm thất bại");
 			}
 		}
 
@@ -500,6 +568,11 @@ namespace DATN_Client.Areas.Admin.Components
 			_file = e.File;
 			if (_file != null)
 			{
+				if (_lstImg.Any(c => c.PathImage == _file.Name))
+				{
+					_toastService.ShowError("Ảnh đã tồn tại");
+					return;
+				}
 				// Trỏ tới thư mục wwwroot để lát nữa thực hiện việc copy sang
 				var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", _file.Name);
 				using (var stream = new FileStream(path, FileMode.Create))
@@ -550,7 +623,7 @@ namespace DATN_Client.Areas.Admin.Components
 				{
 					if (a.Id == b.ProductItemId)
 					{
-						lstTam1.Add(b);						
+						lstTam1.Add(b);
 					}
 				}
 			}
@@ -564,9 +637,9 @@ namespace DATN_Client.Areas.Admin.Components
 						if (delete.StatusCode != System.Net.HttpStatusCode.OK) checkAddDelete = false;
 					}
 				}
-			}			
+			}
 			foreach (var a in _lstPri_ChonMau)
-			{				
+			{
 				foreach (var c in _lstImg_them)
 				{
 					Image_VM img = new()
@@ -588,6 +661,95 @@ namespace DATN_Client.Areas.Admin.Components
 				_lstImg_xoa.Clear();
 				_toastService.ShowSuccess("Thay đổi ảnh minh họa thành công");
 				ClosePopup("AddImage");
+			}
+			else _toastService.ShowError("Thao tác thất bại");
+		}
+
+		private async Task XacNhanUpdate()
+		{
+			bool checkStatusCode = true;
+			ProductItem_VM priUpdate = new()
+			{
+				Id = _pri_s_vm_Update.Id,
+				ProductId = _pri_s_vm_Update.ProductId,
+				ColorId = _pri_s_vm_Update.ColorId,
+				SizeId = _pri_s_vm_Update.SizeId,
+				CategoryId = _pri_s_vm_Update.CategoryID,
+				AvaiableQuantity = _pri_s_vm_Update.AvaiableQuantity,
+				CostPrice = _pri_s_vm_Update.CostPrice,
+				PriceAfterReduction = _pri_s_vm_Update.CostPrice,
+				Status = _pri_s_vm_Update.Status,
+			};
+			var checkIdColor = await _httpClient.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{_pri_s_vm_Update.Id}");
+			if (_pri_s_vm_Update.ColorId != checkIdColor.ColorId)
+			{
+
+				var lstImg = await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>($"https://localhost:7141/api/Image/GetAllImage_PrductItem_ByProductId/{ProductController._productID}");
+				var lstImgCu = lstImg.Where(c => c.ProductItemId == checkIdColor.Id).ToList();
+				var lstImgMoiTam = lstImg.Where(c => c.ColorId == _pri_s_vm_Update.ColorId).ToList();
+				List<Image_Join_ProductItem> lstImgMoi = new();
+				foreach (var item in lstImgMoiTam)
+				{
+					if (!lstImgMoi.Any(c=>c.PathImage==item.PathImage))
+					{
+						lstImgMoi.Add(item);
+					}
+				}
+				foreach (var a in lstImgCu)
+				{
+					var delete = await _httpClient.DeleteAsync($"https://localhost:7141/api/Image/Delete-Image/{a.Id}");
+					if (delete.StatusCode != System.Net.HttpStatusCode.OK) checkStatusCode = false;
+				}
+				foreach (var b in lstImgMoi)
+				{
+					Image_VM img = new()
+					{
+						Id = Guid.NewGuid(),
+						Name = "",
+						STT = await _httpClient.GetFromJsonAsync<int>("https://localhost:7141/api/Image/GetSttMax"),
+						PathImage = b.PathImage,
+						ProductItemId = _pri_s_vm_Update.Id,
+						Status = 1
+					};
+					var add = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/Image/Post-Image", img);
+					if (add.StatusCode != System.Net.HttpStatusCode.OK) checkStatusCode = false;
+				}
+			}
+			var update = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", priUpdate);
+			if (update.StatusCode == System.Net.HttpStatusCode.OK && checkStatusCode ==true)
+			{
+				ClosePopup("UpdatePI");
+				_lst_pri = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>($"https://localhost:7141/api/productitem/get_all_productitem_byProduct/{ProductController._productID}");
+				await JsRuntime.InvokeVoidAsync("OnScrollEvent");
+				_toastService.ShowSuccess("Cập nhật thành công");
+			}
+			else
+			{
+				_toastService.ShowError("Cập nhật thất bại");
+			}
+		}
+
+		private async Task XacNhanXoaPI()
+		{
+			ProductItem_VM priUpdate = new()
+			{
+				Id = _pri_s_vm_Update.Id,
+				ProductId = _pri_s_vm_Update.ProductId,
+				ColorId = _pri_s_vm_Update.ColorId,
+				SizeId = _pri_s_vm_Update.SizeId,
+				CategoryId = _pri_s_vm_Update.CategoryID,
+				AvaiableQuantity = _pri_s_vm_Update.AvaiableQuantity,
+				CostPrice = _pri_s_vm_Update.CostPrice,
+				PriceAfterReduction = _pri_s_vm_Update.CostPrice,
+				Status = _pri_s_vm_Update.Status,
+			};
+			var update = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", priUpdate);
+			if (update.StatusCode == System.Net.HttpStatusCode.OK)
+			{
+				ClosePopup("XoaPI");
+				_lst_pri = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>($"https://localhost:7141/api/productitem/get_all_productitem_byProduct/{ProductController._productID}");
+				await JsRuntime.InvokeVoidAsync("OnScrollEvent");
+				_toastService.ShowSuccess("Thao tác thành công");
 			}
 			else _toastService.ShowError("Thao tác thất bại");
 		}

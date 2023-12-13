@@ -41,19 +41,19 @@
 				var giamin = _lstPrI_show_VM.Where(c => c.ProductId == x.Id).Min(c => c.PriceAfterReduction);
 				var giamax = _lstPrI_show_VM.Where(c => c.ProductId == x.Id).Max(c => c.PriceAfterReduction);
 				int? percentMax = 0;
-                    var lsttam = BanOnlineController._lstpi_Percent.Where(c => c.ProductId == x.Id).ToList();
-                    if (lsttam.Count() > 0)
-                    {
-                        percentMax = lsttam.Max(c => c.Percent);
-                        if (percentMax == null) percentMax = 0;
-                    }
+				var lsttam = BanOnlineController._lstpi_Percent.Where(c => c.ProductId == x.Id).ToList();
+				if (lsttam.Count() > 0)
+				{
+					percentMax = lsttam.Max(c => c.Percent);
+					if (percentMax == null) percentMax = 0;
+				}
 				<div class="col-md-3" style="position: relative;">
 					<a href="/product-detail/@x.Id">
 						<img class="img-thumbnail" src="/images/@img" alt="" style="width:100%;height:400px">
-						 @if (percentMax > 0)
-                            {
-                                <div class="discount-label">-@(percentMax)%</div>
-                            }
+						@if (percentMax > 0)
+						{
+							<div class="discount-label">-@(percentMax)%</div>
+						}
 					</a>
 					@x.Name <br>
 					@{
@@ -75,10 +75,10 @@
 		<br />
 		<center>
 			<h2 style="font-size:16px">Không tìm thấy kết quả phù hợp với từ khóa <b>"@BanOnlineController._valueSearch"</b>. Vui lòng nhập từ khóa khác và thử lại!</h2>
-			</center>
-			<br />
-			<br />
-		<div class="row">
+		</center>
+		<br />
+		<br />
+		<div class="row" style="margin-bottom:300px">
 			<center>
 				<div class="search" style="margin-left:30px;width:60%">
 					<input placeholder="Search..." type="text" style="width:100%" @bind-value="_searchProduct" required>

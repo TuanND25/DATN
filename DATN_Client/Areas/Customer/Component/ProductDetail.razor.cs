@@ -44,7 +44,7 @@ namespace DATN_Client.Areas.Customer.Component
 		{
 			_ss = _ihttpcontextaccessor.HttpContext.Session;
 			_iduser = (_ss.GetString("UserId"));
-			_lstPrI_show_VM = (await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show")).Where(c => c.ProductId == BanOnlineController._idP).ToList();
+			_lstPrI_show_VM = (await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show")).Where(c => c.ProductId == BanOnlineController._idP && c.Status==1).ToList();
 			_p_VM = await _client.GetFromJsonAsync<Products_VM>($"https://localhost:7141/api/product/get_product_byid/{BanOnlineController._idP}");
 			_lstImg_PI = (await _client.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem")).Where(c => c.ProductId == BanOnlineController._idP).ToList();
 			_lstImg_PI_tam = _lstImg_PI; // Ảnh tạm

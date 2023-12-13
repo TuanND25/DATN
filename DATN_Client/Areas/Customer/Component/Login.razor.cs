@@ -21,8 +21,8 @@ namespace DATN_Client.Areas.Customer.Component
         public List<User> Users { get; set; }
         LoginUser loginUser = new LoginUser();
         public string Idsession { get; set; } = string.Empty;
-		
-		public async Task login()
+        public static string Roleuser { get; set; } = string.Empty;
+        public async Task login()
         {
             if (loginUser.UserName== string.Empty || loginUser.Password == string.Empty)
             {
@@ -62,15 +62,16 @@ namespace DATN_Client.Areas.Customer.Component
 
                 var data = claims.Select(c => c.Value).ToArray();
                 var id = data[0];
+                Roleuser = data[2];
                 iHttpContext.HttpContext.Session.SetString("UserId", id);
                 iHttpContext.HttpContext.Session.SetString("Token", token);
+				
 
 
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var responseAuthorize = await _httpClient.GetAsync("https://localhost:7141/api/user/get-user");
                 if (principal.IsInRole("Admin"))
-                {
-
+                {                   
                     navigationManager.NavigateTo("https://localhost:7075/Admin", true);
                 }
                 else
