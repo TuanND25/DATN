@@ -120,10 +120,6 @@ namespace DATN_API.Service_IService.Services
                         join s in _context.Sizes on prI.SizeId equals s.Id
                         join c in _context.Colors on prI.ColorId equals c.Id
                         join cate in _context.Categories on prI.CategoryId equals cate.Id
-                        join pi in _context.PromotionsItem on prI.Id equals pi.ProductItemsId into promoItems
-                        from pi in promoItems.DefaultIfEmpty()
-                        join p in _context.Promotions on (pi != null ? pi.PromotionsId : Guid.Empty) equals p.Id into promotions
-                        from p in promotions.DefaultIfEmpty()
                         select new ProductItem_Show_VM()
                         {
                             Id = prI.Id,
@@ -138,15 +134,34 @@ namespace DATN_API.Service_IService.Services
                             PriceAfterReduction = prI.PriceAfterReduction,
                             CostPrice = prI.CostPrice,
                             Status = prI.Status,
-                            Percent = (p != null ? p.Percent : 0),
                         }).ToList();
 
             return list;
         }
 
-        public Task<List<ProductItem_Show_VM>> GetAllProductShowHome()
+        public async Task<List<ProductItem_Show_VM>> GetAllProductShowHome()
         {
-            throw new NotImplementedException();
+            var list = (from prI in _context.ProductItems
+                        join pr in _context.Products on prI.ProductId equals pr.Id
+                        join cate in _context.Categories on prI.CategoryId equals cate.Id
+                        join pi in _context.PromotionsItem on prI.Id equals pi.ProductItemsId into promoItems
+                        from pi in promoItems.DefaultIfEmpty()
+                        join p in _context.Promotions on (pi != null ? pi.PromotionsId : Guid.Empty) equals p.Id into promotions
+                        from p in promotions.DefaultIfEmpty()
+                        select new ProductItem_Show_VM()
+                        {
+                            Id = prI.Id,
+                            ProductId = prI.ProductId,
+                            Name = pr.Name,
+                            CategoryID = prI.CategoryId,
+                            CategoryName = cate.Name,
+                            PriceAfterReduction = prI.PriceAfterReduction,
+                            CostPrice = prI.CostPrice,
+                            Status = prI.Status,
+                            Percent = (p != null ? p.Percent : 0),
+                        }).ToList();
+
+            return list;
         }
 
         public async Task<ProductItems> UpdateProductItem(ProductItems item)
