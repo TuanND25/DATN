@@ -9,7 +9,7 @@ namespace DATN_Client.Areas.Admin.Controllers
 		
         public IActionResult Index()
         {
-            return View();
+          
             if (Login.Roleuser == "Admin" || Login.Roleuser== "Staff")
 			{
                 return View();
