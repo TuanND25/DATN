@@ -132,6 +132,7 @@ namespace DATN_API.Service_IService.Services
                             CategoryID = prI.CategoryId,
                             CategoryName = cate.Name,
                             PriceAfterReduction = prI.PriceAfterReduction,
+                            AvaiableQuantity = prI.AvaiableQuantity,
                             CostPrice = prI.CostPrice,
                             Status = prI.Status,
                         }).ToList();
