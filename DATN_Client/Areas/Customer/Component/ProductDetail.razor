@@ -166,12 +166,12 @@
 					</div>
 					} *@
 					<div class="row">
-						<div class="col-md-2" style="height: 550px; overflow-y: auto;text-align:center">
+						<div class="col-md-2" style="height: 760px; overflow-y: auto;text-align:center">
 							@foreach (var x in _lstImg_PI_tam.OrderBy(c => c.STT))
 							{
 								<div style="margin-bottom:30px;margin-top:30px">
 									<a @onclick="()=>LoadAnh(x.Id)">
-										<img class="img-thumbnail" src="/images/@x.PathImage" alt="" style="width: 100px;height: 110px;" />
+										<img class="img-thumbnail" src="/images/@x.PathImage" alt="" style="width: 120px;height: 132px;" />
 									</a>
 								</div>
 							}
@@ -250,9 +250,9 @@
 								{
 									var check =
 									_lstPrI_show_VM.
-									FirstOrDefault(c =>
+									Where(c =>
 									c.ColorName == _chonMau &&
-									c.SizeName == x);
+									c.SizeName == x).FirstOrDefault();
 									if (check == null || check.AvaiableQuantity == 0)
 									{
 										checkSoLuongInput = true;
@@ -298,12 +298,13 @@
 						</button>
 					</div>
 					@*Mô tả sản phẩm - Giới thiệu*@
-					
-						<div class="description-productdetail">
+
+					<div style="margin-top:10px">
+						<span>Mô tả</span>
 						<textarea id="auto-resize-textarea" class="txt-description">@_p_VM.Description</textarea>
 						@* <>@_p_VM.Description</> *@
-						</div>
-					
+					</div>
+
 				</div>
 			</div>
 		</div>
