@@ -159,7 +159,7 @@ else
                             <hr />
                             @foreach (var c in LoadBillItemByBill(a.Id))
                             {
-                                <div class="row" style="margin: 15px 0;" @onclick="()=>NavBillItem(a)">
+                                <div class="row" style="margin: 15px 0;" @onclick="()=>NavBillItem(a.Id)">
                                     <div class="col-md-2" style="width:110px;">
                                         <img src="https://product.hstatic.net/200000312481/product/ato1007_2_21baaf6cd76d4e6c9b49758dd8d933b8_master.jpg" style="width:95px;height:95px;" />
                                     </div>
@@ -176,20 +176,24 @@ else
                             }
                             <div class="row" style="margin-top:20px;">
                                 <span style="text-align:right;">
-                                    Thành tiền:  <span style="color: #ee4d2d;font-size:16pt;font-weight:500;margin-left:10px;">₫@(a.TotalAmount?.ToString("#,##0"))</span>
+                                    Tổng tiền:  <span style="color: #ee4d2d;font-size:16pt;font-weight:500;margin-left:10px;">₫@(a.TotalAmount?.ToString("#,##0"))</span>
                                 </span>
                             </div>
-                            <div style="display:flex;float:right;">
-                                <button type="button" class="button">Đánh giá</button>
+                            <div style="display:flex;float:right;">                                   
+                                    @if (_lstPayM.FirstOrDefault(c=>c.Id==a.PaymentMethodId).Name == "Thanh toán Momo")
+                                    {
+                                        <button type="button" class="button">Thanh toán đơn hàng</button>
+                                    }
                                 <button type="button" class="button1" style="margin-left:20px;">Mua lại</button>
-                                <button type="button" class="button1" style="margin-left:20px;" @onclick="()=>NavBillItem(a)">Chi tiết</button>
+                                <button type="button" class="button1" style="margin-left:20px;" @onclick="()=>NavBillItem(a.Id)">Chi tiết</button>
                             </div>
                         </div>
                     </div>
                 </div>
             }
 
-        </div> @*đóng div của " tất cả"*@
+        </div> 
+                                @*đóng div của " tất cả"*@
 
 
 

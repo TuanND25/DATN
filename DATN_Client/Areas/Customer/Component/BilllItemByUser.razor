@@ -224,7 +224,7 @@
                             <p>5</p>
                             <i class="uil fa-solid fa-check"></i>
                         </div>
-                        <p class="text">Đánh giá </p>
+                        <p class="text">Đánh giá</p>
                     </li>
                 </ul>
             </div>
@@ -292,7 +292,7 @@
                 <div class="col-md-6">
                     @if (_bill_ShowModel.Status == 2)
                     {
-                        <button type="button" class="button" style="float:right;">Đánh giá</button>
+                        <button type="button" class="button" style="float:right;" @onclick="ThanhToanHdMomo">Đánh giá</button>
                     }
                     else if (_bill_ShowModel.Status == 1)
                     {

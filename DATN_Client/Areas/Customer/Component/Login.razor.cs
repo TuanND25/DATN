@@ -23,11 +23,12 @@ namespace DATN_Client.Areas.Customer.Component
         public string Idsession { get; set; } = string.Empty;
         public static string Roleuser { get; set; } = string.Empty;
         public static string UserNameShowHome { get; set; }
+        public static bool _chaoLogin { get; set; } = false;
         public async Task login()
         {
             if (loginUser.UserName== string.Empty || loginUser.Password == string.Empty)
             {
-				_toastService.ShowError("vui lòng điền đầy đủ thông tin");
+				_toastService.ShowError("Vui lòng điền đầy đủ thông tin");
                 return;
 
 			}
@@ -80,17 +81,32 @@ namespace DATN_Client.Areas.Customer.Component
 
                     var iduser = Guid.Parse(iHttpContext.HttpContext.Session.GetString("UserId"));
                     var user = await _httpClient.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get_user_by_id/{iduser}");
-                    _toastService.ShowSuccess("Hi," + user.Name);
-                    UserNameShowHome = user.UserName;
-                    await Task.Delay(3000);
+                    UserNameShowHome = LayChuCuoiName(user.Name);
+                    _chaoLogin = true;
                     navigationManager.NavigateTo("/home", true);
-                    
                 }
-
             }
             else
             {
                 _toastService.ShowError(result.Result);
+            }
+        }
+
+        static string LayChuCuoiName(string input)
+        {
+            input = input.Trim();
+            // Kiểm tra xem chuỗi có khoảng trắng không
+            int lastSpaceIndex = input.LastIndexOf(' ');
+
+            // Nếu có khoảng trắng, lấy phần cuối cùng
+            if (lastSpaceIndex >= 0 && lastSpaceIndex < input.Length - 1)
+            {
+                return input.Substring(lastSpaceIndex + 1);
+            }
+            else
+            {
+                // Nếu không có khoảng trắng, trả về toàn bộ chuỗi
+                return input;
             }
         }
     }

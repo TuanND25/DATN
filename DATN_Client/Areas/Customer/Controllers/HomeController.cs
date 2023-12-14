@@ -22,10 +22,10 @@ namespace DATN_Client.Areas.Customer.Controllers
 		{
 			_httpClient= httpClient;
 		}
+		[Route("/home")]
         public IActionResult Index()
         {
-			HttpContext.Session.SetString($"{Guid.NewGuid()}", JsonConvert.SerializeObject(Guid.NewGuid()));
-			
+			HttpContext.Session.SetString($"{Guid.NewGuid()}", JsonConvert.SerializeObject(Guid.NewGuid()));			
 			return View();
         }
 	}

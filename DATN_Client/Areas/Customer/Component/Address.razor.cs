@@ -37,19 +37,27 @@ namespace DATN_Client.Areas.Customer.Component
         bool isLoader = false;
         protected override async Task OnInitializedAsync()
         {
-            isLoader = true;
-            //var token = _ihttpcontextaccessor.HttpContext.Session.GetString("Token"); // Gọi token
-            //_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token); // Xác thực
-            var a = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
-            //var a = Guid.Parse("a4c10abe-eec2-40e6-9b6c-cf1221e9da78");
-            User_VM = await _client.GetFromJsonAsync<User>($"https://localhost:7141/api/user/get_user_by_id/{a}");
-            var d = await _client.GetFromJsonAsync<List<AddressShip_VM>>($"https://localhost:7141/api/AddressShip/get_address_by_UserID/{a}");
-            _lstAddressGetById = d.OrderByDescending(x => x.Status).ToList();
-            _lstTinhTp_Data = await _client.GetFromJsonAsync<List<Province_VM>>("https://api.npoint.io/ac646cb54b295b9555be");
-            _lstTinhTp = _lstTinhTp_Data;
-            _lstQuanHuyen_Data = await _client.GetFromJsonAsync<List<District_VM>>("https://api.npoint.io/34608ea16bebc5cffd42");
-            _lstXaPhuong_Data = await _client.GetFromJsonAsync<List<Ward_VM>>("https://api.npoint.io/dd278dc276e65c68cdf5");
-            isLoader = false;
+            try
+            {
+				isLoader = true;
+				//var token = _ihttpcontextaccessor.HttpContext.Session.GetString("Token"); // Gọi token
+				//_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token); // Xác thực
+				var a = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
+				//var a = Guid.Parse("a4c10abe-eec2-40e6-9b6c-cf1221e9da78");
+				User_VM = await _client.GetFromJsonAsync<User>($"https://localhost:7141/api/user/get_user_by_id/{a}");
+				var d = await _client.GetFromJsonAsync<List<AddressShip_VM>>($"https://localhost:7141/api/AddressShip/get_address_by_UserID/{a}");
+				_lstAddressGetById = d.OrderByDescending(x => x.Status).ToList();
+				_lstTinhTp_Data = await _client.GetFromJsonAsync<List<Province_VM>>("https://api.npoint.io/ac646cb54b295b9555be");
+				_lstTinhTp = _lstTinhTp_Data;
+				_lstQuanHuyen_Data = await _client.GetFromJsonAsync<List<District_VM>>("https://api.npoint.io/34608ea16bebc5cffd42");
+				_lstXaPhuong_Data = await _client.GetFromJsonAsync<List<Ward_VM>>("https://api.npoint.io/dd278dc276e65c68cdf5");
+				isLoader = false;
+			}
+            catch (Exception)
+            {
+
+                _navigationManager.NavigateTo("/home",true);
+            }
         }
 
         public async Task AddAdress()

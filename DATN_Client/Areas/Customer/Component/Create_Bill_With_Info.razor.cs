@@ -17,7 +17,6 @@ namespace DATN_Client.Areas.Customer.Component
 		[Inject] private NavigationManager _navi { get; set; }
 		[Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
 		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
-																				   //private List<User_VM> _lstUser = new List<User_VM>();
 		private List<CartItems_VM> _lstCI = new();
 		private List<Image_Join_ProductItem> _lstImg_PI = new();
 		private List<Image_Join_ProductItem> _lstImg_PI_tam = new();
