@@ -71,14 +71,9 @@ namespace DATN_Client.Areas.Customer.Controllers
         {
             HttpContext.Session.Remove("UserId");
             HttpContext.Session.Remove("Token");
-<<<<<<< HEAD
             DATN_Client.Areas.Customer.Component.Login.UserNameShowHome = null;
             return RedirectToAction("Index", "Home", new { Area = "Customer" });
-=======
-            
-
-			return RedirectToAction("Index", "Home", new { Area = "Customer" });
->>>>>>> master
+           
         }
 
         public async Task<IActionResult> forget()
