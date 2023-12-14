@@ -323,3 +323,11 @@
   }
 
 })();
+
+window.saveAsFile = (fileName, byteBase64) => {
+    const link = document.createElement('a');
+    link.href = 'data:application/octet-stream;base64,' + byteBase64;
+    link.download = fileName;
+    link.click();
+    link.remove();
+};

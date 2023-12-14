@@ -1,4 +1,5 @@
-﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@using DATN_Client.Areas.Customer.Component
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,144 +25,71 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
 <style>
-    .imgInHeader {
-        width: 25%;
-        cursor: pointer;
+        .dropdown {
+        position: relative;
+        display: inline-block;
     }
 
-    .hinhtron {
-        border-radius: 50%;
-        background-color: #7dccff;
+    .dropdown img {
+
+        height: 25px;
+        object-fit: cover;
+        
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+    .dropdown:hover img {
+        transform: scale(1.1);
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 200px;
         padding: 10px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #333;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown-content a {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        color: #333;
+        text-decoration: none;
+    }
+
+    .dropdown-content a i {
         margin-right: 10px;
     }
 
-    .hearderLogo {
+    .dropdown-content a:hover {
+        color: #86d6ff;
+    }
+
+        .user-header {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 30px;
-    }
-
-    .telephone {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: Futura;
-        cursor: pointer;
-    }
-
-    .imgUserHeader {
-        width: 150%;
-        cursor: pointer;
-    }
-
-    .imgCartHeader {
-        width: 150%;
-        cursor: pointer;
-    }
-
-    .countCart {
-        position: absolute;
-        background-color: red;
-        padding: 2px 5px 2px 5px;
-        border-radius: 50%;
-        font-size: 10px;
-        color: white;
-        top: -10px;
-        right: -20px;
-    }
-
-    .borderHeader {
-        border-bottom: 2px solid #f3f3f3;
-        padding-bottom: 10px;
-    }
-
-    .navbarHeader {
-        display: flex;
-        justify-content: center;
         align-items: center;
     }
 
-    .aNavbar {
-        text-decoration: none;
-        color: #333333;
-        padding: 15px
-    }
-
-        .aNavbar:hover {
-            color: #7dccff;
+        .user-header img {
+            height: 25px;
+            object-fit: cover;
+            margin-right: 10px;
         }
 
-    .navbarHeader ul {
-        list-style: none;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-        .navbarHeader ul li {
-            position: relative;
+        .user-header .user-text {
+            color: #333;
         }
-
-            .navbarHeader ul li ul {
-                display: none;
-            }
-
-            .navbarHeader ul li:hover ul {
-                position: absolute;
-                display: flex;
-                flex-direction: column;
-                display: block;
-                z-index: 99;
-                /* left: -20px;*/
-                background-color: #ffffff;
-                color: #000;
-                width: fit-content;
-                padding-left: 5px;
-                font-size: 15px;
-            }
-
-            .navbarHeader ul li ul li {
-                text-align: left;
-                color: #000;
-                padding-left: 0px;
-            }
-
-                .navbarHeader ul li ul li:hover a {
-                    color: #7dccff;
-                    text-align: left;
-                    background-color: #f1f1f1;
-                }
-
-                .navbarHeader ul li ul li a {
-                    display: block;
-                    width: 100%;
-                    color: #000;
-                    text-align: left;
-                    padding: 10px;
-                    align-items: flex-start;
-                }
-
-    .absoluteContent {
-        display: none;
-        position: absolute;
-        right: -10px;
-        z-index: 98;
-    }
-
-
-    .contentUser {
-        display: flex;
-        justify-content: space-between;
-        width: 150px;
-        background-color: red;
-        padding: 10px 5px 10px 5px;
-    }
-
-    .relativeContent:hover .absoluteContent {
-        display: block;
-    }
 </style>
 <body>
     @*----*@
@@ -176,17 +104,51 @@
                 <div style="margin-right:25px">
                     <div style="position:relative" class="relativeContent">
 
-                        <a asp-area="Customer" asp-controller="UserManagement" asp-action="Index"><img src="/img/user.svg" class="imgUserHeader" /></a>
-                        @* <div class="absoluteContent">
-                            <div class="contentUser">
-                            <label style="margin-right:10px;">Đăng xuất</label>
-                            <img src="/img/iconLogOut.svg" style="transform: rotate(3.142rad);" />
+                        
+                        <div class="dropdown">
+                            @{
+                                var a = Login.UserNameShowHome;
+                            }
+                            <div class="user-header">
+                                <span class="user-text" style="margin-right:10px;font-size:10pt;font-weight:700;">@a</span>
+                                <img src="/img/user.svg" class="" />
+
                             </div>
-                            <div class="contentUser">
-                            <label style="margin-right:10px;">Hóa đơn</label>
-                            <img src="/img/iconBill.svg" />
+
+                            <div class="dropdown-content">
+                                @if (a == null)
+                                {
+                                    <a style="margin-bottom:7px;" asp-area="Customer" asp-controller="Login" asp-action="Login">
+                                        <i class="fas fa-sign-in-alt" style="margin-right:13px;"></i>
+                                        Đăng nhập
+                                    </a>
+                                    <a style="margin-bottom:7px;" asp-area="Customer" asp-controller="SignUp" asp-action="Index">
+                                        <i class="fas fa-user-plus"></i>
+                                        Đăng ký
+                                    </a>
+                                }
+                                else
+                                {
+                                <a style="margin-bottom:7px;" asp-area="Customer" asp-controller="UserManagement" asp-action="Index">
+                                    <i class="fa-regular fa-user" style="margin-right:13px;"></i>
+                                    Thông tin tài khoản
+                                </a>
+                                <a style="margin-bottom:7px;" asp-area="Customer" asp-controller="UserManagement" asp-action="BillByUser">
+                                    <i class="fa-solid fa-clipboard-list" style="margin-right:13px;"></i>
+                                    Danh sách đơn hàng
+                                </a>
+                                <a style="margin-bottom:7px;" asp-area="Customer" asp-controller="Login" asp-action="LogOut">
+                                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                    Đăng xuất
+                                </a>
+                                    
+                                }
+
                             </div>
-                            </div>*@
+                        </div>
+
+
+
                     </div>
                 </div>
                 <div style=" position: relative">

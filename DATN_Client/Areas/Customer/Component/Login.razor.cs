@@ -22,6 +22,7 @@ namespace DATN_Client.Areas.Customer.Component
         LoginUser loginUser = new LoginUser();
         public string Idsession { get; set; } = string.Empty;
         public static string Roleuser { get; set; } = string.Empty;
+        public static string UserNameShowHome { get; set; }
         public async Task login()
         {
             if (loginUser.UserName== string.Empty || loginUser.Password == string.Empty)
@@ -63,7 +64,7 @@ namespace DATN_Client.Areas.Customer.Component
                 var data = claims.Select(c => c.Value).ToArray();
                 var id = data[0];
                 Roleuser = data[2];
-                iHttpContext.HttpContext.Session.SetString("UserId", id);
+                iHttpContext.HttpContext.Session.SetString("UserId", id);                
                 iHttpContext.HttpContext.Session.SetString("Token", token);
 				
 
@@ -80,8 +81,10 @@ namespace DATN_Client.Areas.Customer.Component
                     var iduser = Guid.Parse(iHttpContext.HttpContext.Session.GetString("UserId"));
                     var user = await _httpClient.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get_user_by_id/{iduser}");
                     _toastService.ShowSuccess("Hi," + user.Name);
+                    UserNameShowHome = user.UserName;
                     await Task.Delay(3000);
-                    navigationManager.NavigateTo("/all-product", true);
+                    navigationManager.NavigateTo("/home", true);
+                    
                 }
 
             }

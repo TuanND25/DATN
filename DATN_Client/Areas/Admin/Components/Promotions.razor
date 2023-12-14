@@ -1,4 +1,39 @@
-﻿<div class="card">
+﻿@inject IJSRuntime JSRuntime
+
+<style>
+    .cssbuttons-io-button {
+        display: flex;
+        align-items: center;
+        font-family: inherit;
+        font-weight: 500;
+        font-size: 17px;
+        padding: 0.5em 1.5em 0.5em 1.2em;
+        color: white;
+        background: #3aa856;
+        background: linear-gradient( 0deg, rgba(0, 123, 255, 1) 0%, rgba(0, 187, 255, 1) 100% );
+        border: none;
+        box-shadow: 0 0.7em 1.5em -0.5em #4d36d0be;
+        letter-spacing: 0.05em;
+        border-radius: 3pt;
+    }
+
+        .cssbuttons-io-button i {
+            margin-right: 8px;
+        }
+
+        .cssbuttons-io-button:hover {
+            box-shadow: 0 0.5em 1.5em -0.5em #4d36d0be;
+        }
+
+        .cssbuttons-io-button:active {
+            box-shadow: 0 0.3em 1em -0.5em #4d36d0be;
+        }
+
+
+
+
+</style>
+<div class="card">
     <div class="card-body">
         <h3 style="margin-top:20px">Khuyến mại</h3>
         <div class="pagetitle">
@@ -32,7 +67,7 @@
                     <div class="col-sm-7">
                         <div class="row mb-3">
                             <div class="col-md-2"></div>
-                            <div class="col-sm-8">
+                            <div class="col-sm-8" style="margin-left:40px;">
                                 <InputText @bind-Value="_promotionName" class="form-control" placeholder="Search..." />
                             </div>
                             <button type="button" class="btn btn-info col-1" style="width:38px;height:38px;" @onclick="Search"><i class="fas fa-search fa-lg"></i></button>
@@ -49,9 +84,18 @@
                     <div class="col-sm-2">
                         <input type="date" class="form-control" @bind-value="EndDateValue" @oninput="Loc">
                     </div>
-                    <div class="col-sm-4"></div>
-                    <div class="col-sm-2">
-                        <button type="button" class="btn btn-outline-success" style="float:right" @onclick="NavigationAddPromotion">Tạo mới</button>
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-3" style="display:flex;justify-content: flex-end;margin-left:130px;">
+                        <button class="cssbuttons-io-button1" @onclick="ExportExcel" style="margin-right:20px;">
+                            <i class="fa-regular fa-cloud-arrow-down"></i>
+                            <span>Xuất Excel</span>
+                        </button>
+
+                        <button class="cssbuttons-io-button" @onclick="NavigationAddPromotion">
+                            <i class="fa-regular fa-plus"></i>
+                            <span>Tạo mới</span>
+                        </button>
+
                     </div>
                 </div>
             </EditForm>
@@ -108,7 +152,7 @@
                             <td>@(count++)</td>
                             <td>@a.Name</td>
                             <td>@a.Percent</td>
-                            <td style="vertical-align:middle;">@(a.Quantity>2000000000?"Không giới hạn":@a.Quantity)</td> 
+                            <td style="vertical-align:middle;">@(a.Quantity>2000000000?"Không giới hạn":@a.Quantity)</td>
                             <td>@a.StartDate</td>
                             <td>@a.EndDate</td>
                             <td>@a.Description</td>

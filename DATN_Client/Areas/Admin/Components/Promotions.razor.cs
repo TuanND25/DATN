@@ -1,6 +1,11 @@
-﻿using DATN_Client.Areas.Admin.Controllers;
+﻿using ClosedXML.Excel;
+using DATN_Client.Areas.Admin.Controllers;
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using Microsoft.JSInterop;
 
 namespace DATN_Client.Areas.Admin.Components
 {
@@ -19,6 +24,11 @@ namespace DATN_Client.Areas.Admin.Components
         private DateTime StartDateValue = new DateTime(2000, 1, 1);
         private DateTime EndDateValue = new DateTime(2000, 1, 1);
         private string? _promotionName = null;
+        //private JSRuntime _runtime;
+
+
+        private string fileName;
+        private string filePath;
 
         protected override async Task OnInitializedAsync()
         {
@@ -41,13 +51,19 @@ namespace DATN_Client.Areas.Admin.Components
             _promotion_VM = promotionVM;
             _promotion_VM.Status = 0;
             var a = await _httpClient.PutAsJsonAsync<Promotions_VM>("https://localhost:7141/api/promotion/update", _promotion_VM);
-            
+
             var d = await _httpClient.GetFromJsonAsync<List<ProductItem_VM>>($"https://localhost:7141/api/productitem/ProductItem_By_PromotionId/{promotionVM.Id}");
             foreach (var item in d)
             {
                 var productItem = await _httpClient.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{item.Id}");
                 productItem.PriceAfterReduction = productItem.CostPrice;
                 var t = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", productItem);
+            }
+            var e = await _httpClient.GetFromJsonAsync<List<PromotionItem_VM>>($"https://localhost:7141/api/PromotionItem/PromotionItem_By_Promotion/{_promotion_VM.Id}");
+            foreach (var item in e)
+            {
+                item.Status = 0;
+                var f = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/PromotionItem/update", item);
             }
             _navigationManager.NavigateTo("https://localhost:7075/Admin/Promotion", true);
         }
@@ -88,5 +104,86 @@ namespace DATN_Client.Areas.Admin.Components
             }
         }
 
+
+        public async Task ExportExcel()
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Sheet1");
+                // Merge hai dòng đầu
+                worksheet.Cells["A1:H2"].Merge = true;
+
+                // Ghi dòng chữ "Danh sách khuyến mại của BH Unisex" và căn giữa
+                worksheet.Cells["A1"].Value = "Danh sách khuyến mại của BH Unisex";
+                worksheet.Cells["A1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells["A1"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                worksheet.Cells["A1"].Style.Font.Bold = true;
+                worksheet.Cells["A1"].Style.Font.Size = 20;
+
+                // Ghi các tiêu đề cột
+                worksheet.Cells[3, 1].Value = "STT";
+                worksheet.Cells[3, 2].Value = "Tên khuyến mại";
+                worksheet.Cells[3, 3].Value = "Phần trăm giảm";
+                worksheet.Cells[3, 4].Value = "Số lượng";
+                worksheet.Cells[3, 5].Value = "Ngày bắt đầu";
+                worksheet.Cells[3, 6].Value = "Ngày kết thúc";
+                worksheet.Cells[3, 7].Value = "Mô tả";
+                worksheet.Cells[3, 8].Value = "Tình trạng";
+
+                var headerRange = worksheet.Cells[3, 1, 3, 8];  // cái này để tạo viền
+                headerRange.Style.Font.Bold = true;  // in đậm 
+                headerRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;  // căn giữa
+                headerRange.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                headerRange.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                headerRange.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                headerRange.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                // ...
+
+                // Thiết lập độ rộng của các cột
+                for (int i = 1; i <= 8; i++)
+                {
+                    worksheet.Column(i).Width = worksheet.Cells[3, i].Value.ToString().Length + 5;
+                }
+                worksheet.Column(5).Width = 20; // Đặt độ rộng cột "Ngày bắt đầu" là 20
+                worksheet.Column(6).Width = 20; // Đặt độ rộng cột "Ngày bắt đầu" là 20
+                worksheet.Column(6).Width = 25; // Đặt độ rộng cột "Ngày bắt đầu" là 20
+                // Ghi dữ liệu từ danh sách đối tượng vào các ô tương ứng
+                for (int i = 0; i < _lstPromotion.Count; i++)
+                {
+                    Promotions_VM promotion = _lstPromotion[i];
+                    worksheet.Cells[i + 4, 1].Value = i;
+                    worksheet.Cells[i + 4, 2].Value = promotion.Name;
+                    worksheet.Cells[i + 4, 3].Value = promotion.Percent;
+                    worksheet.Cells[i + 4, 4].Value = promotion.Quantity;
+                    worksheet.Cells[i + 4, 5].Value = promotion.StartDate;
+                    worksheet.Cells[i + 4, 6].Value = promotion.EndDate;
+                    worksheet.Cells[i + 4, 7].Value = promotion.Description;
+                    worksheet.Cells[i + 4, 8].Value = promotion.Status;
+
+
+                    worksheet.Cells[i + 4, 5].Style.Numberformat.Format = "dd/MM/yyyy HH:mm:ss"; // định dạng ngày và giờ 
+                    worksheet.Cells[i + 4, 6].Style.Numberformat.Format = "dd/MM/yyyy HH:mm:ss";
+                    worksheet.Cells[i + 4, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;  // căn giữa 
+                    worksheet.Cells[i + 4, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center; 
+                    worksheet.Cells[i + 4, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[i + 4, 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    var dataRange = worksheet.Cells[i + 4, 1, i + 4, 8];
+                    headerRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center; // căn giữa 
+                    dataRange.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    dataRange.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    dataRange.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    dataRange.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    // ...
+                }
+
+
+                var stream = new MemoryStream(package.GetAsByteArray());
+                var fileName = "myobjects.xlsx"; // Tên file mặc định
+                await JSRuntime.InvokeVoidAsync("saveAsFile", fileName, Convert.ToBase64String(stream.ToArray()));
+
+            }
+        }
     }
 }
