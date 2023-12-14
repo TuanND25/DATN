@@ -4,39 +4,54 @@ using Microsoft.AspNetCore.Components;
 
 namespace DATN_Client.Areas.Customer.Component
 {
-    public partial class BillByUser
-    {
-        [Inject] NavigationManager _navigationManager { get; set; }
-        HttpClient _httpClient=new HttpClient();
-        [Inject] Blazored.Toast.Services.IToastService _toastService { get; set; }
-        [Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
-        public static Bill_VM _bill_VM=new Bill_VM();
-        List<Bill_VM> _lstBills = new List<Bill_VM>();
-        User _user=new User();
-        List<BillDetailShow> _listBillItem = new List<BillDetailShow>();
-        bool isLoader = false;
+	public partial class BillByUser
+	{
+		[Inject] private NavigationManager _navigationManager { get; set; }
+		private HttpClient _httpClient = new HttpClient();
+		[Inject] private Blazored.Toast.Services.IToastService _toastService { get; set; }
+		[Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
+		private List<Bill_VM> _lstBills = new List<Bill_VM>();
+		private User _user = new User();
+		private List<BillDetailShow> _listBillItem = new List<BillDetailShow>();
+		private List<PaymentMethod_VM> _lstPayM = new();
+		private bool isLoader = false;
 
-        protected override async Task OnInitializedAsync()
-        {
-            isLoader = true;
-            var a = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
-            //var a = Guid.Parse("F3C0CEA4-8F18-4990-908A-5DF1169F87A2");
+		protected override async Task OnInitializedAsync()
+		{
+			isLoader = true;
+			var a = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
+			//var a = Guid.Parse("F3C0CEA4-8F18-4990-908A-5DF1169F87A2");
+			if (!string.IsNullOrEmpty(a))
+			{
+				_user = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7141/api/user/get_user_by_id/{a}");
+				_lstBills = await _httpClient.GetFromJsonAsync<List<Bill_VM>>($"https://localhost:7141/api/Bill/get_bill_by_user/{a}");
+				_lstBills = _lstBills.OrderByDescending(x => x.CreateDate).ToList();
+				_listBillItem = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>($"https://localhost:7141/api/BillItem/get_alll_billItem_by_UserId/{a}");
+				_lstPayM = await _httpClient.GetFromJsonAsync<List<PaymentMethod_VM>>("https://localhost:7141/api/paymentMethod/get_all_paymentMethod");
+			}
+			else _navigationManager.NavigateTo("/home", true);
+			isLoader = false;
+		}
 
-            _user = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7141/api/user/get_user_by_id/{a}");
-            _lstBills = await _httpClient.GetFromJsonAsync<List<Bill_VM>>($"https://localhost:7141/api/Bill/get_bill_by_user/{a}");
-            _lstBills=_lstBills.OrderByDescending(x => x.CreateDate).ToList() ;
-            _listBillItem = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>($"https://localhost:7141/api/BillItem/get_alll_billItem_by_UserId/{a}"); 
-            isLoader = false;
-        }
-        public async Task NavBillItem(Bill_VM bill_VM)
-        {
-            _bill_VM = bill_VM;
-            _navigationManager.NavigateTo("https://localhost:7075/Customer/UserManagement/BilllItemByUser", true);
-        }
-        public List<BillDetailShow> LoadBillItemByBill(Guid Id)
-        {
-            var b = _listBillItem.Where(x => x.BillID == Id).ToList();
-            return b;
-        }
-    }
+		private async Task NavBillItem(Guid billid)
+		{
+			_navigationManager.NavigateTo($"/account/bill-history/bill-detail?billid={billid}", true);
+		}
+
+		private List<BillDetailShow> LoadBillItemByBill(Guid Id)
+		{
+			var b = _listBillItem.Where(x => x.BillID == Id).ToList();
+			return b;
+		}
+
+		private async Task<string> LayTenPTTT(Guid id)
+		{
+			var pttt = await _httpClient.GetFromJsonAsync<PaymentMethod_VM>($"https://localhost:7141/api/paymentMethod/get_all_paymentMethod_ById/{id}");
+			return pttt.Name;
+		}
+
+		private async Task ThanhToanHdMomo()
+		{
+		}
+	}
 }

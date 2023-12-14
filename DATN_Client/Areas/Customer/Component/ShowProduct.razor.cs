@@ -31,7 +31,7 @@ namespace DATN_Client.Areas.Customer.Component
 				_toastService.ShowError("Vui lòng nhập từ khóa cần tìm kiếm");
 				return;
 			}
-			_navigation.NavigateTo($"https://localhost:7075/search/{_searchProduct}", true);
+			_navigation.NavigateTo($"/search/{_searchProduct}", true);
 		}
 
 		private string XoaDau(string text)

@@ -1,102 +1,109 @@
 ﻿@using DATN_Client.Areas.Customer.Controllers
-<div style="margin-top:30px;" >
-    <div>
-        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
-            </div>
-            <div class="carousel-inner ">
-                <div class="carousel-item active ">
-                    <img src="/images/slider_1.webp" class="d-block w-100" alt="Slide 1">
-                </div>
-                <div class="carousel-item">
-                    <img src="/images/slider_2.webp" class="d-block w-100" alt="Slide 2">
-                </div>
-                <div class="carousel-item">
-                    <img src="/images/slider_3.webp" class="d-block  w-100" alt="Slide 3">
-                </div>
-                <div class="carousel-item">
-                    <img src="/images/slider_4.webp" class="d-block  w-100" alt="Slide 4">
-                </div>
-                <div class="carousel-item">
-                    <img src="/images/slider_5.webp" class="d-block  w-100" alt="Slide 5">
-                </div>
+@using Blazored.Toast.Configuration
+<BlazoredToasts Position="ToastPosition.BottomRight"
+				Timeout="10"
+				IconType="IconType.FontAwesome"
+				SuccessClass="success-toast-override"
+				SuccessIcon="fa-solid fa-check"
+				ErrorIcon="fa-solid fa-triangle-exclamation" />
+<div style="margin-top:30px;">
+	<div>
+		<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+			<div class="carousel-indicators">
+				<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+				<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+				<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+				<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+				<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
+			</div>
+			<div class="carousel-inner ">
+				<div class="carousel-item active ">
+					<img src="/images/slider_1.webp" class="d-block w-100" alt="Slide 1">
+				</div>
+				<div class="carousel-item">
+					<img src="/images/slider_2.webp" class="d-block w-100" alt="Slide 2">
+				</div>
+				<div class="carousel-item">
+					<img src="/images/slider_3.webp" class="d-block  w-100" alt="Slide 3">
+				</div>
+				<div class="carousel-item">
+					<img src="/images/slider_4.webp" class="d-block  w-100" alt="Slide 4">
+				</div>
+				<div class="carousel-item">
+					<img src="/images/slider_5.webp" class="d-block  w-100" alt="Slide 5">
+				</div>
 
-            </div>
+			</div>
 
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+			<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
 
-        </div><!-- End Slides with indicators -->
-    </div>
-    </div>
-    <div style="margin-top:30px;" >
+		</div><!-- End Slides with indicators -->
+	</div>
+</div>
+<div style="margin-top:30px;">
 
-    <div class="center-content">
-        <div>
-            <lable class="title">Enjoy Your Youth!</lable>
-        </div>
-        <div>
-            <lable>Không chỉ là thời trang, BH Uniex còn là “phòng thí nghiệm” của tuổi trẻ - nơi nghiên cứu và</lable>
-            <lable>cho ra đời nguồn năng lượng mang tên “Youth”. Chúng mình luôn muốn tạo nên những trải</lable>
-            <lable>nghiệm vui vẻ, năng động và trẻ trung.</lable>
-        </div>
-    </div>
+	<div class="center-content">
+		<div>
+			<lable class="title">Enjoy Your Youth!</lable>
+		</div>
+		<div style="display:flex;text-align:center;width:50%">
+			<lable>
+				Không chỉ là thời trang, BH Uniex còn là “phòng thí nghiệm” của tuổi trẻ - nơi nghiên cứu và cho ra đời nguồn năng lượng mang tên “Youth”. Chúng mình luôn muốn tạo nên những trải nghiệm vui vẻ, năng động và trẻ trung.
+			</lable>
+		</div>
+	</div>
 
-    @foreach (var b in _lstCate)
-    {
-        <div class="row" style="margin-bottom:40px;">
-            <lable class="title1" @onclick="()=>NavCategory(b.TenKhongDau)">@b.Name.ToUpper()</lable>
-            @foreach (var a in _lstProductItem.Where(x => x.CategoryID==b.Id).Take(7).ToList())
-            {
-                <div class="col-md-3">
-                    <div class="card thumnail" @onclick="()=>NavProductItem(a.ProductId)">
-                        @if (a.Percent > 0)
-                        {
-                            <div class="discount-rectangle">
-                                <span style="font-size:9pt;font-weight:700;">@("-"+a.Percent+"%")</span>
-                            </div>
-                        }
-                        <img src="/images/1.png" class="imgthum" />
-                        <div>
-                            <p style="margin-bottom: 15px; margin-top: 10px;">@a.Name</p>
-                        </div>
-                        <div class="center-content1">
-                            @if (@a.PriceAfterReduction != @a.CostPrice)
-                            {
-                                <p>@a.PriceAfterReduction?.ToString("#,##0") đ</p>
-                                <del style="color:gray;margin-left: 15px;">@a.CostPrice?.ToString("#,##0") đ</del>
-                            }
-                            else
-                            {
-                                <p>@a.CostPrice?.ToString("#,##0")đ</p>
-                            }
-                        </div>
-                    </div>
-                </div>
-            }
-            <div class="col-md-3">
-                <div class="card thumnail " style="justify-content:center;align-items: center;">
-                    <button class="cssbuttons-io-button" @onclick="()=>NavCategory(b.TenKhongDau)">
-                        Xem thêm
-                        <div class="icon">
-                            <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path></svg>
-                        </div>
-                    </button>
-                </div>
-            </div>
-        </div>
-    }
+	@foreach (var b in _lstCate)
+	{
+		<div class="row" style="margin-bottom:40px;">
+			<lable class="title1" @onclick="()=>NavCategory(b.TenKhongDau)">@b.Name.ToUpper()</lable>
+			@foreach (var a in _lstProductItem.Where(x => x.CategoryID == b.Id).Take(7).ToList())
+			{
+				<div class="col-md-3">
+					<div class="card thumnail" @onclick="()=>NavProductItem(a.ProductId)">
+						@if (a.Percent > 0)
+						{
+							<div class="discount-rectangle">
+								<span style="font-size:9pt;font-weight:700;">@("-" + a.Percent + "%")</span>
+							</div>
+						}
+						<img src="/images/1.png" class="imgthum" />
+						<div>
+							<p style="margin-bottom: 15px; margin-top: 10px;">@a.Name</p>
+						</div>
+						<div class="center-content1">
+							@if (@a.PriceAfterReduction != @a.CostPrice)
+							{
+								<p>@a.PriceAfterReduction?.ToString("#,##0") đ</p>
+								<del style="color:gray;margin-left: 15px;">@a.CostPrice?.ToString("#,##0") đ</del>
+							}
+							else
+							{
+								<p>@a.CostPrice?.ToString("#,##0")đ</p>
+							}
+						</div>
+					</div>
+				</div>
+			}
+			<div class="col-md-3">
+				<div class="card thumnail " style="justify-content:center;align-items: center;">
+					<button class="cssbuttons-io-button" @onclick="()=>NavCategory(b.TenKhongDau)">
+						Xem thêm
+						<div class="icon">
+							<svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path></svg>
+						</div>
+					</button>
+				</div>
+			</div>
+		</div>
+	}
 
 
 
@@ -105,137 +112,137 @@
 
 <style>
 
-    .full-width-image {
-        width: 100% !important;
-    }
+	.full-width-image {
+		width: 100% !important;
+	}
 
-    .col-md-3 {
-        position: relative;
-    }
+	.col-md-3 {
+		position: relative;
+	}
 
-    .discount-rectangle {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        width: 40px;
-        height: 20px;
-        background-color: red;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 40px;
-        z-index: 1;
-    }
+	.discount-rectangle {
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		width: 40px;
+		height: 20px;
+		background-color: red;
+		color: white;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		line-height: 40px;
+		z-index: 1;
+	}
 
-        .discount-rectangle span {
-            font-size: 14px;
-        }
+		.discount-rectangle span {
+			font-size: 14px;
+		}
 
 
-    .cssbuttons-io-button {
-        width: 180px;
-        background-image: linear-gradient(19deg, #21D4FD 0%, #B721FF 100%);
-        color: white;
-        font-family: inherit;
-        padding: 0.35em;
-        padding-left: 1.2em;
-        font-size: 17px;
-        border-radius: 0.3em;
-        border: none;
-        letter-spacing: 0.05em;
-        display: flex;
-        align-items: center;
-        overflow: hidden;
-        position: relative;
-        height: 2.8em;
-        padding-right: 3.3em;
-        cursor: pointer;
-        text-transform: uppercase;
-        font-weight: 500;
-        box-shadow: 0 0 1.6em rgba(183, 33, 255,0.3),0 0 1.6em hsla(191, 98%, 56%, 0.3);
-        transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
-        justify-content: center;
-    }
+	.cssbuttons-io-button {
+		width: 180px;
+		background-image: linear-gradient(19deg, #21D4FD 0%, #B721FF 100%);
+		color: white;
+		font-family: inherit;
+		padding: 0.35em;
+		padding-left: 1.2em;
+		font-size: 17px;
+		border-radius: 0.3em;
+		border: none;
+		letter-spacing: 0.05em;
+		display: flex;
+		align-items: center;
+		overflow: hidden;
+		position: relative;
+		height: 2.8em;
+		padding-right: 3.3em;
+		cursor: pointer;
+		text-transform: uppercase;
+		font-weight: 500;
+		box-shadow: 0 0 1.6em rgba(183, 33, 255,0.3),0 0 1.6em hsla(191, 98%, 56%, 0.3);
+		transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+		justify-content: center;
+	}
 
-        .cssbuttons-io-button .icon {
-            background: white;
-            margin-left: 1em;
-            position: absolute;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 2.2em;
-            width: 2.2em;
-            border-radius: 10em;
-            right: 0.3em;
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
-        }
+		.cssbuttons-io-button .icon {
+			background: white;
+			margin-left: 1em;
+			position: absolute;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 2.2em;
+			width: 2.2em;
+			border-radius: 10em;
+			right: 0.3em;
+			transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+		}
 
-        .cssbuttons-io-button:hover .icon {
-            width: calc(100% - 0.6em);
-        }
+		.cssbuttons-io-button:hover .icon {
+			width: calc(100% - 0.6em);
+		}
 
-        .cssbuttons-io-button .icon svg {
-            width: 1.1em;
-            transition: transform 0.3s;
-            color: #B721FF;
-        }
+		.cssbuttons-io-button .icon svg {
+			width: 1.1em;
+			transition: transform 0.3s;
+			color: #B721FF;
+		}
 
-        .cssbuttons-io-button:hover .icon svg {
-            transform: translateX(0.1em);
-        }
+		.cssbuttons-io-button:hover .icon svg {
+			transform: translateX(0.1em);
+		}
 
-        .cssbuttons-io-button:active .icon {
-            transform: scale(0.9);
-        }
+		.cssbuttons-io-button:active .icon {
+			transform: scale(0.9);
+		}
 
-    .center-content1 {
-        display: flex;
-        justify-content: center;
-    }
+	.center-content1 {
+		display: flex;
+		justify-content: center;
+	}
 
-        .center-content1 p {
-            color: red;
-            font-size: 18px;
-        }
+		.center-content1 p {
+			color: red;
+			font-size: 18px;
+		}
 
-    .thumnail {
-        width: 280px;
-        height: 400px;
-        text-align: center;
-        position: relative;
-    }
+	.thumnail {
+		width: 280px;
+		height: 400px;
+		text-align: center;
+		position: relative;
+	}
 
-    .imgthum {
-        width: 100%;
-        height: 280px;
-        margin-bottom: 10px;
-    }
+	.imgthum {
+		width: 100%;
+		height: 280px;
+		margin-bottom: 10px;
+	}
 
-    .center-content {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 38vh; /* Đảm bảo phần tử cha chiếm toàn bộ chiều cao của màn hình */
-        margin-bottom: 30px;
-    }
+	.center-content {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		height: 38vh; /* Đảm bảo phần tử cha chiếm toàn bộ chiều cao của màn hình */
+		margin-bottom: 30px;
+	}
 
-        .center-content div {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+		.center-content div {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
 
-    .title {
-        font-size: 35px;
-        margin-bottom: 25px;
-    }
+	.title {
+		font-size: 35px;
+		margin-bottom: 25px;
+	}
 
-    .title1 {
-        font-size: 30px;
-        font-weight: 500;
-        margin-bottom: 15px;
-    }
+	.title1 {
+		font-size: 30px;
+		font-weight: 500;
+		margin-bottom: 15px;
+	}
 </style>
