@@ -1,93 +1,47 @@
-﻿<div style="display:flex;width:100%">
-    <div style="background-color:#d9d4d4;;margin-left:20px;margin-right:20px;height:550px;width:25%">
+﻿<div>
+    <p class="title-pages">Hóa đơn</p>
+    <div style="background-color:#d3d3d3">
+        <div class="tab-type">
 
-        <EditForm Model="Search" style="position:relative">
-            <div style="padding:15px 20px 15px 30px ; height:30px;background-color:#1e6ad9;margin-top:20px; display:flex; justify-content:left; align-items:center;color:#ffffff;position:absolute;left:-10px;top:-65px;width:100%">
-                Tìm kiếm
+            @foreach (var tabItem in tabTypes)
+            {
+                <div class="@(activeTabType == tabItem.Id? "active-tabItem-type":"tabItem-type")" @onclick="()=>HandleActiveTabType(tabItem.Id)">
+                    @tabItem.Name
+                </div>
+            }
+        </div>
+        <div class="relevative-th">
+            <div class="table-title">
+                <div style="border-right:1px solid #000;width:5%">STT</div>
+                <div class="set-border-right-span" style="width:10%">Thời gian cật nhật</div>
+                <div class="set-border-right-span" style="width:7%">Mã hóa đơn</div>
+                <div class="set-border-right-span" style="width:7%">Thể loại</div>
+                <div class="set-border-right-span" style="width:14%">Khách hàng</div>
+                <div class="set-border-right-span" style="width:14%">Phương thức thanh toán</div>
+                <div class="set-border-right-span" style="width:10%">Tổng tiền</div>
+                <div style="width:10%">Trạng thái</div>
             </div>
-            
-            <div style="margin-top:20px;width:80%;margin-left:20px;margin-top:60px">
-                <input type="text" class="form-control" @bind-value="Search.BillCode" placeholder="Theo mã hóa đơn" style="width:100%;border-radius:5px;padding-top:5px;padding-bottom:5px;" />
-            </div>
-            <div style="margin-top:20px;width:80%;margin-left:20px">
-                <input type="text" class="form-control" @bind-value="Search.UserName" placeholder="Theo tên khách hàng" style="width:100%;border-radius:5px;padding-top:5px;padding-bottom:5px;" />
-            </div>
-            <div>
-                <p style="margin-left:20px;margin-top:20px">Phương thức thanh toán</p>
-                <select class="form-select" style="width:80%;margin-left:20px" @bind="@Phuongthuctt">
-                    <option selected value="0">Chọn phương thức thanh toán </option>
-                    <option value="Chuyển khoản">Chuyển khoản</option>
-                    <option value="Tiền mặt">Tiền mặt</option>
-                </select>
-            </div>
-            <div style="padding:15px 20px 15px 30px ; height:30px;background-color:#1e6ad9;margin-top:20px; display:flex; justify-content:left; align-items:center;color:#ffffff;position:absolute;left:-10px;width:100%">
-                Theo thời gian
-            </div>
-            <div style="margin-top:60px;width:80%;margin-left:20px;">
-                <p style="margin-bottom:5px">Từ</p>
-                <input type="datetime-local"  @onchange="HandleDatetimeChange" class="form-control" placeholder=
-               "Theo tên khách hàng" style="width:100%;border-radius:5px;padding-top:5px;padding-bottom:5px;"/>
-            </div>
-            <div style="margin-top:15px;width:80%;margin-left:20px;">
-                <p style="margin-bottom:5px">Đến</p>
-                <input type="datetime-local" class="form-control" @onchange="HandleDatetimeEndChange" placeholder="Theo tên khách hàng" style="width:100%;border-radius:5px;padding-top:5px;padding-bottom:5px;"/>
-            </div>
-            <p></p>
-            <div  style="display:flex;justify-content:center; align-items:center;width:100%;margin-top:30px">
-                <button style="padding: 5px 12px 5px 12px;display:flex;justify-content:center;align-items:center" class="button_details" @onclick="LocHangLoat">
-                    <label style="padding: 5px 15px 5px 15px;">Tìm kiếm</label>
-                </button>
-            </div>
-       
-      </EditForm>
-</div>
-
-    <div style="width:75%">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Mã HD</th>
-                    <th>Thời gian</th>
-                    <th>Khách hàng</th>
-                    <th>Tổng tiền hàng</th>
-                    <th>Giảm giá</th>
-                    <th>Phương thức TT</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var x in _lstbill)
-                {
-                    <tr class="hover-tr">
-                        <td>@x.BillCode</td>
-                        <td>@x.CreateDate</td>
-                        <td>@x.UserName</td>
-                        <td>@x.TotalAmount</td>
-                        <td>@x.Reduced_Value</td>
-                        <td>@x.PaymentMethodName</td>
-                        <td>@(x.Status == 1 ? "Chưa xác nhận" : x.Status == 2 ? "Đang giao hàng" : "Hoàn thành")</td>
-                        <td>
-                            <button style="padding: 5px 12px 5px 12px;display:flex;justify-content:center;align-items:center;cursor:pointer" class="button_details" @onclick="()=>ClickDetailBill(x)">
-                                <label style="cursor:pointer"> Chi tiết</label>
-                            </button>
-                        </td>
-                    </tr>
+            <div class="absolut-th">
+                @{
+                    int index = 0;
                 }
-            </tbody>
-        </table>
-  </div>
+                @foreach (var item in _lstBillShowOnMain)
+                {
+                    {
+                        index += 1;
+                    }
+                    <div style="display:flex;text-align:center;padding:10px 0px;" class="@(index % 2 == 0 ? "bg-maudam" : "")">
+                        <div style="#000;width:5%">@index</div>
+                        <div style="width:10%>@item.DateTimeShow</div>
+                    <div style="width:7%">Mã hóa đơn</div>
+                        <div style="width:7%">Thể loại</div>
+                        <div style="width:14%">Khách hàng</div>
+                        <div style="width:14%">Phương thức thanh toán</div>
+                        <div style="width:10%">Tổng tiền</div>
+                        <div style="width:10%">Trạng thái</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>
-<style>
-    .hover-tr:hover{
-        background-color: #d9d4d4
-     }
-    .button_details{       
-        
-        color: #fff;
-        background-color: #1e6ad9;
-        border: none;       
-        border-radius: 7px;
-        }
-    
-   
-</style>

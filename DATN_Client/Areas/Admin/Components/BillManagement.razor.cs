@@ -1,81 +1,130 @@
 ﻿using DATN_Shared.ViewModel;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using static DATN_Client.Areas.Admin.Components.BillManagement;
 
 namespace DATN_Client.Areas.Admin.Components
 {
-	public partial class BillManagement
-	{
-		HttpClient _client = new HttpClient();
-		List<Bill_ShowModel> _lstbill = new List<Bill_ShowModel>();
-        public static Bill_ShowModel _billModel= new Bill_ShowModel();
-        public static Bill_ShowModel Search = new Bill_ShowModel();
-
+    public partial class BillManagement
+    {
+        HttpClient _client = new HttpClient();
         [Inject]
-		public NavigationManager _navigationManager { get; set; }
-        public string Phuongthuctt { get; set; }
-        public DateTime startdate { get; set; }
-        public DateTime datecheck { get; set; }
-        public DateTime enddate { get; set; }
+        public NavigationManager _navigationManager { get; set; }
+        List<Bill_ShowModel> _lstbill = new List<Bill_ShowModel>();
+        List<BillShowOnMain> _lstBillShowOnMain = new List<BillShowOnMain>();
+       
+        List<TabType> tabTypes = new List<TabType>();
+        public int activeTabType { get; set; } = 1;
+
         protected override async Task OnInitializedAsync()
-		{
-			_lstbill = await _client.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
-		}
-		public async Task ClickDetailBill(Bill_ShowModel bill_ShowModel)
-		{
-			_billModel = bill_ShowModel;
-			_navigationManager.NavigateTo("https://localhost:7075/Admin/BillManagement/Details",true);
-
-        }
-        public async Task LocHangLoat()
         {
-            _lstbill = await _client.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
-
-            _lstbill = _lstbill.Where(c =>
-                                (Search.BillCode == null ||
-                                Search.BillCode == "0" ||
-                                c.BillCode.ToLower().Contains(Search.BillCode.ToLower())) &&
-                                (Search.UserName == null ||
-                                Search.UserName == "0" ||
-                                RemoveDiacritics(c.UserName.ToLower()).Contains(RemoveDiacritics    (Search.UserName.ToLower())) ) &&
-                                (Phuongthuctt == null ||
-                                Phuongthuctt == "0" ||
-                                c.PaymentMethodName == Phuongthuctt) &&
-                                ((startdate == default && enddate == default) ||
-                                startdate == default ||
-                                enddate == default ||
-                                (c.CreateDate>startdate && c.CreateDate<enddate))).ToList();
+            tabTypes.Add(new TabType { Id = 1, Name = "Tất cả hóa đơn" });
+            tabTypes.Add(new TabType { Id = 2, Name = "Chờ xác nhận" });
+            tabTypes.Add(new TabType { Id = 4, Name = "Đã xác nhận" });
+            tabTypes.Add(new TabType { Id = 3, Name = "Đã thanh toán" });
+            tabTypes.Add(new TabType { Id = 6, Name = "Đã hoàn thành" });
+            await HandleActiveTabType(1);
         }
-        public static string RemoveDiacritics(string input)
+        public class TabType
         {
-            string normalizedString = input.Normalize(NormalizationForm.FormD);
-            StringBuilder stringBuilder = new StringBuilder();
+            public string Name { get; set; }
 
-            foreach (char c in normalizedString)
+            public int Id { get; set; }
+        }
+        public async Task HandleActiveTabType(int id)
+        {
+           
+            var _GetclstBill = await _client.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
+            activeTabType = id;
+            if (activeTabType == 1)
             {
-                UnicodeCategory unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
-                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+
+                var listRemove = _GetclstBill.Where(x => x.Type == 2 && x.Status == 5).ToList();
+                foreach (var item in listRemove)
                 {
-                    stringBuilder.Append(c);
+                    _GetclstBill.Remove(item);
                 }
-            }
-            return stringBuilder.ToString();
-        }
-        public void HandleDatetimeChange(ChangeEventArgs e)
-        {
-            if (DateTime.TryParse(e.Value.ToString(), out DateTime result))
-            {
-                startdate = result;  
+                //tất cả hóa đơn
+                _lstBillShowOnMain = ConvertbillShowOnMain(_GetclstBill);
             }
         }
-        public void HandleDatetimeEndChange(ChangeEventArgs e)
+        
+        public List<BillShowOnMain> ConvertbillShowOnMain(List<Bill_ShowModel> _lstBillGet)
         {
-            if (DateTime.TryParse(e.Value.ToString(), out DateTime result))
+            List<BillShowOnMain> billshow = new List<BillShowOnMain>();
+            foreach (var item in _lstBillGet)
             {
-                enddate = result;
+                var a = new BillShowOnMain
+                {
+                    Id = item.Id,
+                    UserId = item.UserId,
+                    UserName = item.UserName,
+                    HistoryConsumerPointID = item.HistoryConsumerPointID,
+                    ConsumerPoint = item.ConsumerPoint,              
+                    PaymentMethodId = item.PaymentMethodId,
+                    PaymentMethodName = item.PaymentMethodName,
+                    Recipient = item.Recipient,
+                    District = item.District,
+                    Province = item.Province,
+                    WardName = item.WardName,
+                    ToAddress = item.ToAddress,
+                    NumberPhone = item.NumberPhone,
+                    Reduced_Value = item.Reduced_Value,
+                    BillCode = item.BillCode,
+                    TotalAmount = item.TotalAmount,
+                    ReducedAmount = item.ReducedAmount,
+                    Cash =  item.Cash,
+                    CustomerPayment = item.CustomerPayment,
+                    FinalAmount = item.FinalAmount,
+                    CreateDate = item.CreateDate,
+                    CompletionDate = item.CompletionDate,
+                    ConfirmationDate =  item.ConfirmationDate,
+                    DateTimeShow = item.CompletionDate != null ? item.CompletionDate : (item.ConfirmationDate !=null ? item.ConfirmationDate : (item.CreateDate != null ? item.CreateDate :  default )),
+                    Type = item.Type,
+                    Note = item.Note,
+                    Status = item.Status,
+                    PhoneNumber = item.PhoneNumber,
+                };
+                billshow.Add(a);
             }
+            return billshow;
+        }
+
+        public class BillShowOnMain
+        {
+            public Guid Id { get; set; }
+            public Guid UserId { get; set; }
+            public string UserName { get; set; }
+            public Guid? HistoryConsumerPointID { get; set; }
+            public int ConsumerPoint { get; set; }
+            public Guid? PaymentMethodId { get; set; }
+            public string PaymentMethodName { get; set; }
+            public string? Recipient { get; set; }
+            public string? District { get; set; }
+            public string? Province { get; set; }
+            public string? WardName { get; set; }
+            public string? ToAddress { get; set; }
+            public string? NumberPhone { get; set; }
+            public int? Reduced_Value { get; set; }
+            public string BillCode { get; set; }
+            public int? TotalAmount { get; set; }
+            public int? ReducedAmount { get; set; }
+            public int? Cash { get; set; }  // tiền mặt
+            public int? CustomerPayment { get; set; } // tiền khách đưa
+            public int? FinalAmount { get; set; } // tiền khách đưa
+            public DateTime? CreateDate { get; set; }
+            public DateTime? ConfirmationDate { get; set; }
+            public DateTime? CompletionDate { get; set; }
+            public DateTime? DateTimeShow { get; set; }
+            public int? Type { get; set; }
+            public string? Note { get; set; }
+            public int Status { get; set; }
+            public string PhoneNumber { get; set; }
         }
     }
 }

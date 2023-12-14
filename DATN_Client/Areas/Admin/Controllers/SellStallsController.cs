@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DATN_Client.Areas.Customer.Component;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DATN_Client.Areas.Admin.Controllers
 {
@@ -8,6 +9,14 @@ namespace DATN_Client.Areas.Admin.Controllers
         public IActionResult Index()
         {
             return View();
+            //if (Login.Roleuser == "Admin" || Login.Roleuser == "Staff")
+            //{
+            //	return View();
+            //}
+            //else
+            //{
+            //	return Unauthorized();
+            //}
         }
     }
 }

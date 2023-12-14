@@ -71,6 +71,7 @@ namespace DATN_API.Controllers
 				bill.NumberPhone = bill_vm.NumberPhone;
 				bill.Status = bill_vm.Status;
 				bill.ShippingFee = bill_vm.ShippingFee;
+				bill.Type = bill_vm.Type;
 
 				var x = await _billService.PostBill(bill);
 				return Ok("Success");
@@ -101,21 +102,30 @@ namespace DATN_API.Controllers
 			try
 			{
 				Bill bill = await _billService.GetBillById(bill_vm.Id);
-				bill.Id = bill_vm.Id;
-				bill.UserId = bill_vm.UserId;
-				bill.PaymentMethodId = bill_vm.PaymentMethodId;
-				bill.VoucherId = bill_vm.VoucherId;
-				bill.BillCode = bill_vm.BillCode;
-				bill.TotalAmount = bill_vm.TotalAmount;
-				bill.ReducedAmount = bill_vm.ReducedAmount;
-				bill.Cash = bill_vm.Cash;
-				bill.CustomerPayment = bill_vm.CustomerPayment;
-				bill.FinalAmount = bill_vm.FinalAmount;
-				bill.Note = bill_vm.Note;
+                bill.Id = bill_vm.Id;
+                bill.UserId = bill_vm.UserId;
+                bill.PaymentMethodId = bill_vm.PaymentMethodId;
+                bill.VoucherId = bill_vm.VoucherId;
+                bill.BillCode = bill_vm.BillCode;
+                bill.TotalAmount = bill_vm.TotalAmount;
+                bill.ReducedAmount = bill_vm.ReducedAmount;
+                bill.Cash = bill_vm.Cash;
+                bill.CustomerPayment = bill_vm.CustomerPayment;
+                bill.FinalAmount = bill_vm.FinalAmount;
+                bill.CreateDate = bill_vm.CreateDate;
+                bill.ConfirmationDate = bill_vm.ConfirmationDate;
+                bill.CompletionDate = bill_vm.CompletionDate;
+                bill.Note = bill_vm.Note;
+                bill.Recipient = bill_vm.Recipient;
+                bill.District = bill_vm.District;
+                bill.Province = bill_vm.Province;
+                bill.WardName = bill_vm.WardName;
+                bill.ToAddress = bill_vm.ToAddress;
+                bill.NumberPhone = bill_vm.NumberPhone;
+                bill.Status = bill_vm.Status;
+                bill.ShippingFee = bill_vm.ShippingFee;
 				bill.Type = bill_vm.Type;
-				bill.Status = bill_vm.Status;
-				bill.ShippingFee = bill_vm.ShippingFee;
-				await _billService.PutBill(bill);
+                await _billService.PutBill(bill);
 				return Ok("Success");
 			}
 			catch (Exception ex)

@@ -24,6 +24,9 @@ namespace DATN_Client.Areas.Admin.Components
 		private List<Categories_VM> _lstCate = new();
 		private List<Color_VM> _lstColor_Add = new();
 		private List<Size_VM> _lstSize_Add = new();
+		private List<Color_VM> _lstColor_Loc = new();
+		private List<Size_VM> _lstSize_Loc = new();
+		private List<Categories_VM> _lstCate_Loc = new();
 		private List<Categories_VM> _lstCate_Add = new();
 		private List<Image_Join_ProductItem> _lstImg_PI = new();
 		private List<Image_VM> _lstImg_them = new();
@@ -49,6 +52,7 @@ namespace DATN_Client.Areas.Admin.Components
 		private IBrowserFile _file { get; set; }
 		private string _chonMau { get; set; } = string.Empty;
 		private ProductItem_Show_VM _pri_s_vm_Update = new();
+		private ProductItem_Show_VM _pri_s_vm_Loc = new();
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -60,6 +64,33 @@ namespace DATN_Client.Areas.Admin.Components
 			_lstColor = _lstColor.OrderBy(c => c.Name).ToList();
 			_lstSize = await _httpClient.GetFromJsonAsync<List<Size_VM>>("https://localhost:7141/api/Size/get_size");
 			_lstSize = _lstSize.OrderBy(c => _lstSizeSample.IndexOf(c.Name)).ToList();
+			foreach (var x in _lst_pri)
+			{
+				if (!_lstCate_Loc.Any(c => c.Id == x.CategoryID))
+				{
+					_lstCate_Loc.Add(new Categories_VM()
+					{
+						Id = x.CategoryID,
+						Name = x.CategoryName,
+					});
+				}
+				if (!_lstColor_Loc.Any(c => c.Id == x.ColorId))
+				{
+					_lstColor_Loc.Add(new Color_VM()
+					{
+						Id = Guid.Parse(x.ColorId.ToString()),
+						Name = x.ColorName,
+					});
+				}
+				if (!_lstSize_Loc.Any(c => c.Id == x.SizeId))
+				{
+					_lstSize_Loc.Add(new Size_VM()
+					{
+						Id = Guid.Parse(x.SizeId.ToString()),
+						Name = x.SizeName,
+					});
+				}
+			}
 		}
 
 		private void SetModalState(bool isOpen, string modalType)
@@ -333,6 +364,7 @@ namespace DATN_Client.Areas.Admin.Components
 		{
 			_pri_s_vm_Update.Id = pi.Id;
 			_pri_s_vm_Update.ProductId = pi.ProductId;
+			_pri_s_vm_Update.Name = pi.Name;
 			_pri_s_vm_Update.ColorId = pi.ColorId;
 			_pri_s_vm_Update.SizeId = pi.SizeId;
 			_pri_s_vm_Update.CategoryID = pi.CategoryID;
@@ -448,7 +480,7 @@ namespace DATN_Client.Areas.Admin.Components
 					_toastService.ShowError("Tạo mới không thành công. Vui lòng thỏa mãn các điều kiện cần thiết!");
 					return;
 				}
-			}			
+			}
 			foreach (var a in _lst_pri_Add)
 			{
 				ProductItem_VM pri_vm = new ProductItem_VM()
@@ -462,7 +494,7 @@ namespace DATN_Client.Areas.Admin.Components
 					CostPrice = a.CostPrice,
 					PriceAfterReduction = a.CostPrice,
 					Status = a.Status
-				};				
+				};
 				var addPI = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/productitem/add_productitem", pri_vm);
 				if (addPI.StatusCode != System.Net.HttpStatusCode.OK) checkAdd = false;
 				var lstImg = await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>($"https://localhost:7141/api/Image/GetAllImage_PrductItem_ByProductId/{ProductController._productID}");
@@ -488,7 +520,7 @@ namespace DATN_Client.Areas.Admin.Components
 					};
 					var addImg = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/Image/Post-Image", img);
 					if (addImg.StatusCode != System.Net.HttpStatusCode.OK) checkAdd = false;
-				}				
+				}
 			}
 			if (checkAdd == true)
 			{
@@ -668,6 +700,8 @@ namespace DATN_Client.Areas.Admin.Components
 		private async Task XacNhanUpdate()
 		{
 			bool checkStatusCode = true;
+			var checkPromotion = await _httpClient.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{_pri_s_vm_Update.Id}");
+			var promotionItem = await _httpClient.GetFromJsonAsync<PromotionItem_VM>($"https://localhost:7141/api/PromotionItem/getPromotionItem_Percent_by_productItemID/{_pri_s_vm_Update.Id}");
 			ProductItem_VM priUpdate = new()
 			{
 				Id = _pri_s_vm_Update.Id,
@@ -677,9 +711,16 @@ namespace DATN_Client.Areas.Admin.Components
 				CategoryId = _pri_s_vm_Update.CategoryID,
 				AvaiableQuantity = _pri_s_vm_Update.AvaiableQuantity,
 				CostPrice = _pri_s_vm_Update.CostPrice,
-				PriceAfterReduction = _pri_s_vm_Update.CostPrice,
+				PriceAfterReduction = checkPromotion.CostPrice == checkPromotion.PriceAfterReduction
+									? _pri_s_vm_Update.CostPrice
+									: (_pri_s_vm_Update.CostPrice - _pri_s_vm_Update.CostPrice / promotionItem.Percent),
 				Status = _pri_s_vm_Update.Status,
 			};
+			if (_lst_pri.Where(c => (c.ColorId == priUpdate.ColorId && c.SizeId == priUpdate.SizeId && c.CategoryID == priUpdate.CategoryId)&&c.Id!=priUpdate.Id).Count() > 0)
+			{
+				_toastService.ShowError("Cập nhật thất bại do biến thể đã tồn tại");
+				return;
+			}
 			var checkIdColor = await _httpClient.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{_pri_s_vm_Update.Id}");
 			if (_pri_s_vm_Update.ColorId != checkIdColor.ColorId)
 			{
@@ -690,7 +731,7 @@ namespace DATN_Client.Areas.Admin.Components
 				List<Image_Join_ProductItem> lstImgMoi = new();
 				foreach (var item in lstImgMoiTam)
 				{
-					if (!lstImgMoi.Any(c=>c.PathImage==item.PathImage))
+					if (!lstImgMoi.Any(c => c.PathImage == item.PathImage))
 					{
 						lstImgMoi.Add(item);
 					}
@@ -716,7 +757,7 @@ namespace DATN_Client.Areas.Admin.Components
 				}
 			}
 			var update = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", priUpdate);
-			if (update.StatusCode == System.Net.HttpStatusCode.OK && checkStatusCode ==true)
+			if (update.StatusCode == System.Net.HttpStatusCode.OK && checkStatusCode == true)
 			{
 				ClosePopup("UpdatePI");
 				_lst_pri = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>($"https://localhost:7141/api/productitem/get_all_productitem_byProduct/{ProductController._productID}");
@@ -752,6 +793,22 @@ namespace DATN_Client.Areas.Admin.Components
 				_toastService.ShowSuccess("Thao tác thành công");
 			}
 			else _toastService.ShowError("Thao tác thất bại");
+		}
+
+		public async Task LocHangLoat()
+		{
+			_lst_pri = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>($"https://localhost:7141/api/productitem/get_all_productitem_byProduct/{ProductController._productID}");
+
+			_lst_pri = _lst_pri.Where(c =>
+						(_pri_s_vm_Loc.CategoryName == null ||
+						_pri_s_vm_Loc.CategoryName == "0" ||
+						c.CategoryName == _pri_s_vm_Loc.CategoryName) &&
+						(_pri_s_vm_Loc.SizeName == null ||
+						_pri_s_vm_Loc.SizeName == "0" ||
+						c.SizeName == _pri_s_vm_Loc.SizeName) &&
+						(_pri_s_vm_Loc.ColorName == null ||
+						_pri_s_vm_Loc.ColorName == "0" ||
+						c.ColorName == _pri_s_vm_Loc.ColorName)).OrderBy(c => c.Name).ToList();
 		}
 	}
 }

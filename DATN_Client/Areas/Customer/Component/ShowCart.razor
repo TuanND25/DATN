@@ -20,7 +20,7 @@
 
 	.input-field {
 		margin-left: 10px;
-		width: 40px;
+		width: 60px;
 		text-align: center;
 		border: none;
 		background-color: transparent;
@@ -130,11 +130,33 @@
 						</div>
 					</div>
 					<div style="display:flex;flex-direction:column;justify-content:space-between;text-align:right">
-						<label style="cursor:pointer;" @onclick="()=>DeleteCI(x)">Xóa sản phẩm</label>
+						<label style="cursor:pointer;" data-toggle="modal" data-target="#XoaSpGio">Xóa sản phẩm</label>
 						<label><b style="font-size:18px">@((x.Quantity * _pi_s_vm.PriceAfterReduction)?.ToString("#,##0"))đ</b></label>
 					</div>
 				</div>
 				<hr style="margin-top:10px;margin-bottom:10px;height:2px" />
+				@* popup xóa sp giỏ *@
+				<div class="modal fade" id="XoaSpGio">
+					<div class="modal-dialog">
+						<div class="modal-content">
+
+							<!-- Phần tiêu đề của popup -->
+							<div class="modal-header">
+								<h4 class="modal-title">Thông báo</h4>
+								<button style="background-color:#ffffff;border:none" class="close" data-dismiss="modal">&times;</button>
+							</div>
+							<!-- Nội dung của popup -->
+							<div class="modal-body">
+								Bạn có chắc muốn xóa sản phẩm khỏi giỏ hàng không?
+							</div>
+							<!-- Phần chân của popup -->
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+								<button type="button" class="btn btn-primary" @onclick="()=>DeleteCI(x)" data-dismiss="modal">Đồng ý</button>
+							</div>
+						</div>
+					</div>
+				</div>
 			}
 		}
 		else
@@ -178,7 +200,7 @@
 				<!-- Phần tiêu đề của popup -->
 				<div class="modal-header">
 					<h4 class="modal-title">Thông báo</h4>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<button type="button" style="background-color:#ffffff;border:none" class="close" data-dismiss="modal">&times;</button>
 				</div>
 				<!-- Nội dung của popup -->
 				<div class="modal-body">
@@ -193,3 +215,4 @@
 		</div>
 	</div> 
 }
+
