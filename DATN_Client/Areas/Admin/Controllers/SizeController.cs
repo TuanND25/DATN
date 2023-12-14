@@ -8,7 +8,7 @@ namespace DATN_Client.Areas.Admin.Controllers
         [Area("Admin")]
         public IActionResult Index()
         {
-			if (Login.Roleuser == "Admin" || Login.Roleuser == "Staff")
+			if (Login.Roleuser == "Admin")
 			{
 				return View();
 			}
