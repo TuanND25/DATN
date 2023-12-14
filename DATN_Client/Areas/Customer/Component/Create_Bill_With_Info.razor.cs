@@ -25,6 +25,7 @@ namespace DATN_Client.Areas.Customer.Component
 		private List<PaymentMethod_VM> _lstPayM = new();
 		public static Bill_DataAnotation_VM _bill_validate_vm = new Bill_DataAnotation_VM();
 		private User_VM? _user_vm = new();
+		private User_VM? _userVangLai = new();
 		private ProductItem_Show_VM _pi_s_vm = new();
 		private OrderInfoModel _ord = new();
 		private PaymentMethod_VM _payM = new();
@@ -61,7 +62,16 @@ namespace DATN_Client.Areas.Customer.Component
 			_lstPrI_show_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
 			if (_iduser == null)
 			{
-				_bill_validate_vm.UserId = Guid.Parse("8870699c-8f34-4bcd-b07c-08c003c2a732");
+				try
+				{
+					_userVangLai = await _httpClient.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get-user-byusername?username={"khachvanglai"}");
+				}
+				catch (Exception)
+				{
+
+					throw;
+				}
+				_bill_validate_vm.UserId = _userVangLai.Id;
 				_lstCI = SessionServices.GetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai");
 			}
 			else
@@ -119,10 +129,10 @@ namespace DATN_Client.Areas.Customer.Component
 		public async Task Btn_DatHang()
 		{
 			_lstPrI_show_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
-			bool checkSl = false;			
+			bool checkSl = false;
 			foreach (var a in _lstCI)
 			{
-				var pi = _lstPrI_show_VM.FirstOrDefault(c => c.Id == a.ProductItemId);	
+				var pi = _lstPrI_show_VM.FirstOrDefault(c => c.Id == a.ProductItemId);
 				if (a.Quantity > pi.AvaiableQuantity)
 				{
 					if (pi.AvaiableQuantity == 0) _toastService.ShowError($"Sản phẩm {pi.Name} - {pi.ColorName} - {pi.SizeName} hiện đã tạm hết hàng");
@@ -139,9 +149,9 @@ namespace DATN_Client.Areas.Customer.Component
 			var regexPN = @"^0\d{9,10}$"; // regex số đt
 
 
-            if (String.IsNullOrEmpty(_bill_validate_vm.Recipient) || String.IsNullOrEmpty(_bill_validate_vm.NumberPhone) || String.IsNullOrEmpty(_bill_validate_vm.ToAddress) || String.IsNullOrEmpty(_bill_validate_vm.Province) || String.IsNullOrEmpty(_bill_validate_vm.District) || String.IsNullOrEmpty(_bill_validate_vm.WardName) || !Regex.IsMatch(_bill_validate_vm.NumberPhone, regexPN)) return;
+			if (String.IsNullOrEmpty(_bill_validate_vm.Recipient) || String.IsNullOrEmpty(_bill_validate_vm.NumberPhone) || String.IsNullOrEmpty(_bill_validate_vm.ToAddress) || String.IsNullOrEmpty(_bill_validate_vm.Province) || String.IsNullOrEmpty(_bill_validate_vm.District) || String.IsNullOrEmpty(_bill_validate_vm.WardName) || !Regex.IsMatch(_bill_validate_vm.NumberPhone, regexPN)) return;
 
-            _datHangThanhCong = true;
+			_datHangThanhCong = true;
 			_afterClick = "afterClick";
 			var codeToday = DateTime.Now.ToString().Replace("/", "").Substring(0, 4) +
 								DateTime.Now.Year.ToString().Substring(2);
@@ -169,7 +179,7 @@ namespace DATN_Client.Areas.Customer.Component
 			if (addBill.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				// nếu trong list addressShip rỗng và k phải vãng lai thì add để lần sau sử dụng
-				if (_lst_adrS_User.Count == 0 && _bill_validate_vm.UserId != Guid.Parse("8870699c-8f34-4bcd-b07c-08c003c2a732"))
+				if (_lst_adrS_User.Count == 0 && _bill_validate_vm.UserId != _userVangLai.Id)
 				{
 					AddressShip_VM addressShip_VM = new();
 					addressShip_VM.Id = Guid.NewGuid();
@@ -224,6 +234,10 @@ namespace DATN_Client.Areas.Customer.Component
 					var a = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/BillItem/Post-BillItem", billItem_VM);
 					var b = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", pi);
 					var c = await _httpClient.DeleteAsync($"https://localhost:7141/api/CartItems/delete-CartItems/{x.Id}");
+					if (pi.CostPrice != pi.PriceAfterReduction)
+					{
+						var truPromotion = await _httpClient.PutAsJsonAsync($"https://localhost:7141/api/promotion/update_quantity_promotion/{x.ProductItemId}", x.ProductItemId);
+					}
 				}
 				_ihttpcontextaccessor.HttpContext.Session.Remove("_lstCI_Vanglai");
 				// thanh toán momo thì thực hiện điều hướng đến thanh toán momo
@@ -233,7 +247,7 @@ namespace DATN_Client.Areas.Customer.Component
 					_ord.OrderId = Guid.NewGuid().ToString();
 					if (_user_vm.Name == null) _ord.FullName = "Không có thông tin khách hàng";
 					else _ord.FullName = _user_vm.Name;
-					_ord.OrderInfo =_bill_validate_vm.Note+ $". Mã hóa đơn: {_bill_validate_vm.BillCode}";
+					_ord.OrderInfo = _bill_validate_vm.Note + $". Mã hóa đơn: {_bill_validate_vm.BillCode}";
 					_ord.Amount = _tongTienAll;
 					var reponse1 = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/Momo/CreatePaymentAsync", _ord);
 					var reponse2 = await reponse1.Content.ReadFromJsonAsync<MomoCreatePaymentResponseModel>();

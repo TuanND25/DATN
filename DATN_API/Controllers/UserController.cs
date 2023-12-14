@@ -94,7 +94,7 @@ namespace DATN_API.Controllers
 
 
         [Route("get-user-byusername")]
-        [Authorize(Roles ="Admin")]
+        //[Authorize(Roles ="Admin")]
         [HttpGet]
         public async Task<IActionResult> GetUserByUserName(string username)
         {
