@@ -55,3 +55,9 @@
     font-size: 10px;
     color: white;
 }
+
+.table.pd td,
+.table.pd tr,
+.table.pd th{
+    border: 1px solid #d3d3d3;
+}
