@@ -28,7 +28,7 @@ namespace DATN_Client.Areas.Admin.Components
 
 		protected override async Task OnInitializedAsync()
 		{
-			_billModel = BillManagement._billModel;
+			
 			_lstBillDetail = await _client.GetFromJsonAsync<List<BillDetailShow>>("https://localhost:7141/api/BillItem/getbilldetail/" + _billModel.Id);
 
 			foreach (var item in _lstBillDetail)

@@ -71,6 +71,7 @@ namespace DATN_API.Controllers
 				bill.NumberPhone = bill_vm.NumberPhone;
 				bill.Status = bill_vm.Status;
 				bill.ShippingFee = bill_vm.ShippingFee;
+				bill.Type = bill_vm.Type;
 
 				var x = await _billService.PostBill(bill);
 				return Ok("Success");

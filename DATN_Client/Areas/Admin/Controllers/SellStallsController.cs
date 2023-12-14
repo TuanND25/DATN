@@ -8,14 +8,15 @@ namespace DATN_Client.Areas.Admin.Controllers
     {
         public IActionResult Index()
         {
-			if (Login.Roleuser == "Admin" || Login.Roleuser == "Staff")
-			{
-				return View();
-			}
-			else
-			{
-				return Unauthorized();
-			}
-		}
+            return View();
+            //if (Login.Roleuser == "Admin" || Login.Roleuser == "Staff")
+            //{
+            //	return View();
+            //}
+            //else
+            //{
+            //	return Unauthorized();
+            //}
+        }
     }
 }

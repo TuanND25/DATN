@@ -165,10 +165,10 @@ namespace DATN_Client.Areas.Admin.Components
 			bill = new Bill_VM();
 			bill.Id = id;
 			bill.Status = 5;
-			bill.Type = 2;//offline
+			bill.Type = 2;
 			bill.PaymentMethodId = Guid.Parse("261d402e-dfa8-4213-9e29-4fdd6fc6b95d");
 			bill.UserId = getuser.Id;
-
+			bill.CreateDate = DateTime.Now;
 
 			_lstBill = (await _client.GetFromJsonAsync<List<Bill_VM>>("https://localhost:7141/api/Bill/get_alll_bill")).Where(c => c.BillCode.StartsWith(codeToday)).ToList();
 
@@ -1390,7 +1390,14 @@ namespace DATN_Client.Areas.Admin.Components
             billMua.TotalAmount = Tongtien;
 			billMua.Cash = InputTienMat;
 			billMua.CustomerPayment = InputChuyenKhoan;
-			billMua.CreateDate = DateTime.Now;
+			if (activeTabThemThongTin ==true)
+			{
+				billMua.ConfirmationDate = DateTime.Now;
+			}
+			else
+			{
+                billMua.CompletionDate = DateTime.Now;
+            }
 			billMua.Status = 2;
 			billMua.Type = 2;
 

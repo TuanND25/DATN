@@ -1,0 +1,81 @@
+﻿.title-pages {
+    font-size: 20px;
+    color: #000;
+    font-weight: 600;
+    letter-spacing: 140%;
+}
+
+.tab-type {
+    margin-top: 20px;
+    margin-left: 20px;
+    display: flex;
+    justify-content: stretch;
+    align-items: center;
+    gap: 10px;
+}
+
+.tabItem-type {
+    cursor: pointer;
+    width: fit-content;
+    padding: 5px;
+    color: #000;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.active-tabItem-type {
+    cursor: pointer;
+    width: fit-content;
+    padding: 5px;
+    color: #7cb3d8;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 2px solid #7cb3d8;
+}
+
+.billshow {
+    width: 100%;
+    border:1px solid #000;
+}
+
+    .billshow: hover {
+        background-color: red;
+    }
+.border-table td{
+    text-align:center;
+    border:1px solid #000;
+    border-collapse:collapse;
+}
+.bg-maudam {
+    background-color: #bebebe
+}
+.relevative-th {
+    width: 100%;
+    position: relative;
+    height: 100vh;
+}
+.absolut-th {
+    width: 100%;
+    position: absolute;
+    overflow-y: scroll;
+    height: 90vh;
+
+}
+.showItem{
+    padding:15px 0px; 
+    border-bottom:1px solid #fff
+}
+.table-title{
+    padding:15px 0px;
+    font-weight:500;
+    font-size:16px;
+    display:flex;
+    text-align:center;
+}
+.set-border-right-span {
+    border-right: 2px solid #000
+}
