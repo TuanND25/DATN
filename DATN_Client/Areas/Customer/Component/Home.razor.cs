@@ -16,9 +16,17 @@ namespace DATN_Client.Areas.Customer.Component
         [Inject] NavigationManager _navigationManager { get; set; }
         HttpClient _httpClient =new HttpClient();
         private List<Image_Join_ProductItem> _lstImg_PI = new List<Image_Join_ProductItem>();
+        [Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
+            var a = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(a))
+            {
+                Login.UserNameShowHome = null;
+
+            }
+
             _lstProductItem = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_product_home");
             await ListProduct();
         }

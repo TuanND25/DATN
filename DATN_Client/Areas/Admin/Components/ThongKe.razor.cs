@@ -2,6 +2,9 @@
 using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 
 namespace DATN_Client.Areas.Admin.Components
 {
@@ -39,6 +42,7 @@ namespace DATN_Client.Areas.Admin.Components
 
         private BarChart barChart=new BarChart();
         private LineChart lineChart =new LineChart();
+        private DateTime dateTime = DateTime.Today;
         protected override async Task OnInitializedAsync()
         {
             //isLoader = true;
@@ -52,7 +56,6 @@ namespace DATN_Client.Areas.Admin.Components
             await TopSale(1);
             //isLoader = false;
             //StateHasChanged();
-            await RenderWormAsync(1);
         }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -579,6 +582,135 @@ namespace DATN_Client.Areas.Admin.Components
             options.Scales.Y.Title.Display = true;
 
             await lineChart.InitializeAsync(data, options);
+        }
+        public async Task ExportExcel()
+        {
+            var a = await _httpClient.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Hôm nay");
+                //var worksheet = package.Workbook.Worksheets.Add("Tháng này");
+                //var worksheet = package.Workbook.Worksheets.Add("Hôm nay");
+
+                _lstBillDeails.Clear();
+                _lstBill = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year && x.CreateDate?.Month == DateTime.Now.Month).ToList();
+                foreach (var b in _lstBill)
+                {
+                    var _lstBillitem = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>($"https://localhost:7141/api/BillItem/getbilldetail/{b.Id}");
+                    _lstBillDeails.AddRange(_lstBillitem);
+                }
+                var d = _lstBillDeails
+                                        .GroupBy(x => x.ProductItemId)
+                                        .Select(group => new BillDetailShow
+                                        {
+                                            ProductCode = group.FirstOrDefault()?.ProductCode,
+                                            Quantity = group.Sum(item => item.Quantity),
+                                            Name = group.FirstOrDefault()?.Name,
+                                            ColorName = group.FirstOrDefault()?.ColorName,
+                                            SizeName = group.FirstOrDefault()?.SizeName,
+                                            CostPrice = group.FirstOrDefault()?.CostPrice
+                                        })
+                                        .OrderByDescending(group => group.Quantity)
+                                        .ToList();
+                var bill = a.Where(x => x.CreateDate?.Date == _optioSale.Date).Count();
+                var billcancel = a.Where(x => x.CreateDate?.Date == _optioSale.Date && x.Status==0).Count();
+                int productItem = 0;
+                int? doanhthu = 0;
+
+                foreach (var b in _lstBill)
+                {
+                    var _lstBillitem = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>($"https://localhost:7141/api/BillItem/getbilldetail/{b.Id}");
+                    _lstBillDeails.AddRange(_lstBillitem);
+                }
+                foreach (var c in _lstBillDeails)
+                {
+                    var _lstBi = await _httpClient.GetFromJsonAsync<List<BillItems>>("https://localhost:7141/api/BillItem/get_alll_bill_item");
+                    var pro = _lstBi.FirstOrDefault(x => x.Id == c.Id);
+                    productItem += pro.Quantity;
+                }
+                foreach (var b in _lstBill)
+                {
+                    doanhthu += b.TotalAmount;
+                }
+                // Merge hai dòng đầu
+                worksheet.Cells["A1:H2"].Merge = true;
+
+                // Ghi dòng chữ "Danh sách khuyến mại của BH Unisex" và căn giữa
+                worksheet.Cells["A1"].Value = "Báo cáo doanh số và doanh thu BH Unisex ";
+                worksheet.Cells["A1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells["A1"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                worksheet.Cells["A1"].Style.Font.Bold = true;
+                worksheet.Cells["A1"].Style.Font.Size = 20;
+
+                worksheet.Cells[3, 2].Value = "Hoá đơn";
+                worksheet.Cells[3, 6].Value = "Ngày";
+                worksheet.Cells[4, 2].Value = "Đơn bị huỷ";
+                worksheet.Cells[5, 2].Value = "Sản phẩm";
+                worksheet.Cells[6, 2].Value = "Doanh thu";
+
+                worksheet.Cells[3, 3].Value = bill;
+                worksheet.Cells[3, 7].Value = dateTime;
+                worksheet.Cells[4, 3].Value = billcancel;
+                worksheet.Cells[5, 3].Value = productItem;
+                worksheet.Cells[6, 3].Value = doanhthu;
+                worksheet.Cells[6, 3].Style.Numberformat.Format = "₫#,##0";
+                worksheet.Cells[3, 7].Style.Numberformat.Format = "dd/MM/yyyy";
+
+                worksheet.Cells[8, 1].Value = "STT";
+                worksheet.Cells[8, 2].Value = "Mã sản phẩm";
+                worksheet.Cells[8, 3].Value = "Tên sản phẩm";
+                worksheet.Cells[8, 4].Value = "Size";
+                worksheet.Cells[8, 5].Value = "Màu";
+                worksheet.Cells[8, 6].Value = "Số lượng bán";
+                worksheet.Cells[8, 7].Value = "Danh thu";
+
+                var headerRange = worksheet.Cells[8, 1, 8, 7];  // cái này để tạo viền
+                headerRange.Style.Font.Bold = true;  // in đậm 
+                headerRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;  // căn giữa
+                headerRange.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                headerRange.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                headerRange.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                headerRange.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+                for (int i = 1; i <= 7; i++)
+                {
+                    worksheet.Column(i).Width = worksheet.Cells[8, i].Value.ToString().Length + 5;
+                }
+                for (int i = 0; i < d.Count; i++)
+                {
+                    BillDetailShow promotion = d[i];
+                    worksheet.Cells[i + 9, 1].Value = i;
+                    worksheet.Cells[i + 9, 2].Value = promotion.ProductCode;
+                    worksheet.Cells[i + 9, 3].Value = promotion.Name;
+                    worksheet.Cells[i + 9, 4].Value = promotion.SizeName;
+                    worksheet.Cells[i + 9, 5].Value = promotion.ColorName;
+                    worksheet.Cells[i + 9, 6].Value = promotion.Quantity;
+                    worksheet.Cells[i + 9, 7].Value = promotion.CostPrice*promotion.Quantity;
+
+
+                    worksheet.Cells[i + 9, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;  // căn giữa 
+                    worksheet.Cells[i + 9, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[i + 9, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[i + 9, 7].Style.Numberformat.Format = "₫#,##0";
+
+                    var dataRange = worksheet.Cells[i + 9, 1, i + 9, 7];
+                    headerRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center; // căn giữa 
+                    dataRange.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    dataRange.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    dataRange.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    dataRange.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    // ...
+                }
+
+
+
+
+                var stream = new MemoryStream(package.GetAsByteArray());
+                var fileName = "myobjects.xlsx"; // Tên file mặc định
+                await JSRuntime.InvokeVoidAsync("saveAsFile", fileName, Convert.ToBase64String(stream.ToArray()));
+
+            }
         }
 
 
