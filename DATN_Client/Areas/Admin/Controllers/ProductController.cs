@@ -11,7 +11,7 @@ namespace DATN_Client.Areas.Admin.Controllers
 		public IActionResult Index()
 		{
 			return View();
-			if (Login.Roleuser == "Admin" || Login.Roleuser == "Staff")
+			if (Login.Roleuser == "Admin" )
 			{
 				return View();
 			}
@@ -25,7 +25,7 @@ namespace DATN_Client.Areas.Admin.Controllers
 		{
 			_productID = Id;
 			return View();
-			if (Login.Roleuser == "Admin" || Login.Roleuser == "Staff")
+			if (Login.Roleuser == "Admin" )
 			{
 				_productID = Id;
 				return View();
