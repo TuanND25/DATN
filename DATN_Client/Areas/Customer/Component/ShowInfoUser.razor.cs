@@ -42,7 +42,8 @@ namespace DATN_Client.Areas.Customer.Component
 			var a = await _client.PutAsJsonAsync($"https://localhost:7141/api/user/update-user", User_VM);
 			if (a.IsSuccessStatusCode)
 			{
-				ClosePopup("UpdateUser");
+				Login.UserNameShowHome = LayChuCuoiName(User_VM.Name);
+                ClosePopup("UpdateUser");
 				_toastService.ShowSuccess("Cập nhật thông tin người dùng thành công");
 			}
 			else
@@ -85,5 +86,23 @@ namespace DATN_Client.Areas.Customer.Component
 		{
 			SetModalState(false, modalType);
 		}
-	}
+
+        private string LayChuCuoiName(string input)
+        {
+            input = input.Trim();
+            // Kiểm tra xem chuỗi có khoảng trắng không
+            int lastSpaceIndex = input.LastIndexOf(' ');
+
+            // Nếu có khoảng trắng, lấy phần cuối cùng
+            if (lastSpaceIndex >= 0 && lastSpaceIndex < input.Length - 1)
+            {
+                return input.Substring(lastSpaceIndex + 1);
+            }
+            else
+            {
+                // Nếu không có khoảng trắng, trả về toàn bộ chuỗi
+                return input;
+            }
+        }
+    }
 }

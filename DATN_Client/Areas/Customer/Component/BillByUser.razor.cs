@@ -59,6 +59,8 @@ namespace DATN_Client.Areas.Customer.Component
 			// convert b_vm sang Create_Bill_With_Info._bill_validate_vm
 			string json = JsonSerializer.Serialize(b_vm);
 			Create_Bill_With_Info._bill_validate_vm = JsonSerializer.Deserialize<Bill_DataAnotation_VM>(json);
+			// lấy user
+			User user = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7141/api/user/get_user_by_id/{Create_Bill_With_Info._bill_validate_vm.UserId}");
 			// gửi yêu cầu thanh toán momo
 			_ord.OrderId = Guid.NewGuid().ToString();
 			if (_user.Name == null) _ord.FullName = "Không có thông tin khách hàng";

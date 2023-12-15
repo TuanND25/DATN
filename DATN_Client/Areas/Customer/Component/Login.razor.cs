@@ -93,7 +93,7 @@ namespace DATN_Client.Areas.Customer.Component
             }
         }
 
-        static string LayChuCuoiName(string input)
+        private string LayChuCuoiName(string input)
         {
             input = input.Trim();
             // Kiểm tra xem chuỗi có khoảng trắng không

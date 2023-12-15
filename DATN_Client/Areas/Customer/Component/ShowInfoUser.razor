@@ -105,7 +105,7 @@
                         <div class="inputName">
                             <i class="fa-solid fa-phone fa-l" style="color: #a1a1a1"></i>
                             <div style="display:flex;flex-direction:column;margin-left:10px;width:90%">
-                                <InputText class="form_field" name="name" id='name' @bind-Value="@User_VM.PhoneNumber" required placeholder="Số điện thoại" />
+                                <InputText class="form_field" name="name" id='name' @bind-Value="@User_VM.PhoneNumber" required placeholder="Số điện thoại" maxlength="10"/>
                                 <ValidationMessage For="()=>User_VM.PhoneNumber" />
                             </div>
                         </div>
