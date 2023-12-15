@@ -1,4 +1,5 @@
-﻿using DATN_Shared.Models;
+﻿using DATN_Client.Areas.Admin.Controllers;
+using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Components;
 
@@ -25,116 +26,17 @@ namespace DATN_Client.Areas.Admin.Components
 		public bool displayButton { get; set; }
 		public string CheckFee { get; set; }
 		public string CheckNote { get; set; }
+        public Guid BillId { get; set; }
 
-		protected override async Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
 		{
-			
-			_lstBillDetail = await _client.GetFromJsonAsync<List<BillDetailShow>>("https://localhost:7141/api/BillItem/getbilldetail/" + _billModel.Id);
-
-			foreach (var item in _lstBillDetail)
-			{
-				_tongtien += item.Quantity * item.PriceAfter;
-			}
-			texttongtien = NumberToText(Convert.ToDouble(_tongtien));
-			displayButton = false;
+			 BillId = BillManagementController._billId;
+			_lstBillDetail = await _client.GetFromJsonAsync<List<BillDetailShow>>("https://localhost:7141/api/BillItem/getbilldetail/" + _billModel.Id);			
 		}
 
 		public void ReturnBill()
 		{
-			nav.NavigateTo("https://localhost:7075/Admin/BillManagement", true);
-		}
-
-		public async Task UpdateConfirmShipping()
-		{
-			if (Phiship == null && Note == null)
-			{
-				CheckFee = "Không được để trống số tiền";
-				CheckNote = "Không được bỏ trống ghi chú";
-			}
-			else
-			{
-				Bill_VM b = await _client.GetFromJsonAsync<Bill_VM>($"https://localhost:7141/api/Bill/get_bill_by_id/{_billModel.Id}");
-				b.ShippingFee = Phiship;
-				b.Note = Note;
-				b.Status = 2;
-				var status = await _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", b);
-				if (status.IsSuccessStatusCode)
-				{
-					nav.NavigateTo("https://localhost:7075/Admin/BillManagement/Details", true);
-				}
-			}
-		}
-
-		public async Task CancelOrder()
-		{
-			Bill_VM b = await _client.GetFromJsonAsync<Bill_VM>($"https://localhost:7141/api/Bill/get_bill_by_id/{_billModel.Id}");
-
-			b.Status = 0;
-			var status = await _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", b);
-			if (status.IsSuccessStatusCode)
-			{
-				nav.NavigateTo("https://localhost:7075/Admin/BillManagement/Details", true);
-			}
-		}
-
-		private void HandleInput(ChangeEventArgs e)
-		{
-			var Phiship1 = e.Value.ToString();
-
-			if (Phiship1 == null || Phiship1 == string.Empty)
-			{
-				HideButton();
-				CheckFee = "Không được để trống số tiền";
-			}
-			else if (Convert.ToInt32(Phiship1) < 0)
-			{
-				CheckFee = "Vui lòng nhập số lớn hơn 0";
-			}
-			else if (Phiship1 != string.Empty)
-			{
-				CheckFee = null;
-				Phiship = Convert.ToInt32(Phiship1);
-				if (Phiship < 999)
-				{
-					displayButton = true;
-					Suggest_number_1 = RoundToNearestPowerOfTen(Phiship, 100);
-					Suggest_number_2 = RoundToNearestPowerOfTen(Phiship, 1000);
-				}
-			}
-			else
-			{
-				displayButton = false;
-			}
-
-			// Thực hiện các xử lý ngay khi giá trị thay đổi
-		}
-
-		private void CheckNoteNull(ChangeEventArgs e)
-		{
-			var Note = e.Value.ToString();
-			if (Note.Trim() == null || Note.Trim() == string.Empty)
-			{
-				CheckNote = "Không được bỏ trống ghi chú";
-			}
-			else
-			{
-				CheckNote = null;
-			}
-		}
-
-		private void HideButton()
-		{
-			displayButton = false;
-		}
-
-		private void SubmitFeeShip_1()
-		{
-			Phiship = Convert.ToInt32(Suggest_number_1);
-		}
-
-		private void SubmitFeeShip_2()
-		{
-			Phiship = Convert.ToInt32(Suggest_number_2);
+			nav.NavigateTo("https://localhost:7075/bill-management", true);
 		}
 
 		private string RoundToNearestPowerOfTen(int number, int chiso)

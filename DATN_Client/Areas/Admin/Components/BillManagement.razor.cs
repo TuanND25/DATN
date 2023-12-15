@@ -20,15 +20,19 @@ namespace DATN_Client.Areas.Admin.Components
        
         List<TabType> tabTypes = new List<TabType>();
         public int activeTabType { get; set; } = 1;
+        public string tabName { get; set; } = "";
+
+        public int SearchType { get; set; } = 1;
 
         protected override async Task OnInitializedAsync()
         {
             tabTypes.Add(new TabType { Id = 1, Name = "Tất cả hóa đơn" });
-            tabTypes.Add(new TabType { Id = 2, Name = "Chờ xác nhận" });
-            tabTypes.Add(new TabType { Id = 4, Name = "Đã xác nhận" });
-            tabTypes.Add(new TabType { Id = 3, Name = "Đã thanh toán" });
+            tabTypes.Add(new TabType { Id = 2, Name = "Chờ thanh toán" });
+            tabTypes.Add(new TabType { Id = 3, Name = "Chờ xác nhận" });
+            tabTypes.Add(new TabType { Id = 4, Name = "Chờ giao hàng" });
+            tabTypes.Add(new TabType { Id = 5, Name = "Đang giao hàng" });
             tabTypes.Add(new TabType { Id = 6, Name = "Đã hoàn thành" });
-            await HandleActiveTabType(1);
+            await HandleActiveTabType(1,"a");
         }
         public class TabType
         {
@@ -36,11 +40,12 @@ namespace DATN_Client.Areas.Admin.Components
 
             public int Id { get; set; }
         }
-        public async Task HandleActiveTabType(int id)
+        public async Task HandleActiveTabType(int id,string a)
         {
            
             var _GetclstBill = await _client.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
             activeTabType = id;
+            tabName = a;
             if (activeTabType == 1)
             {
 
@@ -51,6 +56,35 @@ namespace DATN_Client.Areas.Admin.Components
                 }
                 //tất cả hóa đơn
                 _lstBillShowOnMain = ConvertbillShowOnMain(_GetclstBill);
+            }
+            else if(activeTabType == 2)
+            {
+                //Chờ thanh toán
+                var list = _GetclstBill.Where(x => x.Type == 1 && x.Status == 1).ToList();
+                _lstBillShowOnMain = ConvertbillShowOnMain(list);
+            }
+            else if (activeTabType == 3)
+            {
+                //Chờ thanh toán
+                var list = _GetclstBill.Where(x => x.Type == 1 && x.Status == 2).ToList();
+                _lstBillShowOnMain = ConvertbillShowOnMain(list);
+            }
+            else if (activeTabType ==4)
+            {
+                var list = _GetclstBill.Where(x => (x.Type == 1 && x.Status == 3) || (x.Type == 2 && x.Status == 1)).ToList();
+                _lstBillShowOnMain = ConvertbillShowOnMain(list);
+            }
+            else if (activeTabType == 5)
+            {
+                var list = _GetclstBill.Where(x => (x.Type == 1 && x.Status == 4) || (x.Type == 2 && x.Status == 2)).ToList();
+                _lstBillShowOnMain = ConvertbillShowOnMain(list);
+            }
+            else if (activeTabType == 6)
+            {
+                var list = _GetclstBill.Where(x => (x.Type == 1 && x.Status == 5) ||
+                (x.Type == 2 && x.Status == 3)
+                ).ToList();
+                _lstBillShowOnMain = ConvertbillShowOnMain(list);
             }
         }
         
@@ -92,7 +126,12 @@ namespace DATN_Client.Areas.Admin.Components
                 };
                 billshow.Add(a);
             }
-            return billshow;
+            return billshow.OrderByDescending(x => x.DateTimeShow).ThenBy(x => x.DateTimeShow).ToList();
+            ;
+        }
+        public void redirectToDetails(Guid BillId)
+        {
+            _navigationManager.NavigateTo($"/bill-management/bill-detail?billid={BillId}",true);
         }
 
         public class BillShowOnMain

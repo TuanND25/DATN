@@ -1294,7 +1294,7 @@ namespace DATN_Client.Areas.Admin.Components
 			if (activeTienMat == true && activeChuyenKhoan == false)
 			{
 
-				bill.PaymentMethodId = lstPaymentMethod.FirstOrDefault(x => x.Name == "Tiền mặt").Id;
+                billMua.PaymentMethodId = lstPaymentMethod.FirstOrDefault(x => x.Name == "Tiền mặt").Id;
 				if (bill.PaymentMethodId == default || bill.PaymentMethodId == null)
 				{
 					_toastService.ShowError("Đã có lỗi xảy ra 2");
@@ -1303,7 +1303,7 @@ namespace DATN_Client.Areas.Admin.Components
 			}
 			else if (activeTienMat == false && activeChuyenKhoan == true)
 			{
-				bill.PaymentMethodId = lstPaymentMethod.FirstOrDefault(x => x.Name == "Chuyển khoản").Id;
+                billMua.PaymentMethodId = lstPaymentMethod.FirstOrDefault(x => x.Name == "Chuyển khoản").Id;
 				if (bill.PaymentMethodId == default || bill.PaymentMethodId == null)
 				{
 					_toastService.ShowError("Đã có lỗi xảy ra 3");
@@ -1312,7 +1312,7 @@ namespace DATN_Client.Areas.Admin.Components
 			}
 			else if (activeTienMat == true && activeChuyenKhoan == true)
 			{
-				bill.PaymentMethodId = lstPaymentMethod.FirstOrDefault(x => x.Name == "Chuyển khoản và tiền mặt").Id;
+                billMua.PaymentMethodId = lstPaymentMethod.FirstOrDefault(x => x.Name == "Chuyển khoản và tiền mặt").Id;
 				if (bill.PaymentMethodId == default || bill.PaymentMethodId == null)
 				{
 					_toastService.ShowError("Đã có lỗi xảy ra 4");
@@ -1383,8 +1383,7 @@ namespace DATN_Client.Areas.Admin.Components
                     _toastService.ShowError("Đã có lỗi xảy ra 8");
                     return;
                 };
-
-
+				billMua.UserId = getuser.Id;
             }
 
             billMua.TotalAmount = Tongtien;
@@ -1393,12 +1392,14 @@ namespace DATN_Client.Areas.Admin.Components
 			if (activeTabThemThongTin ==true)
 			{
 				billMua.ConfirmationDate = DateTime.Now;
-			}
+				billMua.Status = 1;
+
+            }
 			else
 			{
                 billMua.CompletionDate = DateTime.Now;
+                billMua.Status = 3;
             }
-			billMua.Status = 2;
 			billMua.Type = 2;
 
 			
@@ -1496,7 +1497,7 @@ namespace DATN_Client.Areas.Admin.Components
             }
 			else
 			{
-				_toastService.ShowError("Đã thanh toán đc r hehe");
+				_toastService.ShowError("Đã thanh toán thành công");
 				return;
 			}
 			
