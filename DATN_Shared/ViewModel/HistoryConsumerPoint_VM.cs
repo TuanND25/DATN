@@ -10,7 +10,8 @@ namespace DATN_Shared.ViewModel
 	{
         public Guid Id { get; set; }
         public Guid ConsumerPointId { get; set; }
-        public Guid FormulaId { get; set; }
+        public Guid? FormulaId { get; set; }
+        public Guid BillId { get; set; }
         public int Point { get; set; }
         public int Status { get; set; }
     }

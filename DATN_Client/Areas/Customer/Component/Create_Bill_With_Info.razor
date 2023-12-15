@@ -405,33 +405,36 @@ else
 							</div>
 						}
 					</div>
-					<div class="input-container">
-						<input type="text" placeholder="Nhập mã giảm giá" @bind-value="_voucherCode">
-						<button class="invite-btn" type="button" @onclick="ApDungVoucher">
-							Áp dụng
-						</button>
-					</div>
-					@* !string.IsNullOrEmpty(_voucherCode) && !_lstVchUser.Any(c => c.VoucherId == _v_vm.Id && c.Status == 0) && _v_vm.Quantity > 0 && _tongTienHang > _v_vm.Discount_Conditions *@
-					@if (_tiengiamVoucher > 0)
+					@if (!string.IsNullOrEmpty(_iduser))
 					{
-						<div style="display:flex;background-color:#fdf4ed;border:1px solid #A09F9E;border-radius:5px;padding:10px 10px;vertical-align:middle;margin-bottom:10px">
-							<div class="col-md-11">
-								<span>
-									Mã giảm giá <b>@_voucherCode.ToUpper()</b> đã giúp bạn tiết kiệm @(_tiengiamVoucher?.ToString("#,##0"))đ.
-								</span>
+						<div class="input-container">
+							<input type="text" placeholder="Nhập mã giảm giá" @bind-value="_voucherCode">
+							<button class="invite-btn" type="button" @onclick="ApDungVoucher">
+								Áp dụng
+							</button>
+						</div>
+						@* !string.IsNullOrEmpty(_voucherCode) && !_lstVchUser.Any(c => c.VoucherId == _v_vm.Id && c.Status == 0) && _v_vm.Quantity > 0 && _tongTienHang > _v_vm.Discount_Conditions *@
+						@if (_tiengiamVoucher > 0)
+						{
+							<div style="display:flex;background-color:#fdf4ed;border:1px solid #A09F9E;border-radius:5px;padding:10px 10px;vertical-align:middle;margin-bottom:10px">
+								<div class="col-md-11">
+									<span>
+										Mã giảm giá <b>@_voucherCode.ToUpper()</b> đã giúp bạn tiết kiệm @(_tiengiamVoucher?.ToString("#,##0"))đ.
+									</span>
+								</div>
+								<div class="col-md-1" style="text-align:unset">
+									<span @onclick="XoaVoucher"><b>Hủy</b></span>
+								</div>
 							</div>
-							<div class="col-md-1" style="text-align:unset">
-								<span @onclick="XoaVoucher"><b>Hủy</b></span>
-							</div>
+						}
+						<div style="display:flex">
+							<input type="checkbox" class="ui-checkbox"
+								   @oninput="CheckedDungDiem" />
+							<span style="margin-left:5px">
+								Dùng điểm(@_diemCuaNguoiDung.ToString("#,##0") điểm)
+							</span>
 						</div>
 					}
-					<div style="display:flex">
-						<input type="checkbox" class="ui-checkbox"
-							   @oninput="CheckedDungDiem" />
-						<span style="margin-left:5px">
-							Dùng điểm(@_diemCuaNguoiDung.ToString("#,##0") điểm)
-						</span>
-					</div>
 					<div class="row">
 						<div class="col-md-5"><label>Tạm tính</label></div>
 						<div class="col-md-7" style="text-align:right;"><label>@(_tongTienHang?.ToString("#,##0"))đ</label></div>
@@ -450,16 +453,16 @@ else
 							<div class="col-md-7" style="text-align:right;"><label>@(_bill_validate_vm.ShippingFee?.ToString("#,##0"))đ</label></div>
 						</div>
 					}
-					@if (_checkDung == true)
+					@if (_checkDung == true && _diemCuaNguoiDung != 0)
 					{
 						<div class="row">
 							<div class="col-md-5">
 								<label>Giảm giá dùng điểm</label>
-								</div>
+							</div>
 							<div class="col-md-7" style="text-align:right;"><label>-@(_tiengiamDungiem?.ToString("#,##0"))đ</label></div>
 						</div>
 					}
-					<hr style="margin:0"/>
+					<hr style="margin:0" />
 					<div class="row">
 						<div class="col-md-5">
 							<h5>Tổng cộng</h5>
