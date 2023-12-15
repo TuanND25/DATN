@@ -19,7 +19,7 @@ namespace DATN_Client.Areas.Customer.Component
 			_responseModel = BanOnlineController._momoExecuteResponseModel;
 			if (_responseModel.Message.ToLower() == "success")
 			{
-				Create_Bill_With_Info._bill_validate_vm.Status = 1;
+				Create_Bill_With_Info._bill_validate_vm.Status = 2;
 				var updateStatus = _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", Create_Bill_With_Info._bill_validate_vm);
 			}
 		}

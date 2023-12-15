@@ -1,5 +1,7 @@
 ﻿using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
+using DATN_Shared.ViewModel.Momo;
+using DATN_Shared.ViewModel.Momo.Order;
 using Microsoft.AspNetCore.Components;
 
 namespace DATN_Client.Areas.Customer.Component
@@ -10,17 +12,18 @@ namespace DATN_Client.Areas.Customer.Component
 		private HttpClient _httpClient = new HttpClient();
 		[Inject] private Blazored.Toast.Services.IToastService _toastService { get; set; }
 		[Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
-		private List<Bill_VM> _lstBills = new List<Bill_VM>();
-		private User _user = new User();
-		private List<BillDetailShow> _listBillItem = new List<BillDetailShow>();
+		private List<Bill_VM> _lstBills = new();
+		private User _user = new();
+		private List<BillDetailShow> _listBillItem = new();
 		private List<PaymentMethod_VM> _lstPayM = new();
+		private OrderInfoModel _ord = new();
 		private bool isLoader = false;
 
 		protected override async Task OnInitializedAsync()
 		{
 			isLoader = true;
-			//var a = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
-			var a = Guid.Parse("05CE1969-7D23-4E5F-90ED-940F161F902A");
+			var a = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
+			//var a = Guid.Parse("05CE1969-7D23-4E5F-90ED-940F161F902A");
 			var b = Convert.ToString(a);
 			if (!string.IsNullOrEmpty(b))
 			{
@@ -51,8 +54,17 @@ namespace DATN_Client.Areas.Customer.Component
 			return pttt.Name;
 		}
 
-		private async Task ThanhToanHdMomo()
+		private async Task ThanhToanHdMomo(Bill_VM b_vm)
 		{
+			_ord.OrderId = Guid.NewGuid().ToString();
+			if (_user.Name == null) _ord.FullName = "Không có thông tin khách hàng";
+			else _ord.FullName = _user.Name;
+			_ord.OrderInfo = b_vm.Note + $". Mã hóa đơn: {b_vm.BillCode}";
+			_ord.Amount = b_vm.TotalAmount;
+			var reponse1 = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/Momo/CreatePaymentAsync", _ord);
+			var reponse2 = await reponse1.Content.ReadFromJsonAsync<MomoCreatePaymentResponseModel>();
+			_navigationManager.NavigateTo($"{reponse2.PayUrl}", true);
+			return;
 		}
 	}
 }

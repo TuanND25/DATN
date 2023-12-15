@@ -80,6 +80,7 @@ namespace DATN_API.Data
 			builder.Entity<Bill>().Property(x=>x.ReducedAmount).IsRequired(false);
 			builder.Entity<Bill>().Property(x=>x.VoucherId).IsRequired(false);
 			builder.Entity<Bill>().Property(x=>x.PaymentMethodId).IsRequired(false);
+			builder.Entity<HistoryConsumerPoint>().Property(x=>x.FormulaId).IsRequired(false);
 		}
 		protected void CreateRoles(ModelBuilder builder)
 		{

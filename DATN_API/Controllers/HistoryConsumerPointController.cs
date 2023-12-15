@@ -39,6 +39,8 @@ namespace DATN_API.Controllers
 			HistoryConsumerPoint.Id = rvm.Id;
 			HistoryConsumerPoint.ConsumerPointId = rvm.ConsumerPointId;
 			HistoryConsumerPoint.FormulaId = rvm.FormulaId;
+			HistoryConsumerPoint.BillId = rvm.BillId;
+			HistoryConsumerPoint.Point = rvm.Point;
 			HistoryConsumerPoint.Status = rvm.Status;
 			await _HistoryConsumerPoint.AddHistoryConsumerPoint(HistoryConsumerPoint);
 			return Ok();
@@ -49,7 +51,9 @@ namespace DATN_API.Controllers
 			HistoryConsumerPoint HistoryConsumerPoint = await _HistoryConsumerPoint.GetHistoryConsumerPointById(rvm.Id);
 			HistoryConsumerPoint.ConsumerPointId = rvm.ConsumerPointId;
 			HistoryConsumerPoint.FormulaId = rvm.FormulaId;
-			HistoryConsumerPoint.Status = rvm.Status;
+            HistoryConsumerPoint.BillId = rvm.BillId;
+            HistoryConsumerPoint.Point = rvm.Point;
+            HistoryConsumerPoint.Status = rvm.Status;
 			await _HistoryConsumerPoint.UpdateHistoryConsumerPoint(HistoryConsumerPoint);
 			return Ok();
 		}
