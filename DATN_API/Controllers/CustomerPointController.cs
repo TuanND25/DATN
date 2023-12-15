@@ -21,7 +21,13 @@ namespace DATN_API.Controllers
             var lst = await _customerPointService.GetAllCustomerPoint();
             return lst;
         }
-        [HttpPut("putCustomerPoint")]
+		[HttpGet("GetCustomerPoint_byUserID/{UserID}")]
+		public async Task<CustomerPoint_VM> GetCustomerPoint_byUserID(Guid UserID)
+		{
+			var lst = await _customerPointService.GetCustomerPoint_byUserID(UserID);
+			return lst;
+		}
+		[HttpPut("putCustomerPoint")]
         public async Task<string> PutCustomerPoint(CustomerPoint_VM c)
         {
             var lst = await _customerPointService.PutCustomerPoint(c);

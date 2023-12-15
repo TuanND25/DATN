@@ -17,7 +17,6 @@ namespace DATN_Client.Areas.Customer.Component
 		[Inject] private NavigationManager _navi { get; set; }
 		[Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
 		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
-																				   //private List<User_VM> _lstUser = new List<User_VM>();
 		private List<CartItems_VM> _lstCI = new();
 		private List<Image_Join_ProductItem> _lstImg_PI = new();
 		private List<Image_Join_ProductItem> _lstImg_PI_tam = new();
@@ -49,11 +48,15 @@ namespace DATN_Client.Areas.Customer.Component
 		public string? _iduser { get; set; }
 		public bool _datHangThanhCong { get; set; } = false;
 		public string _voucherCode { get; set; } = string.Empty;
-		public int? _tiengiam { get; set; } = 0;
+		public int? _tiengiamVoucher { get; set; } = 0;
+		public int? _tiengiamDungiem { get; set; } = 0;
 		public string _afterClick { get; set; } = string.Empty;
 		private bool isLoader = false;
+		private int _diemCuaNguoiDung { get; set; } = 0;
+		private bool _checkDung { get; set; }
 		protected override async Task OnInitializedAsync()
 		{
+			_bill_validate_vm=new();
 			isLoader = true;
 			_iduser = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
 			if (SessionServices.GetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai").Count == 0 && _iduser == null) _navi.NavigateTo("https://localhost:7075/cart", true);
@@ -64,7 +67,7 @@ namespace DATN_Client.Areas.Customer.Component
 			{
 				try
 				{
-					_userVangLai = await _httpClient.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get-user-byusername?username={"khachvanglai"}");
+					_userVangLai = await _httpClient.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get-user-byusername?username=khachvanglai");
 				}
 				catch (Exception)
 				{
@@ -82,6 +85,7 @@ namespace DATN_Client.Areas.Customer.Component
 				_lst_adrS_User = await _httpClient.GetFromJsonAsync<List<AddressShip_VM>>($"https://localhost:7141/api/AddressShip/get_address_by_UserID/{_bill_validate_vm.UserId}"); // list địa chỉ của user
 				_adrS_User = _lst_adrS_User.FirstOrDefault(c => c.Status == 1);
 			}
+			_diemCuaNguoiDung = int.Parse((await _httpClient.GetFromJsonAsync<CustomerPoint_VM>($"https://localhost:7141/api/CustomerPoint/GetCustomerPoint_byUserID/{_bill_validate_vm.UserId}")).Point);
 			_lstImg_PI = (await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem")).OrderBy(c => c.STT).ToList();
 			_lstTinhTp_Data = await _httpClient.GetFromJsonAsync<List<Province_VM>>("https://api.npoint.io/ac646cb54b295b9555be"); // api tỉnh tp
 			_lstTinhTp = _lstTinhTp_Data;
@@ -330,7 +334,7 @@ namespace DATN_Client.Areas.Customer.Component
 				_toastService.ShowError("Mã giảm giá này bạn đã sử dụng rồi, vui lòng sử dụng mã giảm giá khác!");
 				return;
 			}
-			if (v_vm.Quantity == 0)
+			if (v_vm.Quantity == 0 || v_vm.Status == 0)
 			{
 				_toastService.ShowError("Mã giảm giá không tồn tại, đã hết hạn hoặc hết lượt sử dụng");
 				return;
@@ -351,12 +355,18 @@ namespace DATN_Client.Areas.Customer.Component
 				}
 				_tongTienAll = _tongTienHang + _bill_validate_vm.ShippingFee;
 				_bill_validate_vm.VoucherId = v_vm.Id;
-				_tiengiam = _tongTienAll * v_vm.Percent / 100;
-				if (_tiengiam > v_vm.Maximum_Reduction)
+				_tiengiamVoucher = _tongTienAll * v_vm.Percent / 100;
+				if (_tiengiamVoucher > v_vm.Maximum_Reduction)
 				{
-					_tiengiam = v_vm.Maximum_Reduction;
+					_tiengiamVoucher = v_vm.Maximum_Reduction;
 				}
-				_tongTienAll -= _tiengiam;
+				_tongTienAll -= _tiengiamVoucher;
+				if (_checkDung == true)
+				{
+					_tiengiamDungiem = _tongTienAll / 10;
+					if (_tiengiamDungiem >= _diemCuaNguoiDung) _tiengiamDungiem = _diemCuaNguoiDung;
+					_tongTienAll -= _tiengiamDungiem;
+				}
 				_toastService.ShowSuccess("Áp dụng mã giảm giá thành công");
 			}
 		}
@@ -367,14 +377,20 @@ namespace DATN_Client.Areas.Customer.Component
 			_voucherCode = string.Empty;
 			_tongTienHang = 0;
 			_tongTienAll = 0;
-			_tiengiam = 0;
+			_tiengiamVoucher = 0;
 			foreach (var x in _lstCI)
 			{
 				_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
 				_tongTienHang += (x.Quantity * _pi_s_vm.PriceAfterReduction);
 			}
 			_tongTienAll = _tongTienHang + _bill_validate_vm.ShippingFee;
-			_toastService.ShowSuccess("Hủy áp dụng thành công, mã giảm giá đã được hoàn lại vào ví Vocher");
+			if (_checkDung == true)
+			{
+				_tiengiamDungiem = _tongTienAll / 10;
+				if (_tiengiamDungiem >= _diemCuaNguoiDung) _tiengiamDungiem = _diemCuaNguoiDung;
+				_tongTienAll -= _tiengiamDungiem;
+			}
+			_toastService.ShowSuccess("Hủy áp dụng thành công");
 		}
 		private void SetDataPayMId(Guid id)
 		{
@@ -383,6 +399,84 @@ namespace DATN_Client.Areas.Customer.Component
 		private void NavLogin()
 		{
 			_navi.NavigateTo("https://localhost:7075/customer/Login/login", true);
+		}
+
+		private async Task CheckedDungDiem(ChangeEventArgs e)
+		{
+			_checkDung = (bool)e.Value;
+
+			if (_checkDung == true)
+			{
+				if (_bill_validate_vm.VoucherId != null)
+				{
+					var v_vm = await _httpClient.GetFromJsonAsync<Voucher_VM>($"https://localhost:7141/api/Voucher/ID?Id={_bill_validate_vm.VoucherId}");
+					_tongTienHang = 0;
+					_tongTienAll = 0;
+					foreach (var x in _lstCI)
+					{
+						_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
+						_tongTienHang += (x.Quantity * _pi_s_vm.PriceAfterReduction);
+					}
+					_tongTienAll = _tongTienHang + _bill_validate_vm.ShippingFee;
+					_bill_validate_vm.VoucherId = v_vm.Id;
+					_tiengiamVoucher = _tongTienAll * v_vm.Percent / 100;
+					if (_tiengiamVoucher > v_vm.Maximum_Reduction)
+					{
+						_tiengiamVoucher = v_vm.Maximum_Reduction;
+					}
+					_tongTienAll -= _tiengiamVoucher;
+				}
+				if (_bill_validate_vm.VoucherId == null)
+				{
+					_voucherCode = string.Empty;
+					_tongTienHang = 0;
+					_tongTienAll = 0;
+					_tiengiamVoucher = 0;
+					foreach (var x in _lstCI)
+					{
+						_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
+						_tongTienHang += (x.Quantity * _pi_s_vm.PriceAfterReduction);
+					}
+					_tongTienAll = _tongTienHang + _bill_validate_vm.ShippingFee;
+				}
+				 _tiengiamDungiem = _tongTienAll / 10;
+				if (_tiengiamDungiem >= _diemCuaNguoiDung) _tiengiamDungiem = _diemCuaNguoiDung;
+				_tongTienAll -= _tiengiamDungiem;
+			}
+			else
+			{
+				if (_bill_validate_vm.VoucherId != null)
+				{
+					var v_vm = await _httpClient.GetFromJsonAsync<Voucher_VM>($"https://localhost:7141/api/Voucher/ID?Id={_bill_validate_vm.VoucherId}");
+					_tongTienHang = 0;
+					_tongTienAll = 0;
+					foreach (var x in _lstCI)
+					{
+						_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
+						_tongTienHang += (x.Quantity * _pi_s_vm.PriceAfterReduction);
+					}
+					_tongTienAll = _tongTienHang + _bill_validate_vm.ShippingFee;
+					_tiengiamVoucher = _tongTienAll * v_vm.Percent / 100;
+					if (_tiengiamVoucher > v_vm.Maximum_Reduction)
+					{
+						_tiengiamVoucher = v_vm.Maximum_Reduction;
+					}
+					_tongTienAll -= _tiengiamVoucher;
+				}
+				if (_bill_validate_vm.VoucherId == null)
+				{
+					_voucherCode = string.Empty;
+					_tongTienHang = 0;
+					_tongTienAll = 0;
+					_tiengiamVoucher = 0;
+					foreach (var x in _lstCI)
+					{
+						_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
+						_tongTienHang += (x.Quantity * _pi_s_vm.PriceAfterReduction);
+					}
+					_tongTienAll = _tongTienHang + _bill_validate_vm.ShippingFee;
+				}
+			}
 		}
 	}
 }

@@ -22,11 +22,13 @@ namespace DATN_Client.Areas.Customer.Component
         LoginUser loginUser = new LoginUser();
         public string Idsession { get; set; } = string.Empty;
         public static string Roleuser { get; set; } = string.Empty;
+        public static string UserNameShowHome { get; set; }
+        public static bool _chaoLogin { get; set; } = false;
         public async Task login()
         {
             if (loginUser.UserName== string.Empty || loginUser.Password == string.Empty)
             {
-				_toastService.ShowError("vui lòng điền đầy đủ thông tin");
+				_toastService.ShowError("Vui lòng điền đầy đủ thông tin");
                 return;
 
 			}
@@ -63,7 +65,7 @@ namespace DATN_Client.Areas.Customer.Component
                 var data = claims.Select(c => c.Value).ToArray();
                 var id = data[0];
                 Roleuser = data[2];
-                iHttpContext.HttpContext.Session.SetString("UserId", id);
+                iHttpContext.HttpContext.Session.SetString("UserId", id);                
                 iHttpContext.HttpContext.Session.SetString("Token", token);
 				
 
@@ -79,15 +81,32 @@ namespace DATN_Client.Areas.Customer.Component
 
                     var iduser = Guid.Parse(iHttpContext.HttpContext.Session.GetString("UserId"));
                     var user = await _httpClient.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get_user_by_id/{iduser}");
-                    _toastService.ShowSuccess("Hi," + user.Name);
-                    await Task.Delay(3000);
-                    navigationManager.NavigateTo("/all-product", true);
+                    UserNameShowHome = LayChuCuoiName(user.Name);
+                    _chaoLogin = true;
+                    navigationManager.NavigateTo("/home", true);
                 }
-
             }
             else
             {
                 _toastService.ShowError(result.Result);
+            }
+        }
+
+        static string LayChuCuoiName(string input)
+        {
+            input = input.Trim();
+            // Kiểm tra xem chuỗi có khoảng trắng không
+            int lastSpaceIndex = input.LastIndexOf(' ');
+
+            // Nếu có khoảng trắng, lấy phần cuối cùng
+            if (lastSpaceIndex >= 0 && lastSpaceIndex < input.Length - 1)
+            {
+                return input.Substring(lastSpaceIndex + 1);
+            }
+            else
+            {
+                // Nếu không có khoảng trắng, trả về toàn bộ chuỗi
+                return input;
             }
         }
     }

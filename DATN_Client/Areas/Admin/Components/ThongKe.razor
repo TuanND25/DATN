@@ -1,4 +1,6 @@
-﻿<div class="pagetitle">
+﻿@inject IJSRuntime JSRuntime
+
+<div class="pagetitle" >
     <h1>Dashboard</h1>
     <nav>
         <ol class="breadcrumb">
@@ -6,6 +8,10 @@
             <li class="breadcrumb-item active">Dashboard</li>
         </ol>
     </nav>
+    <button class="cssbuttons-io-button1" @onclick="ExportExcel" style="margin-left: auto;">
+                            <i class="fa-regular fa-cloud-arrow-down"></i>
+                            <span>Xuất Excel</span>
+                        </button>
 </div>
 <style>
     .notpoundimg {
