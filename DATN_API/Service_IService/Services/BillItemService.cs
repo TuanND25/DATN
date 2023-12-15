@@ -60,6 +60,7 @@ namespace DATN_API.Service_IService.Services
 							Id = a.Id,
 							BillID = b.Id,
 							ProductItemId = c.Id,
+							ProductId = c.ProductId,
 							ProductCode = q.ProductCode,
 							Name = q.Name,
 							ColorId = d.Id,
