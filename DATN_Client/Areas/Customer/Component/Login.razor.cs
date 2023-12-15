@@ -72,7 +72,7 @@ namespace DATN_Client.Areas.Customer.Component
 
 				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var responseAuthorize = await _httpClient.GetAsync("https://localhost:7141/api/user/get-user");
-                if (principal.IsInRole("Admin"))
+                if (principal.IsInRole("Admin") || principal.IsInRole("Staff"))
                 {                   
                     navigationManager.NavigateTo("https://localhost:7075/Admin", true);
                 }
