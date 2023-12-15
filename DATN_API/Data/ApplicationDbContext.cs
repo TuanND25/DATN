@@ -143,10 +143,38 @@ namespace DATN_API.Data
 
                 );
 
+            builder.Entity<Cart>().HasData(
+                new Cart
+                {
+                    UserId = Guid.Parse("2e8676b5-daa0-4b9e-bc06-06d5b06f7078"),
+                    Description = string.Empty,
+                    Status = 1
+                },
+                 new Cart
+                 {
+                     UserId = Guid.Parse("f1dded95-3dae-4568-a66e-66f47fbc4ffd"),
+                     Description = string.Empty,
+                     Status = 1
+                 }
+                );
+            builder.Entity<ConsumerPoint>().HasData(
+                    new ConsumerPoint
+                    {
+                        UserID =Guid.Parse("2e8676b5-daa0-4b9e-bc06-06d5b06f7078"),
+                        Point ="0",
+                        Status =1
+                    },
+                     new 
+                     {
+                         UserID = Guid.Parse("f1dded95-3dae-4568-a66e-66f47fbc4ffd"),
+                         Point = "0",
+                         Status = 1
+                     }
+                );
             builder.Entity<IdentityUserRole<Guid>>().HasData(
              new IdentityUserRole<Guid> { RoleId = Guid.Parse("039d186b-f613-4652-91bb-fa284a2e7e33"), UserId = Guid.Parse("76671898-a7dd-4d40-a1da-e56639a4dbe4") },
              new IdentityUserRole<Guid> { RoleId = Guid.Parse("e1813d8e-9ab3-47b6-bb17-cbb48f114d36"), UserId = Guid.Parse("2e8676b5-daa0-4b9e-bc06-06d5b06f7078") },
-             new IdentityUserRole<Guid> { RoleId = Guid.Parse("1048eea1-29e3-4139-9b25-29a4fb2562d7"), UserId = Guid.Parse("5fcc1c98-da29-4d88-b088-f921528142a2") }          
+             new IdentityUserRole<Guid> { RoleId = Guid.Parse("1048eea1-29e3-4139-9b25-29a4fb2562d7"), UserId = Guid.Parse("5fcc1c98-da29-4d88-b088-f921528142a2") }
             );
         }
     }
