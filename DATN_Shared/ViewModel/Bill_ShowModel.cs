@@ -30,7 +30,10 @@ namespace DATN_Shared.ViewModel
 		public int? FinalAmount { get; set; } // tiền khách đưa
 		public DateTime? CreateDate { get; set; }
 		public DateTime? ConfirmationDate { get; set; }
+		public DateTime? ShippingDate { get; set; } // ngày giao cho đơn vị vc
 		public DateTime? CompletionDate { get; set; }
+		public DateTime? CancelDate { get; set; }  // ngày huỷ  
+		public string? CanelBy { get; set; }  // người huỷ 
 		public int? Type { get; set; }
 		public string? Note { get; set; }
 		public int Status { get; set; }

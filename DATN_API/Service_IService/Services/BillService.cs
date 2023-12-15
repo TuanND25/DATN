@@ -68,6 +68,9 @@ namespace DATN_API.Service_IService.Services
 						   WardName = a.WardName,
 						   ToAddress= a.ToAddress,
 						   NumberPhone = a.NumberPhone,
+						   ShippingDate = a.ShippingDate,
+						   CancelDate = a.CancelDate,
+						   CanelBy = a.CanelBy,
 					   }).ToList();
 			return lst;
 		}

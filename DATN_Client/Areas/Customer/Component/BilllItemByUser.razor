@@ -7,25 +7,20 @@
                 SuccessIcon="fas fa-check-circle"
                 ErrorIcon="fa-solid fa-triangle-exclamation" />
 
-<BlazoredToasts Position="ToastPosition.TopRight"
-                Timeout="5"
-                IconType="IconType.FontAwesome"
-                SuccessClass="success-toast-override"
-                SuccessIcon="fa-solid fa-check"
-                ErrorIcon="fa-solid fa-triangle-exclamation" />
 
 
 <style>
-   .btnTrongSuot {
+    .btnTrongSuot {
         background-color: transparent;
         color: blue;
         border: none;
         font-family: inherit;
         font-size: 15px;
         font-weight: 500;
-        margin-left:20px;
-        margin-bottom:4px;    
+        margin-left: 20px;
+        margin-bottom: 4px;
     }
+
     .button {
         font-family: Roboto, Arial, Sans-Serif;
         font-size: 14px;
@@ -171,13 +166,15 @@
         font-size: 15px;
         display: flex;
     }
-    .fade{
+
+    .fade {
         font-family: "Poppins",sans-serif;
     }
 </style>
 
 @{
     int? tong = 0;
+
 }
 
 <EditForm Model="_bill_ShowModel">
@@ -186,6 +183,7 @@
             <h5 class="card-title">Tình trạng đơn hàng</h5>
             <div class="main1">
                 <ul class="ul">
+
                     <li class="li">
                         <i class="fas fa-solid fa-clipboard-list"></i>
                         <div class="progress1 one active1" style="">
@@ -193,39 +191,152 @@
                             <i class="uil fa-solid fa-check"></i>
                         </div>
                         <p class="text">Đơn hàng đã đặt</p>
+                        <p>@_bill_ShowModel.CreateDate?.ToString("HH:mm dd/MM/yyyy")</p>
                     </li>
-                    <li class="li">
-                        <i class="fas fa-regular fa-credit-card"></i>
-                        <div class="progress1 two active1" style="">
-                            <p>2</p>
-                            <i class="uil fa-solid fa-check"></i>
-                        </div>
-                        <p class="text">Chờ thanh toán</p>
-                    </li>
-                    <li class="li">
-                        <i class="fas fa-shipping-fast"></i>
-                        <div class="progress1 three" style="margin-right:-5px;">
-                            <p>3</p>
-                            <i class="uil fa-solid fa-check"></i>
-                        </div>
-                        <p class="text">Đã giao cho ĐVVC</p>
-                    </li>
-                    <li class="li">
-                        <i class="fas fa-solid fa-box-open"></i>
-                        <div class="progress1 four" style="">
-                            <p>4</p>
-                            <i class="uil fa-solid fa-check"></i>
-                        </div>
-                        <p class="text">Đã nhận được hàng</p>
-                    </li>
-                    <li class="li">
-                        <i class="fas fa-regular fa-star"></i>
-                        <div class="progress1 five" style="">
-                            <p>5</p>
-                            <i class="uil fa-solid fa-check"></i>
-                        </div>
-                        <p class="text">Đánh giá</p>
-                    </li>
+
+                    @if (@_bill_ShowModel.Status == 2 && @_bill_ShowModel.PaymentMethodName == "Thanh toán Momo")  // thành công
+                    {
+                        <li class="li">
+                            <i class="fas fa-regular fa-credit-card"></i>
+                            <div class="progress1 two active1" style="">
+                                <p>2</p>
+                                <i class="uil fa-solid fa-check"></i>
+                            </div>
+                            <p class="text">Đã thanh toán @_bill_ShowModel.TotalAmount đ</p>
+                            <p class="text">Chờ xác nhận</p>
+                        </li>
+                    }
+                    else if (@_bill_ShowModel.Status == 1 && @_bill_ShowModel.PaymentMethodName == "Thanh toán Momo")
+                    {  // thất bại
+                        <li class="li">
+                            <i class="fas fa-regular fa-credit-card"></i>
+                            <div class="progress1 two active1" style="">
+                                <p>2</p>
+                                <i class="uil fa-solid fa-check"></i>
+                            </div>
+                            <p class="text">Chờ thanh toán</p>
+                        </li>
+                    }
+
+
+                    else if (@_bill_ShowModel.Status >= 3 && @_bill_ShowModel.PaymentMethodName == "Thanh toán Momo")
+                    {
+                        <li class="li">
+                            <i class="fas fa-regular fa-credit-card"></i>
+                            <div class="progress1 two active1" style="">
+                                <p>2</p>
+                                <i class="uil fa-solid fa-check"></i>
+                            </div>
+                            <p class="text">Đã thanh toán @_bill_ShowModel.TotalAmount đ</p>
+                            <p class="text">Đơn hàng được xác nhận</p>
+                            <p class="text">@_bill_ShowModel.ConfirmationDate?.ToString("HH:mm dd/MM/yyyy")</p>
+                        </li>
+                    }
+                    else if (@_bill_ShowModel.Status >= 3 && @_bill_ShowModel.PaymentMethodName == "Thanh toán khi nhận hàng (COD)")
+                    {
+                        <li class="li">
+                            <i class="fas fa-regular fa-credit-card"></i>
+                            <div class="progress1 two active1" style="">
+                                <p>2</p>
+                                <i class="uil fa-solid fa-check"></i>
+                            </div>
+                            <p class="text">Đơn hàng được xác nhận</p>
+                            <p class="text">@_bill_ShowModel.ConfirmationDate?.ToString("HH:mm dd/MM/yyyy")</p>
+                        </li>
+                    }
+
+                    else
+                    {
+                        <li class="li">
+                            <i class="fas fa-regular fa-credit-card"></i>
+                            <div class="progress1 two active1" style="">
+                                <p>2</p>
+                                <i class="uil fa-solid fa-check"></i>
+                            </div>
+                            <p class="text">Chờ xác nhận</p>
+                        </li>
+                    }
+
+
+
+
+                    @if (_bill_ShowModel.Status >= 3)
+                    {
+                        <li class="li">
+                            <i class="fas fa-shipping-fast"></i>
+                            <div class="progress1 three active1" style="margin-right:-5px;">
+                                <p>3</p>
+                                <i class="uil fa-solid fa-check"></i>
+                            </div>
+                            <p class="text">Đã giao cho ĐVVC</p>
+                            <p>@_bill_ShowModel.ShippingDate</p>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="li">
+                            <i class="fas fa-shipping-fast"></i>
+                            <div class="progress1 three" style="margin-right:-5px;">
+                                <p>3</p>
+                                <i class="uil fa-solid fa-check"></i>
+                            </div>
+                            <p class="text">Chờ giao cho ĐVVC</p>
+                        </li>
+                    }
+
+
+
+                    @if (_bill_ShowModel.Status == 6)
+                    {
+                        <li class="li">
+                            <i class="fas fa-solid fa-box-open"></i>
+                            <div class="progress1 four active1" style="">
+                                <p>4</p>
+                                <i class="uil fa-solid fa-check"></i>
+                            </div>
+                            <p class="text">Đã nhận được hàng</p>
+                            
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="li">
+                            <i class="fas fa-solid fa-box-open"></i>
+                            <div class="progress1 four" style="">
+                                <p>4</p>
+                                <i class="uil fa-solid fa-check"></i>
+                            </div>
+                            <p class="text">Đã nhận được hàng</p>
+                        </li>
+                    }
+
+                    @if (_bill_ShowModel.Status == 6)
+                    {
+                        <li class="li">
+                            <i class="fas fa-regular fa-star"></i>
+                            <div class="progress1 five active1" style="">
+                                <p>5</p>
+                                <i class="uil fa-solid fa-check"></i>
+                            </div>
+                            <p class="text">Hoàn thành</p>
+                            <p>@_bill_ShowModel.CompletionDate</p>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="li">
+                            <i class="fas fa-regular fa-star"></i>
+                            <div class="progress1 five" style="">
+                                <p>5</p>
+                                <i class="uil fa-solid fa-check"></i>
+                            </div>
+                            <p class="text">Hoàn thành</p>
+                            <p class="text">@_bill_ShowModel.CompletionDate?.ToString("HH:mm dd/MM/yyyy")</p>
+                        </li>
+                    }
+
+
+
                 </ul>
             </div>
         </div>
@@ -235,7 +346,9 @@
 
             <div class="row">
                 <h5 class="card-title col-md-6" style="margin-left:15px;margin-right:30px;">Chi tiết đơn hàng</h5>
-                <h5 class="card-title col-md-5" style="text-align:right; color:red;">@(_bill_ShowModel.Status==0?"Đã huỷ":_bill_ShowModel.Status==1?"Chờ xác nhận":_bill_ShowModel.Status==2?"Đang vận chuyển":"Hoàn thành")</h5>
+                <h5 class="card-title col-md-5" style="text-align:right; color:red;">
+                    @(_bill_ShowModel.Status==0?"Đã huỷ":_bill_ShowModel.Status==1?"Chờ thanh toán":_bill_ShowModel.Status==2?"Chờ xác nhận":_bill_ShowModel.Status==3?"Đã được xác nhận":_bill_ShowModel.Status==4?"Đã giao cho ĐVVC":_bill_ShowModel.Status==5?"Giao hàng thành công":_bill_ShowModel.Status==6?"Hoàn thành":"")
+                </h5>
             </div>
             <hr />
             <!-- Default Table -->
@@ -261,9 +374,9 @@
                                 <a>@a.Name</a> <br />
                                 <span>@a.SizeName / @a.ColorName</span>
                             </td>
-                            <td style="vertical-align:middle;text-align:center;">@(a.CostPrice?.ToString("#,##0"))₫</td>
+                            <td style="vertical-align:middle;text-align:center;">@(a.PriceAfter?.ToString("#,##0"))₫</td>
                             <td style="vertical-align:middle;text-align:center;">@a.Quantity</td>
-                            <td style="vertical-align:middle; text-align:right;">@((a.CostPrice*a.Quantity)?.ToString("#,##0"))₫</td>
+                            <td style="vertical-align:middle; text-align:right;">@((a.PriceAfter*a.Quantity)?.ToString("#,##0"))₫</td>
                         </tr>
                         tong += (a.CostPrice * a.Quantity);
                     }
@@ -284,7 +397,7 @@
             <div class="row">
                 <div class="col-md-6" style="display:flex;">
                     <h5 class="card-title">Địa chỉ nhận hàng</h5>
-                    @if(_bill_ShowModel.Status==1)
+                    @if (_bill_ShowModel.Status == 1)
                     {
                         <button class="btnTrongSuot" data-toggle="modal" data-target="#ChangeDiaChi"> Thay đổi </button>
                     }
@@ -324,45 +437,45 @@
 
 
 
-<div class="modal fade" id="ChangeDiaChi">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<!-- Phần tiêu đề của popup -->
-			<div class="modal-header">
-				<h4 class="modal-title">Chọn địa chỉ</h4>
-				<button type="button" class="close" style="background-color:transparent;border:none;" data-dismiss="modal">&times;</button>
-			</div>
+    <div class="modal fade" id="ChangeDiaChi">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Phần tiêu đề của popup -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Chọn địa chỉ</h4>
+                    <button type="button" class="close" style="background-color:transparent;border:none;" data-dismiss="modal">&times;</button>
+                </div>
 
-			<!-- Nội dung của popup -->
-			<div class="modal-body">
-				@foreach (var item in _lstAddressGetById)
-				{
-					<div class="row" style="height:60px; margin-top:20px;">
-						<div class="col-md-9">
-                            <div style="font-size:11pt;">
-                                @item.Recipient | @item.NumberPhone
+                <!-- Nội dung của popup -->
+                <div class="modal-body">
+                    @foreach (var item in _lstAddressGetById)
+                    {
+                        <div class="row" style="height:60px; margin-top:20px;">
+                            <div class="col-md-9">
+                                <div style="font-size:11pt;">
+                                    @item.Recipient | @item.NumberPhone
+                                </div>
+                                <div style="font-size:11pt;">
+                                    @(item.ToAddress + ", " + item.WardName + ", " + item.District + ", " + item.Province)
+                                </div>
                             </div>
-                            <div style="font-size:11pt;">
-                                @(item.ToAddress + ", " + item.WardName + ", " + item.District + ", " + item.Province)
+                            <div class="col-md-3" style="text-align:center;vertical-align:middle;">
+                                <button class="btn btn-primary" data-dismiss="modal" @onclick="()=>ChonDiaChiTuList(item)">Sử dụng</button>
                             </div>
-						</div>
-						<div class="col-md-3" style="text-align:center;vertical-align:middle;">
-							<button class="btn btn-primary" data-dismiss="modal" @onclick="()=>ChonDiaChiTuList(item)">Sử dụng</button>
-						</div>
-					</div>
-				}
-			</div>
-			<!-- Phần chân của popup -->
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-			</div>
-		</div>
-	</div>
-	<BlazoredToasts Position="ToastPosition.TopRight"
-					Timeout="5"
-					IconType="IconType.FontAwesome"
-					SuccessClass="success-toast-override"
-					SuccessIcon="fa-solid fa-check"
-					ErrorIcon="fa-solid fa-triangle-exclamation" />
-</div>
+                        </div>
+                    }
+                </div>
+                <!-- Phần chân của popup -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+        <BlazoredToasts Position="ToastPosition.TopRight"
+                        Timeout="5"
+                        IconType="IconType.FontAwesome"
+                        SuccessClass="success-toast-override"
+                        SuccessIcon="fa-solid fa-check"
+                        ErrorIcon="fa-solid fa-triangle-exclamation" />
+    </div>
 </EditForm>
