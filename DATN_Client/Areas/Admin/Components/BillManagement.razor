@@ -1,47 +1,105 @@
 ﻿<div>
-    <p class="title-pages">Hóa đơn</p>
+    <p class="title-pages">Tìm kiếm hóa đơn</p>
+    <div style="width:100%;height:30vh" class="css-input    ">
+        <div class="row">
+            <div class="col-5" style="display:flex;align-items:center">
+                <span>Thể loại</span>
+                <div style="margin-left:50px" class="group-radio-search"><input type="radio" name="SearchType" value="1" /><span>Tại Quầy</span></div>
+                <div style="margin-left:20px" class="group-radio-search"><input type="radio" name="SearchType" value="2" /><span>Online</span></div>
+            </div>
+            <div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-5" style="display:flex;align-items:center;margin-top:10px">
+                <span>Mã hóa đơn</span>
+                <input type="text" style="margin-left:20px" /
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-5" style="display:flex;align-items:center;margin-top:10px">
+                <span>Số điện thoại</span>
+                <input type="number" style="margin-left:13px" oninput="limitLength(this, 10)" /
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-5" style="display:flex;align-items:center;margin-top:10px">
+                <span>Tên khách</span>
+                <input type="text" style="margin-left:35px"  /
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <p class="title-pages">Danh sách hóa đơn</p>
     <div style="background-color:#d3d3d3">
         <div class="tab-type">
 
             @foreach (var tabItem in tabTypes)
             {
-                <div class="@(activeTabType == tabItem.Id? "active-tabItem-type":"tabItem-type")" @onclick="()=>HandleActiveTabType(tabItem.Id)">
+                <div class="@(activeTabType == tabItem.Id? "active-tabItem-type":"tabItem-type")" @onclick="()=>HandleActiveTabType(tabItem.Id,tabItem.Name)">
                     @tabItem.Name
                 </div>
             }
         </div>
         <div class="relevative-th">
-            <div class="table-title">
-                <div style="border-right:1px solid #000;width:5%">STT</div>
-                <div class="set-border-right-span" style="width:10%">Thời gian cật nhật</div>
-                <div class="set-border-right-span" style="width:7%">Mã hóa đơn</div>
-                <div class="set-border-right-span" style="width:7%">Thể loại</div>
-                <div class="set-border-right-span" style="width:14%">Khách hàng</div>
-                <div class="set-border-right-span" style="width:14%">Phương thức thanh toán</div>
-                <div class="set-border-right-span" style="width:10%">Tổng tiền</div>
-                <div style="width:10%">Trạng thái</div>
-            </div>
-            <div class="absolut-th">
-                @{
-                    int index = 0;
-                }
-                @foreach (var item in _lstBillShowOnMain)
-                {
+            @if (_lstBillShowOnMain.Count > 0)
+            {
+                <div class="table-title">
+                    <div style="border-right:1px solid #000;width:5%">STT</div>
+                    <div class="set-border-right-span" style="width:15%">Thời gian cật nhật</div>
+                    <div class="set-border-right-span" style="width:7%">Mã hóa đơn</div>
+                    <div class="set-border-right-span" style="width:7%">Thể loại</div>
+                    <div class="set-border-right-span" style="width:14%">Khách hàng</div>
+                    <div class="set-border-right-span" style="width:14%">Phương thức thanh toán</div>
+                    <div class="set-border-right-span" style="width:10%">Tổng tiền</div>
+                    <div style="width:10%">Trạng thái</div>
+                </div>
+                <div class="absolut-th">
+                    @{
+                        int index = 0;
+                    }
+                    @foreach (var item in _lstBillShowOnMain)
                     {
                         index += 1;
+                        <div @onclick="()=>redirectToDetails(item.Id)" style=" display:flex; text-align:center; padding:10px 0px;" class="hover-div @(index % 2 == 0 ? "bg-maudam" : "")">
+                            <div style="width:5%; color:#000;">@index</div>
+                            <div style="width:15%;">@item.DateTimeShow?.ToString("yyyy-MM-dd HH:mm:ss")</div>
+                            <div style="width:7%">@item.BillCode</div>
+                            <div style="width:7%">@(item.Type == 1 ? "Online" : "Tại quầy")</div>
+                            <div style="width:14%">@(item.UserName == "khachvanglai" ? "Khách vãng lai" : item.UserName)</div>
+                            <div style="width:14%">@item.PaymentMethodName</div>
+                            <div style="width:10%">@item.TotalAmount</div>
+                            @{
+                                var statusText =
+                                item.Type == 1 && item.Status == 0 ? "Đã hủy" :
+                                (item.Type == 1 && item.Status == 1 ? "Chờ thanh toán" :
+                                (item.Type == 1 && item.Status == 2 ? "Chờ xác nhận" :
+                                (item.Type == 1 && item.Status == 3 ? "Đơn hàng đã được xác nhận" :
+                                (item.Type == 1 && item.Status == 4 ? "Đang giao hàng" :
+                                (item.Type == 1 && item.Status == 5 ? "Hoàn thành" :
+                                (item.Type == 2 && item.Status == 0 ? "Đã hủy" :
+                                (item.Type == 2 && item.Status == 1 ? "Đơn hàng đã được xác nhận" :
+                                (item.Type == 2 && item.Status == 2 ? "Đang giao hàng" :
+                                (item.Type == 2 && item.Status == 3 ? "Hoàn thành" :
+                                (item.Type == 2 && item.Status == 5 ? "Hóa đơn chờ" : ""))))))))));
+                            }
+                            <div style="width:10%">
+                                @statusText
+                            </div>
+                            <div style="width:10%">
+                                <button class="btn-chi-tiet" @onclick="()=>redirectToDetails(item.Id)">
+                                    Chi tiết
+                                </button>
+                            </div>
+                        </div>
                     }
-                    <div style="display:flex;text-align:center;padding:10px 0px;" class="@(index % 2 == 0 ? "bg-maudam" : "")">
-                        <div style="#000;width:5%">@index</div>
-                        <div style="width:10%>@item.DateTimeShow</div>
-                    <div style="width:7%">Mã hóa đơn</div>
-                        <div style="width:7%">Thể loại</div>
-                        <div style="width:14%">Khách hàng</div>
-                        <div style="width:14%">Phương thức thanh toán</div>
-                        <div style="width:10%">Tổng tiền</div>
-                        <div style="width:10%">Trạng thái</div>
-                    </div>
-                }
-            </div>
+                </div>
+            }
+            else
+            {
+                <p class="noBill">Không có hóa đơn @tabName </p>
+            }
         </div>
     </div>
 </div>
