@@ -4,6 +4,7 @@ using DATN_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DATN_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231215162730_5")]
+    partial class _5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -319,6 +321,7 @@ namespace DATN_API.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("FormulaId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Point")
@@ -586,22 +589,22 @@ namespace DATN_API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7dd576ab-b6b6-4ccb-9926-4bcdb035b626"),
-                            ConcurrencyStamp = "68af33ca-0e7b-42e2-9719-3b6a4cecea15",
+                            Id = new Guid("5e969bc9-05d8-4685-9ea3-7e341bf9dfc5"),
+                            ConcurrencyStamp = "9628ef5c-755c-4cec-949d-7544f49c194f",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("5a555dc2-5bef-4dbb-a290-107c7f323c22"),
-                            ConcurrencyStamp = "bc62073d-0f16-41aa-b926-7dcc0d080a12",
+                            Id = new Guid("d1e642db-e277-4a38-ac12-9220dcdafa77"),
+                            ConcurrencyStamp = "8f101a09-017b-4ae7-a3d1-a6ad528a1d58",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = new Guid("c5fc3e01-4908-46e6-abd1-e7ee42d51c6c"),
-                            ConcurrencyStamp = "708cae63-2122-47b8-9d39-379f895b4493",
+                            Id = new Guid("fc0c8c93-9bed-46f3-8c72-23084477c6de"),
+                            ConcurrencyStamp = "b628e796-a47a-4b49-8f31-00a9b3320360",
                             Name = "Staff",
                             NormalizedName = "STAFF"
                         });
@@ -992,7 +995,9 @@ namespace DATN_API.Migrations
 
                     b.HasOne("DATN_Shared.Models.Formula", "Formulas")
                         .WithMany("HistoryConsumerPoints")
-                        .HasForeignKey("FormulaId");
+                        .HasForeignKey("FormulaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Bill");
 

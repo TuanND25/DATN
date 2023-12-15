@@ -1,4 +1,5 @@
 ﻿using DATN_Client.SessionService;
+using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
 using DATN_Shared.ViewModel.DiaChi;
 using DATN_Shared.ViewModel.Momo;
@@ -56,24 +57,16 @@ namespace DATN_Client.Areas.Customer.Component
 		private bool _checkDung { get; set; }
 		protected override async Task OnInitializedAsync()
 		{
-			_bill_validate_vm=new();
+			_bill_validate_vm = new();
 			isLoader = true;
 			_iduser = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
 			if (SessionServices.GetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai").Count == 0 && _iduser == null) _navi.NavigateTo("https://localhost:7075/cart", true);
 			//var token = _ihttpcontextaccessor.HttpContext.Session.GetString("Token"); // Gọi token
 			//_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token); // Xác thực
 			_lstPrI_show_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
-			if (_iduser == null)
+			if (string.IsNullOrEmpty(_iduser))
 			{
-				try
-				{
-					_userVangLai = await _httpClient.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get-user-byusername?username=khachvanglai");
-				}
-				catch (Exception)
-				{
-
-					throw;
-				}
+				_userVangLai = await _httpClient.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get-user-byusername?username=khachvanglai");
 				_bill_validate_vm.UserId = _userVangLai.Id;
 				_lstCI = SessionServices.GetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai");
 			}
@@ -165,11 +158,11 @@ namespace DATN_Client.Areas.Customer.Component
 			_bill_validate_vm.Type = 1;
 			if (_lstPayM.FirstOrDefault(c => c.Id == _bill_validate_vm.PaymentMethodId).Name == "Thanh toán Momo")
 			{
-				_bill_validate_vm.Status = 2;
+				_bill_validate_vm.Status = 1;
 			}
 			if (_lstPayM.FirstOrDefault(c => c.Id == _bill_validate_vm.PaymentMethodId).Name == "Thanh toán khi nhận hàng (COD)")
 			{
-				_bill_validate_vm.Status = 1;
+				_bill_validate_vm.Status = 2;
 			}
 			if (_bill_validate_vm.Note == string.Empty) _bill_validate_vm.Note = "Không có ghi chú";
 			if (_bill_validate_vm.Recipient == string.Empty) _bill_validate_vm.Recipient = _user_vm.Name;
@@ -223,6 +216,26 @@ namespace DATN_Client.Areas.Customer.Component
 						var addVchUser = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/voucher-user/post-voucherUser", vchUser);
 					}
 				}
+				// nếu có check sử dụng điểm thì tạo bản ghi trừ điểm
+				if (_checkDung == true && _diemCuaNguoiDung != 0)
+				{
+					HistoryConsumerPoint_VM h_vm = new()
+					{
+						Id = Guid.NewGuid(),
+						ConsumerPointId = _bill_validate_vm.UserId,
+						BillId = _bill_validate_vm.Id,
+						Point = _tiengiamDungiem ?? 0,
+						Status = 1,
+					};
+					var addhcp = await _httpClient.PostAsJsonAsync($"https://localhost:7141/api/HistoryConsumerPoint/add-HistoryConsumerPoint", h_vm);
+					CustomerPoint_VM customerPoint_VM = new()
+					{
+						UserID = _bill_validate_vm.UserId,
+						Point = (_diemCuaNguoiDung - _tiengiamDungiem).ToString() ?? "0",
+						Status = 1
+					};
+					var addcp = await _httpClient.PutAsJsonAsync<CustomerPoint_VM>($"https://localhost:7141/api/CustomerPoint/putCustomerPoint", customerPoint_VM);
+				}
 				// thực hiện clear giỏ, trừ số lượng trong kho và add vào bill item
 				foreach (var x in _lstCI)
 				{
@@ -261,10 +274,9 @@ namespace DATN_Client.Areas.Customer.Component
 				// thanh toán cod thì thông báo thành công và trả về trang chủ
 				if (_lstPayM.FirstOrDefault(c => c.Id == _bill_validate_vm.PaymentMethodId).Name == "Thanh toán khi nhận hàng (COD)")
 				{
-					_toastService.ShowSuccess("Đơn hàng đã được tạo thành công, để theo dõi đơn hàng hãy vào mục Lịch sử đơn hàng");
-					_toastService.ShowSuccess("Sau 3 giây bạn sẽ được chuyển hướng đến danh sách hóa đơn cá nhân");
+					_toastService.ShowSuccess("Đơn hàng đã được tạo thành công");
 					await Task.Delay(3000);
-					_navi.NavigateTo("/all-product", true); // sau sẽ đổi thành trang chủ
+					_navi.NavigateTo($"/account/bill-history/bill-detail?billid={_bill_validate_vm.Id}", true); // sau sẽ đổi thành trang chủ
 					return;
 				}
 			}
@@ -398,13 +410,13 @@ namespace DATN_Client.Areas.Customer.Component
 		}
 		private void NavLogin()
 		{
-			_navi.NavigateTo("https://localhost:7075/customer/Login/login", true);
+			_navi.NavigateTo("/login", true);
 		}
 
 		private async Task CheckedDungDiem(ChangeEventArgs e)
 		{
 			_checkDung = (bool)e.Value;
-
+			if (_diemCuaNguoiDung == 0) return;
 			if (_checkDung == true)
 			{
 				if (_bill_validate_vm.VoucherId != null)
@@ -439,7 +451,7 @@ namespace DATN_Client.Areas.Customer.Component
 					}
 					_tongTienAll = _tongTienHang + _bill_validate_vm.ShippingFee;
 				}
-				 _tiengiamDungiem = _tongTienAll / 10;
+				_tiengiamDungiem = _tongTienAll / 10;
 				if (_tiengiamDungiem >= _diemCuaNguoiDung) _tiengiamDungiem = _diemCuaNguoiDung;
 				_tongTienAll -= _tiengiamDungiem;
 			}

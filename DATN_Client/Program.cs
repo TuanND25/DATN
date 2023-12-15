@@ -17,7 +17,7 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromSeconds(1000); 
+    options.IdleTimeout = TimeSpan.FromDays(1);
 });
 builder.Services.AddHttpContextAccessor();
 
