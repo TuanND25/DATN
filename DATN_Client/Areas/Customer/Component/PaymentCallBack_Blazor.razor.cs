@@ -1,5 +1,6 @@
 ﻿using DATN_Client.Areas.Customer.Controllers;
 using DATN_Client.SessionService;
+using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
 using DATN_Shared.ViewModel.Momo;
 using Microsoft.AspNetCore.Components;
@@ -29,7 +30,7 @@ namespace DATN_Client.Areas.Customer.Component
 		}
 		public async Task Bill()
 		{
-			_navi.NavigateTo("https://localhost:7075/Customer/UserManagement/BillByUser", true);
+			_navi.NavigateTo($"/account/bill-history/bill-detail?billid={Create_Bill_With_Info._bill_validate_vm.Id}", true);
 		}
 	}
 }

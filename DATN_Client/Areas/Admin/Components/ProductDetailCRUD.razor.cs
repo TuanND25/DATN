@@ -57,7 +57,7 @@ namespace DATN_Client.Areas.Admin.Components
 		protected override async Task OnInitializedAsync()
 		{
 			_lst_pri = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>($"https://localhost:7141/api/productitem/get_all_productitem_byProduct/{ProductController._productID}");
-			_nameProduct = _lst_pri.FirstOrDefault().Name;
+			_nameProduct = (await _httpClient.GetFromJsonAsync<Products_VM>($"https://localhost:7141/api/product/get_product_byid/{ProductController._productID}")).Name;
 			_lstCate = await _httpClient.GetFromJsonAsync<List<Categories_VM>>("https://localhost:7141/api/Categories");
 			_lstCate = _lstCate.OrderBy(c => c.Name).ToList();
 			_lstColor = await _httpClient.GetFromJsonAsync<List<Color_VM>>("https://localhost:7141/api/Color/get_color");
