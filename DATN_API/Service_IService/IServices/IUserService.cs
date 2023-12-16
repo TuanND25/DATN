@@ -11,5 +11,6 @@ namespace DATN_API.Service_IService.IServices
 		public Task<ResponseMess> ChangePassword(ChangePassword_VM changePassword);
 		public Task<User> GetUserByUserName(string username);
 		public Task<User> GetUserById(Guid Id);
+		public Task<ResponseMess> UpdateUserCustomer(User_VM user_VM);
 	}
 }

@@ -1,5 +1,8 @@
 ﻿using DATN_Shared.ViewModel;
+using DATN_Shared.ViewModel.DiaChi;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using System.ComponentModel.DataAnnotations;
 
 namespace DATN_Client.Areas.Admin.Components
 {
@@ -8,6 +11,7 @@ namespace DATN_Client.Areas.Admin.Components
         HttpClient _httpClient = new HttpClient();
         [Inject] NavigationManager _navigationManager { get; set; }
         List<Products_VM> _lstProduct = new List<Products_VM>();
+        List<ProductItem_Show_VM> _lstProductItemShow = new List<ProductItem_Show_VM>();
         List<ProductItem_Show_VM> _lstProductItem = new List<ProductItem_Show_VM>();
         List<Image_VM> _lstImg = new List<Image_VM>();
         Promotions_VM _promotion = new Promotions_VM();
@@ -39,6 +43,10 @@ namespace DATN_Client.Areas.Admin.Components
 
         private bool isUnlimited = false;
         private int quantityValue = 0;
+
+        public string messagestart { get; set; }
+        public string messageend { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
             _lstProduct = await _httpClient.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
@@ -70,7 +78,7 @@ namespace DATN_Client.Areas.Admin.Components
             }
             _lstProductSelect = _lstProductSelect.Distinct().ToList();
             _lstProductItem = _lstProductItem.Where(p => _lstProductSelect.Contains(p.ProductId)).ToList();
-
+            _lstProductItemShow = _lstProductItem.ToList();
             if (_lstProductItemSelect.Count == _lstProductItem.Select(x => x.Id).ToList().Count && _lstProductItem.Select(x => x.Id).ToList().Count != 0)
             {
                 SelectAllCheckboxProductItem = true;
@@ -84,27 +92,50 @@ namespace DATN_Client.Areas.Admin.Components
 
         public async Task AddPromotionItem()
         {
-            var c = _promotion.Id = Guid.NewGuid();
-            _promotion.Quantity = quantityValue;
-            var a = await _httpClient.PostAsJsonAsync<Promotions_VM>("https://localhost:7141/api/promotion/Add", _promotion);
-
-            if (a.IsSuccessStatusCode)
+            if (_promotion.StartDate < DateTime.Now)
             {
-                foreach (var item in _lstProductItemSelect)
+                messagestart = "Ngày bắt đầu phải lớn hơn ngày hiện tại";
+            }
+
+            else if(_promotion.EndDate < _promotion.StartDate)
+            {
+                messageend = "Ngày kết thúc phải lớn hơn ngày bắt đầu";
+                messagestart = "";
+            }
+            else if(_promotion.EndDate > _promotion.StartDate)
+            {
+                messageend = "";
+                messagestart = "";
+            }
+            else
+            {
+                messagestart = "";
+                messageend = "";
+                var c = _promotion.Id = Guid.NewGuid();
+                _promotion.Quantity = quantityValue;
+                var a = await _httpClient.PostAsJsonAsync<Promotions_VM>("https://localhost:7141/api/promotion/Add", _promotion);
+
+                if (a.IsSuccessStatusCode)
                 {
-                    _promotionItem.Id = Guid.NewGuid();
-                    _promotionItem.PromotionsId = c;
-                    _promotionItem.ProductItemsId = item;
-                    _promotionItem.Status = 1;
+                    foreach (var item in _lstProductItemSelect)
+                    {
+                        _promotionItem.Id = Guid.NewGuid();
+                        _promotionItem.PromotionsId = c;
+                        _promotionItem.ProductItemsId = item;
+                        _promotionItem.Status = 1;
 
-                    var b = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/PromotionItem/Add", _promotionItem);
+                        var b = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/PromotionItem/Add", _promotionItem);
 
-                    var productItem = await _httpClient.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{item}");
-                    productItem.PriceAfterReduction = productItem.CostPrice - (productItem.CostPrice * _promotion.Percent) / 100;
-                    var t = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", productItem);
+                        var productItem = await _httpClient.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{item}");
+                        productItem.PriceAfterReduction = productItem.CostPrice - (productItem.CostPrice * _promotion.Percent) / 100;
+                        var t = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", productItem);
+                    }
+                    _navigationManager.NavigateTo("https://localhost:7075/Admin/Promotion", true);
                 }
+
                 _navigationManager.NavigateTo("/promotion-management", true);
             }
+            
         }
 
 
@@ -128,6 +159,8 @@ namespace DATN_Client.Areas.Admin.Components
         {
             _lstProductItem = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
             _lstProductItem = _lstProductItem.OrderBy(x => x.Name).ToList();
+
+
             //_lstProductItemSelect.Clear();
             if (_lstProductSelect.Contains(productId))
             {
@@ -137,6 +170,8 @@ namespace DATN_Client.Areas.Admin.Components
                 //_lstProductItemSelect_Them.Clear();
                 SelectAllCheckboxProductItem = false;
             }
+
+
             else
             {
                 foreach (var a in _lstPromotionItem)
@@ -146,7 +181,11 @@ namespace DATN_Client.Areas.Admin.Components
                 _lstProductItemSelect_Xoa.Clear();
                 _lstProductSelect.Add(productId);
             }
+
+
             _lstProductItem = _lstProductItem.Where(p => _lstProductSelect.Contains(p.ProductId)).ToList();
+            _lstProductItemShow = _lstProductItem.ToList();// đây sẽ là list để show lên
+
             if (_lstProductItemSelect.Count == _lstProductItem.Select(x => x.Id).ToList().Count && _lstProductItem.Select(x => x.Id).ToList().Count != 0)
             {
                 SelectAllCheckboxProductItem = true;
@@ -240,10 +279,7 @@ namespace DATN_Client.Areas.Admin.Components
 
         public async Task LocHangLoat()
         {
-            _lstProductItem = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
-            //ToggleProductSelection();
-            //var a = _lstProductItemSelect;
-            _lstProductItem = _lstProductItem.Where(c =>
+            _lstProductItemShow = _lstProductItem.Where(c =>
                                 (_PM_S_VM.CategoryName == null ||
                                 _PM_S_VM.CategoryName == "0" ||
                                 c.CategoryName == _PM_S_VM.CategoryName) &&

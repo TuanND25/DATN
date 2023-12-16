@@ -55,7 +55,6 @@ namespace DATN_Client.Areas.Customer.Component
 			}
             catch (Exception)
             {
-
                 _navigationManager.NavigateTo("/home",true);
             }
         }

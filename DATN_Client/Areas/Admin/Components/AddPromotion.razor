@@ -74,7 +74,7 @@
                             <label for="inputDate" class="col-sm-4 col-form-label">Ngày bắt đầu</label>
                             <div class="col-sm-8">
                                 <input type="datetime-local" class="form-control" @bind-value="@_promotion.StartDate" />
-                                <span class="message"><ValidationMessage For="()=>_promotion.StartDate" /></span> 
+                                <span class="message">@messagestart</span> 
                             </div>
                         </div>
 
@@ -83,7 +83,7 @@
                             <label for="inputDate" class="col-sm-4 col-form-label">Ngày kết thúc</label>
                             <div class="col-sm-8">
                                 <input type="datetime-local" class="form-control" @bind-value="@_promotion.EndDate">
-                                <span class="message"><ValidationMessage For="()=>_promotion.EndDate" /></span> 
+                                <span class="message">@messageend</span> 
                             </div>
                         </div>
 
@@ -246,7 +246,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var x in _lstProductItem)
+                                @foreach (var x in _lstProductItemShow)
                                 {
                                     <tr>
                                         <th scope="col">

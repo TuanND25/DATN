@@ -34,7 +34,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<BanOnlineController, BanOnlineController>();
 
-
+//builder.Services.AddServerSideBlazor(); 
+//builder.Services.AddDataAnnotationsValidation();
 
 
 builder.Services.AddBlazoredToast();

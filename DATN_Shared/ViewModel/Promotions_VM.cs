@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DATN_Shared.ViewModel.DiaChi;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -19,14 +20,10 @@ namespace DATN_Shared.ViewModel
 		[Range(1, int.MaxValue, ErrorMessage = "Số lượng phải lớn hơn 0")]
 		public int Quantity { get; set; }
 
-		[Required(ErrorMessage = "Ngày bắt đầu không được để trống")]
-		[DataType(DataType.Date)]
-		//[Compare(nameof(CurrentDate), ErrorMessage = "Ngày bắt đầu phải lớn hơn ngày hiện tại")]
+		//[CheckStartDate(ErrorMessage = "Ngày bắt đầu phải lớn hơn ngày hiện tại")]
 		public DateTime StartDate { get; set; }
 
-		[Required(ErrorMessage = "Ngày kết thúc không được để trống")]
-		[DataType(DataType.Date)]
-		//[Compare(nameof(StartDate), ErrorMessage = "Ngày kếu thúc phải lớn hơn ngày bắt đầu")]
+		//[CheckEndDate(ErrorMessage = "Ngày kết thúc phải lớn hơn ngày hiện tại")]
 		public DateTime EndDate { get; set; }
 
 		[Required(ErrorMessage = "Mô tả không được để trống")]

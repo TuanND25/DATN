@@ -52,7 +52,7 @@ namespace DATN_Client.Areas.Customer.Component
 			//{
 			var a = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
 
-			if (a == null || a == string.Empty)
+			if (string.IsNullOrEmpty(a))
 			{
 				_toastService.ShowError("Bạn cần đăng nhập để thực hiện chức năng này");
 				return;
@@ -62,6 +62,9 @@ namespace DATN_Client.Areas.Customer.Component
 			if (response.IsSuccessStatusCode)
 			{
 				_toastService.ShowSuccess("Đổi mật khẩu thành công");
+				changePassword.OldPassword=String.Empty;
+				changePassword.NewPassword=String.Empty;
+				changePassword.ConfirmNewPassword=String.Empty;
 			}
 			else
 			{
