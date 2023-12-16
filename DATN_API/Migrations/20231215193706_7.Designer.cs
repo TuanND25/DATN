@@ -4,6 +4,7 @@ using DATN_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DATN_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231215193706_7")]
+    partial class _7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -207,20 +209,6 @@ namespace DATN_API.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Carts");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = new Guid("2e8676b5-daa0-4b9e-bc06-06d5b06f7078"),
-                            Description = "",
-                            Status = 1
-                        },
-                        new
-                        {
-                            UserId = new Guid("f1dded95-3dae-4568-a66e-66f47fbc4ffd"),
-                            Description = "",
-                            Status = 1
-                        });
                 });
 
             modelBuilder.Entity("DATN_Shared.Models.CartItems", b =>
@@ -301,20 +289,6 @@ namespace DATN_API.Migrations
                     b.HasKey("UserID");
 
                     b.ToTable("ConsumerPoints");
-
-                    b.HasData(
-                        new
-                        {
-                            UserID = new Guid("2e8676b5-daa0-4b9e-bc06-06d5b06f7078"),
-                            Point = "0",
-                            Status = 1
-                        },
-                        new
-                        {
-                            UserID = new Guid("f1dded95-3dae-4568-a66e-66f47fbc4ffd"),
-                            Point = "0",
-                            Status = 1
-                        });
                 });
 
             modelBuilder.Entity("DATN_Shared.Models.Formula", b =>
@@ -615,21 +589,21 @@ namespace DATN_API.Migrations
                         new
                         {
                             Id = new Guid("039d186b-f613-4652-91bb-fa284a2e7e33"),
-                            ConcurrencyStamp = "0c34decc-24fa-4dcf-a6e6-d312796ded05",
+                            ConcurrencyStamp = "7302250a-afa8-437f-a680-ae4d74371b2e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("e1813d8e-9ab3-47b6-bb17-cbb48f114d36"),
-                            ConcurrencyStamp = "482900a8-6683-4076-b028-63ef2fbe66da",
+                            ConcurrencyStamp = "814e1c9e-1638-4047-a761-16144b51a2c8",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = new Guid("1048eea1-29e3-4139-9b25-29a4fb2562d7"),
-                            ConcurrencyStamp = "3939c5f8-acfc-4963-88b8-a970821e464b",
+                            ConcurrencyStamp = "dfc32673-67aa-432b-b439-e68d39f0cb4c",
                             Name = "Staff",
                             NormalizedName = "STAFF"
                         });
@@ -742,7 +716,7 @@ namespace DATN_API.Migrations
                         {
                             Id = new Guid("76671898-a7dd-4d40-a1da-e56639a4dbe4"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9384faf2-56ac-4cdb-aa20-dea016737184",
+                            ConcurrencyStamp = "35fe7821-4344-4ea3-ad03-2b9fd1ef9da9",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
@@ -750,7 +724,7 @@ namespace DATN_API.Migrations
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN@EXAMPLE.COM",
                             OTP = "",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAaleE0YRJVGUZ/3TOji92XjW4EP6T6ek2RohfcLWS69Mas3NnoM8FeijwNczVd6DQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEsoJt5VRJcUFi1vHPeHWUTr0ZB6v9GxSCgOeSRDbTWmVMLgNuRG4/zEVP0nwxnDkQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             Sex = false,
@@ -764,7 +738,7 @@ namespace DATN_API.Migrations
                         {
                             Id = new Guid("5fcc1c98-da29-4d88-b088-f921528142a2"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9fc326d4-ab24-4812-8b0f-d4439a37c5e8",
+                            ConcurrencyStamp = "7f7392de-67dc-4353-8560-42ac894704b5",
                             Email = "nhanvien@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
@@ -772,7 +746,7 @@ namespace DATN_API.Migrations
                             NormalizedEmail = "nhanvien@EXAMPLE.COM",
                             NormalizedUserName = "NHANVIEN@EXAMPLE.COM",
                             OTP = "",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMi2V70tCND0ZyOsocEyTM9RSvjdZxVTOTfhZUbdZK00+9kl7fY2T+3NdP7gt0pziQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENhlpYwB/QvP4rgCGQN6LIMV0j4rbhcsKAnJ+e9P5Yyd4pGU6aYoZAtqkL2baeQ8dA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             Sex = false,
@@ -786,7 +760,7 @@ namespace DATN_API.Migrations
                         {
                             Id = new Guid("2e8676b5-daa0-4b9e-bc06-06d5b06f7078"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ac306cf3-e94c-4198-8a04-21bfc3885ac5",
+                            ConcurrencyStamp = "db80694a-1be9-4856-b96a-59c7a61fef50",
                             Email = "user@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
@@ -794,7 +768,7 @@ namespace DATN_API.Migrations
                             NormalizedEmail = "user@EXAMPLE.COM",
                             NormalizedUserName = "user@EXAMPLE.COM",
                             OTP = "",
-                            PasswordHash = "AQAAAAEAACcQAAAAENhjz8HDPULVEG/KOunh7AqtuoyfudbuWAZ9Cc4gBsePDu/fmAJV82vN2XsTVGsY6g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENFJF4rSR9lJMRVsxbLBf3agESSOmD2KOEVGN6xk7OySW3cjW/xv+kZFPovyZQJcWw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             Sex = false,
@@ -808,7 +782,7 @@ namespace DATN_API.Migrations
                         {
                             Id = new Guid("f1dded95-3dae-4568-a66e-66f47fbc4ffd"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "19bda709-2181-4c6d-b69f-0ecaf6b18df4",
+                            ConcurrencyStamp = "db06b6c1-4404-415f-9f8c-554063427650",
                             Email = "khachvanglai@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,

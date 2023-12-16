@@ -10,5 +10,6 @@ namespace DATN_API.Service_IService.IServices
 		public Task<List<HistoryConsumerPoint>> GetAllHistoryConsumerPoint();
 		public Task<List<HistoryConsumerPoint>> GetAllHistoryConsumerPointById(Guid Id);
 		public Task<HistoryConsumerPoint> GetHistoryConsumerPointById(Guid Id);
+		public Task<HistoryConsumerPoint> GetHistoryConsumerPointByBillId(Guid Id);
 	}
 }

@@ -4,6 +4,7 @@ using DATN_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DATN_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231215191951_addadmin")]
+    partial class addadmin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -207,20 +209,6 @@ namespace DATN_API.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Carts");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = new Guid("2e8676b5-daa0-4b9e-bc06-06d5b06f7078"),
-                            Description = "",
-                            Status = 1
-                        },
-                        new
-                        {
-                            UserId = new Guid("f1dded95-3dae-4568-a66e-66f47fbc4ffd"),
-                            Description = "",
-                            Status = 1
-                        });
                 });
 
             modelBuilder.Entity("DATN_Shared.Models.CartItems", b =>
@@ -301,20 +289,6 @@ namespace DATN_API.Migrations
                     b.HasKey("UserID");
 
                     b.ToTable("ConsumerPoints");
-
-                    b.HasData(
-                        new
-                        {
-                            UserID = new Guid("2e8676b5-daa0-4b9e-bc06-06d5b06f7078"),
-                            Point = "0",
-                            Status = 1
-                        },
-                        new
-                        {
-                            UserID = new Guid("f1dded95-3dae-4568-a66e-66f47fbc4ffd"),
-                            Point = "0",
-                            Status = 1
-                        });
                 });
 
             modelBuilder.Entity("DATN_Shared.Models.Formula", b =>
@@ -615,21 +589,21 @@ namespace DATN_API.Migrations
                         new
                         {
                             Id = new Guid("039d186b-f613-4652-91bb-fa284a2e7e33"),
-                            ConcurrencyStamp = "0c34decc-24fa-4dcf-a6e6-d312796ded05",
+                            ConcurrencyStamp = "cc052bbb-7de3-41e7-8e9d-ee092dd705a7",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("e1813d8e-9ab3-47b6-bb17-cbb48f114d36"),
-                            ConcurrencyStamp = "482900a8-6683-4076-b028-63ef2fbe66da",
+                            Id = new Guid("a08c7d96-07d4-45a4-a9b5-0b9e98918d1e"),
+                            ConcurrencyStamp = "72e504b1-be5c-475c-aa6f-6ad246428b49",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = new Guid("1048eea1-29e3-4139-9b25-29a4fb2562d7"),
-                            ConcurrencyStamp = "3939c5f8-acfc-4963-88b8-a970821e464b",
+                            Id = new Guid("7c75ccf4-e022-43a5-9e0e-d0b9a70f23c1"),
+                            ConcurrencyStamp = "779a2d61-6e0b-43af-82dc-ade29cb3ad87",
                             Name = "Staff",
                             NormalizedName = "STAFF"
                         });
@@ -742,7 +716,7 @@ namespace DATN_API.Migrations
                         {
                             Id = new Guid("76671898-a7dd-4d40-a1da-e56639a4dbe4"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9384faf2-56ac-4cdb-aa20-dea016737184",
+                            ConcurrencyStamp = "be61ab13-5fa7-46a1-8cdc-4ebc9cb9aa7e",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
@@ -750,80 +724,15 @@ namespace DATN_API.Migrations
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN@EXAMPLE.COM",
                             OTP = "",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAaleE0YRJVGUZ/3TOji92XjW4EP6T6ek2RohfcLWS69Mas3NnoM8FeijwNczVd6DQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGM9pjZ/rwWv83ZLZGVrZ+MlYiEthIIuwqH4pbkliQqeW0ypM0yv95qOFyAaZWzZhQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             Sex = false,
-                            Status = 1,
+                            Status = 0,
                             TokenCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TokenExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TwoFactorEnabled = false,
                             UserName = "admin"
-                        },
-                        new
-                        {
-                            Id = new Guid("5fcc1c98-da29-4d88-b088-f921528142a2"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "9fc326d4-ab24-4812-8b0f-d4439a37c5e8",
-                            Email = "nhanvien@example.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            Name = "",
-                            NormalizedEmail = "nhanvien@EXAMPLE.COM",
-                            NormalizedUserName = "NHANVIEN@EXAMPLE.COM",
-                            OTP = "",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMi2V70tCND0ZyOsocEyTM9RSvjdZxVTOTfhZUbdZK00+9kl7fY2T+3NdP7gt0pziQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            Sex = false,
-                            Status = 1,
-                            TokenCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TokenExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TwoFactorEnabled = false,
-                            UserName = "nhanvien"
-                        },
-                        new
-                        {
-                            Id = new Guid("2e8676b5-daa0-4b9e-bc06-06d5b06f7078"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "ac306cf3-e94c-4198-8a04-21bfc3885ac5",
-                            Email = "user@example.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            Name = "",
-                            NormalizedEmail = "user@EXAMPLE.COM",
-                            NormalizedUserName = "user@EXAMPLE.COM",
-                            OTP = "",
-                            PasswordHash = "AQAAAAEAACcQAAAAENhjz8HDPULVEG/KOunh7AqtuoyfudbuWAZ9Cc4gBsePDu/fmAJV82vN2XsTVGsY6g==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            Sex = false,
-                            Status = 1,
-                            TokenCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TokenExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TwoFactorEnabled = false,
-                            UserName = "user"
-                        },
-                        new
-                        {
-                            Id = new Guid("f1dded95-3dae-4568-a66e-66f47fbc4ffd"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "19bda709-2181-4c6d-b69f-0ecaf6b18df4",
-                            Email = "khachvanglai@example.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            Name = "",
-                            NormalizedEmail = "khachvanglai@EXAMPLE.COM",
-                            NormalizedUserName = "khachvanglai@EXAMPLE.COM",
-                            OTP = "",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            Sex = false,
-                            Status = 1,
-                            TokenCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TokenExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TwoFactorEnabled = false,
-                            UserName = "khachvanglai"
                         });
                 });
 
@@ -980,16 +889,6 @@ namespace DATN_API.Migrations
                         {
                             UserId = new Guid("76671898-a7dd-4d40-a1da-e56639a4dbe4"),
                             RoleId = new Guid("039d186b-f613-4652-91bb-fa284a2e7e33")
-                        },
-                        new
-                        {
-                            UserId = new Guid("2e8676b5-daa0-4b9e-bc06-06d5b06f7078"),
-                            RoleId = new Guid("e1813d8e-9ab3-47b6-bb17-cbb48f114d36")
-                        },
-                        new
-                        {
-                            UserId = new Guid("5fcc1c98-da29-4d88-b088-f921528142a2"),
-                            RoleId = new Guid("1048eea1-29e3-4139-9b25-29a4fb2562d7")
                         });
                 });
 

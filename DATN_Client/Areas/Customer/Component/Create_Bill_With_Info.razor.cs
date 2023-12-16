@@ -60,7 +60,6 @@ namespace DATN_Client.Areas.Customer.Component
 			_bill_validate_vm = new();
 			isLoader = true;
 			_iduser = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
-			if (SessionServices.GetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai").Count == 0 && _iduser == null) _navi.NavigateTo("https://localhost:7075/cart", true);
 			//var token = _ihttpcontextaccessor.HttpContext.Session.GetString("Token"); // Gọi token
 			//_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token); // Xác thực
 			_lstPrI_show_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
@@ -78,6 +77,7 @@ namespace DATN_Client.Areas.Customer.Component
 				_lst_adrS_User = await _httpClient.GetFromJsonAsync<List<AddressShip_VM>>($"https://localhost:7141/api/AddressShip/get_address_by_UserID/{_bill_validate_vm.UserId}"); // list địa chỉ của user
 				_adrS_User = _lst_adrS_User.FirstOrDefault(c => c.Status == 1);
 			}
+			if (!_lstCI.Any()) _navi.NavigateTo("/cart",true);
 			_diemCuaNguoiDung = int.Parse((await _httpClient.GetFromJsonAsync<CustomerPoint_VM>($"https://localhost:7141/api/CustomerPoint/GetCustomerPoint_byUserID/{_bill_validate_vm.UserId}")).Point);
 			_lstImg_PI = (await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem")).OrderBy(c => c.STT).ToList();
 			_lstTinhTp_Data = await _httpClient.GetFromJsonAsync<List<Province_VM>>("https://api.npoint.io/ac646cb54b295b9555be"); // api tỉnh tp
@@ -125,6 +125,7 @@ namespace DATN_Client.Areas.Customer.Component
 
 		public async Task Btn_DatHang()
 		{
+			if (!_lstCI.Any()) _navi.NavigateTo("/cart", true);
 			_lstPrI_show_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
 			bool checkSl = false;
 			foreach (var a in _lstCI)

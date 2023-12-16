@@ -81,5 +81,10 @@ namespace DATN_API.Service_IService.Services
 				return null;
 			}
 		}
-	}
+
+        public async Task<HistoryConsumerPoint> GetHistoryConsumerPointByBillId(Guid BillId)
+        {
+            return await context.HistoryConsumerPoints.FirstOrDefaultAsync(c=>c.BillId == BillId);
+        }
+    }
 }
