@@ -75,5 +75,10 @@ namespace DATN_Client.Areas.Customer.Component
 				}
 			}
 		}
+
+		public async void NavProductItem(Guid Id)
+		{
+			_navigation.NavigateTo($"/product-detail/{Id}", true);
+		}
 	}
 }

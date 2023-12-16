@@ -35,6 +35,11 @@ namespace DATN_Client.Areas.Customer.Component
 			_navigation.NavigateTo($"https://localhost:7075/search/{_searchProduct}", true);
 		}
 
+		public async void NavProductItem(Guid Id)
+		{
+			_navigation.NavigateTo($"/product-detail/{Id}", true);
+		}
+
 		private string XoaDau(string text)
 		{
 			string normalizedString = text.Normalize(NormalizationForm.FormD);

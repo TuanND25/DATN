@@ -15,6 +15,13 @@ namespace DATN_API.Controllers
 		{
 			_productsServices = productsServices;
 		}
+		[HttpGet("check_productCode_byCode")]
+		public async Task<IActionResult> CheckProductCode_ByCode(string productCode)
+		{
+			var a = await _productsServices.CheckProductCode_ByCode(productCode);
+			return Ok(a);
+		}
+
 		[HttpGet("get_allProduct")]
 		public async Task<IActionResult> GetAllProduct()
 		{

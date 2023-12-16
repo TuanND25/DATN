@@ -180,6 +180,10 @@ namespace DATN_Client.Areas.Customer.Component
 			// ko phải vãng lai
 			if (_iduser != null)
 			{
+				if (checkSl.Status == 2)
+				{
+					_toastService.ShowError("Mặt hàng này hiện đã tạm hết");
+				}
 				// lấy giỏ
 				_lstCI = await _client.GetFromJsonAsync<List<CartItems_VM>>($"https://localhost:7141/api/CartItems/{_iduser}");
 				if (checkSl.AvaiableQuantity == 0)
