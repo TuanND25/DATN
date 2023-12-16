@@ -140,7 +140,7 @@ else
                                 string img = _lstImg_PI.Where(c => c.ProductId == x.Id).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
                             }
                             <div style="display:flex;flex-direction:column;width:100px;grid-column: span 1 / span 8;">
-                               <img src="/images/1.png"
+                               <img src="/images/@img"
                                class="imagelistShow"/>
                                <span class="titleNameProduct">
                                    @x.Name
@@ -207,7 +207,7 @@ else
               </div>
            </div>
            <div class="col-7 input-Number" style="display:flex;justify-content:flex-end;align-items:center">
-              <input type="number" class="" style="text-align:right;width:60%" readonly="@(!@activeTabDungDiem)" @oninput="ChangeInputTichDiem" @bind="InputTichDiem"/>
+              <input type="number" class="" style="text-align:right;width:60%" readonly @oninput="ChangeInputTichDiem" @bind="InputTichDiem" re/>
            </div>
        </div>
             }

@@ -1,10 +1,12 @@
-﻿using DATN_Shared.ViewModel;
+﻿using DATN_Client.Areas.Customer.Component;
+using DATN_Shared.ViewModel;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using static DATN_Client.Areas.Admin.Components.BillManagement;
 
@@ -17,15 +19,24 @@ namespace DATN_Client.Areas.Admin.Components
         public NavigationManager _navigationManager { get; set; }
         List<Bill_ShowModel> _lstbill = new List<Bill_ShowModel>();
         List<BillShowOnMain> _lstBillShowOnMain = new List<BillShowOnMain>();
+        List<PaymentMethod_VM> _lstPaymentMethod = new List<PaymentMethod_VM>();
        
         List<TabType> tabTypes = new List<TabType>();
         public int activeTabType { get; set; } = 1;
         public string tabName { get; set; } = "";
+        public DateOnly StartDate { get; set; } = DateOnly.FromDateTime(DateTime.Now).AddDays(-1);
+        public DateOnly EndDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
-        public int SearchType { get; set; } = 1;
+
+        public string SearchType { get; set; } = string.Empty;
+        public string SearchPaymentMethod { get; set; } = string.Empty;
+        public string SearchBillCode { get; set; } = string.Empty;
+        public int SearchPhoneNumber { get; set; }
+        public string SearchNameUser { get; set; } = string.Empty;
+        public bool activeTabDateSearch { get; set; } = false;
 
         protected override async Task OnInitializedAsync()
-        {
+        {    
             tabTypes.Add(new TabType { Id = 1, Name = "Tất cả hóa đơn" });
             tabTypes.Add(new TabType { Id = 2, Name = "Chờ thanh toán" });
             tabTypes.Add(new TabType { Id = 3, Name = "Chờ xác nhận" });
@@ -33,6 +44,36 @@ namespace DATN_Client.Areas.Admin.Components
             tabTypes.Add(new TabType { Id = 5, Name = "Đang giao hàng" });
             tabTypes.Add(new TabType { Id = 6, Name = "Đã hoàn thành" });
             await HandleActiveTabType(1,"a");
+            _lstPaymentMethod = await _client.GetFromJsonAsync<List<PaymentMethod_VM>>(" https://localhost:7141/api/paymentMethod/get_all_paymentMethod");
+        }
+        public async Task handleSearch()
+        {
+            if (activeTabDateSearch==false)
+            {
+                SearchNameUser = RemoveUnicode(SearchNameUser);
+                await HandleActiveTabType(activeTabType, "");
+                _lstBillShowOnMain = _lstBillShowOnMain.Where(c =>
+                (SearchType == null || SearchType == string.Empty || c.Type == Convert.ToInt32(SearchType)) &&
+                (SearchBillCode == null || SearchBillCode == string.Empty || c.BillCode == SearchBillCode) &&
+                (SearchPhoneNumber == null || SearchPhoneNumber.ToString() == string.Empty || c.PhoneNumber.Contains(SearchPhoneNumber.ToString())) &&
+                (SearchNameUser == null || SearchNameUser == string.Empty || RemoveUnicode(c.UserName).ToLower().Contains(SearchNameUser.ToLower())) &&
+                (SearchPaymentMethod == null || SearchPaymentMethod == string.Empty || c.PaymentMethodName == SearchPaymentMethod)
+                ).ToList();
+            }
+            else
+            {
+                SearchNameUser = RemoveUnicode(SearchNameUser);
+                await HandleActiveTabType(activeTabType, "");
+                _lstBillShowOnMain = _lstBillShowOnMain.Where(c =>
+                (SearchType == null || SearchType == string.Empty || c.Type == Convert.ToInt32(SearchType)) &&
+                (SearchBillCode == null || SearchBillCode == string.Empty || c.BillCode == SearchBillCode) &&
+                (SearchPhoneNumber == null || SearchPhoneNumber.ToString() == string.Empty || c.PhoneNumber.Contains(SearchPhoneNumber.ToString())) &&
+                (SearchNameUser == null || SearchNameUser == string.Empty || RemoveUnicode(c.UserName).ToLower().Contains(SearchNameUser.ToLower())) &&
+                (SearchPaymentMethod == null || SearchPaymentMethod == string.Empty || c.PaymentMethodName == SearchPaymentMethod) &&
+                (DateOnly.FromDateTime(c.DateTimeShow.Value) >= StartDate && DateOnly.FromDateTime(c.DateTimeShow.Value)    <= EndDate)
+                ).ToList();
+            }
+            
         }
         public class TabType
         {
@@ -87,6 +128,8 @@ namespace DATN_Client.Areas.Admin.Components
                 _lstBillShowOnMain = ConvertbillShowOnMain(list);
             }
         }
+
+
         
         public List<BillShowOnMain> ConvertbillShowOnMain(List<Bill_ShowModel> _lstBillGet)
         {
@@ -118,7 +161,7 @@ namespace DATN_Client.Areas.Admin.Components
                     CreateDate = item.CreateDate,
                     CompletionDate = item.CompletionDate,
                     ConfirmationDate =  item.ConfirmationDate,
-                    DateTimeShow = item.CompletionDate != null ? item.CompletionDate : (item.ConfirmationDate !=null ? item.ConfirmationDate : (item.CreateDate != null ? item.CreateDate :  default )),
+                    DateTimeShow = item.CompletionDate != null ? item.CompletionDate : (item.ConfirmationDate !=null ? item.ConfirmationDate : (item.CreateDate != null ? item.CreateDate :  default(DateTime))),
                     Type = item.Type,
                     Note = item.Note,
                     Status = item.Status,
@@ -164,6 +207,30 @@ namespace DATN_Client.Areas.Admin.Components
             public string? Note { get; set; }
             public int Status { get; set; }
             public string PhoneNumber { get; set; }
+        }
+
+        public static string RemoveUnicode(string text)
+        {
+            string[] arr1 = new string[] { "á", "à", "ả", "ã", "ạ", "â", "ấ", "ầ", "ẩ", "ẫ", "ậ", "ă", "ắ", "ằ", "ẳ", "ẵ", "ặ",
+    "đ",
+    "é","è","ẻ","ẽ","ẹ","ê","ế","ề","ể","ễ","ệ",
+    "í","ì","ỉ","ĩ","ị",
+    "ó","ò","ỏ","õ","ọ","ô","ố","ồ","ổ","ỗ","ộ","ơ","ớ","ờ","ở","ỡ","ợ",
+    "ú","ù","ủ","ũ","ụ","ư","ứ","ừ","ử","ữ","ự",
+    "ý","ỳ","ỷ","ỹ","ỵ",};
+            string[] arr2 = new string[] { "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a",
+    "d",
+    "e","e","e","e","e","e","e","e","e","e","e",
+    "i","i","i","i","i",
+    "o","o","o","o","o","o","o","o","o","o","o","o","o","o","o","o","o",
+    "u","u","u","u","u","u","u","u","u","u","u",
+    "y","y","y","y","y",};
+            for (int i = 0; i < arr1.Length; i++)
+            {
+                text = text.Replace(arr1[i], arr2[i]);
+                text = text.Replace(arr1[i].ToUpper(), arr2[i].ToUpper());
+            }
+            return text;
         }
     }
 }
