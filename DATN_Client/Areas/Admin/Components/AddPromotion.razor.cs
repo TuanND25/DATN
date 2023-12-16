@@ -103,7 +103,7 @@ namespace DATN_Client.Areas.Admin.Components
                     productItem.PriceAfterReduction = productItem.CostPrice - (productItem.CostPrice * _promotion.Percent) / 100;
                     var t = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", productItem);
                 }
-                _navigationManager.NavigateTo("https://localhost:7075/Admin/Promotion", true);
+                _navigationManager.NavigateTo("/promotion-management", true);
             }
         }
 

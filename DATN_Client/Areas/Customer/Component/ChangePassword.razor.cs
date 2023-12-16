@@ -23,7 +23,9 @@ namespace DATN_Client.Areas.Customer.Component
 		public string Message { get; set; } = string.Empty;
 		User User_VM = new User();
 		List<User> _lstUser_VM = new List<User>();
-
+		private string _checkPassCu { get; set; } = "password";
+		private string _checkPassMoi { get; set; } = "password";
+		private string _checkPassCofirm { get; set; } = "password";
 		protected override async Task OnInitializedAsync()
 		{
 			//var token = _ihttpcontextaccessor.HttpContext.Session.GetString("Token"); // Gọi token
@@ -107,6 +109,20 @@ namespace DATN_Client.Areas.Customer.Component
 			}
 		}
 
-
+		private void CheckPassCu (ChangeEventArgs e)
+		{
+			if ((bool)e.Value == false) _checkPassCu = "text";
+			else _checkPassCu = "password";
+		}
+		private void CheckPassMoi(ChangeEventArgs e)
+		{
+			if ((bool)e.Value == false) _checkPassMoi = "text";
+			else _checkPassMoi = "password";
+		}
+		private void CheckPassConfirm(ChangeEventArgs e)
+		{
+			if ((bool)e.Value == false) _checkPassCofirm = "text";
+			else _checkPassCofirm = "password";
+		}
 	}
 }

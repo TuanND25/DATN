@@ -17,7 +17,7 @@ namespace DATN_Client.Areas.Customer.Component
 		private List<Products_VM> _lstP = new List<Products_VM>();
 		private List<Products_VM> _lstP_Tam1 = new();
 		private List<Categories_VM> _lstCate = new();
-		private List<Image_Join_ProductItem> _lstImg_PI = new List<Image_Join_ProductItem>();
+		private List<Image_Join_ProductItem> _lstImg_PI = new();
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -30,7 +30,8 @@ namespace DATN_Client.Areas.Customer.Component
 
 			_lstProductItem_tam = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_product_home");
 			_lstProductItem = _lstProductItem_tam;
-			await ListProduct();
+            _lstImg_PI = await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem");
+            await ListProduct();
 		}
 
 		public async Task ListProduct()

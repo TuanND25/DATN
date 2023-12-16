@@ -13,8 +13,8 @@
             <h1>Quản lý người dùng</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item">Quản lý người dùng</li>
+                    <li class="breadcrumb-item"><a href="admin">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/user-management">Quản lý người dùng</a></li>
                 </ol>
             </nav>
         </div><!-- End Breadcrumbs with a page title -->
@@ -257,7 +257,6 @@
                         <th style="text-align:center">Trạng thái</th>
                         <th style="text-align:center">Chức vụ</th>
                         <th style="text-align:center">Chỉnh sửa trạng thái</th>
-                        <th style="text-align:center">Địa chỉ</th>
                         <th style="text-align:center">Cập nhật</th>
                     </tr>
                 </thead>
@@ -298,19 +297,19 @@
                                     </div>
 
                                 </div>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Status-@x.id">
-                                    Ngừng hoạt động
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#Status-@x.id">
+                                    <i class="fa-solid fa-ban"></i>
                                 </button>
                             </td>
-                            <td style="vertical-align:middle;text-align:center">
+                            @* <td style="vertical-align:middle;text-align:center">
                                 <button style="border: none;border-radius: 15px;" class="btn btn-primary" type="button" @onclick="()=>GetAddressShipByUser(x.id)">
                                     Xem địa chỉ
                                 </button>
-                            </td>
+                            </td> *@
                             <td style="vertical-align:middle;text-align:center">
-                                <button style="border: none;border-radius: 15px;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#UpdateUser" 
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#UpdateUser" 
                                 type="button" @onclick="()=>LoadFormUser(x)">
-                                    Chỉnh sửa
+                                    <i class="bi bi-pencil-square"></i>
                                 </button>
                             </td>
 

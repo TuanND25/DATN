@@ -1,12 +1,18 @@
-﻿<div class="card">
+﻿@using Blazored.Toast.Configuration
+<BlazoredToasts Position="ToastPosition.BottomRight"
+                Timeout="5"
+                IconType="IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fa-solid fa-check"
+                ErrorIcon="fa-solid fa-triangle-exclamation" />
+<div class="card">
     <div class="card-body">
         <div class="pagetitle">
             <h1>Quản lý màu sắc</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item">Quản lý thuộc tính</li>
-                    <li class="breadcrumb-item active">Màu sắc</li>
+                    <li class="breadcrumb-item"><a href="/admin">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/color-management">Quản lý màu sắc</a></li>
                 </ol>
             </nav>
         </div><!-- End Breadcrumbs with a page title -->
@@ -21,14 +27,16 @@
             <div class="card-body">
 
                 <EditForm Model="color_VM">
+                    <DataAnnotationsValidator/>
                     <div class="row mb-3">
-                        <label for="inputText" class="col-sm-4 col-form-label">Màu sắc: </label>
+                        <label for="inputText" class="col-sm-4 col-form-label">Màu sắc </label>
                         <div class="col-sm-8">
                             <InputText class="form-control" @bind-Value="@color_VM.Name" />
+                            <ValidationMessage For="()=>color_VM.Name" style="color:red"/>
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label class="col-sm-4 col-form-label">Trạng thái: </label>
+                        <label class="col-sm-4 col-form-label">Trạng thái </label>
                         <div class="col-sm-8">
                             <div class="row">
                                 <InputRadioGroup @bind-Value="@color_VM.Status" class="form-control">
@@ -46,10 +54,16 @@
                         <!--popup-->
                         <label class="col-sm-4 col-form-label">Submit </label>
                         <div class="col-sm-8">
-                            <button type="submit" class="btn btn-outline-success" style="float:center" data-bs-toggle="modal" data-bs-target="#Add">Create</button>
-                            <button type="submit" class="btn btn-outline-success" style="float:center" data-bs-toggle="modal" data-bs-target="#update">Update</button>
+                            <button type="submit" class="btn btn-outline-success" style="float:center" data-bs-toggle="modal" data-bs-target="#Add">Thêm mới</button>
+                            <button type="submit" class="btn btn-outline-success" style="float:center" data-bs-toggle="modal" data-bs-target="#update">Cập nhật</button>
                             <!--popup add-->
                             <div class="modal fade" id="Add" tabindex="-1">
+                                <BlazoredToasts Position="ToastPosition.BottomRight"
+                                                Timeout="5"
+                                                IconType="IconType.FontAwesome"
+                                                SuccessClass="success-toast-override"
+                                                SuccessIcon="fa-solid fa-check"
+                                                ErrorIcon="fa-solid fa-triangle-exclamation" />
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -57,11 +71,11 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            Bạn có xác nhận thêm mới màu hay không ?
+                                            Bạn có đồng ý thêm mới màu sắc hay không ?
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary" @onclick="AddColor">Save changes</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                            <button type="button" class="btn btn-primary" @onclick="AddColor">Xác nhân</button>
                                         </div>
                                     </div>
                                 </div>
@@ -71,15 +85,15 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title">Update</h5>
+                                            <h5 class="modal-title">Cập nhật</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            Bạn có xác nhận update màu hay không ?
+                                            Bạn có đồng ý cập nhật màu sắc hay không ?
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary" @onclick="()=>UpdateColor(color_VM)">Update</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                            <button type="button" class="btn btn-primary" @onclick="()=>UpdateColor(color_VM)">Xác nhận</button>
                                         </div>
                                     </div>
                                 </div>
@@ -100,7 +114,7 @@
                 <h4 style="margin-top:20px">Danh sách màu sắc</h4>
                 <div class="pagetitle">
                 </div>
-                @if (color == null)
+                @if (_lstcolor == null)
                 {
                     <p><em>Loading...</em></p>
                 }
@@ -117,13 +131,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var x in color)
+                                @foreach (var x in _lstcolor)
                                 {
                                     <tr>
                                         <td>@(count++)</td>
                                         <td>@x.Name</td>
                                         <td>@(x.Status == 1 ? "Hoạt động" : "Ngừng hoạt động")</td>
-                                        <td><button type="button" class="btn btn-outline-success" style="float:center" @onclick="()=>LoadForm(x)">Apply</button> </td>
+                                        <td>
+                                            <button style="width:45px;height:45px"
+                                                    class="btn btn-warning"
+                                                    @onclick="()=>LoadForm(x)">
+                                                <i class="fa-solid fa-wrench"></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                 }
                             </tbody>

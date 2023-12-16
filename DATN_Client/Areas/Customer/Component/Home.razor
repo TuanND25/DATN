@@ -66,6 +66,7 @@
 			<lable class="title1" @onclick="()=>NavCategory(b.TenKhongDau)">@b.Name.ToUpper()</lable>
 			@foreach (var a in _lstProductItem_tam.Where(x => x.CategoryID == b.Id).Take(7).ToList())
 			{
+				string img = _lstImg_PI.Where(c => c.ProductId == a.ProductId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
 				var giamin = _lstProductItem.Where(c => c.ProductId == a.ProductId).Min(c => c.PriceAfterReduction);
 				var giamax = _lstProductItem.Where(c => c.ProductId == a.ProductId).Max(c => c.PriceAfterReduction);
 				<div class="col-md-3">

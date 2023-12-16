@@ -17,7 +17,7 @@ namespace DATN_Client.Areas.Admin.Components
         //[Inject] PromotionController _navPromotion { get; set; }
 
         List<Promotions_VM> _lstPromotion = new List<Promotions_VM>();
-        public static Promotions_VM _promotion_VM = new Promotions_VM();
+        private Promotions_VM _promotion_VM = new Promotions_VM();
         private int selectedValue = 0;
         private int selectedSort = 0;
         private int statusValue;
@@ -37,14 +37,14 @@ namespace DATN_Client.Areas.Admin.Components
 
         public async Task NavigationAddPromotion()
         {
-            _navigationManager.NavigateTo("https://localhost:7075/Admin/Promotion/Add", true);
+            _navigationManager.NavigateTo("/promotion-management/add", true);
         }
 
 
         public async Task NavigationUpdatePromotion(Promotions_VM promotionVM)
         {
             _promotion_VM = promotionVM;
-            _navigationManager.NavigateTo("https://localhost:7075/Admin/Promotion/Update", true);
+            _navigationManager.NavigateTo($"/promotion-management/update?id={promotionVM.Id}", true);
         }
         public async Task DeletePromotion(Promotions_VM promotionVM)
         {
@@ -65,7 +65,7 @@ namespace DATN_Client.Areas.Admin.Components
                 item.Status = 0;
                 var f = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/PromotionItem/update", item);
             }
-            _navigationManager.NavigateTo("https://localhost:7075/Admin/Promotion", true);
+            _navigationManager.NavigateTo("/promotion-management", true);
         }
         public async Task Search()
         {

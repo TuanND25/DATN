@@ -7,6 +7,8 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Microsoft.JSInterop;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
 
 namespace DATN_Client.Areas.Customer.Component
 {
@@ -19,6 +21,7 @@ namespace DATN_Client.Areas.Customer.Component
 		private List<Image_Join_ProductItem> _lstImg_PI = new();
 		private List<Image_Join_ProductItem> _lstImg_PI_tam = new();
 		private List<CartItems_VM> _lstCI = new();
+		private List<Categories_VM> _lstCate = new();
 		private List<string> _lstColor = new();
 		private List<string> _lstSize = new();
 		private ProductItem_Show_VM _pi_S_VM = new();
@@ -41,6 +44,47 @@ namespace DATN_Client.Areas.Customer.Component
 		private ISession? _ss { get; set; }
 		List<string> _lstSizeSample = new() { "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL" };
 		private ElementReference myTextarea;
+		private string XoaDau(string text)
+		{
+			string normalizedString = text.Normalize(NormalizationForm.FormD);
+			StringBuilder stringBuilder = new StringBuilder();
+
+			foreach (char c in normalizedString)
+			{
+				UnicodeCategory unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+				if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+				{
+					stringBuilder.Append(c);
+				}
+			}
+
+			return stringBuilder.ToString().Normalize(NormalizationForm.FormC).ToLower();
+		}
+
+		private void SetTenKhongDau(List<Categories_VM> lst)
+		{
+			// Dictionary để theo dõi số lần xuất hiện của mỗi chuỗi TenKhongDau
+			Dictionary<string, int> countDictionary = new Dictionary<string, int>();
+
+			foreach (var x in lst)
+			{
+				string tenKhongDau = XoaDau(x.Name).Replace(" ", "-");
+
+				// Kiểm tra xem chuỗi đã xuất hiện trước đó chưa
+				if (countDictionary.ContainsKey(tenKhongDau))
+				{
+					// Nếu đã xuất hiện, thì thêm số thứ tự vào cuối chuỗi
+					countDictionary[tenKhongDau]++;
+					x.TenKhongDau = $"{tenKhongDau}-{countDictionary[tenKhongDau]}";
+				}
+				else
+				{
+					// Nếu chưa xuất hiện, thêm vào từ điển với số thứ tự là 1
+					countDictionary.Add(tenKhongDau, 1);
+					x.TenKhongDau = tenKhongDau;
+				}
+			}
+		}
 		protected override async Task OnInitializedAsync()
 		{
 			_ss = _ihttpcontextaccessor.HttpContext.Session;
@@ -49,6 +93,8 @@ namespace DATN_Client.Areas.Customer.Component
 			_p_VM = await _client.GetFromJsonAsync<Products_VM>($"https://localhost:7141/api/product/get_product_byid/{BanOnlineController._idP}");
 			_lstImg_PI = await _client.GetFromJsonAsync<List<Image_Join_ProductItem>>($"https://localhost:7141/api/Image/GetAllImage_PrductItem_ByProductId/{BanOnlineController._idP}");
 			List<Image_Join_ProductItem> lstImgtam = new();
+			_lstCate = await _client.GetFromJsonAsync<List<Categories_VM>>("https://localhost:7141/api/Categories");
+			SetTenKhongDau(_lstCate);
 			foreach (var item in _lstImg_PI)
 			{
 				if (!lstImgtam.Any(c=>c.PathImage == item.PathImage))
@@ -66,8 +112,7 @@ namespace DATN_Client.Areas.Customer.Component
 			_lstColor = _lstPrI_show_VM.Select(c => c.ColorName).Distinct().OrderBy(c => c).ToList();
 			_lstSize = _lstPrI_show_VM.Select(c => c.SizeName).Distinct().ToList();
 			_lstSize = _lstSize.OrderBy(c => _lstSizeSample.IndexOf(c)).ToList();
-			//_chonMau = _lstColor.FirstOrDefault();
-			//await ChonMau(_chonMau);			
+			
 		}		
 
 		protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -269,6 +314,12 @@ namespace DATN_Client.Areas.Customer.Component
 					return;
 				}
 			}
+		}
+
+		private string LayTenDanhmuc(string name)
+		{
+			var str = _lstCate.Where(c => c.Name == name).Select(c=>c.TenKhongDau).FirstOrDefault();
+			return str;
 		}
 	}
 }

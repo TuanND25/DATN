@@ -23,17 +23,24 @@ namespace DATN_Client.Areas.Admin.Components
 		public AddUserByAdmin userbyadmin1 = new AddUserByAdmin();
 		protected override async Task OnInitializedAsync()
         {
-         
+            if (Login.Roleuser != "Admin")
+            {
+                navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
             users = await httpClient.GetFromJsonAsync<List<AddUserByAdmin>>("https://localhost:7141/api/user/get-user");
-
 			addressShips = await httpClient.GetFromJsonAsync<List<AddressShip_VM>>("https://localhost:7141/api/AddressShip");
         }
 
 		public async Task GetAddressShipByUser(Guid Id)
 		{
-
-			addressShips = addressShips.Where(a => a.UserId == Id).ToList();
-			navigationManager.NavigateTo("https://localhost:7075/Admin/Addresss",true);
+            if (Login.Roleuser != "Admin")
+            {
+                navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
+            addressShips = addressShips.Where(a => a.UserId == Id).ToList();
+			navigationManager.NavigateTo("/address-management",true);
 		}
         public async Task ChangeStatusUser(AddUserByAdmin user)
         {
@@ -53,7 +60,7 @@ namespace DATN_Client.Areas.Admin.Components
 			user_VM.Sex = user.sex;
 			user = null;
             var a= await httpClient.PutAsJsonAsync<User_VM>("https://localhost:7141/api/user/update-status-user", user_VM);
-			navigationManager.NavigateTo("https://localhost:7075/Admin/User", true);
+			navigationManager.NavigateTo("/user-management", true);
 		}
 		
 		public async Task SearchByUsername()
@@ -102,7 +109,7 @@ namespace DATN_Client.Areas.Admin.Components
 			{
 				_toastService.ShowSuccess(result.Result);
 				await Task.Delay(2000);
-				navigationManager.NavigateTo("https://localhost:7075/Admin/User",true);
+				navigationManager.NavigateTo("/user-management", true);
 			}
 			else
 			{
@@ -111,7 +118,12 @@ namespace DATN_Client.Areas.Admin.Components
 		}
 		public async Task LoadFormUser(AddUserByAdmin GetValueFromList)
 		{
-			userbyadmin1.id = GetValueFromList.id;
+            if (Login.Roleuser != "Admin")
+            {
+                navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
+            userbyadmin1.id = GetValueFromList.id;
 			userbyadmin1.name = GetValueFromList.name;
 			userbyadmin1.username = GetValueFromList.username;
 			userbyadmin1.phonenumber = GetValueFromList.phonenumber;
@@ -123,8 +135,12 @@ namespace DATN_Client.Areas.Admin.Components
 		}
 		public async Task UpdateUser()
 		{
-			
-           
+            if (Login.Roleuser != "Admin")
+            {
+                navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
+
             if (userbyadmin1.username == string.Empty || userbyadmin1.email == string.Empty  || userbyadmin1.name == string.Empty || userbyadmin1.role== string.Empty)
 			{
 				_toastService.ShowError("Vui lòng điền đầy đủ thông tin");
@@ -136,7 +152,7 @@ namespace DATN_Client.Areas.Admin.Components
 			{
 				_toastService.ShowSuccess(result.Result);
 				await Task.Delay(2000);
-				navigationManager.NavigateTo("https://localhost:7075/Admin/User",true);
+				navigationManager.NavigateTo("/user-management",true);
 			}
 			else
 			{

@@ -23,13 +23,14 @@ namespace DATN_Client.Areas.Customer.Component
 			_lstImg_PI = await _client.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem");
 			_lstCate = await _client.GetFromJsonAsync<List<Categories_VM>>("https://localhost:7141/api/Categories");
 			SetTenKhongDau(_lstCate);
+			_lstCate = _lstCate.OrderBy(c => c.Name).ToList();
 		}
 
 		public async Task SearchPrd()
 		{
 			if (_searchProduct == null || _searchProduct.Trim() == string.Empty)
 			{
-				_toastService.ShowError("Vui lòng nhập từ khóa cần tìm kiếm");
+				_toastService.ShowError("Vui lòng nhập từ khóa cần tìm kiếm!");
 				return;
 			}
 			_navigation.NavigateTo($"https://localhost:7075/search/{_searchProduct}", true);

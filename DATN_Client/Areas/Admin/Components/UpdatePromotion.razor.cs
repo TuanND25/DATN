@@ -1,4 +1,5 @@
-﻿using DATN_Shared.ViewModel;
+﻿using DATN_Client.Areas.Admin.Controllers;
+using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Components;
 
 namespace DATN_Client.Areas.Admin.Components
@@ -38,8 +39,7 @@ namespace DATN_Client.Areas.Admin.Components
         {
             _lstProduct = await _httpClient.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
             _lstImg = await _httpClient.GetFromJsonAsync<List<Image_VM>>("https://localhost:7141/api/Image");
-            _promotion = Promotions._promotion_VM;
-
+            _promotion = await _httpClient.GetFromJsonAsync<Promotions_VM>($"https://localhost:7141/api/promotion/{PromotionController._idPromotion}");
             _lstPromotionItem = await _httpClient.GetFromJsonAsync<List<PromotionItem_VM>>($"https://localhost:7141/api/PromotionItem/PromotionItem_By_Promotion/{_promotion.Id}");
             _lstPrI_show_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
             _lstProductItem = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
@@ -105,7 +105,7 @@ namespace DATN_Client.Areas.Admin.Components
                     var b = await _httpClient.DeleteAsync($"https://localhost:7141/api/PromotionItem/PromotionItemByProductItem/{item}");
                 }
             }
-            _navigationManager.NavigateTo("https://localhost:7075/Admin/Promotion", true);
+            _navigationManager.NavigateTo("/promotion-management", true);
         }
 
         private async Task LoadPromotionItem(Guid Id)

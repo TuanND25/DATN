@@ -133,7 +133,14 @@
 </style>
 @*<h3>@_nameCate</h3>*@
 @*<br />*@
-<span>Trang Chủ / @_nameCate / @_p_VM.Name</span>
+<nav>
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="/home">Trang chủ</a></li>
+		<li class="breadcrumb-item"><a href="/all-product">Tất cả sản phẩm</a></li>
+		<li class="breadcrumb-item"><a href="/all-product/@LayTenDanhmuc(_nameCate)">@_nameCate</a></li>
+		<li class="breadcrumb-item"><a href="/product-detail/@_p_VM.Id">@_p_VM.Name</a></li>
+	</ol>
+</nav>
 
 <div>
 	<div class="product-detail-wrapper">
