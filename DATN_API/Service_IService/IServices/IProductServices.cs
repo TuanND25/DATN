@@ -9,6 +9,6 @@ namespace DATN_API.Service_IService.IServices
         public Task<bool> DeleteProducts(Guid Id);
         public Task<List<Products>> GetAllProducts();
         public Task<Products> GetAllProductsById(Guid Id);
-        //public Task<Products> GetAllProductsItemByProducts(Guid ProductsId);
+        public Task<bool> CheckProductCode_ByCode(string productCode);
     }
 }

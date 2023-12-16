@@ -1,7 +1,7 @@
 ﻿@using DATN_Client.Areas.Customer.Controllers
 @using Blazored.Toast.Configuration
 <BlazoredToasts Position="ToastPosition.BottomRight"
-				Timeout="10"
+				Timeout="5"
 				IconType="IconType.FontAwesome"
 				SuccessClass="success-toast-override"
 				SuccessIcon="fa-solid fa-check"
@@ -64,8 +64,10 @@
 	{
 		<div class="row" style="margin-bottom:40px;">
 			<lable class="title1" @onclick="()=>NavCategory(b.TenKhongDau)">@b.Name.ToUpper()</lable>
-			@foreach (var a in _lstProductItem.Where(x => x.CategoryID == b.Id).Take(7).ToList())
+			@foreach (var a in _lstProductItem_tam.Where(x => x.CategoryID == b.Id).Take(7).ToList())
 			{
+				var giamin = _lstProductItem.Where(c => c.ProductId == a.ProductId).Min(c => c.PriceAfterReduction);
+				var giamax = _lstProductItem.Where(c => c.ProductId == a.ProductId).Max(c => c.PriceAfterReduction);
 				<div class="col-md-3">
 					<div class="card thumnail" @onclick="()=>NavProductItem(a.ProductId)">
 						@if (a.Percent > 0)
@@ -75,18 +77,17 @@
 							</div>
 						}
 						<img src="/images/1.png" class="imgthum" />
-						<div>
-							<p style="margin-bottom: 15px; margin-top: 10px;">@a.Name</p>
+						<div style="text-align:left">
+							<p style="margin-bottom: 15px; margin-top: 10px;padding-left:15px">@a.Name</p>
 						</div>
 						<div class="center-content1">
-							@if (@a.PriceAfterReduction != @a.CostPrice)
+							@if (giamin == giamax || giamin == null || giamax == null)
 							{
-								<p>@a.PriceAfterReduction?.ToString("#,##0") đ</p>
-								<del style="color:gray;margin-left: 15px;">@a.CostPrice?.ToString("#,##0") đ</del>
+								<p>@((giamin ?? giamax)?.ToString("#,##0"))đ</p>
 							}
 							else
 							{
-								<p>@a.CostPrice?.ToString("#,##0")đ</p>
+								<p>@(giamin?.ToString("#,##0") + " - " + giamax?.ToString("#,##0"))</p>
 							}
 						</div>
 					</div>
@@ -199,7 +200,8 @@
 
 	.center-content1 {
 		display: flex;
-		justify-content: center;
+		justify-content: left;
+		padding-left: 15px;
 	}
 
 		.center-content1 p {

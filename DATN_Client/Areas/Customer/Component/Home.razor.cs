@@ -12,6 +12,7 @@ namespace DATN_Client.Areas.Customer.Component
 		[Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
 		[Inject] private Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
 		private List<ProductItem_Show_VM> _lstProductItem = new List<ProductItem_Show_VM>();
+		private List<ProductItem_Show_VM> _lstProductItem_tam = new List<ProductItem_Show_VM>();
 		private List<PromotionItem_VM> _lstpi_Percent = new List<PromotionItem_VM>();
 		private List<Products_VM> _lstP = new List<Products_VM>();
 		private List<Products_VM> _lstP_Tam1 = new();
@@ -27,28 +28,29 @@ namespace DATN_Client.Areas.Customer.Component
 			}
 			var a = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
 
-			_lstProductItem = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_product_home");
+			_lstProductItem_tam = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_product_home");
+			_lstProductItem = _lstProductItem_tam;
 			await ListProduct();
 		}
 
 		public async Task ListProduct()
 		{
-			_lstProductItem = _lstProductItem
+			_lstProductItem_tam = _lstProductItem_tam
 			.Where(pi => pi.PriceAfterReduction != null && pi.PriceAfterReduction > 0 && pi.Status != 0)
 			.GroupBy(pi => pi.ProductId)
 			.Select(g => new ProductItem_Show_VM
 			{
 				Id = g.Min(pi => pi.Id),
 				ProductId = g.Key,
-				Name = _lstProductItem.FirstOrDefault(x => x.ProductId == g.Key)?.Name,
-				CategoryID = _lstProductItem.FirstOrDefault(x => x.ProductId == g.Key).CategoryID,
-				CategoryName = _lstProductItem.FirstOrDefault(x => x.ProductId == g.Key)?.CategoryName,
+				Name = _lstProductItem_tam.FirstOrDefault(x => x.ProductId == g.Key)?.Name,
+				CategoryID = _lstProductItem_tam.FirstOrDefault(x => x.ProductId == g.Key).CategoryID,
+				CategoryName = _lstProductItem_tam.FirstOrDefault(x => x.ProductId == g.Key)?.CategoryName,
 				PriceAfterReduction = g.Min(pi => pi.PriceAfterReduction),
 				CostPrice = g.FirstOrDefault(pi => pi.PriceAfterReduction == null || pi.PriceAfterReduction == g.Min(pi => pi.PriceAfterReduction))?.CostPrice,
-				Percent = _lstProductItem.Where(pi => pi.ProductId == g.Key).Max(pi => pi.Percent)
+				Percent = _lstProductItem_tam.Where(pi => pi.ProductId == g.Key).Max(pi => pi.Percent)
 			}).OrderByDescending(x => x.Percent).ToList();
 
-			_lstCate = _lstProductItem.GroupBy(p => p.CategoryID)
+			_lstCate = _lstProductItem_tam.GroupBy(p => p.CategoryID)
 									  .Select(g => new Categories_VM { Id = g.Key, Name = g.First().CategoryName })
 									  .ToList();
 			SetTenKhongDau(_lstCate);
