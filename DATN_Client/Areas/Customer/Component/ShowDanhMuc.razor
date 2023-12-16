@@ -7,17 +7,73 @@
 				SuccessIcon="fa-solid fa-check"
 				ErrorIcon="fa-solid fa-triangle-exclamation" />
 <style>
-	.discount-label {
+	.discount-rectangle {
 		position: absolute;
-		top: 0;
-		right: 10px;
+		top: 10px;
+		left: 10px;
 		width: 40px;
 		height: 20px;
 		background-color: red;
 		color: white;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		line-height: 40px;
+		z-index: 1;
+	}
+
+		.discount-rectangle span {
+			font-size: 14px;
+		}
+
+	.center-content1 {
+		display: flex;
+		justify-content: left;
+		padding-left: 15px;
+	}
+
+		.center-content1 p {
+			color: red;
+			font-size: 18px;
+		}
+
+	.thumnail {
+		width: 280px;
+		height: 400px;
 		text-align: center;
-		line-height: 20px;
-		font-size: 12px;
+		position: relative;
+	}
+
+	.imgthum {
+		width: 100%;
+		height: 280px;
+		margin-bottom: 10px;
+	}
+
+	.center-content {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		height: 38vh; /* Đảm bảo phần tử cha chiếm toàn bộ chiều cao của màn hình */
+		margin-bottom: 30px;
+	}
+
+		.center-content div {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+	.title {
+		font-size: 35px;
+		margin-bottom: 25px;
+	}
+
+	.title1 {
+		font-size: 30px;
+		font-weight: 500;
+		margin-bottom: 15px;
 	}
 </style>
 <div class="row ">
@@ -75,24 +131,28 @@
                         if (percentMax == null) percentMax = 0;
                     }
 						<div class="col-md-4" style="position: relative;">
-							<a href="/product-detail/@x.Id">
-								<img class="img-thumbnail" src="/images/@img" alt="" style="width:100%;height:360px">
-								 @if (percentMax > 0)
-                            {
-                                <div class="discount-label">-@(percentMax)%</div>
-                            }
-							</a>
-							@x.Name <br>
-							@{
-								if (giamin == giamax || giamin == null || giamax == null)
+							<div class="card thumnail" @onclick="()=>NavProductItem(x.Id)">
+								@if (percentMax > 0)
 								{
-									@(giamax?.ToString("#,##0") + " VND")
+									<div class="discount-rectangle">
+										<span style="font-size:9pt;font-weight:700;">@("-" + percentMax + "%")</span>
+									</div>
 								}
-								else
-								{
-									@(giamin?.ToString("#,##0") + " - " + giamax?.ToString("#,##0") + " VND")
-								}
-							}
+								<img src="/images/@img" class="imgthum" />
+								<div style="text-align:left">
+									<p style="margin-bottom: 15px; margin-top: 10px;padding-left:15px">@x.Name</p>
+								</div>
+								<div class="center-content1">
+									@if (giamin == giamax || giamin == null || giamax == null)
+									{
+										<p>@((giamin ?? giamax)?.ToString("#,##0"))đ</p>
+									}
+									else
+									{
+										<p>@(giamin?.ToString("#,##0") + " - " + giamax?.ToString("#,##0"))</p>
+									}
+								</div>
+							</div>
 						</div>
 					}
 				}
