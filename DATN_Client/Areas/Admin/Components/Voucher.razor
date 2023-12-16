@@ -1,341 +1,371 @@
-﻿<div class="card">
-    <div class="card-body">
-        <div class="pagetitle">
-            <h1>Quản lý voucher</h1>
-            <nav>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item">Quản lý thuộc tính</li>
-                    <li class="breadcrumb-item active">Voucher</li>
-                </ol>
-            </nav>
-        </div><!-- End Breadcrumbs with a page title -->
-    </div>
+﻿@using Blazored.Toast.Configuration
+<BlazoredToasts Position="ToastPosition.BottomRight"
+				Timeout="5"
+				IconType="IconType.FontAwesome"
+				SuccessClass="success-toast-override"
+				SuccessIcon="fa-solid fa-check"
+				ErrorIcon="fa-solid fa-triangle-exclamation" />
+
+<div class="card">
+	<div class="card-body">
+		<div class="pagetitle">
+			<h1>Quản lý voucher</h1>
+			<nav>
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="index.html">Home</a></li>
+					<li class="breadcrumb-item">Quản lý thuộc tính</li>
+					<li class="breadcrumb-item active">Voucher</li>
+				</ol>
+			</nav>
+		</div><!-- End Breadcrumbs with a page title -->
+	</div>
 </div>
 
 
 <section class="section">
-    <div class="row">
-        @*		<div class="col-lg-6">
+	<div class="row">
+		@*		<div class="col-lg-6">
 
-            <div class="card">
-            <div class="card-body">
-            <h4 class="card-title">Voucher</h4>
+		<div class="card">
+		<div class="card-body">
+		<h4 class="card-title">Voucher</h4>
 
-            <!-- General Form Elements -->
+		<!-- General Form Elements -->
 
-            </div>
-            </div>
+		</div>
+		</div>
 
-            </div>*@
-
-
+		</div>*@
 
 
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4 style="margin-top:20px">Danh sách Voucher</h4>
-                    </div>
-                    <div class="col-md-6" style="text-align:right;">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddVoucher">
-                        Add Voucher
-                    </button>
-                    </div>
-                </div>
-                <div class="pagetitle">
-                </div>
-                @if (vouchers == null)
-                {
-                    <p><em>Loading...</em></p>
-                }
-                else
-                {
-                    <div style="height: 500px; overflow-y: auto;">
-                        <table class="table">
-                            <thead>
-                                <tr style="position: sticky;top:0">
 
-                                    <th>Tên</th>
-                                    <th>Code</th>
-                                    <th>Phần trăm giảm</th>
-                                    <th>Số lượng</th>
-                                    <th>Ngày bắt đầu</th>
-                                    <th>Ngày kết thúc</th>
-                                    <th>Điều kiện tối thiểu</th>
-                                    <th>Giảm tối đa</th>
-                                    <th>Trạng thái</th>
-                                    <th></th>
-                                    <th></th>
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var x in vouchers)
-                                {
-                                    <tr>
-                                        <td>@x.Name</td>
-                                        <td>@x.Code</td>
-                                        <td>@x.Percent</td>
-                                        <td>@x.Quantity</td>
-                                        <td>@x.StartDate</td>
-                                        <td>@x.EndDate</td>
-                                        <td>@x.Discount_Conditions</td>
-                                        <td>@x.Maximum_Reduction</td>
-                                        <td style="vertical-align:middle;">
-                                             <span class="@(x.Status==1?"badge bg-success":"badge bg-danger")">
-                                                @(x.Status == 1 ? " Đang Hoạt động" : "Ngừng hoạt động")
-                                            </span>
-                                        </td>
+		<div class="card">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-6">
+						<h4 style="margin-top:20px">Danh sách Voucher</h4>
+					</div>
+					<div class="col-md-6" style="text-align:right;">
+						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddVoucher">
+							Add Voucher
+						</button>
+					</div>
+				</div>
+				<div class="pagetitle">
+				</div>
+				@if (vouchers == null)
+				{
+					<p><em>Loading...</em></p>
+				}
+				else
+				{
+					<div style="height: 500px; overflow-y: auto;">
+						<table class="table">
+							<thead>
+								<tr style="position: sticky;top:0">
 
-                                        <td>
+									<th>Tên</th>
+									<th>Code</th>
+									<th>Phần trăm giảm</th>
+									<th>Số lượng</th>
+									<th>Ngày bắt đầu</th>
+									<th>Ngày kết thúc</th>
+									<th>Điều kiện tối thiểu</th>
+									<th>Giảm tối đa</th>
+									<th>Trạng thái</th>
+									<th></th>
+									<th></th>
 
-                                            <div class="modal fade" id="Status">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
+								</tr>
+							</thead>
+							<tbody>
+								@foreach (var x in vouchers)
+								{
+									<tr>
+										<td>@x.Name</td>
+										<td>@x.Code</td>
+										<td>@x.Percent</td>
+										<td>@x.Quantity</td>
+										<td>@x.StartDate</td>
+										<td>@x.EndDate</td>
+										<td>@x.Discount_Conditions</td>
+										<td>@x.Maximum_Reduction</td>
+										<td style="vertical-align:middle;">
+											<span class="@(x.Status==1?"badge bg-success":"badge bg-danger")">
+												@(x.Status == 1 ? " Đang Hoạt động" : "Ngừng hoạt động")
+											</span>
+										</td>
 
-                                                        <!-- Phần tiêu đề của popup -->
-                                                <div class="modal-header">
-                                                            <h4 class="modal-title">Thêm sản phẩm</h4>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        </div>
+										<td>
 
-                                                        <!-- Nội dung của popup -->
-                                                <p>Bạn có đồng ý ngừng hoạt động voucher này</p>
-                                                        <!-- Phần chân của popup -->
-                                                <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                                            <button type="button" class="btn btn-danger" @onclick="()=>ChangeStatusVoucher(x)" data-dismiss="modal">Xác nhận</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Status">
-                                                Ngừng hoạt động
-                                            </button>
-                                        </td>
-                                        <td><button class="btn btn-primary" @onclick="()=>LoadFormVoucher(x)" data-bs-toggle="modal" data-bs-target="#UpdateVoucher"><i class="bi bi-pencil-square"></i></button></td>
+											<div class="modal fade" id="Status">
+												<div class="modal-dialog">
+													<div class="modal-content">
 
-                                    </tr>
+														<!-- Phần tiêu đề của popup -->
+														<div class="modal-header">
+															<h4 class="modal-title">Thêm sản phẩm</h4>
+															<button type="button" class="close" data-dismiss="modal">&times;</button>
+														</div>
 
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                }
-            </div>
-        </div>
+														<!-- Nội dung của popup -->
+														<p>Bạn có đồng ý ngừng hoạt động voucher này</p>
+														<!-- Phần chân của popup -->
+														<div class="modal-footer">
+															<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+															<button type="button" class="btn btn-danger" @onclick="()=>ChangeStatusVoucher(x)" data-dismiss="modal">Xác nhận</button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Status">
+												Ngừng hoạt động
+											</button>
+										</td>
+										<td><button class="btn btn-primary" @onclick="()=>LoadFormVoucher(x)" data-bs-toggle="modal" data-bs-target="#UpdateVoucher"><i class="bi bi-pencil-square"></i></button></td>
 
-    </div>
+									</tr>
+
+								}
+							</tbody>
+						</table>
+					</div>
+				}
+			</div>
+		</div>
+
+	</div>
 </section>
 
 
 
 
 <div class="modal fade" id="AddVoucher" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Cập nhật người dùng</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<EditForm Model="voucher_VM">
+				<div class="modal-header">
+					<h5 class="modal-title">Cập nhật người dùng</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
 
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-body" style="margin-top: 20px">
-                                    <EditForm Model="voucher_VM">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="card">
+									<div class="card-body" style="margin-top: 20px">
 
-                                        <div class="row mb-3">
-                                            <label for="inputText" class="col-sm-4 col-form-label">Tên voucher</label>
-                                            <div class="col-sm-8">
-                                                <InputText class="form-control" @bind-Value="voucher_VM.Name" />
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="inputText" class="col-sm-4 col-form-label">Code</label>
-                                            <div class="col-sm-8">
-                                                <InputText class="form-control" @bind-Value="voucher_VM.Code" />
-                                            </div>
-                                        </div>
+										<DataAnnotationsValidator />
+										<div class="row mb-3">
+											<label for="inputText" class="col-sm-4 col-form-label">Tên voucher</label>
+											<div class="col-sm-8">
+												<InputText class="form-control" @bind-Value="voucher_VM.Name" />
+												<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>voucher_VM.Name"></ValidationMessage></span>
+											</div>
 
-                                        <div class="row mb-3">
-                                            <label for="inputNumber" class="col-sm-4 col-form-label">Phần trăm giảm</label>
-                                            <div class="col-sm-8">
-                                                <InputNumber class="form-control" @bind-Value="voucher_VM.Percent" />
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="inputNumber" class="col-sm-4 col-form-label">Số lượng</label>
-                                            <div class="col-sm-8">
-                                                <InputNumber class="form-control" @bind-Value="@voucher_VM.Quantity" />
-                                            </div>
-                                        </div>
+										</div>
+										<div class="row mb-3">
+											<label for="inputText" class="col-sm-4 col-form-label">Code</label>
+											<div class="col-sm-8">
+												<InputText class="form-control" @bind-Value="voucher_VM.Code" />
+												<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>voucher_VM.Code"></ValidationMessage></span>
+											</div>
+											
+										</div>
 
-
-                                        <div class="row mb-3">
-                                            <label for="inputDate" class="col-sm-4 col-form-label">Ngày bắt đầu</label>
-                                            <div class="col-sm-8">
-                                                <input type="datetime-local" class="form-control" @bind-value="@voucher_VM.StartDate" />
-                                            </div>
-                                        </div>
-
-
-                                        <div class="row mb-3">
-                                            <label for="inputDate" class="col-sm-4 col-form-label">Ngày kết thúc</label>
-                                            <div class="col-sm-8">
-                                                <input type="datetime-local" class="form-control" @bind-value="@voucher_VM.EndDate">
-                                            </div>
-                                        </div>
+										<div class="row mb-3">
+											<label for="inputNumber" class="col-sm-4 col-form-label">Phần trăm giảm</label>
+											<div class="col-sm-8">
+												<InputNumber class="form-control" @bind-Value="voucher_VM.Percent" />
+												<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>voucher_VM.Percent"></ValidationMessage></span>
+											</div>
+											
+										</div>
+										<div class="row mb-3">
+											<label for="inputNumber" class="col-sm-4 col-form-label">Số lượng</label>
+											<div class="col-sm-8">
+												<InputNumber class="form-control" @bind-Value="@voucher_VM.Quantity" />
+												<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>voucher_VM.Quantity"></ValidationMessage></span>
+											</div>
+											
+										</div>
 
 
-                                        <div class="row mb-3">
-                                            <label for="inputPassword" class="col-sm-4 col-form-label" style="font-size:14px">Điều kiện tối thiểu</label>
-                                            <div class="col-sm-8">
-                                                <InputNumber class="form-control" style="height: 50px" @bind-Value="@voucher_VM.Discount_Conditions" />
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="inputPassword" class="col-sm-4 col-form-label" style="font-size:14px">Giám tối đa trên hóa đơn</label>
-                                            <div class="col-sm-8">
-                                                <InputNumber class="form-control" style="height: 50px" @bind-Value="@voucher_VM.Maximum_Reduction" />
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <label class="col-sm-4 col-form-label">Mô tả </label>
-                                            <div class="col-sm-8">
-                                                <div class="row">
-                                                    <InputRadioGroup @bind-Value="@voucher_VM.Status" class="form-control">
-                                                        <div class="col-sm-6">
-                                                            <InputRadio Value="1" /> Hoạt động
-                                                        </div>
-                                                        <div class="col-sm-6">
-                                                            <InputRadio Value="0" /> Ngừng hoạt động
-                                                        </div>
-                                                    </InputRadioGroup>
-                                                </div>
-                                            </div>
-                                        </div>
+										<div class="row mb-3">
+											<label for="inputDate" class="col-sm-4 col-form-label">Ngày bắt đầu</label>
+											<div class="col-sm-8">
+												<input type="datetime-local" class="form-control" @bind-value="@voucher_VM.StartDate" />
+												<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>voucher_VM.StartDate"></ValidationMessage></span>
+											</div>
+											
+										</div>
 
 
-                                    </EditForm><!-- End General Form Elements -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+										<div class="row mb-3">
+											<label for="inputDate" class="col-sm-4 col-form-label">Ngày kết thúc</label>
+											<div class="col-sm-8">
+												<input type="datetime-local" class="form-control" @bind-value="@voucher_VM.EndDate">
+												<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>voucher_VM.EndDate"></ValidationMessage></span>
 
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" @onclick="AddVoucher" data-bs-dismiss="modal">Thêm mới Voucher</button>
-            </div>
-        </div>
-    </div>
+											</div>
+											
+										</div>
+
+
+										<div class="row mb-3">
+											<label for="inputPassword" class="col-sm-4 col-form-label" style="font-size:14px">Điều kiện tối thiểu</label>
+											<div class="col-sm-8">
+												<InputNumber class="form-control" style="height: 50px" @bind-Value="@voucher_VM.Discount_Conditions" />
+												<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>voucher_VM.Discount_Conditions"></ValidationMessage></span>
+											</div>
+											
+										</div>
+										<div class="row mb-3">
+											<label for="inputPassword" class="col-sm-4 col-form-label" style="font-size:14px">Giám tối đa trên hóa đơn</label>
+											<div class="col-sm-8">
+												<InputNumber class="form-control" style="height: 50px" @bind-Value="@voucher_VM.Maximum_Reduction" />
+												<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>voucher_VM.Maximum_Reduction"></ValidationMessage></span>
+											</div>
+											
+										</div>
+
+										<div class="row mb-3">
+											<label class="col-sm-4 col-form-label">Mô tả </label>
+											<div class="col-sm-8">
+												<div class="row">
+													<InputRadioGroup @bind-Value="@voucher_VM.Status" class="form-control">
+														<div class="col-sm-6">
+															<InputRadio Value="1" /> Hoạt động
+														</div>
+														<div class="col-sm-6">
+															<InputRadio Value="0" /> Ngừng hoạt động
+														</div>
+													</InputRadioGroup>
+												</div>
+											</div>
+										</div>
+
+
+										<!-- End General Form Elements -->
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary" @onclick="AddVoucher" data-bs-dismiss="modal">Thêm mới Voucher</button>
+				</div>
+			</EditForm>
+		</div>
+	</div>
 </div><!-- popup Add voucher-->
 
 <div class="modal fade" id="UpdateVoucher" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Cập nhật Voucher</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<EditForm Model="voucher_VM1">
+				<div class="modal-header">
+					<h5 class="modal-title">Cập nhật Voucher</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
 
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-body" style="margin-top: 20px">
-                                    <EditForm Model="voucher_VM1">
-
-                                        <div class="row mb-3">
-                                            <label for="inputText" class="col-sm-4 col-form-label">Tên voucher</label>
-                                            <div class="col-sm-8">
-                                                <InputText class="form-control" @bind-Value="voucher_VM1.Name" />
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="inputText" class="col-sm-4 col-form-label">Code</label>
-                                            <div class="col-sm-8">
-                                                <InputText class="form-control" @bind-Value="voucher_VM1.Code" />
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <label for="inputNumber" class="col-sm-4 col-form-label">Phần trăm giảm</label>
-                                            <div class="col-sm-8">
-                                                <InputNumber class="form-control" @bind-Value="voucher_VM1.Percent" />
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="inputNumber" class="col-sm-4 col-form-label">Số lượng</label>
-                                            <div class="col-sm-8">
-                                                <InputNumber class="form-control" @bind-Value="@voucher_VM1.Quantity" />
-                                            </div>
-                                        </div>
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="card">
+									<div class="card-body" style="margin-top: 20px">
 
 
-                                        <div class="row mb-3">
-                                            <label for="inputDate" class="col-sm-4 col-form-label">Ngày bắt đầu</label>
-                                            <div class="col-sm-8">
-                                                <input type="datetime-local" class="form-control" @bind-value="@voucher_VM1.StartDate" />
-                                            </div>
-                                        </div>
+										<div class="row mb-3">
+											<label for="inputText" class="col-sm-4 col-form-label">Tên voucher</label>
+											<div class="col-sm-8">
+												<InputText class="form-control" @bind-Value="voucher_VM1.Name" />
+											</div>
+										</div>
+										<div class="row mb-3">
+											<label for="inputText" class="col-sm-4 col-form-label">Code</label>
+											<div class="col-sm-8">
+												<InputText class="form-control" @bind-Value="voucher_VM1.Code" />
+											</div>
+										</div>
+
+										<div class="row mb-3">
+											<label for="inputNumber" class="col-sm-4 col-form-label">Phần trăm giảm</label>
+											<div class="col-sm-8">
+												<InputNumber class="form-control" @bind-Value="voucher_VM1.Percent" />
+											</div>
+										</div>
+										<div class="row mb-3">
+											<label for="inputNumber" class="col-sm-4 col-form-label">Số lượng</label>
+											<div class="col-sm-8">
+												<InputNumber class="form-control" @bind-Value="@voucher_VM1.Quantity" />
+											</div>
+										</div>
 
 
-                                        <div class="row mb-3">
-                                            <label for="inputDate" class="col-sm-4 col-form-label">Ngày kết thúc</label>
-                                            <div class="col-sm-8">
-                                                <input type="datetime-local" class="form-control" @bind-value="@voucher_VM1.EndDate">
-                                            </div>
-                                        </div>
+										<div class="row mb-3">
+											<label for="inputDate" class="col-sm-4 col-form-label">Ngày bắt đầu</label>
+											<div class="col-sm-8">
+												<input type="datetime-local" class="form-control" @bind-value="@voucher_VM1.StartDate" />
+											</div>
+										</div>
 
-                                        <div class="row mb-3">
-                                            <label for="inputPassword" class="col-sm-4 col-form-label" style="font-size:14px">Điều kiện tối thiểu</label>
-                                            <div class="col-sm-8">
-                                                <InputNumber class="form-control" style="height: 50px" @bind-Value="@voucher_VM1.Discount_Conditions" />
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="inputPassword" class="col-sm-4 col-form-label" style="font-size:14px">Giám tối đa trên hóa đơn</label>
-                                            <div class="col-sm-8">
-                                                <InputNumber class="form-control" style="height: 50px" @bind-Value="@voucher_VM1.Maximum_Reduction" />
-                                            </div>
-                                        </div>
 
-                                        <div class="row mb-3">
-                                            <label class="col-sm-4 col-form-label">Mô tả </label>
-                                            <div class="col-sm-8">
-                                                <div class="row">
-                                                    <InputRadioGroup @bind-Value="@voucher_VM1.Status" class="form-control">
-                                                        <div class="col-sm-6">
-                                                            <InputRadio Value="1" /> Hoạt động
-                                                        </div>
-                                                        <div class="col-sm-6">
-                                                            <InputRadio Value="0" /> Ngừng hoạt động
-                                                        </div>
-                                                    </InputRadioGroup>
-                                                </div>
-                                            </div>
-                                        </div>
+										<div class="row mb-3">
+											<label for="inputDate" class="col-sm-4 col-form-label">Ngày kết thúc</label>
+											<div class="col-sm-8">
+												<input type="datetime-local" class="form-control" @bind-value="@voucher_VM1.EndDate">
+											</div>
+										</div>
 
-                                    </EditForm><!-- End General Form Elements -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                <button type="submit" class="btn btn-primary" @onclick="()=>UpdateVoucher(voucher_VM1)">Upadate</button>
-            </div>
-        </div>
-    </div>
+										<div class="row mb-3">
+											<label for="inputPassword" class="col-sm-4 col-form-label" style="font-size:14px">Điều kiện tối thiểu</label>
+											<div class="col-sm-8">
+												<InputNumber class="form-control" style="height: 50px" @bind-Value="@voucher_VM1.Discount_Conditions" />
+											</div>
+										</div>
+										<div class="row mb-3">
+											<label for="inputPassword" class="col-sm-4 col-form-label" style="font-size:14px">Giám tối đa trên hóa đơn</label>
+											<div class="col-sm-8">
+												<InputNumber class="form-control" style="height: 50px" @bind-Value="@voucher_VM1.Maximum_Reduction" />
+											</div>
+										</div>
+
+										<div class="row mb-3">
+											<label class="col-sm-4 col-form-label">Mô tả </label>
+											<div class="col-sm-8">
+												<div class="row">
+													<InputRadioGroup @bind-Value="@voucher_VM1.Status" class="form-control">
+														<div class="col-sm-6">
+															<InputRadio Value="1" /> Hoạt động
+														</div>
+														<div class="col-sm-6">
+															<InputRadio Value="0" /> Ngừng hoạt động
+														</div>
+													</InputRadioGroup>
+												</div>
+											</div>
+										</div>
+
+										<!-- End General Form Elements -->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+					<button type="submit" class="btn btn-primary" @onclick="()=>UpdateVoucher(voucher_VM1)">Upadate</button>
+				</div>
+			</EditForm>
+		</div>
+
+	</div>
 </div><!-- popup update Voucher-->

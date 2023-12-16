@@ -5,7 +5,8 @@ namespace DATN_Client.Areas.Admin.Components
 {
     public partial class Voucher
     {
-        HttpClient httpClient = new HttpClient();
+		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
+		HttpClient httpClient = new HttpClient();
         public Voucher_VM voucher_VM = new Voucher_VM();
         public Voucher_VM voucher_VM1 = new Voucher_VM();
         [Inject] NavigationManager navigationManager { get; set; }
@@ -41,6 +42,11 @@ namespace DATN_Client.Areas.Admin.Components
 
         public async Task AddVoucher()
         {
+            if (voucher_VM.Code==string.Empty) 
+            {
+                _toastService.ShowError("Vui lòng nhập đầy đủ thông tin");
+                return;
+            }
             voucher_VM.Id = Guid.NewGuid();
 
             await httpClient.PostAsJsonAsync<Voucher_VM>("https://localhost:7141/api/Voucher/Post-Voucher", voucher_VM);
