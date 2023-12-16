@@ -238,7 +238,39 @@ namespace DATN_API.Service_IService.Services
 			return a;
 		}
 
+        public async Task<ResponseMess> UpdateUserCustomer(User_VM user_VM)
+        {
+			var user = await _context.Users.FindAsync(user_VM.Id);
+			if (user != null)
+			{
+				user.Name = user_VM.Name;
+				user.Email = user_VM.Email;
+				user.PhoneNumber = user_VM.PhoneNumber;
+				user.Sex = user_VM.Sex;
+				user.Status = user_VM.Status;
+				user.Name = user.Name;
 
 
-	}
+				_context.Users.Update(user);
+				await _context.SaveChangesAsync();
+				return new ResponseMess
+				{
+					IsSuccess = true,
+					StatusCode = 200,
+					Message = "Cập nhận thông tin người dùng thành công",
+					Token = null
+				};
+			}
+			else
+			{
+				return new ResponseMess
+				{
+					IsSuccess = false,
+					StatusCode = 400,
+					Message = "Cập nhập thông tin người dùng thất bại",
+					Token = null
+				};
+			}
+		}
+    }
 }

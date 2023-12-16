@@ -39,16 +39,26 @@ namespace DATN_Client.Areas.Customer.Component
 
 		public async Task UpdateUser()
 		{
-			var a = await _client.PutAsJsonAsync($"https://localhost:7141/api/user/update-user", User_VM);
+			User_VM user_VM = new User_VM();
+			user_VM.UserName = User_VM.UserName;
+			user_VM.Id = User_VM.Id;
+			user_VM.PhoneNumber = User_VM.PhoneNumber;
+			user_VM.Status = User_VM.Status;
+			user_VM.Role = user_VM.Role;
+			user_VM.Name = User_VM.Name;
+			user_VM.Sex= User_VM.Sex;
+			user_VM.Email = User_VM.Email;
+			var a = await _client.PutAsJsonAsync($"https://localhost:7141/api/user/update-user-customer", user_VM);
 			if (a.IsSuccessStatusCode)
 			{
 				Login.UserNameShowHome = LayChuCuoiName(User_VM.Name);
-                ClosePopup("UpdateUser");
+				ClosePopup("UpdateUser");
 				_toastService.ShowSuccess("Cập nhật thông tin người dùng thành công");
+				_navigationManager.NavigateTo("https://localhost:7075/account/info", true);
 			}
 			else
 			{
-				_toastService.ShowSuccess("Cập nhật thông tin người dùng thành công");
+				_toastService.ShowError("Cập nhật thông tin người dùng thất bại");
 			}
 		}
 

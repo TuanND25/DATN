@@ -220,7 +220,7 @@ else
                 @*            <button class="btnUpdateInfo"  data-bs-toggle="modal" @onclick="Load">
                     THÊM ĐỊA CHỈ MỚI
                     </button>*@
-            </div><link href="~/css/showinfouser.css" rel="stylesheet" />
+            </div>
         </div>
         <hr>
         @if (_lstAddressGetById.Count() == 0)
@@ -317,8 +317,8 @@ else
         <div class="modal-dialog modal-dialog-centered" style="width:150%">
             <div class="modal-content">
                 <div class="modal-body">
-                    <label style="font-size:22px;font-weight:600;padding:15px 50px 15px 15px">Thêm địa chỉ mới</label>
-                    <button class="col-md-1 btnTrongSuot2" style="margin-left:265px;" @onclick='()=>ClosePopup("AddAddress")'><i class="fas fa-times" style="font-size:16pt;"></i></button>
+                    <label style="font-size:18px;font-weight:600;padding:15px 50px 15px 15px">Thêm địa chỉ mới</label>
+                    <button class="col-md-1 btnTrongSuot2" style="margin-left:215px;" @onclick='()=>ClosePopup("AddAddress")'><i class="fas fa-times" style="font-size:16pt;"></i></button>
                     <div style=" display: flex;flex-direction:column;">
                         <div class="row">
                             <div class="col-md-6">
@@ -418,8 +418,8 @@ else
                 <div class="modal-body">
                     <DataAnnotationsValidator />
                     <div class="row">
-                        <label class="col-md-6" style="font-size:22px;font-weight:600;padding:15px 50px 15px 15px">Thêm địa chỉ mới</label>
-                        <button class="col-md-1 btnTrongSuot2" style="margin-left:230px;" @onclick='()=>ClosePopup("UpdateAddress")'><i class="fas fa-times" style="font-size:16pt;"></i></button>
+                        <label class="col-md-6" style="font-size:18px;font-weight:600;padding:15px 50px 15px 15px">Thêm địa chỉ mới</label>
+                        <button class="col-md-1 btnTrongSuot2" style="margin-left:215px;" @onclick='()=>ClosePopup("UpdateAddress")'><i class="fas fa-times" style="font-size:16pt;"></i></button>
                     </div>
                     <div style=" display: flex;flex-direction:column;">
                         <div class="row">
