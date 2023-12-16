@@ -55,7 +55,7 @@ namespace DATN_Client.Areas.Customer.Component
             {
                 _toastService.ShowSuccess("Mật khẩu đã được gửi về điện thoại của bạn");
 				await Task.Delay(2000);
-				NavigationManager.NavigateTo("https://localhost:7075/Customer/Login/Login", true);
+				NavigationManager.NavigateTo("/login", true);
             }
             else
             {

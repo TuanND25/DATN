@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DATN_Client.Areas.Admin.Controllers
 {
-    public class SizeController : Controller
+	[Area("Admin")]
+	public class SizeController : Controller
     {
-        [Area("Admin")]
+		[Route("size-management")]        
         public IActionResult Index()
         {
 			if (Login.Roleuser == "Admin")

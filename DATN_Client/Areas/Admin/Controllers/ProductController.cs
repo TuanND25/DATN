@@ -10,7 +10,6 @@ namespace DATN_Client.Areas.Admin.Controllers
 		[Route("product-manager")]
 		public IActionResult Index()
 		{
-			return View();
 			if (Login.Roleuser == "Admin" )
 			{
 				return View();
@@ -20,14 +19,13 @@ namespace DATN_Client.Areas.Admin.Controllers
 				return Unauthorized();
 			}
 		}
-		[Route("product/{Id}")]
-		public IActionResult DetailProduct(Guid Id)
+		[Route("product-manager/product-detail")]
+		public IActionResult DetailProduct(Guid id)
 		{
-			_productID = Id;
-			return View();
+			_productID = id;
 			if (Login.Roleuser == "Admin" )
 			{
-				_productID = Id;
+				_productID = id;
 				return View();
 			}
 			else

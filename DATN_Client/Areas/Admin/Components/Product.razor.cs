@@ -1,4 +1,5 @@
-﻿using DATN_Shared.ViewModel;
+﻿using DATN_Client.Areas.Customer.Component;
+using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Globalization;
@@ -19,7 +20,12 @@ namespace DATN_Client.Areas.Admin.Components
 		private string _textSearch { get; set; } = string.Empty;
 		protected override async Task OnInitializedAsync()
 		{
-			products = await _httpClient.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
+            if (Login.Roleuser != "Admin")
+            {
+                navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
+            products = await _httpClient.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
 		}
 
 		protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -29,7 +35,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		public async Task AddProduct()
 		{
-			if (!string.IsNullOrEmpty(products_VM.ProductCode))
+            if (Login.Roleuser != "Admin")
+            {
+                navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
+            if (!string.IsNullOrEmpty(products_VM.ProductCode))
 			{
 				if ((await _httpClient.GetFromJsonAsync<bool>($"https://localhost:7141/api/product/check_productCode_byCode?productCode={products_VM.ProductCode}") == true))
 				{
@@ -45,7 +56,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		public async Task UpdateProduct(Products_VM products)
 		{
-			if (!string.IsNullOrEmpty(products_VM.ProductCode))
+            if (Login.Roleuser != "Admin")
+            {
+                navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
+            if (!string.IsNullOrEmpty(products_VM.ProductCode))
 			{
 				if ((await _httpClient.GetFromJsonAsync<bool>($"https://localhost:7141/api/product/check_productCode_byCode?productCode={products_VM.ProductCode}") == true))
 				{
@@ -61,13 +77,23 @@ namespace DATN_Client.Areas.Admin.Components
 
 		public async void DeleteProduct(Guid Id)
 		{
-			await _httpClient.DeleteAsync("https://localhost:7141/api/product/delete_product/" + Id);
+            if (Login.Roleuser != "Admin")
+            {
+                navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
+            await _httpClient.DeleteAsync("https://localhost:7141/api/product/delete_product/" + Id);
 			navigationManager.NavigateTo("/product-manager", true);
 		}
 
 		public async Task LoadForm(Products_VM rvm)
 		{
-			products_VM.Id = rvm.Id;
+            if (Login.Roleuser != "Admin")
+            {
+                navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
+            products_VM.Id = rvm.Id;
 			products_VM.Name = rvm.Name;
 			products_VM.ProductCode = rvm.ProductCode;
 			products_VM.Description = rvm.Description;
@@ -76,12 +102,22 @@ namespace DATN_Client.Areas.Admin.Components
 
 		public void RedirectCRUD(Guid id)
 		{
-			navigationManager.NavigateTo($"https://localhost:7075/product/{id}", true);
+            if (Login.Roleuser != "Admin")
+            {
+                navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
+            navigationManager.NavigateTo($"/product-manager/product-detail?id={id}", true);
 		}
 
 		private async Task TimKiem()
 		{
-			products = await _httpClient.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
+            if (Login.Roleuser != "Admin")
+            {
+                navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
+            products = await _httpClient.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
 			_textSearch = _textSearch.ToLower();
 			if (_textSearch != XoaDau(_textSearch))
 			{

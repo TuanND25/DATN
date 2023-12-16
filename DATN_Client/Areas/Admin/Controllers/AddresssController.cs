@@ -6,7 +6,8 @@ namespace DATN_Client.Areas.Admin.Controllers
     [Area("Admin")]
     public class AddresssController : Controller
     {
-        public IActionResult Index()
+		[Route("address-management")]
+		public IActionResult Index()
         {
 			if (Login.Roleuser == "Admin" || Login.Roleuser == "Staff")
 			{

@@ -132,6 +132,8 @@ namespace DATN_Client.Areas.Admin.Components
                     }
                     _navigationManager.NavigateTo("https://localhost:7075/Admin/Promotion", true);
                 }
+
+                _navigationManager.NavigateTo("/promotion-management", true);
             }
             
         }

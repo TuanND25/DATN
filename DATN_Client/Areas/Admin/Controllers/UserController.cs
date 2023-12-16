@@ -6,17 +6,17 @@ namespace DATN_Client.Areas.Admin.Controllers
 	[Area("Admin")]
 	public class UserController : Controller
 	{
+		[Route("user-management")]
 		public IActionResult Index()
 		{
-			return View();
-			//if (Login.Roleuser == "Admin" )
-			//{
-				
-			//}
-			//else
-			//{
-			//	return Unauthorized();
-			//}
+			if (Login.Roleuser == "Admin")
+			{
+				return View();
+			}
+			else
+			{
+				return Unauthorized();
+			}
 		}
 	}
 }

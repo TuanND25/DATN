@@ -1,12 +1,18 @@
-﻿<div class="card">
+﻿@using Blazored.Toast.Configuration
+<BlazoredToasts Position="ToastPosition.BottomRight"
+                Timeout="5"
+                IconType="IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fa-solid fa-check"
+                ErrorIcon="fa-solid fa-triangle-exclamation" />
+<div class="card">
     <div class="card-body">
         <div class="pagetitle">
-            <h1>Quản lý màu sắc</h1>
+            <h1>Quản lý kích thước</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item">Quản lý thuộc tính</li>
-                    <li class="breadcrumb-item active">Màu sắc</li>
+                    <li class="breadcrumb-item"><a href="/admin">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/size-management">Quản lý kích thước</a></li>
                 </ol>
             </nav>
         </div><!-- End Breadcrumbs with a page title -->
@@ -18,16 +24,16 @@
     <div class="col-lg-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Quản lý Size</h5>
+                <h5 class="card-title">Quản lý kích thước</h5>
                 <EditForm Model="size_VM">
                     <div class="row mb-3">
-                        <label for="inputText" class="col-sm-4 col-form-label">Size: </label>
+                        <label for="inputText" class="col-sm-4 col-form-label">Kích thước </label>
                         <div class="col-sm-8">
                             <InputText class="form-control" @bind-Value="@size_VM.Name" />
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label class="col-sm-4 col-form-label">Trạng thái: </label>
+                        <label class="col-sm-4 col-form-label">Trạng thái </label>
                         <div class="col-sm-8">
                             <div class="row">
                                 <InputRadioGroup @bind-Value="@size_VM.Status" class="form-control">
@@ -46,7 +52,7 @@
                         <label class="col-sm-4 col-form-label">Submit </label>
                         <div class="col-sm-8">
                             <button type="submit" class="btn btn-outline-success" style="float:center" data-bs-toggle="modal" data-bs-target="#Add">Create</button>
-                            <button type="submit" class="btn btn-outline-success" style="float:center" data-bs-toggle="modal" data-bs-target="#update">Update</button>
+                            <button type="submit" class="btn btn-outline-success" style="float:center" data-bs-toggle="modal" data-bs-target="#update">Cập nhật</button>
                             <!--popup add-->
                             <div class="modal fade" id="Add" tabindex="-1">
                                 <div class="modal-dialog">
@@ -56,11 +62,11 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            Bạn có xác nhận thêm mới size hay không ?
+                                            Bạn có đồng ý thêm mới kích thước hay không?
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary" @onclick="AddSize">Save changes</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ĐÓng</button>
+                                            <button type="button" class="btn btn-primary" @onclick="AddSize">Xác nhận</button>
                                         </div>
                                     </div>
                                 </div>
@@ -70,15 +76,15 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title">Update </h5>
+                                            <h5 class="modal-title">Cập nhật</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            Bạn có xác nhận update size hay không ?
+                                            Bạn có đồng ý cập nhật kích thước hay không?
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary" @onclick="()=>UpdateSize(size_VM)">Update</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                            <button type="button" class="btn btn-primary" @onclick="()=>UpdateSize(size_VM)">Xác nhận</button>
                                         </div>
                                     </div>
                                 </div>
@@ -100,10 +106,10 @@
                 }
                 <div class="card">
                     <div class="card-body">
-                        <h4 style="margin-top:20px">List Size</h4>
+                        <h4 style="margin-top:20px">Danh sách kích thước</h4>
                         <div class="pagetitle">
                         </div>
-                        @if (size == null)
+                        @if (_lstsize == null)
                         {
                             <p><em>Loading...</em></p>
                         }
@@ -120,7 +126,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var x in size)
+                                        @foreach (var x in _lstsize)
                                         {
                                             <tr>
                                                 <td>@(count++)</td>

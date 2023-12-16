@@ -42,6 +42,7 @@
 		height: 400px;
 		text-align: center;
 		position: relative;
+		cursor:pointer
 	}
 
 	.imgthum {
@@ -83,6 +84,9 @@
 		<hr style="border: 1px solid orangered;">
 		<div class="danhmuc" style="border: 2px solid black;">
 			<ul>
+				<li>
+					<a href="/all-product">TẤT CẢ SẢN PHẨM</a>
+				</li>
 				@foreach (var item in _lstCate)
 				{
 					<li>
@@ -143,7 +147,7 @@
 								}
 								else
 								{
-									<p>@(giamin?.ToString("#,##0") + " - " + giamax?.ToString("#,##0"))</p>
+									<p>@(giamin?.ToString("#,##0") + " - " + giamax?.ToString("#,##0"))đ</p>
 								}
 							</div>
 						</div>

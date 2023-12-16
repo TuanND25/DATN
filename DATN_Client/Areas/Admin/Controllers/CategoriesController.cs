@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DATN_Client.Areas.Admin.Controllers
 {
-    public class CategoriesController : Controller
-    {
-        [Area("Admin")]
-        public IActionResult Index()
+	[Area("Admin")]
+	public class CategoriesController : Controller
+    {       
+		[Route("category-management")]
+		public IActionResult Index()
         {
 			if (Login.Roleuser == "Admin" )
 			{
