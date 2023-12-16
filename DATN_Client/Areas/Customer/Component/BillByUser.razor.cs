@@ -3,13 +3,14 @@ using DATN_Shared.ViewModel;
 using DATN_Shared.ViewModel.Momo;
 using DATN_Shared.ViewModel.Momo.Order;
 using Microsoft.AspNetCore.Components;
+using System.Text.Json;
 
 namespace DATN_Client.Areas.Customer.Component
 {
 	public partial class BillByUser
 	{
 		[Inject] private NavigationManager _navigationManager { get; set; }
-		private HttpClient _httpClient = new HttpClient();
+		private HttpClient _httpClient = new();
 		[Inject] private Blazored.Toast.Services.IToastService _toastService { get; set; }
 		[Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
 		private List<Bill_VM> _lstBills = new();
@@ -24,8 +25,7 @@ namespace DATN_Client.Areas.Customer.Component
 			isLoader = true;
 			var a = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
 			//var a = Guid.Parse("05CE1969-7D23-4E5F-90ED-940F161F902A");
-			var b = Convert.ToString(a);
-			if (!string.IsNullOrEmpty(b))
+			if (!string.IsNullOrEmpty(a))
 			{
 				_user = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7141/api/user/get_user_by_id/{a}");
 				_lstBills = await _httpClient.GetFromJsonAsync<List<Bill_VM>>($"https://localhost:7141/api/Bill/get_bill_by_user/{a}");
@@ -56,6 +56,12 @@ namespace DATN_Client.Areas.Customer.Component
 
 		private async Task ThanhToanHdMomo(Bill_VM b_vm)
 		{
+			// convert b_vm sang Create_Bill_With_Info._bill_validate_vm
+			string json = JsonSerializer.Serialize(b_vm);
+			Create_Bill_With_Info._bill_validate_vm = JsonSerializer.Deserialize<Bill_DataAnotation_VM>(json);
+			// lấy user
+			User user = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7141/api/user/get_user_by_id/{Create_Bill_With_Info._bill_validate_vm.UserId}");
+			// gửi yêu cầu thanh toán momo
 			_ord.OrderId = Guid.NewGuid().ToString();
 			if (_user.Name == null) _ord.FullName = "Không có thông tin khách hàng";
 			else _ord.FullName = _user.Name;

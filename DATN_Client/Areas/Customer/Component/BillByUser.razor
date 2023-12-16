@@ -126,7 +126,7 @@ else
 						<button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-1" type="button" role="tab" aria-controls="profile" aria-selected="false">Hoàn thành</button>
 					</li>
 					<li class="nav-item flex-fill" role="presentation">
-						<button class="nav-link w-100" id="contact-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-2" type="button" role="tab" aria-controls="contact" aria-selected="false">Đã huỷ</button>
+						<button class="nav-link w-100" id="contact-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-2" type="button" role="tab" aria-controls="contact" aria-selected="false">Đã hủy</button>
 					</li>
 				</ul>
 			</div>
@@ -154,7 +154,7 @@ else
 										<h6 class="card-tittle">ĐƠN HÀNG: #@a.BillCode, Đặt lúc — @a.CreateDate</h6>
 									</div>
 									<div class="col-md-4 status">
-										@(a.Status == 0 ? "Đã huỷ"
+										@(a.Status == 0 ? "Đã hủy"
 										: a.Status == 1 ? "Chờ thanh toán"
 										: a.Status == 2 ? "Chờ xác nhận"
 										: a.Status == 3 ? "Đã được xác nhận"
@@ -187,7 +187,7 @@ else
 									</span>
 								</div>
 								<div style="display:flex;float:right;">
-									@if (_lstPayM.FirstOrDefault(c => c.Id == a.PaymentMethodId).Name == "Thanh toán Momo")
+									@if (_lstPayM.FirstOrDefault(c => c.Id == a.PaymentMethodId).Name == "Thanh toán Momo" && a.Status == 1)
 									{
 										<button type="button" class="button" @onclick="()=>ThanhToanHdMomo(a)">Thanh toán đơn hàng</button>
 									}

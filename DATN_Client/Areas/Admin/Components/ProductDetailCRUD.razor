@@ -575,7 +575,7 @@ else
 				</div>
 				<br />
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div class="form-floating">
 							<select class="form-select" @bind="_pri_s_vm_Update.ColorId">
 								@foreach (var item in _lstColor)
@@ -586,10 +586,21 @@ else
 							<label for="floatingSelect">Màu</label>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div class="form-floating">
 							<select class="form-select" @bind="_pri_s_vm_Update.SizeId">
 								@foreach (var item in _lstSize)
+								{
+									<option value="@item.Id">@item.Name</option>
+								}
+							</select>
+							<label for="floatingSelect">Kích thước</label>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-floating">
+							<select class="form-select" @bind="_pri_s_vm_Update.CategoryID">
+								@foreach (var item in _lstCate)
 								{
 									<option value="@item.Id">@item.Name</option>
 								}

@@ -28,11 +28,25 @@ namespace DATN_API.Controllers
 			var x = await _HistoryConsumerPoint.GetHistoryConsumerPointById(ID);
 			return x;
 		}
-		//public Guid Id { get; set; }
-		//public Guid ConsumerPointId { get; set; }
-		//public Guid FormulaId { get; set; }
-		//public int Status { get; set; }
-		[HttpPost("add-HistoryConsumerPoint")]
+        [HttpGet("Get-HistoryConsumerPointBy-BillId/{BillID}")]
+        public async Task<HistoryConsumerPoint> GetHistoryConsumerPointByBillId(Guid BillID)
+        {
+			try
+			{
+				var x = await _HistoryConsumerPoint.GetHistoryConsumerPointByBillId(BillID);
+				if (x == null) return new();
+				return x;
+			}
+			catch (Exception)
+			{
+				return new();
+			}
+        }
+        //public Guid Id { get; set; }
+        //public Guid ConsumerPointId { get; set; }
+        //public Guid FormulaId { get; set; }
+        //public int Status { get; set; }
+        [HttpPost("add-HistoryConsumerPoint")]
 		public async Task<ActionResult<HistoryConsumerPoint>> PostHistoryConsumerPoint(HistoryConsumerPoint_VM rvm)
 		{
 			HistoryConsumerPoint HistoryConsumerPoint = new HistoryConsumerPoint();
