@@ -9,6 +9,7 @@ namespace DATN_Client.Areas.Admin.Components
         [Inject] NavigationManager _navigationManager { get; set; }
         List<Products_VM> _lstProduct = new List<Products_VM>();
         List<ProductItem_Show_VM> _lstProductItem = new List<ProductItem_Show_VM>();
+        List<ProductItem_Show_VM> _lstProductItemShow = new List<ProductItem_Show_VM>();
         List<Image_VM> _lstImg = new List<Image_VM>();
         Promotions_VM _promotion = new Promotions_VM();
         List<ProductItem_Show_VM> _productItemByPromotion = new List<ProductItem_Show_VM>();
@@ -66,6 +67,7 @@ namespace DATN_Client.Areas.Admin.Components
             }
             _lstProductSelect = _lstProductSelect.Distinct().ToList();
             _lstProductItem = _lstProductItem.Where(p => _lstProductSelect.Contains(p.ProductId)).ToList();
+            _lstProductItemShow = _lstProductItem.ToList();
 
             if (_lstProductItemSelect.Count == _lstProductItem.Select(x => x.Id).ToList().Count && _lstProductItem.Select(x => x.Id).ToList().Count != 0)
             {
@@ -196,9 +198,9 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public async Task LocHangLoat()
         {
-            _lstProductItem = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
 
-            _lstProductItem = _lstPrI_show_VM.Where(c =>
+
+            _lstProductItemShow = _lstProductItem.Where(c =>
                                 (_PM_S_VM.CategoryName == null ||
                                 _PM_S_VM.CategoryName == "0" ||
                                 c.CategoryName == _PM_S_VM.CategoryName) &&

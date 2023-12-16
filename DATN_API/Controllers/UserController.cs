@@ -92,6 +92,21 @@ namespace DATN_API.Controllers
             }
         }
 
+        [Route("update-user-customer")]
+        [HttpPut]
+        public async Task<IActionResult> UpdateUserCustomer(User_VM updateUser)
+        {
+           var result = await _userService.UpdateUserCustomer(updateUser);
+            if (result.IsSuccess)
+            {
+                return StatusCode(result.StatusCode,result.Message);
+            }
+            else
+            {
+                return StatusCode(result.StatusCode, result.Message);    
+            }
+        }
+
 
         [Route("get-user-byusername")]
         //[Authorize(Roles ="Admin")]

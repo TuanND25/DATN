@@ -7,12 +7,6 @@
                 SuccessIcon="fas fa-check-circle"
                 ErrorIcon="fa-solid fa-triangle-exclamation" />
 
-<BlazoredToasts Position="ToastPosition.TopRight"
-                Timeout="5"
-                IconType="IconType.FontAwesome"
-                SuccessClass="success-toast-override"
-                SuccessIcon="fa-solid fa-check"
-                ErrorIcon="fa-solid fa-triangle-exclamation" />
 <style>
     .btnTrongSuot {
         background-color: transparent;
@@ -92,7 +86,8 @@
         <div class="modal-dialog modal-dialog-centered" style="width:150%">
             <div class="modal-content">
                 <div class="modal-body">
-                    <label style="font-size:22px;font-weight:600;padding:15px 50px 15px 15px">Chỉnh sửa thông tin tài khoản</label>
+                    <label style="font-size:18px;font-weight:600;padding:15px 50px 15px 15px">Chỉnh sửa thông tin tài khoản</label>
+                    <button class="col-md-1 btnTrongSuot2" style="margin-left:105px;" @onclick='()=>ClosePopup("UpdateUser")'><i class="fas fa-times" style="font-size:16pt;"></i></button>
                     <div style=" display: flex;flex-direction:column;">
 
                         <div class="inputName">
@@ -111,7 +106,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label class="col-sm-4 col-form-label">Tình trạng</label>
+                            <label class="col-sm-4 col-form-label">Giới tính</label>
                             <div class="col-sm-8">
                                 <div class="row">
                                     <InputRadioGroup @bind-Value="@User_VM.Sex" class="form-control">
