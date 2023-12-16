@@ -7,15 +7,16 @@ namespace DATN_Client.Areas.Admin.Controllers
 	public class UserController : Controller
 	{
 		public IActionResult Index()
-		{return View();
-			if (Login.Roleuser == "Admin" )
-			{
+		{
+			return View();
+			//if (Login.Roleuser == "Admin" )
+			//{
 				
-			}
-			else
-			{
-				return Unauthorized();
-			}
+			//}
+			//else
+			//{
+			//	return Unauthorized();
+			//}
 		}
 	}
 }
