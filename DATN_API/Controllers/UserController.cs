@@ -34,7 +34,7 @@ namespace DATN_API.Controllers
             var listuser = from users in _userManager.Users
                            join roleusers in _context.UserRoles on users.Id equals roleusers.UserId
                            join roles in _roleManager.Roles on roleusers.RoleId equals roles.Id
-                           where roles.Name== "Staff"
+                          
                            select new
                            {
                                id = users.Id,
