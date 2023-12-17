@@ -39,7 +39,8 @@ namespace DATN_Client.Areas.Admin.Components
 				}
 			}
 			if (string.IsNullOrEmpty(size_VM.Name)) return;
-			await _httpClient.PostAsJsonAsync<Size_VM>("https://localhost:7141/api/Size/PostSize", size_VM);
+            size_VM.Name = size_VM.Name.Trim();
+            await _httpClient.PostAsJsonAsync<Size_VM>("https://localhost:7141/api/Size/PostSize", size_VM);
             navigationManager.NavigateTo("/size-management", true);
 
 
@@ -54,13 +55,14 @@ namespace DATN_Client.Areas.Admin.Components
             size_VM.Id = Guid.NewGuid();
             if (!string.IsNullOrEmpty(size_VM.Name))
             {
-                if (_lstsize.Any(c => c.Name == size_VM.Name))
+                if (_lstsize.Any(c => c.Name == size_VM.Name)&& !_lstsize.Any(c => c.Id == size.Id))
                 {
                     _toastService.ShowError("Kích thước đã tồn tại");
                     return;
                 }
             }
             if (string.IsNullOrEmpty(size_VM.Name)) return;
+            size.Name = size.Name.Trim();
             await _httpClient.PutAsJsonAsync<Size_VM>("https://localhost:7141/api/Size/PutSize", size);
             navigationManager.NavigateTo("/size-management", true);
         }

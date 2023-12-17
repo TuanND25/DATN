@@ -25,7 +25,7 @@
 
         <div class="card">
             <div class="card-body">
-
+                <h5 class="card-title">Thuộc tính màu sắc</h5>
                 <EditForm Model="color_VM">
                     <DataAnnotationsValidator/>
                     <div class="row mb-3">
@@ -138,10 +138,9 @@
                                         <td>@x.Name</td>
                                         <td>@(x.Status == 1 ? "Hoạt động" : "Ngừng hoạt động")</td>
                                         <td>
-                                            <button style="width:45px;height:45px"
-                                                    class="btn btn-warning"
+                                            <button type="button" class="btn btn-primary"
                                                     @onclick="()=>LoadForm(x)">
-                                                <i class="fa-solid fa-wrench"></i>
+                                                <i class="bi bi-pencil-square"></i>
                                             </button>
                                         </td>
                                     </tr>

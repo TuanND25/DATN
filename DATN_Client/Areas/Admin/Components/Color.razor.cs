@@ -37,6 +37,7 @@ namespace DATN_Client.Areas.Admin.Components
                 }
             }
             if (string.IsNullOrEmpty(color_VM.Name)) return;
+            color_VM.Name = color_VM.Name.Trim();
             await _httpClient.PostAsJsonAsync<Color_VM>("https://localhost:7141/api/Color/PostColor", color_VM);
             navigationManager.NavigateTo("/color-management", true);
 
@@ -51,13 +52,14 @@ namespace DATN_Client.Areas.Admin.Components
             }
             if (!string.IsNullOrEmpty(color_VM.Name))
             {
-                if (_lstcolor.Any(c => c.Name == color_VM.Name))
+                if (_lstcolor.Any(c => c.Name == color_VM.Name) && !_lstcolor.Any(c=>c.Id==color.Id))
                 {
                     _toastService.ShowError("Màu sắc đã tồn tại");
                     return;
                 }
             }
             if (string.IsNullOrEmpty(color_VM.Name)) return;
+            color.Name = color_VM.Name.Trim();
             await _httpClient.PutAsJsonAsync<Color_VM>("https://localhost:7141/api/Color/PutColoe", color);
             navigationManager.NavigateTo("/color-management", true);
         }

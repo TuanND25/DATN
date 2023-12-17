@@ -3,19 +3,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DATN_Client.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class FormulaController : Controller
     {
-        [Area("Admin")]
+        [Route("formula-management")]
         public IActionResult Index()
         {
-			if (Login.Roleuser == "Admin")
-			{
-				return View();
-			}
-			else
-			{
-				return Unauthorized();
-			}
-		}
+
+            if (Login.Roleuser == "Admin")
+            {
+                return View();
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
     }
 }

@@ -109,7 +109,7 @@
 				}
 				if (x.AvaiableQuantity <= 0 || string.IsNullOrEmpty(x.AvaiableQuantity.ToString()))
 				{
-					textErr_SoLuong = "=> Số lượng phải lớn hơn 0";
+					textErr_SoLuong = "=> Số lượng tồn phải lớn hơn 0";
 				}
 				if (x.CostPrice <= 0 || string.IsNullOrEmpty(x.CostPrice.ToString()))
 				{
@@ -183,8 +183,8 @@
 		<EditForm Model="_pri_s_vm_Loc">
 			<div class=" row">
 				<div class="col-md-4">
-					<InputSelect class="form-select" @bind-Value="_pri_s_vm_Loc.CategoryName" @onclick="LocHangLoat">
-						<option value="0" selected>Thể loại</option>
+					<InputSelect class="form-select" @bind-Value="_pri_s_vm_Loc.CategoryName" @onclick="ChonLoc">
+						<option value="" selected>Thể loại</option>
 						@foreach (var x in _lstCate_Loc)
 						{
 							<option value="@x.Name">@x.Name</option>
@@ -192,8 +192,8 @@
 					</InputSelect>
 				</div>
 				<div class="col-md-4">
-					<InputSelect class="form-select" @bind-Value="_pri_s_vm_Loc.ColorName" @onclick="LocHangLoat">
-						<option value="0" selected>Màu sắc</option>
+					<InputSelect class="form-select" @bind-Value="_pri_s_vm_Loc.ColorName" @onclick="ChonLoc">
+						<option value="" selected>Màu sắc</option>
 						@foreach (var x in _lstColor_Loc)
 						{
 							<option value="@x.Name">@x.Name</option>
@@ -201,8 +201,8 @@
 					</InputSelect>
 				</div>
 				<div class="col-md-4">
-					<InputSelect class="form-select" @bind-Value="_pri_s_vm_Loc.SizeName" @onclick="LocHangLoat">
-						<option value="0" selected>Kích thước</option>
+					<InputSelect class="form-select" @bind-Value="_pri_s_vm_Loc.SizeName" @onclick="ChonLoc">
+						<option value="" selected>Kích thước</option>
 						@foreach (var x in _lstSize_Loc)
 						{
 							<option value="@x.Name">@x.Name</option>

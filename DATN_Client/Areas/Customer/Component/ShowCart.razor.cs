@@ -22,14 +22,14 @@ namespace DATN_Client.Areas.Customer.Component
 		protected override async Task OnInitializedAsync()
 		{
 			_idUser = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
-			_lstPrI_show_VM = (await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show")).Where(c => c.Status == 1).ToList();
+			_lstPrI_show_VM = (await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show")).ToList();
 			if (_idUser == null) _lstCI = SessionServices.GetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai");
 			else _lstCI = await _client.GetFromJsonAsync<List<CartItems_VM>>($"https://localhost:7141/api/CartItems/{_idUser}");
 			_lstImg_PI = (await _client.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem")).OrderBy(c => c.STT).ToList();
 			foreach (var x in _lstCI)
 			{
 				_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
-				_tongTien += (x.Quantity * _pi_s_vm.PriceAfterReduction);
+				_tongTien += (x.Quantity * (_pi_s_vm??new()).PriceAfterReduction);
 			}
 			_note = string.Empty;
 		}
@@ -69,13 +69,13 @@ namespace DATN_Client.Areas.Customer.Component
 		{
 			if (_idUser == null)
 			{
-				if (ci.Quantity == 1) await DeleteCI(ci);
+				if (ci.Quantity == 1) return;
 				ci.Quantity -= 1;
 				SessionServices.SetLstFromSession_LstCI(_ihttpcontextaccessor.HttpContext.Session, "_lstCI_Vanglai", _lstCI);
 			}
 			else
 			{
-				if (ci.Quantity == 1) await DeleteCI(ci);
+				if (ci.Quantity == 1) return;
 				ci.Quantity -= 1;
 				await _client.PutAsJsonAsync("https://localhost:7141/api/CartItems/update-CartItems", ci);
 			}
@@ -114,7 +114,7 @@ namespace DATN_Client.Areas.Customer.Component
 			foreach (var x in _lstCI)
 			{
 				var checkSl = await _client.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{x.ProductItemId}");
-				if (x.Quantity > checkSl.AvaiableQuantity)
+				if (x.Quantity > checkSl.AvaiableQuantity || checkSl.Status!=1)
 				{
 					ProductItem_Show_VM pi = _lstPrI_show_VM.FirstOrDefault(c=>c.Id == x.ProductItemId);
 					_toastService.ShowError($"Số lượng tồn kho của sản phẩm {pi.Name} - {pi.ColorName} - {pi.SizeName} không đủ");

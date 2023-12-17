@@ -82,8 +82,8 @@
 						<!--popup-->
 						<label class="col-sm-4 col-form-label">Submit </label>
 						<div class="col-sm-8">
-							<button type="submit" class="btn btn-outline-success" style="float:center" data-bs-toggle="modal" data-bs-target="#Add">Create</button>
-							<button type="submit" class="btn btn-outline-success" style="float:center" data-bs-toggle="modal" data-bs-target="#update">Update</button>
+							<button type="submit" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#Add">Thêm mới</button>
+							<button type="submit" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#update">Cập nhật</button>
 							<!--popup add-->
 							<div class="modal fade" id="Add" tabindex="-1">
 								<BlazoredToasts Position="ToastPosition.BottomRight"
@@ -99,7 +99,7 @@
 											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 										</div>
 										<div class="modal-body">
-											Bạn có xác nhận thêm mới sản phẩm hay không?
+											Bạn có đồng ý thêm mới sản phẩm hay không?
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
@@ -119,11 +119,11 @@
 								<div class="modal-dialog">
 									<div class="modal-content">
 										<div class="modal-header">
-											<h5 class="modal-title">Update </h5>
+											<h5 class="modal-title">Cập nhật</h5>
 											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 										</div>
 										<div class="modal-body">
-											Bạn có xác nhận cập nhật sản phẩm hay không?
+											Bạn có đồng ý cập nhật sản phẩm hay không?
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -154,7 +154,7 @@
 							<input type="text" class="form-control" @bind="_textSearch"
 								   placeholder="Tìm kiếm theo tên hoặc mã sản phẩm" />
 							<button type="submit" class="btn btn-primary"
-									@onclick="TimKiem" style="width:14%;">
+									@onclick="ClickTimKiem" style="width:14%;">
 								<i class="fa-solid fa-magnifying-glass"></i>
 							</button>
 						</div>

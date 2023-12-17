@@ -25,7 +25,7 @@ namespace DATN_Client.Areas.Customer.Component
 				_toastService.ShowError("Vui lòng nhập từ khóa cần tìm kiếm");
 				return;
 			}
-			_navigation.NavigateTo($"https://localhost:7075/search/{_searchProduct}", true);
+			_navigation.NavigateTo($"/search-product?search={_searchProduct}", true);
 		}
 
 		public async void NavProductItem(Guid Id)

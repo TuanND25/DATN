@@ -38,6 +38,8 @@ namespace DATN_Client.Areas.Admin.Components
                 }
             }
             if (string.IsNullOrEmpty(cate_VM.Name)) return;
+            cate_VM.TenKhongDau = "";
+            cate_VM.Name = cate_VM.Name.Trim();
             await _httpClient.PostAsJsonAsync<Categories_VM>("https://localhost:7141/api/Categories/PostCategory", cate_VM);
             navigationManager.NavigateTo("/category-management", true);
         }
@@ -50,7 +52,7 @@ namespace DATN_Client.Areas.Admin.Components
             }
             if (!string.IsNullOrEmpty(cate_VM.Name))
             {
-                if (_lstcate.Any(c => c.Name == cate_VM.Name))
+                if (_lstcate.Any(c => c.Name == cate_VM.Name) && !_lstcate.Any(c => c.Id == cate.Id))
                 {
                     _toastService.ShowError("Thể loại đã tồn tại");
                     return;
@@ -58,6 +60,7 @@ namespace DATN_Client.Areas.Admin.Components
             }
             if (string.IsNullOrEmpty(cate_VM.Name)) return;
             cate.TenKhongDau = "";
+            cate.Name = cate.Name.Trim();
             await _httpClient.PutAsJsonAsync<Categories_VM>("https://localhost:7141/api/Categories/PutCategory", cate);
             navigationManager.NavigateTo("/category-management", true);
         }
