@@ -25,6 +25,17 @@ namespace DATN_Client.Areas.Customer.Component
 		public static string UserNameShowHome { get; set; }
 		public static bool _chaoLogin { get; set; } = false;
 		public string _check { get; set; } = "password";
+		
+		protected override async Task OnInitializedAsync()
+		{
+			var idUser = iHttpContext.HttpContext.Session.GetString("UserId");
+			if (!string.IsNullOrEmpty(idUser))
+			{
+				if (Roleuser == "Admin") navigationManager.NavigateTo("/admin", true);
+				if (Roleuser == "Staff") navigationManager.NavigateTo("https://localhost:7075/Admin/SellStalls", true);
+				if (Roleuser == "User") navigationManager.NavigateTo("/admin", true);
+			}
+		}
 		public async Task login()
 		{
 			if (loginUser.UserName == string.Empty || loginUser.Password == string.Empty)
@@ -68,12 +79,16 @@ namespace DATN_Client.Areas.Customer.Component
 				Roleuser = data[2];
 				iHttpContext.HttpContext.Session.SetString("UserId", id);
 				iHttpContext.HttpContext.Session.SetString("Token", token);
+               
 
 
-
-				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 				var responseAuthorize = await _httpClient.GetAsync("https://localhost:7141/api/user/get-user");
-				if (principal.IsInRole("Admin") || principal.IsInRole("Staff"))
+				if (principal.IsInRole("Staff"))
+				{
+					navigationManager.NavigateTo("https://localhost:7075/Admin/SellStalls", true);
+				}
+				if (principal.IsInRole("Admin"))
 				{
 					navigationManager.NavigateTo("https://localhost:7075/Admin", true);
 				}
@@ -85,6 +100,8 @@ namespace DATN_Client.Areas.Customer.Component
 					UserNameShowHome = LayChuCuoiName(user.Name);
 					_chaoLogin = true;
 					iHttpContext.HttpContext.Session.Remove("_lstCI_Vanglai");
+					_toastService.ShowSuccess("Chào người dùng");
+					await Task.Delay(2000);
 					navigationManager.NavigateTo("/home", true);
 				}
 			}
