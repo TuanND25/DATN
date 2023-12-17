@@ -1,7 +1,8 @@
 ﻿@using DATN_Client.Areas.Customer.Component;
+@using DATN_Client.Areas.Customer.Controllers;
 @model DATN_Shared.ViewModel.Momo.MomoExecuteResponseModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = BanOnlineController._momoExecuteResponseModel.Message.ToLower() == "success" ? "Thanh toán thành công" : "Thanh toán thất bại";
     Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
 }
 @(await Html.RenderComponentAsync<PaymentCallBack_Blazor>(RenderMode.Server))
