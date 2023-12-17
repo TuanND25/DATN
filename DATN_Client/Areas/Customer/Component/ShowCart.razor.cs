@@ -39,7 +39,7 @@ namespace DATN_Client.Areas.Customer.Component
 			var checkSl = await _client.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{ci.ProductItemId}");
 			if (_idUser == null)
 			{
-				if (ci.Quantity + 1 > checkSl.AvaiableQuantity)
+				if (ci.Quantity + 1 > checkSl.AvaiableQuantity || checkSl.Status!=1)
 				{
 					_toastService.ShowError("Số lượng tồn kho không đủ");
 					return;
@@ -49,7 +49,7 @@ namespace DATN_Client.Areas.Customer.Component
 			}
 			else
 			{
-				if (ci.Quantity + 1 > checkSl.AvaiableQuantity)
+				if (ci.Quantity + 1 > checkSl.AvaiableQuantity || checkSl.Status != 1)
 				{
 					_toastService.ShowError("Số lượng tồn kho không đủ");
 					return;

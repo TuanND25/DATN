@@ -100,8 +100,6 @@ namespace DATN_Client.Areas.Customer.Component
 					UserNameShowHome = LayChuCuoiName(user.Name);
 					_chaoLogin = true;
 					iHttpContext.HttpContext.Session.Remove("_lstCI_Vanglai");
-					_toastService.ShowSuccess("Chào người dùng");
-					await Task.Delay(2000);
 					navigationManager.NavigateTo("/home", true);
 				}
 			}

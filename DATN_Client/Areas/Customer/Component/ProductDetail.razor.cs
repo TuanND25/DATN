@@ -89,7 +89,7 @@ namespace DATN_Client.Areas.Customer.Component
 		{
 			_ss = _ihttpcontextaccessor.HttpContext.Session;
 			_iduser = (_ss.GetString("UserId"));
-			_lstPrI_show_VM = (await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show")).Where(c => c.ProductId == BanOnlineController._idP && c.Status==1).ToList();
+			_lstPrI_show_VM = (await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show")).Where(c => c.ProductId == BanOnlineController._idP).ToList();
 			_p_VM = await _client.GetFromJsonAsync<Products_VM>($"https://localhost:7141/api/product/get_product_byid/{BanOnlineController._idP}");
 			_lstImg_PI = await _client.GetFromJsonAsync<List<Image_Join_ProductItem>>($"https://localhost:7141/api/Image/GetAllImage_PrductItem_ByProductId/{BanOnlineController._idP}");
 			List<Image_Join_ProductItem> lstImgtam = new();
@@ -225,13 +225,9 @@ namespace DATN_Client.Areas.Customer.Component
 			// ko phải vãng lai
 			if (_iduser != null)
 			{
-				if (checkSl.Status == 2)
-				{
-					_toastService.ShowError("Mặt hàng này hiện đã tạm hết");
-				}
 				// lấy giỏ
 				_lstCI = await _client.GetFromJsonAsync<List<CartItems_VM>>($"https://localhost:7141/api/CartItems/{_iduser}");
-				if (checkSl.AvaiableQuantity == 0)
+				if (checkSl.AvaiableQuantity == 0|| checkSl.Status!=1)
 				{
 					_toastService.ShowError("Số lượng tồn kho không đủ");
 					return;

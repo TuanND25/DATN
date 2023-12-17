@@ -20,18 +20,24 @@ namespace DATN_Client.Areas.Customer.Component
 		private List<Image_Join_ProductItem> _lstImg_PI = new();
 
 		protected override async Task OnInitializedAsync()
-		{
-			if (Login._chaoLogin == true)
-			{
-				_toastService.ShowSuccess("Đăng nhập thành công. Xin chào");
-				Login._chaoLogin = false;
-			}
+		{			
 			var a = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
-
 			_lstProductItem_tam = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_product_home");
 			_lstProductItem = _lstProductItem_tam;
             _lstImg_PI = await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem");
             await ListProduct();
+		}
+
+		protected override async Task OnAfterRenderAsync(bool firstRender)
+		{
+			if (firstRender)
+			{
+				if (Login._chaoLogin == true)
+				{
+					_toastService.ShowSuccess($"Đăng nhập thành công. Xin chào {Login.UserNameShowHome}");
+					Login._chaoLogin = false;
+				}				
+			}					
 		}
 
 		public async Task ListProduct()
