@@ -38,7 +38,8 @@ namespace DATN_Shared.ViewModel
 		public string? Note { get; set; }
 		public int Status { get; set; }
 		public string PhoneNumber { get; set; }
+        public int? ShippingFee { get; set; }
 
 
-	}
+    }
 }
