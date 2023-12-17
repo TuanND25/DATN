@@ -88,7 +88,7 @@ namespace DATN_Client.Areas.Customer.Component
             {
                 _toastService.ShowSuccess("Đăng ký thành công");
                  await Task.Delay(3000);
-                navigationManager.NavigateTo("https://localhost:7075/Customer/Login/Login",true);
+                navigationManager.NavigateTo("https://localhost:7075/login",true);
 				
 				return;
             }
