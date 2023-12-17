@@ -2,6 +2,7 @@
 using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace DATN_Client.Areas.Admin.Components
 {
@@ -12,39 +13,35 @@ namespace DATN_Client.Areas.Admin.Components
 		private List<BillDetailShow> _lstBillDetail = new List<BillDetailShow>();
 		private AddressShip addressShip = new AddressShip();
 		private Bill_VM b = new Bill_VM();
+		
 
 		[Inject]
 		private NavigationManager nav { get; set; }
 
-		private Bill bil = new Bill();
-		public int? _tongtien { get; set; } = 0;
-		public string texttongtien { get; set; }
-		public int Phiship { get; set; }
-		public string Note { get; set; }
-		public string Suggest_number_1 { get; set; } = string.Empty;
-		public string Suggest_number_2 { get; set; } = string.Empty;
-		public bool displayButton { get; set; }
-		public string CheckFee { get; set; }
-		public string CheckNote { get; set; }
+		public Bill_ShowModel _bill = new Bill_ShowModel();
         public Guid BillId { get; set; }
+        public string TotalText { get; set; }
 
         protected override async Task OnInitializedAsync()
 		{
-			 BillId = BillManagementController._billId;
-			_lstBillDetail = await _client.GetFromJsonAsync<List<BillDetailShow>>("https://localhost:7141/api/BillItem/getbilldetail/" + _billModel.Id);			
+			await getDataBill();
+            _lstBillDetail = await _client.GetFromJsonAsync<List<BillDetailShow>>("https://localhost:7141/api/BillItem/getbilldetail/" + BillId);					
 		}
+		public async Task getDataBill()
+		{
+            BillId = BillManagementController._billId;
+            List<Bill_ShowModel> _lstbill = await _client.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
+
+			_bill = _lstbill.FirstOrDefault(x => x.Id == BillId);
+			TotalText = NumberToText(Convert.ToDouble(_bill.TotalAmount.ToString()));
+        }
 
 		public void ReturnBill()
 		{
-			nav.NavigateTo("https://localhost:7075/bill-management", true);
-		}
+            JSRuntime.InvokeVoidAsync("history.back");
+        }
+		
 
-		private string RoundToNearestPowerOfTen(int number, int chiso)
-		{
-			int roundedNumber = number * chiso;
-			var Suggest_number1 = roundedNumber.ToString();
-			return Suggest_number1;
-		}
 
 		private static string NumberToText(double inputNumber, bool suffix = true)
 		{

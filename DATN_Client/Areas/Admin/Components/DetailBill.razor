@@ -1,162 +1,101 @@
-﻿<style>
-    /* CSS */
-    .button-33 {
-        background-color: #c2fbd7;
-        border-radius: 100px;
-        box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
-        color: green;
-        cursor: pointer;
-        display: inline-block;
-        font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
-        padding: 2px 20px;
-        text-align: center;
-        text-decoration: none;
-        transition: all 250ms;
-        border: 0;
-        font-size: 16px;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-    }
-
-        .button-33:hover {
-            box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
-            transform: scale(1.05) rotate(-1deg);
-        }
-
-    .button-34 {
-        background-color: #D74C4C;
-        border-radius: 100px;
-        box-shadow: rgba(215,76,76, .2) 0 -25px 18px -14px inset,rgba(215,76,76, .15) 0 1px 2px,rgba(215,76,76, .15) 0 2px 4px,rgba(215,76,76, .15) 0 4px 8px,rgba(215,76,76, .15) 0 8px 16px,rgba(215,76,76, .15) 0 16px 32px;
-        color: wheat;
-        cursor: pointer;
-        display: inline-block;
-        font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
-        padding: 2px 20px;
-        text-align: center;
-        text-decoration: none;
-        transition: all 250ms;
-        border: 0;
-        font-size: 16px;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-    }
-
-        .button-34:hover {
-            box-shadow: rgba(215,76,76,.35) 0 -25px 18px -14px inset,rgba(215,76,76,.25) 0 1px 2px,rgba(215,76,76,.25) 0 2px 4px,rgba(215,76,76,.25) 0 4px 8px,rgba(215,76,76,.25) 0 8px 16px,rgba(215,76,76,.25) 0 16px 32px;
-            transform: scale(1.05) rotate(-1deg);
-        }
-
-    .cangiua {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center
-    }
-
-    .inputtext {
-        appearance: none;
-        border: none;
-        outline: none;
-        border-bottom: .1em solid #454545;
-        background: rgba(#454545, .2);
-        border-radius: .1em .1em 0 0;
-        padding: 0px;
-        color: #454545;
-    }
-
-    <!-- HTML ! -->
-    /* CSS */
-    .button-37 {
-        background-color: #13aa52;
-        border: 1px solid #13aa52;
-        border-radius: 4px;
-        box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
-        box-sizing: border-box;
-        color: #fff;
-        cursor: pointer;
-        font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
-        font-size: 16px;
-        font-weight: 400;
-        outline: none;
-        outline: 0;
-        padding: 10px 25px;
-        text-align: center;
-        transform: translateY(0);
-        transition: transform 150ms, box-shadow 150ms;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-    }
-
-    .button-37:hover {
-        box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
-        transform: translateY(-2px);
-    }
-
-    .abc {
-        display: none;
-    }
-
-    .button_price {
-        border: none;
-        padding: 5px;
-    }
-
-    .btnSucces {
-        padding: 10px 15px 10px 15px;
-        width: 100px;
-        border: 1px solid #D15555;
-        border-radius: 25px;
-        color: #D15555;
-    }
-
-        .btnSucces:hover {
-            border: 1px solid #D15555;
-            background-color: #D15555;
-            border-radius: 25px;
-            color: wheat;
-        }
-
-    .btnCancel {
-        margin-left: 20px;
-        padding: 10px 15px 10px 15px;
-        width: 100px;
-        border: 1px solid #797878;
-        border-radius: 25px;
-        color: #797878;
-    }
-
-        .btnCancel:hover {
-            background-color: #797878;
-            border: 1px solid #797878;
-            border-radius: 25px;
-            color: white;
-        }
-
-    .divCancelOrder {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 30px;
-    }
-
-    .TitleYesOrNo {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #454545;
-        font-size: 20px;
-        align-items: center;
-        font-weight: 500;
-        margin-bottom: 30px;
-    }
-</style>
-
+﻿@inject IJSRuntime JSRuntime
 <div class="row">
     <div>
         <button @onclick=ReturnBill style="border:none;border-radius:25px; padding:10px 25px 10px 25px; background-color:#fe9666;color:white"><i style="margin-right:15px" class="fa-solid fa-chevron-left"></i>Back</button>
+    </div>
+    <div>
+        <div style="display:flex;">
+            <div style="width:35%">
+                @if (_bill.UserName == "khachvanglai")
+                {
+                    <p>Khách vãng lai</p>
+                }
+                else
+                {
+                    <p>Khách hàng: @_bill.UserName</p>
+                    <p>Số điện thoại: @_bill.PhoneNumber</p>
+                }
+                <p>Tổng tiền: @_bill.TotalAmount</p>
+                <p>Thành chữ: @TotalText</p>
+                <p>Phương thức thanh toán: @_bill.PaymentMethodName</p>
+                <p>
+                    Hình thức mua hàng:
+                    @if (_bill.Type == 1)
+                    {
+                        <span>Online</span>
+                    }
+                    else if (_bill.Type == 2 && _bill.Status != 3)
+                    {
+                        <span>Tại quầy(Có vận chuyển)</span>
+                    }
+                    else
+                    {
+                        <span>Tại quầy</span>
+                    }
+                </p>
+                <p></p>
+            </div>
+            <div style="width:40%">
+                @if (!string.IsNullOrEmpty(_bill.Province))
+                {
+                    <p>Thông tin vận chuyển</p>
+                    <div style="padding-left:15px">
+                        <p>Người nhận: @_bill.Recipient</p>
+                        <p>Số điện thoại: @_bill.NumberPhone</p>
+                        <p>Địa chỉ:@_bill.ToAddress, @_bill.WardName, @_bill.District, @_bill.Province</p>
+                        <p>
+                            Phí ship:
+                            @if (string.IsNullOrEmpty(_bill.ShippingFee.ToString()) || _bill.ShippingFee == 0)
+                            {
+                                <span>cần được cập nhật</span>
+                            }
+                            else
+                            {
+                                <span>@_bill.ShippingFee</span>
+                            }
+                        </p>
+                    </div>
+                }
+            </div>
+        </div>
+        <div>
+            Danh sách sản phẩm
+            <table style="width:100%">
+                <tr style="border:1px solid #d3d3d3;border-collapse:collapse">
+                    <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">STT</td>
+                    <td style="width:50%;border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px; ">Sản phẩm</td>
+                    <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">Đơn giá</td>
+                    <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">Số lượng</td>
+                    <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">Tổng tiền</td>
+                </tr>
+                @{
+                    int index = 0;
+                    int countQuantity = 0;
+                    int countTienHang = 0;
+                }
+                @foreach (var item in _lstBillDetail)
+                {
+                    {
+                        index += 1;
+                        countQuantity += @item.Quantity;
+                        countTienHang += (@item.Quantity * @item.PriceAfter) ?? 0;
+
+                    }
+                    <tr>
+                        <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@index</td>
+                        <td style="width:50%;border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px; ">@item.Name - @item.SizeName - @item.ColorName</td>
+                        <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@item.PriceAfter</td>
+                        <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@item.Quantity</td>
+                        <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@(item.Quantity * item.PriceAfter)</td>
+                    </tr>
+                }
+                <tr>
+                    <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center" colspan="3">Tổng cộng</td>
+                    <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@countQuantity</td>
+                    <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@countTienHang</td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>
 

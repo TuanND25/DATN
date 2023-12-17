@@ -71,6 +71,8 @@ namespace DATN_API.Service_IService.Services
 						   ShippingDate = a.ShippingDate,
 						   CancelDate = a.CancelDate,
 						   CanelBy = a.CanelBy,
+						   ShippingFee = a.ShippingFee,
+						   
 					   }).ToList();
 			return lst;
 		}
