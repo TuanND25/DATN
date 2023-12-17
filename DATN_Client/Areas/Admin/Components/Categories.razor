@@ -1,139 +1,144 @@
 ﻿<div class="card">
-    <div class="card-body">
-        <div class="pagetitle">
-            <h1>Quản lý thể loại</h1>
-            <nav>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/admin">Home</a></li>
-                    <li class="breadcrumb-item"><a href="/category-management">Quản lý thể loại</a></li>
-                </ol>
-            </nav>
-        </div><!-- End Breadcrumbs with a page title -->
-    </div>
+	<div class="card-body">
+		<div class="pagetitle">
+			<h1>Quản lý thể loại</h1>
+			<nav>
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="/admin">Home</a></li>
+					<li class="breadcrumb-item"><a href="/category-management">Quản lý thể loại</a></li>
+				</ol>
+			</nav>
+		</div><!-- End Breadcrumbs with a page title -->
+	</div>
 </div>
 
 
 <div class="row">
-    <div class="col-lg-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Quản lý thể loại</h5>
-                <EditForm Model="cate_VM">
-                    <div class="row mb-3">
-                        <label for="inputText" class="col-sm-4 col-form-label">Tên thể loại</label>
-                        <div class="col-sm-8">
-                            <InputText class="form-control" @bind-Value="@cate_VM.Name" />
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col-sm-4 col-form-label">Trạng thái </label>
-                        <div class="col-sm-8">
-                            <div class="row">
-                                <InputRadioGroup @bind-Value="@cate_VM.Status" class="form-control">
-                                    <div class="col-sm-6">
-                                        <InputRadio Value="1" /> Hoạt động
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <InputRadio Value="0" /> Ngừng hoạt động
-                                    </div>
-                                </InputRadioGroup>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <!--popup-->
-                        <label class="col-sm-4 col-form-label">Submit</label>
-                        <div class="col-sm-8">
-                            <button type="submit" class="btn btn-outline-success" style="float:center" data-bs-toggle="modal" data-bs-target="#Add">Thêm mới</button>
-                            <button type="submit" class="btn btn-outline-success" style="float:center" data-bs-toggle="modal" data-bs-target="#update">Cập nhật</button>
-                            <!--popup add-->
-                            <div class="modal fade" id="Add" tabindex="-1">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Thêm mới</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Bạn có đồng ý thêm mới thể loại hay không ?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                            <button type="button" class="btn btn-primary" @onclick="AddCate">Xác nhận</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> <!--end popup add-->
-                            <!--popup update-->
-                            <div class="modal fade" id="update" tabindex="-1">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Cập nhật</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Bạn có đống ý cập nhật thể loại hay không ?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                            <button type="button" class="btn btn-primary" @onclick="()=>UpdateCate(cate_VM)">Xác nhận</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> <!--end popup update-->
-                        </div>
-                    </div>
-                </EditForm>
-            </div>
-        </div>
-    </div>
+	<div class="col-lg-6">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Thuộc tính thể loại</h5>
+				<EditForm Model="cate_VM">
+					<div class="row mb-3">
+						<label for="inputText" class="col-sm-4 col-form-label">Tên thể loại</label>
+						<div class="col-sm-8">
+							<InputText class="form-control" @bind-Value="@cate_VM.Name" />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-sm-4 col-form-label">Trạng thái </label>
+						<div class="col-sm-8">
+							<div class="row">
+								<InputRadioGroup @bind-Value="@cate_VM.Status" class="form-control">
+									<div class="col-sm-6">
+										<InputRadio Value="1" /> Hoạt động
+									</div>
+									<div class="col-sm-6">
+										<InputRadio Value="0" /> Ngừng hoạt động
+									</div>
+								</InputRadioGroup>
+							</div>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<!--popup-->
+						<label class="col-sm-4 col-form-label">Submit</label>
+						<div class="col-sm-8">
+							<button type="submit" class="btn btn-outline-success" style="float:center" data-bs-toggle="modal" data-bs-target="#Add">Thêm mới</button>
+							<button type="submit" class="btn btn-outline-success" style="float:center" data-bs-toggle="modal" data-bs-target="#update">Cập nhật</button>
+							<!--popup add-->
+							<div class="modal fade" id="Add" tabindex="-1">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Thêm mới</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											Bạn có đồng ý thêm mới thể loại hay không ?
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+											<button type="button" class="btn btn-primary" @onclick="AddCate">Xác nhận</button>
+										</div>
+									</div>
+								</div>
+							</div> <!--end popup add-->
+							<!--popup update-->
+							<div class="modal fade" id="update" tabindex="-1">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Cập nhật</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											Bạn có đống ý cập nhật thể loại hay không ?
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+											<button type="button" class="btn btn-primary" @onclick="()=>UpdateCate(cate_VM)">Xác nhận</button>
+										</div>
+									</div>
+								</div>
+							</div> <!--end popup update-->
+						</div>
+					</div>
+				</EditForm>
+			</div>
+		</div>
+	</div>
 
-    <div class="col-lg-6">
-        <div class="card">
-            <div class="card-body">
-                @{
-                    int count = 1;
-                }
-                <div class="card">
-                    <div class="card-body">
-                        <h4 style="margin-top:20px">List Thể Loại</h4>
-                        <div class="pagetitle">
-                        </div>
-                        @if (_lstcate == null)
-                        {
-                            <p><em>Loading...</em></p>
-                        }
-                        else
-                        {
-                            <div style="height: 500px; overflow-y: auto;">
-                                <table class="table">
-                                    <thead>
-                                        <tr style="position: sticky;top:0">
-                                            <th scope="col">#</th>
-                                            <th scope="col">Màu</th>
-                                            <th scope="col">Trạng Thái</th>
-                                            <th scope="col">Chức năng</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var x in _lstcate)
-                                        {
-                                            <tr>
-                                                <td>@(count++)</td>
-                                                <td>@x.Name</td>
-                                                <td>@(x.Status == 1 ? "Hoạt động" : "Ngừng hoạt động")</td>
-                                                <td><button type="button" class="btn btn-outline-success" style="float:center" @onclick="()=>LoadForm(x)">Apply</button> </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
+	<div class="col-lg-6">
+		<div class="card">
+			<div class="card-body">
+				@{
+					int count = 1;
+				}
+				<div class="card">
+					<div class="card-body">
+						<h4 style="margin-top:20px">List Thể Loại</h4>
+						<div class="pagetitle">
+						</div>
+						@if (_lstcate == null)
+						{
+							<p><em>Loading...</em></p>
+						}
+						else
+						{
+							<div style="height: 500px; overflow-y: auto;">
+								<table class="table">
+									<thead>
+										<tr style="position: sticky;top:0">
+											<th scope="col">#</th>
+											<th scope="col">Màu</th>
+											<th scope="col">Trạng Thái</th>
+											<th scope="col">Chức năng</th>
+										</tr>
+									</thead>
+									<tbody>
+										@foreach (var x in _lstcate)
+										{
+											<tr>
+												<td>@(count++)</td>
+												<td>@x.Name</td>
+												<td>@(x.Status == 1 ? "Hoạt động" : "Ngừng hoạt động")</td>
+												<td>
+													<button type="button" class="btn btn-primary"
+															@onclick="()=>LoadForm(x)">
+														<i class="bi bi-pencil-square"></i>
+													</button>
+												</td>
+											</tr>
+										}
+									</tbody>
+								</table>
 
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

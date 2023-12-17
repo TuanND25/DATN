@@ -17,14 +17,14 @@ namespace DATN_Client.Areas.Customer.Controllers
 		private List<Products_VM> _lstP = new();
 		private List<Products_VM> _lstP_Tam1 = new();
 		private List<Categories_VM> _lstCate = new();
-		public static List<PromotionItem_VM>? _lstpi_Percent = new();
-		private Products_VM _P_Show = new Products_VM();
+		public static List<PromotionItem_VM>? _lstpi_Percent = new();		
 		public static Guid _idP;
 		public static IPagedList<Products_VM> _pageList;
 		public static MomoExecuteResponseModel _momoExecuteResponseModel = new();
 		public static string _tenDanhMuc { get; set; }
 		public static string _valueSearch { get; set; }
 		public static int _soKQ { get; set; }
+		public static string _nameProductDetail { get; set; }
 		private string XoaDau(string text)
 		{
 			string normalizedString = text.Normalize(NormalizationForm.FormD);
@@ -104,10 +104,10 @@ namespace DATN_Client.Areas.Customer.Controllers
 		[Route("product-detail/{id}")]
 		public async Task<IActionResult> ProductDetail(Guid id)
 		{
-			_lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
-			_P_Show = _lstP.Where(c => c.Id == id).FirstOrDefault();
-			_idP = _P_Show.Id;
-			return View(_P_Show);
+			var x = await _client.GetFromJsonAsync<Products_VM>($"https://localhost:7141/api/product/get_product_byid/{id}");
+            _nameProductDetail = x.Name;
+            _idP = id;
+			return View();
 		}
 
 		[Route("cart")]
@@ -134,20 +134,24 @@ namespace DATN_Client.Areas.Customer.Controllers
 			return View(_momoExecuteResponseModel);
 		}
 
-		[Route("search/{search}")]
-		public async Task<IActionResult> SearchProduct(int? page, string? search)
+		[Route("search-product")]
+		public async Task<IActionResult> SearchProduct(string? search,int? page)
 		{
 			_lstPrI_show_VM = await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
 			_lstpi_Percent = await _client.GetFromJsonAsync<List<PromotionItem_VM>>($"https://localhost:7141/api/PromotionItem/getLstPromotionItem_Percent_by_productItemID");
 			_lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
-			if (search.ToLower() != XoaDau(search))
+			if (!string.IsNullOrEmpty(search))
 			{
-				_lstPrI_show_VM = _lstPrI_show_VM.Where(c => c.Name.ToLower().Contains(search.ToLower())).ToList();
+				if ((search).ToLower() != XoaDau(search))
+				{
+					_lstPrI_show_VM = _lstPrI_show_VM.Where(c => c.Name.ToLower().Contains(search.ToLower())).ToList();
+				}
+				else
+				{
+					_lstPrI_show_VM = _lstPrI_show_VM.Where(c => XoaDau(c.Name).Contains(XoaDau(search))).ToList();
+				}
 			}
-			else
-			{
-				_lstPrI_show_VM = _lstPrI_show_VM.Where(c => XoaDau(c.Name).Contains(XoaDau(search))).ToList();
-			}
+			else _lstPrI_show_VM = new();
 			// Lấy list sp ko có spct
 			foreach (var a in _lstP)
 			{

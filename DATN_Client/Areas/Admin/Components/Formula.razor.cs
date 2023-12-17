@@ -21,19 +21,19 @@ namespace DATN_Client.Areas.Admin.Components
 			formula_VM.Id = Guid.NewGuid();
 
 			await _httpClient.PostAsJsonAsync<Formula_VM>("https://localhost:7141/api/Formula/PostFormula", formula_VM);
-			navigationManager.NavigateTo("https://localhost:7075/Admin/Formula", true);
+			navigationManager.NavigateTo("/formula-management", true);
 
 
 		}
 		public async Task UpdateFormula(Formula_VM formula)
 		{
 			await _httpClient.PutAsJsonAsync<Formula_VM>("https://localhost:7141/api/Formula/PutFormula", formula);
-            navigationManager.NavigateTo("https://localhost:7075/Admin/Formula", true);
+            navigationManager.NavigateTo("/formula-management", true);
         }
 		public async void DeleteFormula(Guid Id)
 		{
 			await _httpClient.DeleteAsync("https://localhost:7141/api/Formula/DeleteFormula/" + Id);
-			navigationManager.NavigateTo("https://localhost:7075/Admin/Formula", true);
+			navigationManager.NavigateTo("/formula-management", true);
 		}
 		public async Task LoadForm(Formula_VM rvm)
 		{

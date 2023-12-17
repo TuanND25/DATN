@@ -24,7 +24,7 @@
     <div class="col-lg-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Quản lý kích thước</h5>
+                <h5 class="card-title">Thuộc kích thước</h5>
                 <EditForm Model="size_VM">
                     <div class="row mb-3">
                         <label for="inputText" class="col-sm-4 col-form-label">Kích thước </label>
@@ -132,7 +132,12 @@
                                                 <td>@(count++)</td>
                                                 <td>@x.Name</td>
                                                 <td>@(x.Status == 1 ? "Hoạt động" : "Ngừng hoạt động")</td>
-                                                <td><button type="button" class="btn btn-outline-success" style="float:center" @onclick="()=>LoadForm(x)">Apply</button> </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-primary"
+                                                            @onclick="()=>LoadForm(x)">
+                                                        <i class="bi bi-pencil-square"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         }
                                     </tbody>

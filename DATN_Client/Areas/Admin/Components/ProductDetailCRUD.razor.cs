@@ -57,18 +57,18 @@ namespace DATN_Client.Areas.Admin.Components
 
 		protected override async Task OnInitializedAsync()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            _lst_pri = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>($"https://localhost:7141/api/productitem/get_all_productitem_byProduct/{ProductController._productID}");
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			_lst_pri = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>($"https://localhost:7141/api/productitem/get_all_productitem_byProduct/{ProductController._productID}");
 			_nameProduct = (await _httpClient.GetFromJsonAsync<Products_VM>($"https://localhost:7141/api/product/get_product_byid/{ProductController._productID}")).Name;
-			_lstCate = await _httpClient.GetFromJsonAsync<List<Categories_VM>>("https://localhost:7141/api/Categories");
+			_lstCate = (await _httpClient.GetFromJsonAsync<List<Categories_VM>>("https://localhost:7141/api/Categories")).Where(c => c.Status == 1).ToList();
 			_lstCate = _lstCate.OrderBy(c => c.Name).ToList();
-			_lstColor = await _httpClient.GetFromJsonAsync<List<Color_VM>>("https://localhost:7141/api/Color/get_color");
+			_lstColor = (await _httpClient.GetFromJsonAsync<List<Color_VM>>("https://localhost:7141/api/Color/get_color")).Where(c => c.Status == 1).ToList();
 			_lstColor = _lstColor.OrderBy(c => c.Name).ToList();
-			_lstSize = await _httpClient.GetFromJsonAsync<List<Size_VM>>("https://localhost:7141/api/Size/get_size");
+			_lstSize = (await _httpClient.GetFromJsonAsync<List<Size_VM>>("https://localhost:7141/api/Size/get_size")).Where(c => c.Status == 1).ToList();
 			_lstSize = _lstSize.OrderBy(c => _lstSizeSample.IndexOf(c.Name)).ToList();
 			foreach (var x in _lst_pri)
 			{
@@ -97,6 +97,12 @@ namespace DATN_Client.Areas.Admin.Components
 					});
 				}
 			}
+			var uri = new Uri(_navi.Uri);
+			var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
+			_pri_s_vm_Loc.CategoryName = queryParams["category"];
+			_pri_s_vm_Loc.ColorName = queryParams["color"];
+			_pri_s_vm_Loc.SizeName = queryParams["size"];
+			await LocHangLoat();
 		}
 
 		private void SetModalState(bool isOpen, string modalType)
@@ -147,22 +153,22 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private void BackToManager()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            _navi.NavigateTo("/product-manager", true);
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			_navi.NavigateTo("/product-manager", true);
 		}
 
 		private async Task AddMauListTam()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            if (_idColorChon == Guid.Parse("00000000-0000-0000-0000-000000000000")) return;
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			if (_idColorChon == Guid.Parse("00000000-0000-0000-0000-000000000000")) return;
 			var color = await _httpClient.GetFromJsonAsync<Color_VM>($"https://localhost:7141/api/Color/ById?Id={_idColorChon}");
 			if (!_lstColor_Add.Any(c => c.Id == color.Id))
 			{
@@ -205,12 +211,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task AddCateListTam()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            if (_idCateChon == Guid.Parse("00000000-0000-0000-0000-000000000000")) return;
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			if (_idCateChon == Guid.Parse("00000000-0000-0000-0000-000000000000")) return;
 			var cate = await _httpClient.GetFromJsonAsync<Categories_VM>($"https://localhost:7141/api/Categories/ById?Id={_idCateChon}");
 			if (!_lstCate_Add.Any(c => c.Id == cate.Id))
 			{
@@ -253,12 +259,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task AddSizeListTam()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            if (_idSizeChon == Guid.Parse("00000000-0000-0000-0000-000000000000")) return;
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			if (_idSizeChon == Guid.Parse("00000000-0000-0000-0000-000000000000")) return;
 			var size = await _httpClient.GetFromJsonAsync<Size_VM>($"https://localhost:7141/api/Size/Id?Id={_idSizeChon}");
 			if (!_lstSize_Add.Any(c => c.Id == size.Id))
 			{
@@ -301,12 +307,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private void RemoveMauListTam(Color_VM cl)
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            List<ProductItem_Show_VM> lst = new();
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			List<ProductItem_Show_VM> lst = new();
 			foreach (var x in _lst_pri_Add)
 			{
 				if (x.ColorId != cl.Id)
@@ -320,12 +326,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private void RemoveSizeListTam(Size_VM sz)
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            List<ProductItem_Show_VM> lst = new();
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			List<ProductItem_Show_VM> lst = new();
 			foreach (var x in _lst_pri_Add)
 			{
 				if (x.SizeId != sz.Id)
@@ -339,12 +345,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private void RemoveCateListTam(Categories_VM cate)
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            List<ProductItem_Show_VM> lst = new();
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			List<ProductItem_Show_VM> lst = new();
 			foreach (var x in _lst_pri_Add)
 			{
 				if (x.CategoryID != cate.Id)
@@ -358,78 +364,78 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private void Mo_AddColor_Tam()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            _idColorChon = Guid.Parse("00000000-0000-0000-0000-000000000000");
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			_idColorChon = Guid.Parse("00000000-0000-0000-0000-000000000000");
 			OpenPopup("AddColor_Tam");
 		}
 
 		private void Mo_AddCate_Tam()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            _idCateChon = Guid.Parse("00000000-0000-0000-0000-000000000000");
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			_idCateChon = Guid.Parse("00000000-0000-0000-0000-000000000000");
 			OpenPopup("AddCate_Tam");
 		}
 
 		private void Mo_AddSize_Tam()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            _idSizeChon = Guid.Parse("00000000-0000-0000-0000-000000000000");
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			_idSizeChon = Guid.Parse("00000000-0000-0000-0000-000000000000");
 			OpenPopup("AddSize_Tam");
 		}
 
 		private async Task MoAddCate()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            _Cate_VM.Name = string.Empty;
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			_Cate_VM.Name = string.Empty;
 			OpenPopup("AddCate");
 		}
 
 		private async Task MoAddColor()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            _C_VM.Name = string.Empty;
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			_C_VM.Name = string.Empty;
 			OpenPopup("AddColor");
 		}
 
 		private async Task MoAddSize()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            _S_VM.Name = string.Empty;
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			_S_VM.Name = string.Empty;
 			OpenPopup("AddSize");
 		}
 
 		private async Task Mo_AddImage()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            await ChonMau(_chonMau);
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			await ChonMau(_chonMau);
 			_lstImg_them.Clear();
 			_lstImg_xoa.Clear();
 			_lstColor_string = _lst_pri.Select(c => c.ColorName).Distinct().OrderBy(c => c).ToList();
@@ -438,12 +444,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task MoUpdatePI(ProductItem_Show_VM pi)
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            _pri_s_vm_Update.Id = pi.Id;
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			_pri_s_vm_Update.Id = pi.Id;
 			_pri_s_vm_Update.ProductId = pi.ProductId;
 			_pri_s_vm_Update.Name = pi.Name;
 			_pri_s_vm_Update.ColorId = pi.ColorId;
@@ -458,12 +464,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task MoDungHDPI(ProductItem_Show_VM pi)
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            _pri_s_vm_Update.Id = pi.Id;
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			_pri_s_vm_Update.Id = pi.Id;
 			_pri_s_vm_Update.ProductId = pi.ProductId;
 			_pri_s_vm_Update.ColorId = pi.ColorId;
 			_pri_s_vm_Update.SizeId = pi.SizeId;
@@ -477,12 +483,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task Add_C()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            if (string.IsNullOrEmpty(_C_VM.Name))
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			if (string.IsNullOrEmpty(_C_VM.Name))
 			{
 				_toastService.ShowError("Không được để trống");
 				return;
@@ -505,12 +511,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task Add_Cate()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            if (string.IsNullOrEmpty(_Cate_VM.Name))
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			if (string.IsNullOrEmpty(_Cate_VM.Name))
 			{
 				_toastService.ShowError("Không được để trống");
 				return;
@@ -534,12 +540,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task Add_S()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            if (string.IsNullOrEmpty(_S_VM.Name))
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			if (string.IsNullOrEmpty(_S_VM.Name))
 			{
 				_toastService.ShowError("Không được để trống");
 				return;
@@ -564,12 +570,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task AddPI()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            bool checkAdd = true;
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			bool checkAdd = true;
 			//	public Guid Id { get; set; }
 			//public Guid ProductId { get; set; }
 			//public Guid? ColorId { get; set; }
@@ -646,12 +652,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private void DeletePITam(ProductItem_Show_VM pi)
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            List<Size_VM> lstSz = new();
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			List<Size_VM> lstSz = new();
 			List<Color_VM> lstCl = new();
 			List<Categories_VM> lstCate = new();
 			_lst_pri_Add.Remove(pi);
@@ -683,12 +689,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task ChonMau(string mau)
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            if (string.IsNullOrEmpty(mau)) return;
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			if (string.IsNullOrEmpty(mau)) return;
 			_chonMau = mau;
 			_lstPri_ChonMau.Clear();
 			_lstPri_ChonMau = _lst_pri.Where(c => c.ColorName == mau).ToList();
@@ -711,12 +717,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		public async Task ChangeEv(InputFileChangeEventArgs e)
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            var lstImg = await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem");
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			var lstImg = await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem");
 			Image_VM imgTam = new Image_VM();
 			_file = e.File;
 			if (_file != null)
@@ -759,24 +765,24 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private void XoaAnhTam(Image_VM img)
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            _lstImg_xoa.Add(img);
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			_lstImg_xoa.Add(img);
 			_lstImg.Remove(img);
 			_lstImg_them.Remove(img);
 		}
 
 		private async Task XacNhanAddImg()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            bool checkAddDelete = true;
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			bool checkAddDelete = true;
 			var lstImg = await _httpClient.GetFromJsonAsync<List<Image_VM>>("https://localhost:7141/api/Image");
 			List<Image_VM> lstTam1 = new();
 			List<Image_VM> lstXoa = new();
@@ -830,12 +836,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task XacNhanUpdate()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            bool checkStatusCode = true;
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			bool checkStatusCode = true;
 			var checkPromotion = await _httpClient.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{_pri_s_vm_Update.Id}");
 			var promotionItem = await _httpClient.GetFromJsonAsync<PromotionItem_VM>($"https://localhost:7141/api/PromotionItem/getPromotionItem_Percent_by_productItemID/{_pri_s_vm_Update.Id}");
 			ProductItem_VM priUpdate = new()
@@ -852,7 +858,7 @@ namespace DATN_Client.Areas.Admin.Components
 									: (_pri_s_vm_Update.CostPrice - _pri_s_vm_Update.CostPrice / promotionItem.Percent),
 				Status = _pri_s_vm_Update.Status,
 			};
-			if (_lst_pri.Where(c => (c.ColorId == priUpdate.ColorId && c.SizeId == priUpdate.SizeId && c.CategoryID == priUpdate.CategoryId)&&c.Id!=priUpdate.Id).Count() > 0)
+			if (_lst_pri.Where(c => (c.ColorId == priUpdate.ColorId && c.SizeId == priUpdate.SizeId && c.CategoryID == priUpdate.CategoryId) && c.Id != priUpdate.Id).Count() > 0)
 			{
 				_toastService.ShowError("Cập nhật thất bại do biến thể đã tồn tại");
 				return;
@@ -908,12 +914,12 @@ namespace DATN_Client.Areas.Admin.Components
 
 		private async Task XacNhanXoaPI()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            ProductItem_VM priUpdate = new()
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			ProductItem_VM priUpdate = new()
 			{
 				Id = _pri_s_vm_Update.Id,
 				ProductId = _pri_s_vm_Update.ProductId,
@@ -935,25 +941,42 @@ namespace DATN_Client.Areas.Admin.Components
 			}
 			else _toastService.ShowError("Thao tác thất bại");
 		}
+		public async Task ChonLoc()
+		{
+			var currentUrl = _navi.ToAbsoluteUri(_navi.Uri);
 
+			// Thêm thông tin vào URL parameters
+			var uriBuilder = new UriBuilder(currentUrl);
+			var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
+			if (!string.IsNullOrEmpty(_pri_s_vm_Loc.CategoryName))
+				query["category"] = _pri_s_vm_Loc.CategoryName.ToString();
+			else query["category"] = null;
+			if (!string.IsNullOrEmpty(_pri_s_vm_Loc.ColorName))
+				query["color"] = _pri_s_vm_Loc.ColorName.ToString();
+			else query["color"] = null;
+			if (!string.IsNullOrEmpty(_pri_s_vm_Loc.SizeName))
+				query["size"] = _pri_s_vm_Loc.SizeName.ToString();
+			else query["size"] = null;
+			uriBuilder.Query = query.ToString();
+			// Chuyển đến URL mới
+			_navi.NavigateTo(uriBuilder.ToString());
+			await LocHangLoat();
+		}
 		public async Task LocHangLoat()
 		{
-            if (Login.Roleuser != "Admin")
-            {
-                _navi.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
-            _lst_pri = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>($"https://localhost:7141/api/productitem/get_all_productitem_byProduct/{ProductController._productID}");
+			if (Login.Roleuser != "Admin")
+			{
+				_navi.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			_lst_pri = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>($"https://localhost:7141/api/productitem/get_all_productitem_byProduct/{ProductController._productID}");
 
 			_lst_pri = _lst_pri.Where(c =>
-						(_pri_s_vm_Loc.CategoryName == null ||
-						_pri_s_vm_Loc.CategoryName == "0" ||
+						(string.IsNullOrEmpty(_pri_s_vm_Loc.CategoryName) ||
 						c.CategoryName == _pri_s_vm_Loc.CategoryName) &&
-						(_pri_s_vm_Loc.SizeName == null ||
-						_pri_s_vm_Loc.SizeName == "0" ||
+						(string.IsNullOrEmpty(_pri_s_vm_Loc.SizeName) ||
 						c.SizeName == _pri_s_vm_Loc.SizeName) &&
-						(_pri_s_vm_Loc.ColorName == null ||
-						_pri_s_vm_Loc.ColorName == "0" ||
+						(string.IsNullOrEmpty(_pri_s_vm_Loc.ColorName) ||
 						c.ColorName == _pri_s_vm_Loc.ColorName)).OrderBy(c => c.Name).ToList();
 		}
 	}
