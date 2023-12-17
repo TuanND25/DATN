@@ -124,8 +124,7 @@
 </div>
 
 
-
-
+@*Poup*@
 @* data-target="#ChooseSizeAndColor" data-toggle=" *@
 
 <div class="modal fade" id="UpdateShippingFee">
@@ -135,25 +134,33 @@
                     SuccessClass="success-toast-override"
                     SuccessIcon="fa-solid fa-check"
                     ErrorIcon="fa-solid fa-triangle-exclamation" />
+   
     <div class="modal-dialog">
         <div class="modal-content">
-            <div style="padding:5px 15px;border-bottom:1px solid #000">
-                <p class="titleUpadteFee">Cập nhật phí vận chuyển</p>
+            <div class="modal-header">
+                <h5 class="modal-title">Cập nhập phí vận chuyển</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div style="padding:5px 15px;">
-                Phí vận chuyển: <input type="number" @bind="PhiShip" @oninput="CheckFeeShip"/>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Phí vận chuyển: </label>
+                    <input type="number" class="form-control" @bind="PhiShip" @oninput="CheckFeeShip" >
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Ghi chú: </label>
+                    <textarea class="form-control" @bind="Note"></textarea>
+                </div>
             </div>
-            <div style="padding:5px 15px;">
-                Ghi chú: <textarea rows="4" cols="50" @bind="Note"></textarea>
-            </div>
-
-            <button @onclick="()=>UpdateFeeship()"  data-dismiss="@(ActiveTabFee== true ? "modal":"")">
+            <div class="modal-footer">
+            <button type="button" class="btn btn-primary" @onclick="()=>UpdateFeeship()" data-dismiss="@(ActiveTabFee== true ? "modal":"")">
                 Xác nhận
             </button>
+            </div>
         </div>
     </div>
 </div>
-<div class="modal fade" id="XacnhanBanGiao">
+@*Poup*@
+@*<div class="modal fade" id="XacnhanBanGiao">
    
     <div class="modal-dialog">
         <div class="modal-content">           
@@ -167,8 +174,26 @@
             </button>
         </div>
     </div>
+</div>*@
+<div class="modal fade" id="XacnhanBanGiao">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Xác nhận bàn giao</h5>
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+                <p>Bạn đồng ý bàn giao đơn hàng cho đơn vị vận chuyển</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" @onclick="()=>Bangiao()" data-dismiss="modal">Xác nhận</button>
+        </div>
+    </div>
 </div>
-<div class="modal fade" id="XacnhanThanhcong">
+</div>
+@*Poup*@
+@*<div class="modal fade" id="XacnhanThanhcong">
 
     <div class="modal-dialog">
         <div class="modal-content">
@@ -182,6 +207,28 @@
             </button>
         </div>
     </div>
+</div>*@
+<div class="modal fade" id="XacnhanThanhcong">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận thành công</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn đồng ý hoàn thành đơn hàng</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">
+                    Hủy
+                </button>
+                <button type="button" class="btn btn-primary" @onclick="()=>ThanhCong()" data-dismiss="modal">Xác nhận</button>
+            </div>
+        </div>
+    </div>
 </div>
-
+<style>
+ 
+</style>
 

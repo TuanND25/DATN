@@ -1,4 +1,5 @@
 ﻿@using DATN_Client.Areas.Customer.Component;
+@using DATN_Client.Areas.Customer.Controllers
 @using DATN_Shared.ViewModel;
 @using X.PagedList.Mvc.Core;
 @using X.PagedList;
@@ -6,7 +7,7 @@
 @model X.PagedList.IPagedList<Products_VM>
 
 @{
-	ViewData["Title"] = "Index";
+	ViewData["Title"] = BanOnlineController._tenDanhMuc;
 	Layout = @"~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
 }
 <style>

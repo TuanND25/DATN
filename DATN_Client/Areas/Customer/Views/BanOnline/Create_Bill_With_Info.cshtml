@@ -1,6 +1,6 @@
 ﻿@using DATN_Client.Areas.Customer.Component;
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Đơn hàng của bạn";
     Layout = "~/Areas/Customer/Views/Shared/_PaymentBillLayout.cshtml";
 }
 @(await Html.RenderComponentAsync<Create_Bill_With_Info>(RenderMode.Server))
