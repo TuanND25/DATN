@@ -48,9 +48,18 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public async Task DeletePromotion(Promotions_VM promotionVM)
         {
-            _promotion_VM = promotionVM;
-            _promotion_VM.Status = 0;
-            var a = await _httpClient.PutAsJsonAsync<Promotions_VM>("https://localhost:7141/api/promotion/update", _promotion_VM);
+            //_promotion_VM = promotionVM;
+            promotionVM.Status = 0;
+
+            try
+            {
+                var a = await _httpClient.PutAsJsonAsync<Promotions_VM>("https://localhost:7141/api/promotion/update", promotionVM);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
             var d = await _httpClient.GetFromJsonAsync<List<ProductItem_VM>>($"https://localhost:7141/api/productitem/ProductItem_By_PromotionId/{promotionVM.Id}");
             foreach (var item in d)

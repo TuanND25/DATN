@@ -26,6 +26,7 @@ namespace DATN_Shared.Models
         public DateTime? CompletionDate { get; set; }
         public DateTime? CancelDate { get; set; }  // ngày huỷ  
         public string? CanelBy { get; set; }  // người huỷ 
+        public Guid? CreateBy { get; set; }  // người huỷ 
         public int Type { get; set; }
         public string? Note { get; set; }
         public string? Recipient { get; set; }
