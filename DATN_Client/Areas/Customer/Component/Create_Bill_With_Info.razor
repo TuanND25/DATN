@@ -263,38 +263,38 @@ else
 							</div>
 
 							<div class="form-floating" style="margin-top:10px;">
-								<InputSelect class="form-select" @bind-Value="@_bill_validate_vm.Province" @onclick="ChonTinhTP" id="floatingSelect" aria-label="Tỉnh/Thành phố">
+								<InputSelect class="form-select" @bind-Value="@_bill_validate_vm.Province" @onclick="ChonTinhTP" id="floatingSelect1" aria-label="Tỉnh/Thành phố">
 									<option value="@string.Empty" style="color:#999999;" selected>--Tỉnh/Thành phố--</option>
 									@foreach (var x in _lstTinhTp)
 									{
 										<option value="@x.Name">@x.Name</option>
 									}
 								</InputSelect>
-								<label style="color:#999999;" for="floatingSelect">Tỉnh/Thành phố</label>
+								<label style="color:#999999;" for="floatingSelect1">Tỉnh/Thành phố</label>
 							</div>
 							<ValidationMessage For="()=>_bill_validate_vm.Province" />
 
 							<div class="form-floating" style="margin-top:10px;">
-								<InputSelect class="form-select" @bind-Value="@_bill_validate_vm.District" @onclick="ChonQuanHuyen" id="floatingSelect1" aria-label="Quận/Huyện">
+								<InputSelect class="form-select" @bind-Value="@_bill_validate_vm.District" @onclick="ChonQuanHuyen" id="floatingSelect2" aria-label="Quận/Huyện">
 									<option value="@string.Empty" style="color:#999999;" selected>--Quận/Huyện--</option>
 									@foreach (var x in _lstQuanHuyen)
 									{
 										<option value="@x.Name">@x.Name</option>
 									}
 								</InputSelect>
-								<label style="color:#999999;" for="floatingSelect1">Quận/Huyện</label>
+								<label style="color:#999999;" for="floatingSelect2">Quận/Huyện</label>
 							</div>
 							<ValidationMessage For="()=>_bill_validate_vm.District" />
 
 							<div class="form-floating" style="margin-top:10px;">
-								<InputSelect class="form-select" @bind-Value="@_bill_validate_vm.WardName" id="floatingSelect2" aria-label="Phường/Xã">
+								<InputSelect class="form-select" @bind-Value="@_bill_validate_vm.WardName" id="floatingSelect3" aria-label="Phường/Xã">
 									<option value="@string.Empty" style="color:#999999;" selected>--Phường/Xã--</option>
 									@foreach (var x in _lstXaPhuong)
 									{
 										<option value="@x.Name">@x.Name</option>
 									}
 								</InputSelect>
-								<label style="color:#999999;" for="floatingSelect2">Phường/Xã</label>
+								<label style="color:#999999;" for="floatingSelect3">Phường/Xã</label>
 							</div>
 							<ValidationMessage For="()=>_bill_validate_vm.WardName" />
 
@@ -365,7 +365,7 @@ else
 					<hr />
 					<div class="@(e>4?"scoll":"noscoll")">
 						@foreach (var x in _lstCI)
-						{
+						{							
 							_pi_s_vm = _lstPrI_show_VM.Where(c => c.Id == x.ProductItemId).FirstOrDefault();
 							var lst_chonmau = _lstPrI_show_VM.Where(c => c.ColorId == _pi_s_vm.ColorId).ToList();
 							_lstImg_PI_tam.Clear();
@@ -374,13 +374,13 @@ else
 								var a = _lstImg_PI.Where(c => c.ProductItemId == mau.Id);
 								_lstImg_PI_tam.AddRange(a);
 							}
-							var img = _lstImg_PI_tam.Where(c => c.ProductId == _pi_s_vm.ProductId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
+							var img = _lstImg_PI_tam.Where(c => c.ProductId ==_pi_s_vm.ProductId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
 
 							<div class="row">
 								<div class="col-md-8" style="margin-top:10px">
 									<div style="display:flex;">
 										<div style="position:relative">
-											<img src="/images/1.png" alt="" style="width:60px;height:60px;border-radius:8px">
+											<img src="/images/@img" alt="" style="width:60px;height:60px;border-radius:8px">
 											@*<img src="/images/@img" alt="" style="width:60px;height:60px;border-radius:8px">*@
 											<div class="img_Ab">@x.Quantity</div>
 										</div>

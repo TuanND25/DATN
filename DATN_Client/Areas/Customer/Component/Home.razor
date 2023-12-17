@@ -79,7 +79,13 @@
 						}
 						<img src="/images/@img" class="imgthum" />
 						<div style="text-align:left">
-							<p style="margin-bottom: 15px; margin-top: 10px;padding-left:15px">@a.Name</p>
+							<p style="
+	/* line-height: 16px;
+    overflow: hidden;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    display: -webkit-box; */
+margin-bottom: 15px; margin-top: 10px;padding-left:15px">@a.Name</p>
 						</div>
 						<div class="center-content1">
 							@if (giamin == giamax || giamin == null || giamax == null)
@@ -215,10 +221,10 @@
 		height: 400px;
 		text-align: center;
 		position: relative;
-		cursor:pointer;
+		cursor: pointer;
 	}
 
-	.xt{
+	.xt {
 		cursor: auto;
 	}
 
