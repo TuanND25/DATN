@@ -1,4 +1,12 @@
 ﻿@inject IJSRuntime JSRuntime
+@using Blazored.Toast.Configuration
+
+<BlazoredToasts Position="ToastPosition.BottomRight"
+                Timeout="5"
+                IconType="IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fa-solid fa-check"
+                ErrorIcon="fa-solid fa-triangle-exclamation" />
 <div class="row">
     <div>
         <button @onclick=ReturnBill style="border:none;border-radius:25px; padding:10px 25px 10px 25px; background-color:#fe9666;color:white"><i style="margin-right:15px" class="fa-solid fa-chevron-left"></i>Back</button>
@@ -54,8 +62,24 @@
                                 <span>@_bill.ShippingFee</span>
                             }
                         </p>
+                        <p>@_bill.Note</p>
                     </div>
                 }
+            </div>
+            <div style="display:flex;justify-content:center;align-items:center">
+                @if (_bill.Type==1 && _bill.Status==2)
+                {
+                    <button class="btn_UpdateBill" data-target="#UpdateShippingFee" data-toggle="modal">Cập nhật phí ship</button>
+                }
+                else if ((_bill.Type == 1 && _bill.Status == 3) || (_bill.Type == 2 && _bill.Status == 1))
+                {
+                    <button class="btn_UpdateBill" data-target="#XacnhanBanGiao" data-toggle="modal">Bàn giao cho đơn vị vận chuyển</button>
+                }
+                else if ((_bill.Type == 1 && _bill.Status == 4) || (_bill.Type == 2 && _bill.Status == 2))
+                {
+                    <button class="btn_UpdateBill" data-target="#XacnhanThanhcong" data-toggle="modal">Hoàn thành đơn hàng</button>
+                }
+
             </div>
         </div>
         <div>
@@ -95,6 +119,67 @@
                     <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@countTienHang</td>
                 </tr>
             </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+@* data-target="#ChooseSizeAndColor" data-toggle=" *@
+
+<div class="modal fade" id="UpdateShippingFee">
+    <BlazoredToasts Position="ToastPosition.BottomRight"
+                    Timeout="5"
+                    IconType="IconType.FontAwesome"
+                    SuccessClass="success-toast-override"
+                    SuccessIcon="fa-solid fa-check"
+                    ErrorIcon="fa-solid fa-triangle-exclamation" />
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div style="padding:5px 15px;border-bottom:1px solid #000">
+                <p class="titleUpadteFee">Cập nhật phí vận chuyển</p>
+            </div>
+            <div style="padding:5px 15px;">
+                Phí vận chuyển: <input type="number" @bind="PhiShip" @oninput="CheckFeeShip"/>
+            </div>
+            <div style="padding:5px 15px;">
+                Ghi chú: <textarea rows="4" cols="50" @bind="Note"></textarea>
+            </div>
+
+            <button @onclick="()=>UpdateFeeship()"  data-dismiss="@(ActiveTabFee== true ? "modal":"")">
+                Xác nhận
+            </button>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="XacnhanBanGiao">
+   
+    <div class="modal-dialog">
+        <div class="modal-content">           
+            <p>Bạn đồng ý bàn giao đơn hàng cho đơn vị vận chuyển</p>
+
+            <button data-dismiss="modal">
+                Hủy
+            </button>
+            <button @onclick="()=>Bangiao()" data-dismiss="modal">
+                Xác nhận
+            </button>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="XacnhanThanhcong">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <p>Bạn đồng ý hoàn thành đơn hàng</p>
+
+            <button data-dismiss="modal">
+                Hủy
+            </button>
+            <button @onclick="()=>ThanhCong()" data-dismiss="modal">
+                Xác nhận
+            </button>
         </div>
     </div>
 </div>

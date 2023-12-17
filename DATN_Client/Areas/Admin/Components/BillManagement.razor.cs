@@ -37,6 +37,8 @@ namespace DATN_Client.Areas.Admin.Components
         public string SearchNameUser { get; set; } = string.Empty;
         public bool activeTabDateSearch { get; set; } = false;
 
+
+
         protected override async Task OnInitializedAsync()
         {
             tabTypes.Add(new TabType { Id = 1, Name = "Tất cả hóa đơn" });
@@ -61,6 +63,8 @@ namespace DATN_Client.Areas.Admin.Components
             SearchPhoneNumber = queryParams["phone"];
             SearchNameUser = queryParams["nameuser"];
             SearchPaymentMethod = queryParams["pm"];
+
+
 
             if (DateOnly.TryParse(queryParams["startdate"], out var parsedDate))
             {            
@@ -88,28 +92,57 @@ namespace DATN_Client.Areas.Admin.Components
             {
                 query["type"] = SearchType.ToString();
             }
+            else
+            {
+                query["type"] = null;
+            }
+
             if (!string.IsNullOrEmpty(SearchBillCode))
             {
                 query["billcode"] = SearchBillCode.ToString();
             }
+            else
+            {
+                query["billcode"] = null;
+            }
+
             if (!string.IsNullOrEmpty(SearchPhoneNumber))
             {
                 query["phone"] = SearchPhoneNumber.ToString();
             }
+            else
+            {
+                query["phone"] = null;
+            }
+
             if (!string.IsNullOrEmpty(SearchNameUser))
             {
                 query["nameuser"] = SearchNameUser;
             }
+            else
+            {
+                query["nameuser"] = null;
+            }
+            
             if (!string.IsNullOrEmpty(SearchPaymentMethod))
             {
                 query["pm"] = SearchPaymentMethod;
             }
+            else
+            {
+                query["pm"] = null;
+            }
+
             if (activeTabDateSearch == true)
             {
                 query["startdate"] = StartDate.ToString();
                 query["enddate"] = EndDate.ToString();
             }
-
+            else
+            {
+                query["startdate"] =null;
+                query["enddate"] = null;
+            }
 
             uriBuilder.Query = query.ToString();
 
@@ -202,6 +235,9 @@ namespace DATN_Client.Areas.Admin.Components
         }
 
 
+      
+
+
         public class TabType
         {
             public string Name { get; set; }
@@ -210,7 +246,7 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public async Task HandleActiveTabType(int id)
         {
-            activeTabType = id;
+           
 
             var currentUrl = _navigationManager.ToAbsoluteUri(_navigationManager.Uri);
 
@@ -222,7 +258,7 @@ namespace DATN_Client.Areas.Admin.Components
 
             // Chuyển đến URL mới
             _navigationManager.NavigateTo(uriBuilder.ToString());
-
+            activeTabType = id;
 
             var _GetclstBill = await _client.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
             if (activeTabType == 1)
