@@ -131,3 +131,20 @@
         color: #fff;
         background-color: #1e7898;
     }
+.btn_UpdateBill {
+    padding: 10px 30px;
+    border-radius: 10px;
+    border: 1px solid #FE9666;
+    color: #FE9666;
+}
+    .btn_UpdateBill:hover {
+        background-color: #FE9666;
+        color: #fff;
+    }
+.titleUpadteFee {
+    font-size: 16px;
+    color: #000;
+    font-weight:500;
+}
+
+
