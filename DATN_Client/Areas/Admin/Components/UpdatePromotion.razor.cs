@@ -36,6 +36,9 @@ namespace DATN_Client.Areas.Admin.Components
         public bool SelectAllCheckboxProductItem { get; set; } = false;
         public bool SelectAllCheckboxProduct = false;
 
+        public string messagestart { get; set; }
+        public string messageend { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
             _lstProduct = await _httpClient.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
@@ -81,33 +84,51 @@ namespace DATN_Client.Areas.Admin.Components
 
         public async Task Update()
         {
-            var a = await _httpClient.PutAsJsonAsync<Promotions_VM>("https://localhost:7141/api/promotion/Update", _promotion);
-            var c = _promotion.Id;
-            if (_lstProductItemSelect_Them.Count > 0)
+            if (_promotion.StartDate < DateTime.Now)
             {
-                foreach (var item in _lstProductItemSelect_Them)
+                messagestart = "Ngày bắt đầu phải lớn hơn ngày hiện tại";
+            }
+
+            else if (_promotion.EndDate < _promotion.StartDate)
+            {
+                messageend = "Ngày kết thúc phải lớn hơn ngày bắt đầu";
+                messagestart = "";
+            }
+            else if (_promotion.EndDate > _promotion.StartDate)
+            {
+                messageend = "";
+                messagestart = "";
+            }
+            else
+            {
+                var a = await _httpClient.PutAsJsonAsync<Promotions_VM>("https://localhost:7141/api/promotion/Update", _promotion);
+                var c = _promotion.Id;
+                if (_lstProductItemSelect_Them.Count > 0)
                 {
-                    if (!_lstPromotionItem.Any(x => x.ProductItemsId == item) || !_lstPromotionItem.Any(x => x.PromotionsId == c))
+                    foreach (var item in _lstProductItemSelect_Them)
                     {
-                        _promotionItem.Id = Guid.NewGuid();
-                        _promotionItem.PromotionsId = c;
-                        _promotionItem.ProductItemsId = item;
-                        _promotionItem.Status = 1;
-                        var b = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/PromotionItem/Add", _promotionItem);
-                        var productItem = await _httpClient.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{item}");
-                        productItem.PriceAfterReduction = productItem.CostPrice - (productItem.CostPrice * _promotion.Percent) / 100;
-                        var t = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", productItem);
+                        if (!_lstPromotionItem.Any(x => x.ProductItemsId == item) || !_lstPromotionItem.Any(x => x.PromotionsId == c))
+                        {
+                            _promotionItem.Id = Guid.NewGuid();
+                            _promotionItem.PromotionsId = c;
+                            _promotionItem.ProductItemsId = item;
+                            _promotionItem.Status = 1;
+                            var b = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/PromotionItem/Add", _promotionItem);
+                            var productItem = await _httpClient.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{item}");
+                            productItem.PriceAfterReduction = productItem.CostPrice - (productItem.CostPrice * _promotion.Percent) / 100;
+                            var t = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", productItem);
+                        }
                     }
                 }
-            }
-            if (_lstProductItemSelect_Xoa.Count > 0)
-            {
-                foreach (var item in _lstProductItemSelect_Xoa)
+                if (_lstProductItemSelect_Xoa.Count > 0)
                 {
-                    var b = await _httpClient.DeleteAsync($"https://localhost:7141/api/PromotionItem/PromotionItemByProductItem/{item}");
+                    foreach (var item in _lstProductItemSelect_Xoa)
+                    {
+                        var b = await _httpClient.DeleteAsync($"https://localhost:7141/api/PromotionItem/PromotionItemByProductItem/{item}");
+                    }
                 }
+                _navigationManager.NavigateTo("/promotion-management", true);
             }
-            _navigationManager.NavigateTo("/promotion-management", true);
         }
 
         private async Task LoadPromotionItem(Guid Id)

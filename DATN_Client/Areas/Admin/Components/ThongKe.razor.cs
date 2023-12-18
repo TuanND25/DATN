@@ -11,6 +11,10 @@ namespace DATN_Client.Areas.Admin.Components
     public partial class ThongKe
     {
         List<Bill_ShowModel> _lstBill = new List<Bill_ShowModel>();
+        List<Bill_ShowModel> _lstBillSale = new List<Bill_ShowModel>();
+        List<Bill_ShowModel> _lstBillRevenue = new List<Bill_ShowModel>();
+        List<Bill_ShowModel> _lstBillProducts = new List<Bill_ShowModel>();
+        List<Bill_ShowModel> _lstBillTopSale = new List<Bill_ShowModel>();
         List<BillDetailShow> _lstBillDetai = new List<BillDetailShow>();
         List<ProductItems> _lstProductItem = new List<ProductItems>();
         List<Promotions_VM> _lstPromotion = new List<Promotions_VM>();
@@ -23,12 +27,9 @@ namespace DATN_Client.Areas.Admin.Components
         Count count3 = new Count();
         Count count4 = new Count(); // biểu đồ line
         Count count5 = new Count();
-        Count count6 = new Count();
         List<Count> productCounts = new List<Count>();
         List<Count> _billCounts = new List<Count>();
         List<Count> _RevenueCounts = new List<Count>();
-        List<Count> _RevenueCounts1 = new List<Count>();
-        List<Count> _RevenueCounts2 = new List<Count>();
         List<BillDetailShow> _lstBillDeails = new List<BillDetailShow>();
         List<BillDetailShow> _lstThongKeProductItem = new List<BillDetailShow>();
         [Inject] NavigationManager _navigationManager { get; set; }
@@ -40,13 +41,15 @@ namespace DATN_Client.Areas.Admin.Components
         bool isLoader = false;
 
 
-        private BarChart barChart=new BarChart();
-        private LineChart lineChart =new LineChart();
+        private BarChart barChart = new BarChart();
+        private LineChart lineChart = new LineChart();
         private DateTime dateTime = DateTime.Today;
+        private string _time { get; set; } = String.Empty;
         protected override async Task OnInitializedAsync()
         {
             //isLoader = true;
             _lstBill = await _httpClient.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
+            _lstBill = _lstBill.Where(x => !(x.Status==5 && x.Type==2) && x.Status!=0).ToList();
             _lstProductItem = await _httpClient.GetFromJsonAsync<List<ProductItems>>("https://localhost:7141/api/productitem/get_all_productitem");
             _lstPromotion = await _httpClient.GetFromJsonAsync<List<Promotions_VM>>("https://localhost:7141/api/promotion");
             _lstBillDetai = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>("https://localhost:7141/api/BillItem/get_alll_bill_item_show");
@@ -54,36 +57,49 @@ namespace DATN_Client.Areas.Admin.Components
             await Revenue(1);
             await Products(1);
             await TopSale(1);
+            await Task(0);
             //isLoader = false;
             //StateHasChanged();
-        }
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            if (firstRender)
+            var uri = new Uri(_navigationManager.Uri);
+            var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
+            _time = queryParams["time"];
+            if (string.IsNullOrEmpty(_time))
             {
-                await RenderManhattanAsync();
-                await RenderWormAsync(1);
+                _time = "month";
             }
-            //await RenderWormAsync(currentChartId);
-            await base.OnAfterRenderAsync(firstRender);
-            
+            await RenderWormAsync(_time);
+            await RenderManhattanAsync();
         }
+        //protected override async Task OnAfterRenderAsync(bool firstRender)
+        //{
+        //    if (firstRender)
+        //    {
+        //        //await ChonTimeThang();
+        //        //await RenderManhattanAsync();
+                
+        //    }
+        //    //await RenderWormAsync(currentChartId);
+        //    await base.OnAfterRenderAsync(firstRender);
 
-        private async Task RenderWormAsync(int option)
+        //}
+
+        private async Task RenderWormAsync(string time)
         {
-            if (option == 0)
+            if (time == "month")
             {
                 await RenderWormAsyncThisMonth();
                 count4.Tittle = "Tháng này";
                 StateHasChanged();
+                return;
             }
-            else if (option == 1)
+            if (time == "3-month")
             {
                 await RenderWormAsyncThis3Month();
                 count4.Tittle = "3 tháng gần đây";
                 StateHasChanged();
+                return;
             }
-            else
+            if (time == "year")
             {
                 await RenderWormAsyncThisYeah();
                 count4.Tittle = "Năm nay";
@@ -93,36 +109,35 @@ namespace DATN_Client.Areas.Admin.Components
         public async Task Sale(int option)
         {
             var a = await _httpClient.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
-
+            a = a.Where(x => !(x.Status == 5 && x.Type == 2) && x.Status != 0).ToList();
             if (option == 0)
             {
-                _lstBill = a.Where(x => x.CreateDate?.Date == _optioSale.Date).ToList();
-                count.Dem = _lstBill.Count();
+                _lstBillSale = a.Where(x => x.CreateDate?.Date == _optioSale.Date).ToList();
+                count.Dem = _lstBillSale.Count();
                 count.Tittle = "Hôm nay";
             }
             else if (option == 1)
             {
-                _lstBill = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year && x.CreateDate?.Month == DateTime.Now.Month).ToList();
-                count.Dem = _lstBill.Count();
+                _lstBillSale = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year && x.CreateDate?.Month == DateTime.Now.Month).ToList();
+                count.Dem = _lstBillSale.Count();
                 count.Tittle = "Tháng này";
             }
             else
             {
-                _lstBill = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year).ToList();
-                count.Dem = _lstBill.Count();
+                _lstBillSale = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year).ToList();
+                count.Dem = _lstBillSale.Count();
                 count.Tittle = "Năm nay";
             }
         }
-
         public async Task Revenue(int option)
         {
             var a = await _httpClient.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
-
+            a = a.Where(x => !(x.Status == 5 && x.Type == 2) && x.Status != 0).ToList();
             if (option == 0)
             {
-                _lstBill = a.Where(x => x.CreateDate?.Date == _optioSale.Date).ToList();
+                _lstBillRevenue = a.Where(x => x.CreateDate?.Date == _optioSale.Date).ToList();
                 count1.Dem = 0;
-                foreach (var b in _lstBill)
+                foreach (var b in _lstBillRevenue)
                 {
                     count1.Dem += b.TotalAmount;
                 }
@@ -130,9 +145,9 @@ namespace DATN_Client.Areas.Admin.Components
             }
             else if (option == 1)
             {
-                _lstBill = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year && x.CreateDate?.Month == DateTime.Now.Month).ToList();
+                _lstBillRevenue = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year && x.CreateDate?.Month == DateTime.Now.Month).ToList();
                 count1.Dem = 0;
-                foreach (var b in _lstBill)
+                foreach (var b in _lstBillRevenue)
                 {
                     count1.Dem += b.TotalAmount;
                 }
@@ -155,9 +170,9 @@ namespace DATN_Client.Areas.Admin.Components
             }
             else
             {
-                _lstBill = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year).ToList();
+                _lstBillRevenue = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year).ToList();
                 count1.Dem = 0;
-                foreach (var b in _lstBill)
+                foreach (var b in _lstBillRevenue)
                 {
                     count1.Dem += b.TotalAmount;
                 }
@@ -167,12 +182,13 @@ namespace DATN_Client.Areas.Admin.Components
         public async Task Products(int option)
         {
             var a = await _httpClient.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
+            a = a.Where(x => !(x.Status == 5 && x.Type == 2) && x.Status != 0).ToList();
             if (option == 0)
             {
                 _lstBillDeails.Clear();
-                _lstBill = a.Where(x => x.CreateDate?.Date == _optioSale.Date).ToList();
+                _lstBillProducts = a.Where(x => x.CreateDate?.Date == _optioSale.Date).ToList();
                 count2.Dem = 0;
-                foreach (var b in _lstBill)
+                foreach (var b in _lstBillProducts)
                 {
                     var _lstBillitem = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>($"https://localhost:7141/api/BillItem/getbilldetail/{b.Id}");
                     _lstBillDeails.AddRange(_lstBillitem);
@@ -188,9 +204,9 @@ namespace DATN_Client.Areas.Admin.Components
             else if (option == 1)
             {
                 _lstBillDeails.Clear();
-                _lstBill = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year && x.CreateDate?.Month == DateTime.Now.Month).ToList();
+                _lstBillProducts = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year && x.CreateDate?.Month == DateTime.Now.Month).ToList();
                 count2.Dem = 0;
-                foreach (var b in _lstBill)
+                foreach (var b in _lstBillProducts)
                 {
                     var _lstPro = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>($"https://localhost:7141/api/BillItem/getbilldetail/{b.Id}");
                     _lstBillDeails.AddRange(_lstPro);
@@ -206,9 +222,9 @@ namespace DATN_Client.Areas.Admin.Components
             else
             {
                 _lstBillDeails.Clear();
-                _lstBill = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year).ToList();
+                _lstBillProducts = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year).ToList();
                 count2.Dem = 0;
-                foreach (var b in _lstBill)
+                foreach (var b in _lstBillProducts)
                 {
                     var _lstPro = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>($"https://localhost:7141/api/BillItem/getbilldetail/{b.Id}");
                     _lstBillDeails.AddRange(_lstPro);
@@ -225,12 +241,13 @@ namespace DATN_Client.Areas.Admin.Components
         public async Task TopSale(int option)
         {
             var a = await _httpClient.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
+            a = a.Where(x => !(x.Status == 5 && x.Type == 2) && x.Status != 0).ToList();
             if (option == 0)
             {
                 count3.Tittle = "Hôm nay";
                 _lstBillDeails.Clear();
-                _lstBill = a.Where(x => x.CreateDate?.Date == _optioSale.Date).ToList();
-                foreach (var b in _lstBill)
+                _lstBillTopSale = a.Where(x => x.CreateDate?.Date == _optioSale.Date).ToList();
+                foreach (var b in _lstBillTopSale)
                 {
                     var _lstBillitem = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>($"https://localhost:7141/api/BillItem/getbilldetail/{b.Id}");
                     _lstBillDeails.AddRange(_lstBillitem);
@@ -239,7 +256,7 @@ namespace DATN_Client.Areas.Admin.Components
                                         .GroupBy(x => x.ProductItemId)
                                         .Select(group => new BillDetailShow
                                         {
-                                            ProductCode=group.FirstOrDefault()?.ProductCode,
+                                            ProductCode = group.FirstOrDefault()?.ProductCode,
                                             Quantity = group.Sum(item => item.Quantity),
                                             Name = group.FirstOrDefault()?.Name,
                                             ColorName = group.FirstOrDefault()?.ColorName,
@@ -254,8 +271,8 @@ namespace DATN_Client.Areas.Admin.Components
             {
                 count3.Tittle = "Tháng này";
                 _lstBillDeails.Clear();
-                _lstBill = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year && x.CreateDate?.Month == DateTime.Now.Month).ToList();
-                foreach (var b in _lstBill)
+                _lstBillTopSale = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year && x.CreateDate?.Month == DateTime.Now.Month).ToList();
+                foreach (var b in _lstBillTopSale)
                 {
                     var _lstBillitem = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>($"https://localhost:7141/api/BillItem/getbilldetail/{b.Id}");
                     _lstBillDeails.AddRange(_lstBillitem);
@@ -278,8 +295,8 @@ namespace DATN_Client.Areas.Admin.Components
             {
                 count3.Tittle = "Năm nay";
                 _lstBillDeails.Clear();
-                _lstBill = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year).ToList();
-                foreach (var b in _lstBill)
+                _lstBillTopSale = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year).ToList();
+                foreach (var b in _lstBillTopSale)
                 {
                     var _lstBillitem = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>($"https://localhost:7141/api/BillItem/getbilldetail/{b.Id}");
                     _lstBillDeails.AddRange(_lstBillitem);
@@ -297,6 +314,41 @@ namespace DATN_Client.Areas.Admin.Components
                                         })
                                         .OrderByDescending(group => group.Quantity)
                                         .ToList();
+            }
+        }
+        public async Task Task(int option)
+        {
+            var a = await _httpClient.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
+            a = a.Where(x => !(x.Status == 5 && x.Type == 2) && x.Status != 0).ToList();
+            if (option == 0)
+            {
+                var d = a.Where(x => x.CreateDate?.Date == _optioSale.Date).ToList();
+                count5.Dem2 = d.Where(x => x.Status == 1 || x.Status==2).Count();
+                count5.Dem3 = d.Where(x => x.Status == 3).Count();
+                count5.Dem4 = d.Where(x => x.Status == 4).Count();
+                count5.Dem5 = d.Where(x => x.Status == 0).Count();
+                count5.Dem5 = d.Where(x => x.Status == 6).Count();
+                count5.Tittle = "Hôm nay";
+            }
+            else if (option == 1)
+            {
+                var d = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year && x.CreateDate?.Month == DateTime.Now.Month).ToList();
+                count5.Dem2 = d.Where(x => x.Status == 1 || x.Status == 2).Count();
+                count5.Dem3 = d.Where(x => x.Status == 3).Count();
+                count5.Dem4 = d.Where(x => x.Status == 4).Count();
+                count5.Dem5 = d.Where(x => x.Status == 0).Count();
+                count5.Dem5 = d.Where(x => x.Status == 6).Count();
+                count.Tittle = "Tháng này";
+            }
+            else
+            {
+                var d = a.Where(x => x.CreateDate?.Year == DateTime.Now.Year).ToList();
+                count5.Dem2 = d.Where(x => x.Status == 1 || x.Status == 2).Count();
+                count5.Dem3 = d.Where(x => x.Status == 3).Count();
+                count5.Dem4 = d.Where(x => x.Status == 4).Count();
+                count5.Dem5 = d.Where(x => x.Status == 0).Count();
+                count5.Dem5 = d.Where(x => x.Status == 6).Count();
+                count.Tittle = "Năm nay";
             }
         }
 
@@ -357,7 +409,7 @@ namespace DATN_Client.Areas.Admin.Components
 
             var data = new ChartData
             {
-                Labels = productCounts.Select(x=>x.Date).ToList(),
+                Labels = productCounts.Select(x => x.Date).ToList(),
                 Datasets = new List<IChartDataset>()
                 {
                     new BarChartDataset()
@@ -397,8 +449,8 @@ namespace DATN_Client.Areas.Admin.Components
             await barChart.InitializeAsync(data, options);
         }
 
-       
-          
+
+
         public async Task RenderWormAsyncThisMonth()
         {
             DateTime startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
@@ -424,7 +476,7 @@ namespace DATN_Client.Areas.Admin.Components
                 {
                     new LineChartDataset()
                     {
-                        Label = Convert.ToString(startDate.Month),
+                        Label ="Tháng" + Convert.ToString(startDate.Month),
                         Data =_RevenueCounts.Select(x=>x.Dem1).ToList(),
                         BackgroundColor = new List<string>{ "rgb(88, 80, 141)" },
                         BorderColor = new List<string>{ "rgb(88, 80, 141)" },
@@ -614,7 +666,7 @@ namespace DATN_Client.Areas.Admin.Components
                                         .OrderByDescending(group => group.Quantity)
                                         .ToList();
                 var bill = a.Where(x => x.CreateDate?.Date == _optioSale.Date).Count();
-                var billcancel = a.Where(x => x.CreateDate?.Date == _optioSale.Date && x.Status==0).Count();
+                var billcancel = a.Where(x => x.CreateDate?.Date == _optioSale.Date && x.Status == 0).Count();
                 int productItem = 0;
                 int? doanhthu = 0;
 
@@ -686,7 +738,7 @@ namespace DATN_Client.Areas.Admin.Components
                     worksheet.Cells[i + 9, 4].Value = promotion.SizeName;
                     worksheet.Cells[i + 9, 5].Value = promotion.ColorName;
                     worksheet.Cells[i + 9, 6].Value = promotion.Quantity;
-                    worksheet.Cells[i + 9, 7].Value = promotion.CostPrice*promotion.Quantity;
+                    worksheet.Cells[i + 9, 7].Value = promotion.CostPrice * promotion.Quantity;
 
 
                     worksheet.Cells[i + 9, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;  // căn giữa 
@@ -715,8 +767,31 @@ namespace DATN_Client.Areas.Admin.Components
 
 
 
+        private async Task ChonTimeThang(string time)
+        {
+            var currentUrl = _navigationManager.ToAbsoluteUri(_navigationManager.Uri);
 
+            // Thêm thông tin vào URL parameters
+            var uriBuilder = new UriBuilder(currentUrl);
+            var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
+            if (!string.IsNullOrEmpty(time))
+            {
+                query["time"] = time.ToString();
+            }
+            uriBuilder.Query = query.ToString();
+            // Chuyển đến URL mới
+            _navigationManager.NavigateTo(uriBuilder.ToString(),true);
+        }
 
+        private async Task Chon3Thang()
+        {
+            _navigationManager.NavigateTo("/admin/3-month");
+        }
+
+        private async Task Chon1Nam()
+        {
+            _navigationManager.NavigateTo("/admin/year");
+        }
     }
     public class Count
     {
@@ -726,6 +801,11 @@ namespace DATN_Client.Areas.Admin.Components
         public double Dem1 { get; set; }
         public string Date { get; set; }
         public bool Status { get; set; }
+        public int Dem2 { get; set; }
+        public int Dem3 { get; set; }
+        public int Dem4 { get; set; }
+        public int Dem5 { get; set; }
+        public int Dem6 { get; set; }
         public Count()
         {
 
