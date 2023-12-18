@@ -6,8 +6,6 @@
 				SuccessIcon="fa-solid fa-check"
 				ErrorIcon="fa-solid fa-triangle-exclamation" 
                 />
-
-
 @if(isLoader)
 {
     <div class="loader-overlay">
@@ -65,7 +63,7 @@ else
                         }
                 @if(_lstBillItemShow.Count !=0 )
                 {
-<div style="overflow-y: scroll;height:100%">
+        <div style="overflow-y: scroll;height:100%">
                             <table style="width:100%" class="table-sellStall">
                     <thead style="background-color:#f2f2f2;color:#000">
                     <th style="width:5%">STT</th>
@@ -110,7 +108,14 @@ else
                                 </div>
                             </td>
                             <td style="text-align:center">
-                                 <span>@(x.AvailableQuantity-x.Quantity)</span>
+                                                    @if (x.AvailableQuantity-x.Quantity>=0)
+                                                    {
+                                                        <span>@(x.AvailableQuantity-x.Quantity)</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>0</span>
+                                                    }
                             </td>
                             <td style="text-align:right;">@x.Price</td>
                             <td style="text-align:right;">@(x.Price*x.Quantity)</td>
