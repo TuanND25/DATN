@@ -37,6 +37,10 @@ namespace DATN_Client.Areas.Admin.Components
         List<CustomerPoint_VM> _lstCustomerPoint = new List<CustomerPoint_VM>();
 
 
+        List<Bill_VM> _lstBillSearch = new List<Bill_VM>();
+
+
+
         public int ActiveTabSearchUser { get; set; } = 1;
         public int paymentmethodid { get; set; } = 2;
 
@@ -155,8 +159,38 @@ namespace DATN_Client.Areas.Admin.Components
             isLoader = false;
         }
 
+        public async Task GetDataBill()
+        {
+            _lstBillSearch = await _client.GetFromJsonAsync<List<Bill_VM>>("https://localhost:7141/api/Bill/get_alll_bill\r\n");
+            _lstBillSearch = _lstBillSearch.Where(x => x.Type == 2 && x.Status == 5).OrderByDescending(x=>x.CreateDate).ToList();
+        }
+        public async Task ChonBillSearch(Guid BillId1)
+        {
+            checkBillIsNull  = false;
+            int a = 0;
+            BillId = BillId1;
+            foreach (var item in _lstBill_Vm_show)
+            {
+                
+                if (item.Id == BillId1)
+                {
+                    a += 1; 
+                } 
+                else
+                {
+                    a += 0;
+                }    
+                
+            }
+            if (a==0)
+            {
+
+                _lstBill_Vm_show.Add(_lstBillSearch.FirstOrDefault(x => x.Id == BillId1));
+            }
 
 
+            await getBillId(BillId);
+        }
         public async Task addBill()
         {
             var codeToday = DateTime.Now.ToString().Replace("/", "").Substring(0, 4) +
@@ -339,6 +373,8 @@ namespace DATN_Client.Areas.Admin.Components
             activeSize = default;
             SoluongProductItemMua = 1;
             SoluongProductItem = 0;
+
+
             if (BillId == default)
             {
                 _toastService.ShowError("Vui lòng thêm hóa đơn trước khi thanh toán");
@@ -371,6 +407,7 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public async Task getSizeAndShowColor(Guid IdSize)
         {
+            SoluongProductItem = 0;
             activeSize = default;
             activeSize = IdSize;
             activeColor = default;
@@ -1505,7 +1542,7 @@ namespace DATN_Client.Areas.Admin.Components
             }
             else
             {
-                _toastService.ShowError("Đã thanh toán thành công");
+                _toastService.ShowError("Thanh toán thất bại");
                 return;
             }
 

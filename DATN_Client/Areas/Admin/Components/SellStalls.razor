@@ -58,6 +58,7 @@ else
                     </div>
                 }
                 <i class="fa-solid fa-circle-plus" style="font-size:35px;cursor:pointer" @onclick="()=>addBill()"></i>
+                <i class="fa-solid fa-magnifying-glass" style="font-size:35px;cursor:pointer" data-toggle="modal" data-target="#SearchBill" @onclick="()=>GetDataBill()"></i>
             </div>
                         @{
                              int a = 1;
@@ -357,7 +358,7 @@ else
                <span>Số điện thoại</span>
            </div>
            <div class="col-7 input-Number" style="display:flex;justify-content:flex-end">
-              <input type="number" style="width:100%" placeholder="Số điện thoại" maxlength="10" @oninput="checkPhoneNumberNguoiNhan"/>
+              <input type="number" style="width:100%" placeholder="Số điện thoại" maxlength="10" @oninput="checkPhoneNumberNguoiNhan" @bind="phoneNumberNguoinhan"/>
            </div>
        </div>
 
@@ -605,6 +606,47 @@ else
                    </div>                
                </div>
             </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="SearchBill">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Phần tiêu đề của popup -->
+            <div class="modal-header" style="background-color:#f2cc8c">
+                <h6 class="modal-title">Tìm kiếm khách hàng</h6>
+                <i class="fa-solid fa-xmark close" style="cursor: pointer;" data-dismiss="modal"></i>
+            </div>
+            <!-- Nội dung của popup -->
+            <div class="container">
+                <div style="height:300px;overflow-y:auto;">             
+                    @foreach (var x in _lstBillSearch)
+                    {
+                        <div class="UserShow" @onclick="()=>ChonBillSearch(x.Id)" data-dismiss="modal">
+                            Mã hóa đơn : @x.BillCode
+                        </div>
+                    }
+                            
+                </div>
+            </div>
+
+
+            <!-- Phần chân của popup -->
+
         </div>
     </div>
 </div>
