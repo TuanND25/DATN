@@ -23,6 +23,7 @@ namespace DATN_Shared.ViewModel
         public DateTime? CreateDate { get; set; }
         public DateTime? ConfirmationDate { get; set; }
         public DateTime? CompletionDate { get; set; }
+        public DateTime? CancelDate { get; set; }  // ngày huỷ  
         public int Type { get; set; }
   
         public string? Note { get; set; }
@@ -35,7 +36,6 @@ namespace DATN_Shared.ViewModel
         public int Status { get; set; }
 
         public int? ShippingFee { get; set; }
-
 
         public string? CanelBy { get; set; }
         public Guid? CreateBy { get; set; }

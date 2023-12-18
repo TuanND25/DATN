@@ -96,7 +96,7 @@ namespace DATN_API.Controllers
 			}
 		}
 
-				[HttpPut("Put-Bill")]
+		[HttpPut("Put-Bill")]
 		public async Task<ActionResult<Bill>> PutBill(Bill_VM bill_vm)
 		{
 			try
@@ -126,6 +126,7 @@ namespace DATN_API.Controllers
                 bill.ShippingFee = bill_vm.ShippingFee;
 				bill.Type = bill_vm.Type;
 				bill.CreateBy = bill_vm.CreateBy;
+				bill.CancelDate = bill_vm.CancelDate;
 				bill.CanelBy = bill_vm.CanelBy;
                 await _billService.PutBill(bill);
 				return Ok("Success");
