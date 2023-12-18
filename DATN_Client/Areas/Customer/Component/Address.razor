@@ -187,25 +187,16 @@
 
 @if (isLoader)
 {
-    <div class="loader-container1">
-        <div class="loader1">
-            <svg viewBox="0 0 80 80">
-                <circle id="test" cx="40" cy="40" r="32"></circle>
-            </svg>
-        </div>
-
-        <div class="loader1 triangle">
-            <svg viewBox="0 0 86 80">
-                <polygon points="43 8 79 72 7 72"></polygon>
-            </svg>
-        </div>
-
-        <div class="loader1">
-            <svg viewBox="0 0 80 80">
-                <rect x="8" y="8" width="64" height="64"></rect>
-            </svg>
-        </div>
-    </div>
+	<div class="loader-overlay">
+		<div class="loader-container">
+			<svg class="pl" width="240" height="240" viewBox="0 0 240 240">
+				<circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+				<circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+				<circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+				<circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+			</svg>
+		</div>
+	</div>
 }
 else
 {
@@ -256,10 +247,10 @@ else
                             </button>
                             @if (item.Status == 1)
                             {
-                                <button class="btnTrongSuot btne" disabled @onclick="()=>DeleteAddress(item.Id)"
+                                @*<button class="btnTrongSuot btne" disabled @onclick="()=>DeleteAddress(item.Id)"
                         style="border-left: 2px solid black;">
                                     Xoá
-                                </button>
+                                </button>*@
                             }
                             else
                             {
@@ -278,7 +269,7 @@ else
                         <div class="col-md-8" style="font-family:inherit;font-size:15px;margin-left:190px">
                             @if (item.Status == 1)
                             {
-                                <button class="btnTrongSuot1 btne " disabled @onclick="()=>SetDefaultAddress(item.Id)">Thiết lập mặc định</button>
+                                //<button class="btnTrongSuot1 btne " disabled @onclick="()=>SetDefaultAddress(item.Id)">Thiết lập mặc định</button>
                             }
                             else
                             {
@@ -418,8 +409,8 @@ else
                 <div class="modal-body">
                     <DataAnnotationsValidator />
                     <div class="row">
-                        <label class="col-md-6" style="font-size:18px;font-weight:600;padding:15px 50px 15px 15px">Thêm địa chỉ mới</label>
-                        <button class="col-md-1 btnTrongSuot2" style="margin-left:215px;" @onclick='()=>ClosePopup("UpdateAddress")'><i class="fas fa-times" style="font-size:16pt;"></i></button>
+                        <label class="col-md-6" style="font-size:18px;font-weight:600;padding:15px 50px 15px 15px">Cập nhật địa chỉ</label>
+                        <button class="col-md-1 btnTrongSuot2" style="margin-left:195px;" @onclick='()=>ClosePopup("UpdateAddress")'><i class="fas fa-times" style="font-size:16pt;"></i></button>
                     </div>
                     <div style=" display: flex;flex-direction:column;">
                         <div class="row">

@@ -52,6 +52,14 @@ namespace DATN_Client.Areas.Customer.Component
 				_navigationManager.NavigateTo("/home", true);
 			}
 		}
+		public async Task NavBill()
+        {
+			_navigationManager.NavigateTo("https://localhost:7075/account/bill-history", true);
+        }
+		public async Task MuaLai()
+        {
+
+        }
 
 		public async Task ChonDiaChiTuList(AddressShip_VM addressShip_VM)
 		{
@@ -75,10 +83,21 @@ namespace DATN_Client.Areas.Customer.Component
 		public async Task HuyDonHang()
 		{
 			_bill_ShowModel.Status = 0;
+			_bill_ShowModel.CanelBy = "Đơn hàng được huỷ bởi bạn";
+			_bill_ShowModel.CancelDate = DateTime.Now;
 			var a = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", _bill_ShowModel);
+
+			var b = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>($"https://localhost:7141/api/BillItem/getbilldetail/{_bill_ShowModel.Id}");
+
 			if (a.IsSuccessStatusCode)
 			{
 				_toastService.ShowSuccess("Huỷ đơn hàng thành công");
+				foreach (var c in b)
+                {
+					var e = await _httpClient.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{c.ProductItemId}");
+						e.AvaiableQuantity += c.Quantity;
+					var d = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", e);
+				}
 			}
 			else
 			{
