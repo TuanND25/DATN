@@ -52,7 +52,9 @@ else
                             <label style="user-select: none">@x.BillCode</label>
 
                         </label>
-                        <label class="closeBill" @onclick="()=>closeBill(x.Id)" style="display:flex;font-size:10px;cursor:pointer;text-align:center;margin-right:5px;margin-left:5px">X</label>
+                        <label class="closeBill" @onclick="()=>Xacnhanxoabill(x.Id)" 
+                            data-target="#RemoveBill" data-toggle="modal"
+                            style="display:flex;font-size:10px;cursor:pointer;text-align:center;margin-right:5px;margin-left:5px">X</label>
                     </div>
                 }
                 <i class="fa-solid fa-circle-plus" style="font-size:35px;cursor:pointer" @onclick="()=>addBill()"></i>
@@ -86,7 +88,8 @@ else
                             <td style="text-align:center">@a  </td>
                             <td style="overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 1; border:none">
                                <div>
-                                    <i class="fa-solid fa-trash-can" style="color: #ee4444;margin-right:5px;cursor:pointer" @onclick="()=>RemoveBillItem(x.Id)">
+                                    <i class="fa-solid fa-trash-can" style="color: #ee4444;margin-right:5px;cursor:pointer" data-target="#RemoveBillItem"
+                                    data-toggle="modal" @onclick="()=>Xacnhanxoasp(x.Id)">
 
                                 </i>@x.ProductName 
                                </div>
@@ -114,7 +117,7 @@ else
                                                     }
                                                     else
                                                     {
-                                                        <span>0</span>
+                                                        <span style="color:red">0</span>
                                                     }
                             </td>
                             <td style="text-align:right;">@x.Price</td>
@@ -164,7 +167,7 @@ else
             <span style="font-weight:700;font-size:18px">
             THANH TOÁN ĐƠN HÀNG
         </span>
-        <div style="display:flex;"><span style="margin-right:5px">Thêm thông tin</span
+        <div style="display:flex;"><span style="margin-right:5px">Giao hàng</span
         ><input type="checkbox" @bind="activeTabThemThongTin"/></div>
         <div class="row" style="margin-top:5px;" >
             <div class="col-5" style="display:flex;justify-content:center;align-items:center">
@@ -500,7 +503,7 @@ else
 
             <!-- Phần tiêu đề của popup -->
             <div class="modal-header" style="background-color:#f2cc8c">
-                <h6 class="modal-title">Thêm thông tin sản phẩm</h6>
+                <h6 class="modal-title">Thêm thông tin khách hàng</h6>
                 <i class="fa-solid fa-xmark close" style="cursor: pointer;" data-dismiss="modal"></i>
             </div>
             <!-- Nội dung của popup -->
@@ -655,4 +658,57 @@ else
         </div>
     </div>
 </div>
+
+
+
+<div class="modal fade" id="RemoveBillItem">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Xác nhận xóa sản phẩm khỏi giỏ hàng</h5>
+				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p>Bạn đồng ý xóa</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">
+					Hủy
+				</button>
+				<button type="button" class="btn btn-primary" @onclick="()=>RemoveBillItem(IdBillItemShow)"
+						data-dismiss="modal" >
+					Xóa  
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="RemoveBill">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Xác nhận xóa hóa đơn chờ</h5>
+				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p>Bạn đồng ý xóa</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">
+					Hủy
+				</button>
+				<button type="button" class="btn btn-primary" @onclick="()=>closeBill(IdBillRemove)"
+						data-dismiss="modal" >
+					Xóa  
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
 }
