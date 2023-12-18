@@ -63,7 +63,24 @@ namespace DATN_API.Controllers
             }
 
         }
-        [HttpGet("get_alll_billItem_byId")]
+
+		[HttpGet("GetBillItemsByBillId_billitemdb/{BillId}")]
+		public async Task<ActionResult<List<BillItems>>> GetBillItemsByBillId_billitemdb(Guid BillId)
+		{
+			try
+			{
+				var lstUsId = await _iBillItemService.GetBillItemsByBillId_billitemdb(BillId);
+				return Ok(lstUsId);
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+
+		}
+
+		[HttpGet("get_alll_billItem_byId")]
         public async Task<ActionResult<BillItems>> GetBillItemById(Guid Id)
         {
             try

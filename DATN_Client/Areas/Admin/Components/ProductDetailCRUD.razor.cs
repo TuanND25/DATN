@@ -899,6 +899,12 @@ namespace DATN_Client.Areas.Admin.Components
 				}
 			}
 			var update = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", priUpdate);
+			var checkStatusProduct = await _httpClient.GetFromJsonAsync<Products_VM>($"https://localhost:7141/api/product/get_product_byid/{priUpdate.ProductId}");
+			if (priUpdate.Status == 1 && checkStatusProduct.Status != 1)
+			{
+				checkStatusProduct.Status = 1;
+				var updateStatusProduct = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/product/update_product", checkStatusProduct);
+			}
 			if (update.StatusCode == System.Net.HttpStatusCode.OK && checkStatusCode == true)
 			{
 				ClosePopup("UpdatePI");

@@ -19,6 +19,7 @@ namespace DATN_Client.Areas.Customer.Component
 		private BillItem_VM _billItem = new();
 		private List<BillDetailShow> _lstBillItems = new();
 		private List<AddressShip_VM> _lstAddressGetById = new();
+		private List<Image_Join_ProductItem> _lstImg_PI = new();
 		[Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
 		private OrderInfoModel _ord = new();
 		private Bill_DataAnotation_VM _bill_vm = new();
@@ -35,6 +36,7 @@ namespace DATN_Client.Areas.Customer.Component
 				_bill_ShowModel = a.FirstOrDefault(x => x.Id == UserManagementController._billId);
 				_lstBillItems = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>($"https://localhost:7141/api/BillItem/getbilldetail/{UserManagementController._billId}");
 				_bill_vm = await _httpClient.GetFromJsonAsync<Bill_DataAnotation_VM>($"https://localhost:7141/api/Bill/get_bill_by_id/{UserManagementController._billId}");
+				_lstImg_PI = (await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem")).OrderBy(c => c.STT).ToList();
 				if (_bill_vm.VoucherId != null)
 				{
 					var vch = await _httpClient.GetFromJsonAsync<Voucher_VM>($"https://localhost:7141/api/Voucher/ID?Id={_bill_vm.VoucherId}");
@@ -83,7 +85,7 @@ namespace DATN_Client.Areas.Customer.Component
 		public async Task HuyDonHang()
 		{
 			_bill_ShowModel.Status = 0;
-			_bill_ShowModel.CanelBy = "Đơn hàng được huỷ bởi bạn";
+			_bill_ShowModel.CanelBy = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
 			_bill_ShowModel.CancelDate = DateTime.Now;
 			var a = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", _bill_ShowModel);
 
@@ -119,6 +121,11 @@ namespace DATN_Client.Areas.Customer.Component
 			_ord.Amount = Create_Bill_With_Info._bill_validate_vm.TotalAmount;
 			var reponse1 = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/Momo/CreatePaymentAsync", _ord);
 			var reponse2 = await reponse1.Content.ReadFromJsonAsync<MomoCreatePaymentResponseModel>();
+			if (string.IsNullOrEmpty(reponse2.PayUrl))
+			{
+				_toastService.ShowError(reponse2.LocalMessage);
+				return;
+			}
 			_navigationManager.NavigateTo($"{reponse2.PayUrl}", true);
 			return;
 		}

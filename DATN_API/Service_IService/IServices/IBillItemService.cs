@@ -10,6 +10,7 @@ namespace DATN_API.Service_IService.IServices
         public Task<BillItems> DeleteBillItems(Guid Id);
         public Task<BillItems> GetBillItemsById(Guid Id);
         public Task<List<BillDetailShow>> GetBillItemsByBillId(Guid BillId);
+        public Task<List<BillItems>> GetBillItemsByBillId_billitemdb(Guid BillId);
         public Task<List<BillDetailShow>> GetBillItemsShow();
         public Task<List<BillDetailShow>> GetAllBillItemsByUserId(Guid UserId);
         public Task<IEnumerable<BillItems>> GetAllBillItems();

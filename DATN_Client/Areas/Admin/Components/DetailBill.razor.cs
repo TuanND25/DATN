@@ -19,8 +19,6 @@ namespace DATN_Client.Areas.Admin.Components
 		private Bill_VM b = new Bill_VM();
 		[Inject]private NavigationManager _navi {  get; set; }
 
-		[Inject]
-		private NavigationManager nav { get; set; }
 		[Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
 
 		public Bill_ShowModel _bill = new Bill_ShowModel();
@@ -189,6 +187,7 @@ namespace DATN_Client.Areas.Admin.Components
 			}
 			_bill.Note += "lý do hủy: " + LyDoHuy;
 			_bill.Status = 0;
+			_bill.CancelDate = DateTime.Now;
 			_bill.ConfirmationDate = DateTime.Now;
 			_bill.CanelBy = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
 			var reponse = await _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", _bill);
@@ -198,15 +197,28 @@ namespace DATN_Client.Areas.Admin.Components
 				var _lstUser = await _client.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
 
 				////_bill.NameCreatBy = _lstUser.FirstOrDefault(x=>x.Id==_bill.CreateBy).UserName;
-				if (_bill.CanelBy != null)
+
+				//Guid a = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
+
+
+				var lstRollBack = await _client.GetFromJsonAsync<List<BillItem_VM>>($"https://localhost:7141/api/BillItem/GetBillItemsByBillId_billitemdb/{_bill.Id}");
+				foreach (var item in lstRollBack)
 				{
-					//Guid a = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
+					try
+					{
+						var pi = await _client.GetFromJsonAsync<ProductItem_VM>($"https://localhost:7141/api/productitem/get_all_productitem_byID/{item.ProductItemsId}");
+						pi.AvaiableQuantity += item.Quantity;
+						var update = await _client.PutAsJsonAsync("https://localhost:7141/api/productitem/update_productitem", pi);
+					}
+					catch (Exception)
+					{
 
-
-					TenNguoiHuy = (await _client.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get_user_by_id/{_bill.CanelBy}") ?? new()).Name.ToString() ?? string.Empty;
-					var x = new Uri(_navi.Uri);
-					_navi.NavigateTo(x.ToString(), true);
+						throw;
+					}
 				}
+				var x = new Uri(_navi.Uri);
+					_navi.NavigateTo(x.ToString(), true);
+				
 
 			}
 			else

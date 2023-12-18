@@ -32,6 +32,7 @@ namespace DATN_Client.Areas.Admin.Components
         List<Count> _RevenueCounts = new List<Count>();
         List<BillDetailShow> _lstBillDeails = new List<BillDetailShow>();
         List<BillDetailShow> _lstThongKeProductItem = new List<BillDetailShow>();
+        List<Image_Join_ProductItem> _lstImg_PI = new List<Image_Join_ProductItem>();
         [Inject] NavigationManager _navigationManager { get; set; }
         //var _lstThongKeProductItem;
         [Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
@@ -53,7 +54,8 @@ namespace DATN_Client.Areas.Admin.Components
             _lstProductItem = await _httpClient.GetFromJsonAsync<List<ProductItems>>("https://localhost:7141/api/productitem/get_all_productitem");
             _lstPromotion = await _httpClient.GetFromJsonAsync<List<Promotions_VM>>("https://localhost:7141/api/promotion");
             _lstBillDetai = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>("https://localhost:7141/api/BillItem/get_alll_bill_item_show");
-            await Sale(0);
+			_lstImg_PI = (await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem")).OrderBy(c => c.STT).ToList();
+			await Sale(0);
             await Revenue(1);
             await Products(1);
             await TopSale(1);
@@ -286,7 +288,8 @@ namespace DATN_Client.Areas.Admin.Components
                                             Name = group.FirstOrDefault()?.Name,
                                             ColorName = group.FirstOrDefault()?.ColorName,
                                             SizeName = group.FirstOrDefault()?.SizeName,
-                                            CostPrice = group.FirstOrDefault()?.CostPrice
+                                            CostPrice = group.FirstOrDefault()?.CostPrice,
+                                            ProductItemId = group.FirstOrDefault()?.ProductItemId ?? default(Guid)
                                         })
                                         .OrderByDescending(group => group.Quantity).Take(5)
                                         .ToList();
@@ -781,16 +784,6 @@ namespace DATN_Client.Areas.Admin.Components
             uriBuilder.Query = query.ToString();
             // Chuyển đến URL mới
             _navigationManager.NavigateTo(uriBuilder.ToString(),true);
-        }
-
-        private async Task Chon3Thang()
-        {
-            _navigationManager.NavigateTo("/admin/3-month");
-        }
-
-        private async Task Chon1Nam()
-        {
-            _navigationManager.NavigateTo("/admin/year");
         }
     }
     public class Count
