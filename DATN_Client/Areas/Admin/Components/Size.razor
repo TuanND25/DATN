@@ -26,10 +26,12 @@
             <div class="card-body">
                 <h5 class="card-title">Thuộc kích thước</h5>
                 <EditForm Model="size_VM">
+                    <DataAnnotationsValidator />
                     <div class="row mb-3">
                         <label for="inputText" class="col-sm-4 col-form-label">Kích thước </label>
                         <div class="col-sm-8">
                             <InputText class="form-control" @bind-Value="@size_VM.Name" />
+                            <ValidationMessage For="()=>size_VM.Name" style="color:red" />
                         </div>
                     </div>
                     <div class="row mb-3">

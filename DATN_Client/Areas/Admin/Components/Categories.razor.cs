@@ -19,7 +19,7 @@ namespace DATN_Client.Areas.Admin.Components
                 navigationManager.NavigateTo("https://localhost:7075/Admin", true);
                 return;
             }
-            _lstcate = await _httpClient.GetFromJsonAsync<List<Categories_VM>>("https://localhost:7141/api/Categories");
+            _lstcate = (await _httpClient.GetFromJsonAsync<List<Categories_VM>>("https://localhost:7141/api/Categories")).OrderBy(c => c.Name).ToList();
         }
         public async Task AddCate()
         {
@@ -31,7 +31,7 @@ namespace DATN_Client.Areas.Admin.Components
             cate_VM.Id = Guid.NewGuid();
             if (!string.IsNullOrEmpty(cate_VM.Name))
             {
-                if (_lstcate.Any(c => c.Name == cate_VM.Name))
+                if (_lstcate.Any(c => c.Name.ToLower().Trim() == cate_VM.Name.ToLower().Trim()))
                 {
                     _toastService.ShowError("Thể loại đã tồn tại");
                     return;
@@ -50,15 +50,15 @@ namespace DATN_Client.Areas.Admin.Components
                 navigationManager.NavigateTo("https://localhost:7075/Admin", true);
                 return;
             }
-            if (!string.IsNullOrEmpty(cate_VM.Name))
+            if (!string.IsNullOrEmpty(cate.Name))
             {
-                if (_lstcate.Any(c => c.Name == cate_VM.Name) && !_lstcate.Any(c => c.Id == cate.Id))
+                if (_lstcate.Any(c => c.Name.ToLower().Trim() == cate.Name.ToLower().Trim()) && !_lstcate.Any(c => c.Id == cate.Id))
                 {
                     _toastService.ShowError("Thể loại đã tồn tại");
                     return;
                 }
             }
-            if (string.IsNullOrEmpty(cate_VM.Name)) return;
+            if (string.IsNullOrEmpty(cate.Name)) return;
             cate.TenKhongDau = "";
             cate.Name = cate.Name.Trim();
             await _httpClient.PutAsJsonAsync<Categories_VM>("https://localhost:7141/api/Categories/PutCategory", cate);

@@ -57,14 +57,14 @@
                             <button type="submit" class="btn btn-outline-success" style="float:center" data-bs-toggle="modal" data-bs-target="#Add">Thêm mới</button>
                             <button type="submit" class="btn btn-outline-success" style="float:center" data-bs-toggle="modal" data-bs-target="#update">Cập nhật</button>
                             <!--popup add-->
-                            <div class="modal fade" id="Add" tabindex="-1">
-                                <BlazoredToasts Position="ToastPosition.BottomRight"
-                                                Timeout="5"
-                                                IconType="IconType.FontAwesome"
-                                                SuccessClass="success-toast-override"
-                                                SuccessIcon="fa-solid fa-check"
-                                                ErrorIcon="fa-solid fa-triangle-exclamation" />
+                            <div class="modal fade" id="Add" tabindex="-1">                                
                                 <div class="modal-dialog">
+                                    <BlazoredToasts Position="ToastPosition.BottomRight"
+                                                    Timeout="5"
+                                                    IconType="IconType.FontAwesome"
+                                                    SuccessClass="success-toast-override"
+                                                    SuccessIcon="fa-solid fa-check"
+                                                    ErrorIcon="fa-solid fa-triangle-exclamation" />
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title">Thêm mới</h5>
@@ -83,6 +83,12 @@
                             <!--popup update-->
                             <div class="modal fade" id="update" tabindex="-1">
                                 <div class="modal-dialog">
+                                    <BlazoredToasts Position="ToastPosition.BottomRight"
+                                                    Timeout="5"
+                                                    IconType="IconType.FontAwesome"
+                                                    SuccessClass="success-toast-override"
+                                                    SuccessIcon="fa-solid fa-check"
+                                                    ErrorIcon="fa-solid fa-triangle-exclamation" />
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title">Cập nhật</h5>

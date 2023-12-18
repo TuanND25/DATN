@@ -64,11 +64,11 @@ namespace DATN_Client.Areas.Admin.Components
 			}
 			_lst_pri = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>($"https://localhost:7141/api/productitem/get_all_productitem_byProduct/{ProductController._productID}");
 			_nameProduct = (await _httpClient.GetFromJsonAsync<Products_VM>($"https://localhost:7141/api/product/get_product_byid/{ProductController._productID}")).Name;
-			_lstCate = (await _httpClient.GetFromJsonAsync<List<Categories_VM>>("https://localhost:7141/api/Categories")).Where(c => c.Status == 1).ToList();
+			_lstCate = (await _httpClient.GetFromJsonAsync<List<Categories_VM>>("https://localhost:7141/api/Categories"));
 			_lstCate = _lstCate.OrderBy(c => c.Name).ToList();
-			_lstColor = (await _httpClient.GetFromJsonAsync<List<Color_VM>>("https://localhost:7141/api/Color/get_color")).Where(c => c.Status == 1).ToList();
+			_lstColor = (await _httpClient.GetFromJsonAsync<List<Color_VM>>("https://localhost:7141/api/Color/get_color"));
 			_lstColor = _lstColor.OrderBy(c => c.Name).ToList();
-			_lstSize = (await _httpClient.GetFromJsonAsync<List<Size_VM>>("https://localhost:7141/api/Size/get_size")).Where(c => c.Status == 1).ToList();
+			_lstSize = (await _httpClient.GetFromJsonAsync<List<Size_VM>>("https://localhost:7141/api/Size/get_size"));
 			_lstSize = _lstSize.OrderBy(c => _lstSizeSample.IndexOf(c.Name)).ToList();
 			foreach (var x in _lst_pri)
 			{

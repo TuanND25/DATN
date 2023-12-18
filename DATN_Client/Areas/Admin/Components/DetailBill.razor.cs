@@ -17,13 +17,13 @@ namespace DATN_Client.Areas.Admin.Components
 		private List<BillDetailShow> _lstBillDetail = new List<BillDetailShow>();
 		private AddressShip addressShip = new AddressShip();
 		private Bill_VM b = new Bill_VM();
-
+		[Inject]private NavigationManager _navi {  get; set; }
 
 		[Inject]
 		private NavigationManager nav { get; set; }
-        [Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
+		[Inject] public IHttpContextAccessor _ihttpcontextaccessor { get; set; }
 
-        public Bill_ShowModel _bill = new Bill_ShowModel();
+		public Bill_ShowModel _bill = new Bill_ShowModel();
 		public Guid BillId { get; set; }
 		public string TotalText { get; set; }
 		public int PhiShip { get; set; }
@@ -31,18 +31,22 @@ namespace DATN_Client.Areas.Admin.Components
 		public bool ActiveTabFee { get; set; } = false;
 		public string LyDoHuy { get; set; }
 		public bool activetabHuy { get; set; } = false;
-        public string  TenNguoiHuy { get; set; }
+		public string TenNguoiHuy { get; set; } = string.Empty;
 
-        protected override async Task OnInitializedAsync()
+		protected override async Task OnInitializedAsync()
 		{
 			await getDataBill();
 			_lstBillDetail = await _client.GetFromJsonAsync<List<BillDetailShow>>("https://localhost:7141/api/BillItem/getbilldetail/" + BillId);
+			if (!string.IsNullOrEmpty(_bill.CanelBy))
+			{
+				TenNguoiHuy = (await _client.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get_user_by_id/{_bill.CanelBy}") ?? new()).Name ?? string.Empty.ToString() ?? string.Empty;
+			}
 		}
 		public async Task getDataBill()
 		{
 			BillId = BillManagementController._billId;
 
-			
+
 
 
 			List<Bill_ShowModel> _lstbill = await _client.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
@@ -51,19 +55,19 @@ namespace DATN_Client.Areas.Admin.Components
 			TotalText = NumberToText(Convert.ToDouble(_bill.TotalAmount.ToString()));
 
 			var _lstUser = await _client.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
-
-			////_bill.NameCreatBy = _lstUser.FirstOrDefault(x=>x.Id==_bill.CreateBy).UserName;
+			_bill.NameCreatBy = (await _client.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get_user_by_id/{_bill.CreateBy}")).Name.ToString();
 			if (_bill.CanelBy != null)
 			{
-                TenNguoiHuy = _lstUser.FirstOrDefault(x => x.Id == Guid.Parse(_bill.CanelBy)).Name;
-            }
-			
+				TenNguoiHuy = (await _client.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get_user_by_id/{_bill.CanelBy}") ?? new()).Name.ToString() ?? string.Empty;
+				
+			}
+
 			//int a = 1;
 			//var CancelUser = await _client.GetFromJsonAsync<User_VM>("https://localhost:7141/api/user/get_user_by_id/" + _bill.CanelBy);
 			//         _bill.NameCreatBy = CancelUser.Name;
 		}
 
-        public void ReturnBill()
+		public void ReturnBill()
 		{
 			JSRuntime.InvokeVoidAsync("history.back");
 		}
@@ -185,46 +189,47 @@ namespace DATN_Client.Areas.Admin.Components
 			}
 			_bill.Note += "lý do hủy: " + LyDoHuy;
 			_bill.Status = 0;
-            _bill.ConfirmationDate = DateTime.Now;
+			_bill.ConfirmationDate = DateTime.Now;
 			_bill.CanelBy = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
-            var reponse = await _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", _bill);
-			if (reponse.StatusCode.ToString()=="OK")
+			var reponse = await _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", _bill);
+			if (reponse.StatusCode.ToString() == "OK")
 			{
 				_toastService.ShowWarning("Hủy đơn hàng thành công");
 				var _lstUser = await _client.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
 
-			////_bill.NameCreatBy = _lstUser.FirstOrDefault(x=>x.Id==_bill.CreateBy).UserName;
-			if (_bill.CanelBy != null)
-			{
-					Guid a = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));     
+				////_bill.NameCreatBy = _lstUser.FirstOrDefault(x=>x.Id==_bill.CreateBy).UserName;
+				if (_bill.CanelBy != null)
+				{
+					//Guid a = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
 
 
-                    TenNguoiHuy = _lstUser.FirstOrDefault(x => x.Id == a).Name;
-					await OnInitializedAsync();
-            }
+					TenNguoiHuy = (await _client.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get_user_by_id/{_bill.CanelBy}") ?? new()).Name.ToString() ?? string.Empty;
+					var x = new Uri(_navi.Uri);
+					_navi.NavigateTo(x.ToString(), true);
+				}
 
-            }
+			}
 			else
 			{
-                _toastService.ShowError("Hủy đơn hàng thất bại");
-            }
+				_toastService.ShowError("Hủy đơn hàng thất bại");
+			}
 
-        }
+		}
 		public void CheckLyDoHuy(ChangeEventArgs e)
 		{
 			if (!string.IsNullOrEmpty(e.Value.ToString()))
 			{
 				activetabHuy = true;
 			}
-			else 
+			else
 			{
-                activetabHuy = false;
-            }
+				activetabHuy = false;
+			}
 		}
 
 
 
-        private static string NumberToText(double inputNumber, bool suffix = true)
+		private static string NumberToText(double inputNumber, bool suffix = true)
 		{
 			string[] unitNumbers = new string[] { "không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín" };
 			string[] placeValues = new string[] { "", "nghìn", "triệu", "tỷ" };

@@ -126,12 +126,16 @@ namespace DATN_Client.Areas.Customer.Component
 
 		public async Task Btn_DatHang()
 		{
+			Voucher_VM? vch = new Voucher_VM();
 			// moi
 			_datHangThanhCong = true;
 			_afterClick = "afterClick";
 			if (!_lstCI.Any()) _navi.NavigateTo("/cart", true);
 			_lstPrI_show_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
-			var vch = await _httpClient.GetFromJsonAsync<Voucher_VM>($"https://localhost:7141/api/Voucher/ID?Id={_bill_validate_vm.VoucherId}");
+			if (_bill_validate_vm.VoucherId!=null)
+			{
+				 vch = await _httpClient.GetFromJsonAsync<Voucher_VM>($"https://localhost:7141/api/Voucher/ID?Id={_bill_validate_vm.VoucherId}");
+			}
 			bool checkSl = false;
 			foreach (var a in _lstCI)
 			{
@@ -156,14 +160,14 @@ namespace DATN_Client.Areas.Customer.Component
 				_afterClick = string.Empty;
 				return;
 			}
-			if (vch.Quantity == 0)
+			if (vch.Quantity == 0 && _bill_validate_vm.VoucherId != null)
 			{
 				_toastService.ShowError("Mã giảm giá đã hết lượt sử dụng");
 				_datHangThanhCong = false;
 				_afterClick = string.Empty;
 				return;
 			}
-			if (vch.Status != 1)
+			if (vch.Status != 1 && _bill_validate_vm.VoucherId != null)
 			{
 				_toastService.ShowError("Mã giảm giá đã hết hạn");
 				_datHangThanhCong = false;
@@ -200,6 +204,8 @@ namespace DATN_Client.Areas.Customer.Component
 			else _bill_validate_vm.BillCode = codeToday + _lstBill.Max(c => int.Parse(c.BillCode.Substring(6)) + 1).ToString();
 			// Ngày tạo
 			_bill_validate_vm.CreateDate = DateTime.Now;
+			// người tạo
+			_bill_validate_vm.CreateBy = _bill_validate_vm.UserId;
 			// thực hiện add bill
 			var addBill = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/Bill/Post-Bill", _bill_validate_vm);
 			// nếu thành công thì tiếp tục

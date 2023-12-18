@@ -2,141 +2,169 @@
 @using Blazored.Toast.Configuration
 
 <BlazoredToasts Position="ToastPosition.BottomRight"
-                Timeout="5"
-                IconType="IconType.FontAwesome"
-                SuccessClass="success-toast-override"
-                SuccessIcon="fa-solid fa-check"
-                ErrorIcon="fa-solid fa-triangle-exclamation" />
+				Timeout="5"
+				IconType="IconType.FontAwesome"
+				SuccessClass="success-toast-override"
+				SuccessIcon="fa-solid fa-check"
+				ErrorIcon="fa-solid fa-triangle-exclamation" />
 <div class="row">
-    <div>
-        <button @onclick=ReturnBill style="border:none;border-radius:25px; padding:10px 25px 10px 25px; background-color:#fe9666;color:white"><i style="margin-right:15px" class="fa-solid fa-chevron-left"></i>Back</button>
-    </div>
-    <div>
-        <div style="display:flex;">
-            <div style="width:35%">
-                @if (_bill.UserName == "khachvanglai")
-                {
-                    <p>Khách vãng lai</p>
-                }
-                else
-                {
-                    <p>Khách hàng: @_bill.UserName</p>
-                    <p>Số điện thoại: @_bill.PhoneNumber</p>
-                }
-                <p>Tổng tiền: @_bill.TotalAmount</p>
-                <p>Thành chữ: @TotalText</p>
-                <p>Phương thức thanh toán: @_bill.PaymentMethodName</p>
-                <p>
-                    Hình thức mua hàng:
-                    @if (_bill.Type == 1)
-                    {
-                        <span>Online</span>
-                    }
-                    else if (_bill.Type == 2 && _bill.Status != 3)
-                    {
-                        <span>Tại quầy(Có vận chuyển)</span>
-                    }
-                    else
-                    {
-                        <span>Tại quầy</span>
-                    }
-                </p>
-                <p></p>
-            </div>
-            <div style="width:40%">
-                @if (!string.IsNullOrEmpty(_bill.Province))
-                {
-                    <p>Thông tin vận chuyển</p>
-                    <div style="padding-left:15px">
-                        <p>Người nhận: @_bill.Recipient</p>
-                        <p>Số điện thoại: @_bill.NumberPhone</p>
-                        <p>Địa chỉ:@_bill.ToAddress, @_bill.WardName, @_bill.District, @_bill.Province</p>
-                        <p>
-                            Phí ship:
-                            @if (string.IsNullOrEmpty(_bill.ShippingFee.ToString()) || _bill.ShippingFee == 0)
-                            {
-                                <span>cần được cập nhật</span>
-                            }
-                            else
-                            {
-                                <span>@_bill.ShippingFee</span>
-                            }
-                        </p>
-                        <p>Ghi chú: @_bill.Note</p>
-                       @*  <p>Người tạo đơn: @_bill.NameCreatBy</p> *@
-                        @if (_bill.CanelBy!= null || _bill.CanelBy != default)
-                        {
-                            <p>Người hủy đơn: @TenNguoiHuy</p> 
-                          // <p>Người tạo đơn: @_bill.NameCreatBy</p>
-                        }
-                    </div>
-                }
+	<div>
+		<button @onclick=ReturnBill style="border:none;border-radius:25px; padding:10px 25px 10px 25px; background-color:#fe9666;color:white"><i style="margin-right:15px" class="fa-solid fa-chevron-left"></i>Back</button>
+	</div>
+	<h2>Thông tin hóa đơn</h2>
+	<div>
+		<div style="display:flex;">
+			<div style="width:35%">
+				@if (_bill.UserName == "khachvanglai")
+				{
+					if (_bill.Type != 0)
+					{
+						<p>Người tạo: @_bill.NameCreatBy</p>
+					}
+					<p>Khách vãng lai</p>
+				}
+				else
+				{
+					if (_bill.Type != 0)
+					{
+						<p>Người tạo: @_bill.NameCreatBy</p>
+					}
+					<p>Khách hàng: @_bill.UserName</p>
+					<p>Số điện thoại: @_bill.PhoneNumber</p>
+				}
+				@if (_bill.Cash>0)
+				{
+					<p>Tiền mặt: @_bill.Cash</p>
+				}
+				@if (_bill.CustomerPayment > 0)
+				{
+					<p>Tiền chuyển khoản: @_bill.CustomerPayment</p>
+				}
+				<p>Tổng tiền: @_bill.TotalAmount</p>
+				<p>Thành chữ: @TotalText</p>
+				<p>Phương thức thanh toán: @_bill.PaymentMethodName</p>
+				<p>
+					Hình thức mua hàng:
+					@if (_bill.Type == 1)
+					{
+						<span>Online</span>
+					}
+					else if (_bill.Type == 2 && _bill.Status != 3)
+					{
+						<span>Tại quầy(Có vận chuyển)</span>
+					}
+					else
+					{
+						<span>Tại quầy</span>
+					}
+				</p>
+				<p></p>
+			</div>
+			<div style="width:40%">
 
-            </div>
-            <div style="display:flex;justify-content:center;align-items:center;flex-direction:column;gap:20px">
-                @if (_bill.Type == 1 && _bill.Status == 2)
-                {
-                    <button class="btn_UpdateBill" data-target="#UpdateShippingFee" data-toggle="modal">Cập nhật phí ship</button>
-                }
-                else if ((_bill.Type == 1 && _bill.Status == 3) || (_bill.Type == 2 && _bill.Status == 1))
-                {
-                    <button class="btn_UpdateBill" data-target="#XacnhanBanGiao" data-toggle="modal">Bàn giao cho đơn vị vận chuyển</button>
-                }
-                else if ((_bill.Type == 1 && _bill.Status == 4) || (_bill.Type == 2 && _bill.Status == 2))
-                {
-                    <button class="btn_UpdateBill" data-target="#XacnhanThanhcong" data-toggle="modal">Hoàn thành đơn hàng</button>
-                }             
-                @if (
-                (_bill.Type == 1 && _bill.Status == 1) ||
-                (_bill.Type == 1 && _bill.Status == 2) ||
-                (_bill.Type == 1 && _bill.Status == 3) ||
-                (_bill.Type == 2 && _bill.Status == 1)
-                )
-                {
-                    <button class="btn_CancelBill" data-target="#CancelBill" data-toggle="modal">Hủy đơn hàng</button>
-                }
+				@if (!string.IsNullOrEmpty(_bill.Province))
+				{
 
-            </div>
-        </div>
-        <div>
-            Danh sách sản phẩm
-            <table style="width:100%">
-                <tr style="border:1px solid #d3d3d3;border-collapse:collapse">
-                    <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">STT</td>
-                    <td style="width:50%;border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px; ">Sản phẩm</td>
-                    <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">Đơn giá</td>
-                    <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">Số lượng</td>
-                    <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">Tổng tiền</td>
-                </tr>
-                @{
-                    int index = 0;
-                    int countQuantity = 0;
-                    int countTienHang = 0;
-                }
-                @foreach (var item in _lstBillDetail)
-                {
-                    {
-                        index += 1;
-                        countQuantity += @item.Quantity;
-                        countTienHang += (@item.Quantity * @item.PriceAfter) ?? 0;
+					@if (!string.IsNullOrEmpty(TenNguoiHuy))
+					{
+						<p>Người hủy: @(string.IsNullOrEmpty(TenNguoiHuy) ? string.Empty : TenNguoiHuy)</p>
+					}
+					else
+					{
+						<p></p>
+					}
 
-                    }
-                    <tr>
-                        <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@index</td>
-                        <td style="width:50%;border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px; ">@item.Name - @item.SizeName - @item.ColorName</td>
-                        <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@item.PriceAfter</td>
-                        <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@item.Quantity</td>
-                        <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@(item.Quantity * item.PriceAfter)</td>
-                    </tr>
-                }
-                <tr>
-                    <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center" colspan="3">Tổng cộng</td>
-                    <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@countQuantity</td>
-                    <td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@countTienHang</td>
-                </tr>
-            </table>
-        </div>
-    </div>
+					<p>Thông tin vận chuyển</p>
+					<div style="padding-left:15px">
+						<p>Người nhận: @_bill.Recipient</p>
+						<p>Số điện thoại: @_bill.NumberPhone</p>
+						<p>Địa chỉ: @_bill.ToAddress, @_bill.WardName, @_bill.District, @_bill.Province</p>
+						<p>
+							Phí ship:
+							@if (string.IsNullOrEmpty(_bill.ShippingFee.ToString()) || _bill.ShippingFee == 0)
+							{
+								<span>cần được cập nhật</span>
+							}
+							else
+							{
+								<span>@_bill.ShippingFee</span>
+							}
+						</p>
+						<p>Ghi chú: @_bill.Note</p>
+						@*  <p>Người tạo đơn: @_bill.NameCreatBy</p> *@
+						@* @if (_bill.CanelBy != null || _bill.CanelBy != default)
+					{
+					<p>Người hủy đơn: @TenNguoiHuy</p>
+					// <p>Người tạo đơn: @_bill.NameCreatBy</p>
+					} *@
+					</div>
+				}
+
+			</div>
+			<div style="display:flex;justify-content:center;align-items:center;flex-direction:column;gap:20px">
+				@if (_bill.Type == 1 && _bill.Status == 2)
+				{
+					<button class="btn_UpdateBill" data-target="#UpdateShippingFee" data-toggle="modal">Cập nhật phí ship</button>
+				}
+				else if ((_bill.Type == 1 && _bill.Status == 3) || (_bill.Type == 2 && _bill.Status == 1))
+				{
+					<button class="btn_UpdateBill" data-target="#XacnhanBanGiao" data-toggle="modal">Bàn giao cho đơn vị vận chuyển</button>
+				}
+				else if ((_bill.Type == 1 && _bill.Status == 4) || (_bill.Type == 2 && _bill.Status == 2))
+				{
+					<button class="btn_UpdateBill" data-target="#XacnhanThanhcong" data-toggle="modal">Hoàn thành đơn hàng</button>
+				}
+				@if (
+									(_bill.Type == 1 && _bill.Status == 1) ||
+									(_bill.Type == 1 && _bill.Status == 2) ||
+									(_bill.Type == 1 && _bill.Status == 3) ||
+									(_bill.Type == 2 && _bill.Status == 1)
+									)
+				{
+					<button class="btn_CancelBill" data-target="#CancelBill" data-toggle="modal">Hủy đơn hàng</button>
+				}
+
+			</div>
+		</div>
+		<div>
+			Danh sách sản phẩm
+			<table style="width:100%">
+				<tr style="border:1px solid #d3d3d3;border-collapse:collapse">
+					<td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">STT</td>
+					<td style="width:50%;border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px; ">Sản phẩm</td>
+					<td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">Đơn giá</td>
+					<td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">Số lượng</td>
+					<td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">Tổng tiền</td>
+				</tr>
+				@{
+					int index = 0;
+					int countQuantity = 0;
+					int countTienHang = 0;
+				}
+				@foreach (var item in _lstBillDetail)
+				{
+					{
+						index += 1;
+						countQuantity += @item.Quantity;
+						countTienHang += (@item.Quantity * @item.PriceAfter) ?? 0;
+
+					}
+					<tr>
+						<td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@index</td>
+						<td style="width:50%;border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px; ">@item.Name - @item.SizeName - @item.ColorName</td>
+						<td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@item.PriceAfter</td>
+						<td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@item.Quantity</td>
+						<td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@(item.Quantity * item.PriceAfter)</td>
+					</tr>
+				}
+				<tr>
+					<td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center" colspan="3">Tổng cộng</td>
+					<td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@countQuantity</td>
+					<td style="border:1px solid #d3d3d3;border-collapse:collapse;padding:5px 10px;width:5%;text-align:center">@countTienHang</td>
+				</tr>
+			</table>
+		</div>
+	</div>
 </div>
 
 
@@ -144,36 +172,36 @@
 @* data-target="#ChooseSizeAndColor" data-toggle=" *@
 
 <div class="modal fade" id="UpdateShippingFee">
-    <BlazoredToasts Position="ToastPosition.BottomRight"
-                    Timeout="5"
-                    IconType="IconType.FontAwesome"
-                    SuccessClass="success-toast-override"
-                    SuccessIcon="fa-solid fa-check"
-                    ErrorIcon="fa-solid fa-triangle-exclamation" />
+	<BlazoredToasts Position="ToastPosition.BottomRight"
+					Timeout="5"
+					IconType="IconType.FontAwesome"
+					SuccessClass="success-toast-override"
+					SuccessIcon="fa-solid fa-check"
+					ErrorIcon="fa-solid fa-triangle-exclamation" />
 
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Cập nhập phí vận chuyển</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Phí vận chuyển: </label>
-                    <input type="number" class="form-control" @bind="PhiShip" @oninput="CheckFeeShip">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Ghi chú: </label>
-                    <textarea class="form-control" @bind="Note"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" @onclick="()=>UpdateFeeship()" data-dismiss="@(ActiveTabFee== true ? "modal":"")">
-                    Xác nhận
-                </button>
-            </div>
-        </div>
-    </div>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Cập nhập phí vận chuyển</h5>
+				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="mb-3">
+					<label class="form-label">Phí vận chuyển: </label>
+					<input type="number" class="form-control" @bind="PhiShip" @oninput="CheckFeeShip">
+				</div>
+				<div class="mb-3">
+					<label class="form-label">Ghi chú: </label>
+					<textarea class="form-control" @bind="Note"></textarea>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" @onclick="()=>UpdateFeeship()" data-dismiss="@(ActiveTabFee== true ? "modal":"")">
+					Xác nhận
+				</button>
+			</div>
+		</div>
+	</div>
 </div>
 @*Poup*@
 @*<div class="modal fade" id="XacnhanBanGiao">
@@ -192,21 +220,21 @@
     </div>
 </div>*@
 <div class="modal fade" id="XacnhanBanGiao">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Xác nhận bàn giao</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Bạn đồng ý bàn giao đơn hàng cho đơn vị vận chuyển</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                <button type="button" class="btn btn-primary" @onclick="()=>Bangiao()" data-dismiss="modal">Xác nhận</button>
-            </div>
-        </div>
-    </div>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Xác nhận bàn giao</h5>
+				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p>Bạn đồng ý bàn giao đơn hàng cho đơn vị vận chuyển</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+				<button type="button" class="btn btn-primary" @onclick="()=>Bangiao()" data-dismiss="modal">Xác nhận</button>
+			</div>
+		</div>
+	</div>
 </div>
 @*Poup*@
 @*<div class="modal fade" id="XacnhanThanhcong">
@@ -225,57 +253,58 @@
     </div>
 </div>*@
 <div class="modal fade" id="XacnhanThanhcong">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Xác nhận thành công</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Bạn đồng ý hoàn thành đơn hàng</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"
-                        data-dismiss="modal">
-                    Hủy
-                </button>
-                <button type="button" class="btn btn-primary" @onclick="()=>ThanhCong()" data-dismiss="modal">Xác nhận</button>
-            </div>
-        </div>
-    </div>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Xác nhận thành công</h5>
+				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p>Bạn đồng ý hoàn thành đơn hàng</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">
+					Hủy
+				</button>
+				<button type="button" class="btn btn-primary" @onclick="()=>ThanhCong()" data-dismiss="modal">Xác nhận</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 
 <div class="modal fade" id="CancelBill">
-    <BlazoredToasts Position="ToastPosition.BottomRight"
-                    Timeout="5"
-                    IconType="IconType.FontAwesome"
-                    SuccessClass="success-toast-override"
-                    SuccessIcon="fa-solid fa-check"
-                    ErrorIcon="fa-solid fa-triangle-exclamation" />
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Xác nhận thành công</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Bạn đồng ý hủy đơn hàng</p>
-            </div>
-            <div>
-                <textarea @bind="LyDoHuy" @oninput="CheckLyDoHuy" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"
-                        data-dismiss="modal">
-                    Không hủy
-                </button>
-                <button type="button" class="btn btn-primary" @onclick="()=>CancelBill()"
-                    data-dismiss="@(activetabHuy==true?"modal":"")"
-                >Hủy</button>
-            </div>
-        </div>
-    </div>
+	<BlazoredToasts Position="ToastPosition.BottomRight"
+					Timeout="5"
+					IconType="IconType.FontAwesome"
+					SuccessClass="success-toast-override"
+					SuccessIcon="fa-solid fa-check"
+					ErrorIcon="fa-solid fa-triangle-exclamation" />
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Xác nhận thành công</h5>
+				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p>Bạn đồng ý hủy đơn hàng</p>
+			</div>
+			<div>
+				<textarea @bind="LyDoHuy" @oninput="CheckLyDoHuy" />
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">
+					Không hủy
+				</button>
+				<button type="button" class="btn btn-primary" @onclick="()=>CancelBill()"
+						data-dismiss="@(activetabHuy==true?"modal":"")">
+					Hủy
+				</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 
