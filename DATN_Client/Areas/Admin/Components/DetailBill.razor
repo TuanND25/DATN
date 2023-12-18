@@ -62,12 +62,19 @@
                                 <span>@_bill.ShippingFee</span>
                             }
                         </p>
-                        <p>@_bill.Note</p>
+                        <p>Ghi chú: @_bill.Note</p>
+                       @*  <p>Người tạo đơn: @_bill.NameCreatBy</p> *@
+                        @if (_bill.CanelBy!= null || _bill.CanelBy != default)
+                        {
+                            <p>Người hủy đơn: @TenNguoiHuy</p> 
+                          // <p>Người tạo đơn: @_bill.NameCreatBy</p>
+                        }
                     </div>
                 }
+
             </div>
-            <div style="display:flex;justify-content:center;align-items:center">
-                @if (_bill.Type==1 && _bill.Status==2)
+            <div style="display:flex;justify-content:center;align-items:center;flex-direction:column;gap:20px">
+                @if (_bill.Type == 1 && _bill.Status == 2)
                 {
                     <button class="btn_UpdateBill" data-target="#UpdateShippingFee" data-toggle="modal">Cập nhật phí ship</button>
                 }
@@ -78,6 +85,15 @@
                 else if ((_bill.Type == 1 && _bill.Status == 4) || (_bill.Type == 2 && _bill.Status == 2))
                 {
                     <button class="btn_UpdateBill" data-target="#XacnhanThanhcong" data-toggle="modal">Hoàn thành đơn hàng</button>
+                }             
+                @if (
+                (_bill.Type == 1 && _bill.Status == 1) ||
+                (_bill.Type == 1 && _bill.Status == 2) ||
+                (_bill.Type == 1 && _bill.Status == 3) ||
+                (_bill.Type == 2 && _bill.Status == 1)
+                )
+                {
+                    <button class="btn_CancelBill" data-target="#CancelBill" data-toggle="modal">Hủy đơn hàng</button>
                 }
 
             </div>
@@ -134,7 +150,7 @@
                     SuccessClass="success-toast-override"
                     SuccessIcon="fa-solid fa-check"
                     ErrorIcon="fa-solid fa-triangle-exclamation" />
-   
+
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -144,7 +160,7 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <label class="form-label">Phí vận chuyển: </label>
-                    <input type="number" class="form-control" @bind="PhiShip" @oninput="CheckFeeShip" >
+                    <input type="number" class="form-control" @bind="PhiShip" @oninput="CheckFeeShip">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Ghi chú: </label>
@@ -152,18 +168,18 @@
                 </div>
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-primary" @onclick="()=>UpdateFeeship()" data-dismiss="@(ActiveTabFee== true ? "modal":"")">
-                Xác nhận
-            </button>
+                <button type="button" class="btn btn-primary" @onclick="()=>UpdateFeeship()" data-dismiss="@(ActiveTabFee== true ? "modal":"")">
+                    Xác nhận
+                </button>
             </div>
         </div>
     </div>
 </div>
 @*Poup*@
 @*<div class="modal fade" id="XacnhanBanGiao">
-   
+
     <div class="modal-dialog">
-        <div class="modal-content">           
+        <div class="modal-content">
             <p>Bạn đồng ý bàn giao đơn hàng cho đơn vị vận chuyển</p>
 
             <button data-dismiss="modal">
@@ -176,21 +192,21 @@
     </div>
 </div>*@
 <div class="modal fade" id="XacnhanBanGiao">
-<div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">Xác nhận bàn giao</h5>
-            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận bàn giao</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
                 <p>Bạn đồng ý bàn giao đơn hàng cho đơn vị vận chuyển</p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
                 <button type="button" class="btn btn-primary" @onclick="()=>Bangiao()" data-dismiss="modal">Xác nhận</button>
+            </div>
         </div>
     </div>
-</div>
 </div>
 @*Poup*@
 @*<div class="modal fade" id="XacnhanThanhcong">
@@ -228,7 +244,38 @@
         </div>
     </div>
 </div>
-<style>
- 
-</style>
+
+
+<div class="modal fade" id="CancelBill">
+    <BlazoredToasts Position="ToastPosition.BottomRight"
+                    Timeout="5"
+                    IconType="IconType.FontAwesome"
+                    SuccessClass="success-toast-override"
+                    SuccessIcon="fa-solid fa-check"
+                    ErrorIcon="fa-solid fa-triangle-exclamation" />
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận thành công</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn đồng ý hủy đơn hàng</p>
+            </div>
+            <div>
+                <textarea @bind="LyDoHuy" @oninput="CheckLyDoHuy" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">
+                    Không hủy
+                </button>
+                <button type="button" class="btn btn-primary" @onclick="()=>CancelBill()"
+                    data-dismiss="@(activetabHuy==true?"modal":"")"
+                >Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 

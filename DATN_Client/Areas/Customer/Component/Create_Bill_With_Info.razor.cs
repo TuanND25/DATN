@@ -60,6 +60,7 @@ namespace DATN_Client.Areas.Customer.Component
 			_bill_validate_vm = new();
 			isLoader = true;
 			_iduser = _ihttpcontextaccessor.HttpContext.Session.GetString("UserId");
+
 			//var token = _ihttpcontextaccessor.HttpContext.Session.GetString("Token"); // Gọi token
 			//_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token); // Xác thực
 			_lstPrI_show_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");

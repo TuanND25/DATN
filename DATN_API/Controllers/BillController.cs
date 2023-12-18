@@ -125,6 +125,8 @@ namespace DATN_API.Controllers
                 bill.Status = bill_vm.Status;
                 bill.ShippingFee = bill_vm.ShippingFee;
 				bill.Type = bill_vm.Type;
+				bill.CreateBy = bill_vm.CreateBy;
+				bill.CanelBy = bill_vm.CanelBy;
                 await _billService.PutBill(bill);
 				return Ok("Success");
 			}

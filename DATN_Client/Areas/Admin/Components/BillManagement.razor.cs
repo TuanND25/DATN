@@ -47,6 +47,7 @@ namespace DATN_Client.Areas.Admin.Components
             tabTypes.Add(new TabType { Id = 4, Name = "Chờ giao hàng" });
             tabTypes.Add(new TabType { Id = 5, Name = "Đang giao hàng" });
             tabTypes.Add(new TabType { Id = 6, Name = "Đã hoàn thành" });
+            tabTypes.Add(new TabType { Id = 7, Name = "Đã hủy" });
 
 
 
@@ -63,11 +64,17 @@ namespace DATN_Client.Areas.Admin.Components
             SearchPhoneNumber = queryParams["phone"];
             SearchNameUser = queryParams["nameuser"];
             SearchPaymentMethod = queryParams["pm"];
-
+            int x = 1;
+            int.TryParse(queryParams["TabType"], out x);
+            if (x==0)
+            {
+                x = 1;
+            }
+            await HandleActiveTabType(x);
 
 
             if (DateOnly.TryParse(queryParams["startdate"], out var parsedDate))
-            {            
+            {
                 StartDate = parsedDate;
                 if (StartDate != null)
                 {
@@ -123,7 +130,7 @@ namespace DATN_Client.Areas.Admin.Components
             {
                 query["nameuser"] = null;
             }
-            
+
             if (!string.IsNullOrEmpty(SearchPaymentMethod))
             {
                 query["pm"] = SearchPaymentMethod;
@@ -140,7 +147,7 @@ namespace DATN_Client.Areas.Admin.Components
             }
             else
             {
-                query["startdate"] =null;
+                query["startdate"] = null;
                 query["enddate"] = null;
             }
 
@@ -150,7 +157,7 @@ namespace DATN_Client.Areas.Admin.Components
             // Chuyển đến URL mới
             _navigationManager.NavigateTo(uriBuilder.ToString());
 
-          await  LocDuLieu();
+            await LocDuLieu();
 
         }
 
@@ -198,6 +205,11 @@ namespace DATN_Client.Areas.Admin.Components
                 ).ToList();
                 _lstBillShowOnMain = ConvertbillShowOnMain(list);
             }
+            else if (true)
+            {
+                var list = _GetclstBill.Where(x =>x.Status == 0).ToList();
+                _lstBillShowOnMain = ConvertbillShowOnMain(list);
+            }
 
 
 
@@ -235,7 +247,7 @@ namespace DATN_Client.Areas.Admin.Components
         }
 
 
-      
+
 
 
         public class TabType
@@ -246,7 +258,7 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public async Task HandleActiveTabType(int id)
         {
-           
+
 
             var currentUrl = _navigationManager.ToAbsoluteUri(_navigationManager.Uri);
 
@@ -351,7 +363,7 @@ namespace DATN_Client.Areas.Admin.Components
         public void redirectToDetails(Guid BillId)
         {
             _navigationManager.NavigateTo($"/bill-management/bill-detail?billid={BillId}", true);
-        
+
         }
 
         public class BillShowOnMain

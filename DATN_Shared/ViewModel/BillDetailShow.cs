@@ -26,5 +26,6 @@ namespace DATN_Shared.ViewModel
 		public int? CostPrice { get; set; }
 		public DateTime? CreateDate { get; set; }
 		public int Status { get; set; }
-	}
+       
+    }
 }
