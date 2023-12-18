@@ -132,6 +132,9 @@ namespace DATN_Client.Areas.Admin.Components
 
         public bool isLoader { get; set; } = false;
 
+        public Guid IdBillItemShow { get; set; }
+        public  Guid IdBillRemove { get; set; }
+
 
 
         protected override async Task OnInitializedAsync()
@@ -145,7 +148,12 @@ namespace DATN_Client.Areas.Admin.Components
             isLoader = true;
             _lstPrI_show_VM = await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
             _lstImg_PI = await _client.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem");
+
             _lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
+
+            _lstP = _lstP.Where(x => x.Status == 1).ToList();
+
+
             _lstP_1 = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
             _lstUser = await _client.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
             _lstUser_1 = await _client.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
@@ -477,6 +485,7 @@ namespace DATN_Client.Areas.Admin.Components
             }
 
             _lstProductItem = (await _client.GetFromJsonAsync<List<ProductItem_VM>>($"https://localhost:7141/api/productitem/get_all_productitem_byProduct/{IdProduct}")).ToList();
+            _lstProductItem = _lstProductItem.Where(x => x.Status == 1 &&  x.AvaiableQuantity>0).ToList();
 
             //Lấy list size All
             _lstSizeAll = (await _client.GetFromJsonAsync<List<Size_VM>>("https://localhost:7141/api/Size/get_size")).ToList();
@@ -1538,6 +1547,7 @@ namespace DATN_Client.Areas.Admin.Components
             var _lstBillItem1 = _lstBillItem.Where(x => x.BillID == BillId).ToList();
 
             var _lstPrductItem = await _client.GetFromJsonAsync<List<ProductItem_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
+            _lstPrductItem = _lstPrductItem.Where(x => x.AvaiableQuantity > 0 && x.Status == 1).ToList();
 
             foreach (var x in _lstBillItem1)
             {
@@ -1545,7 +1555,7 @@ namespace DATN_Client.Areas.Admin.Components
                 var productItem = _lstPrductItem.FirstOrDefault(z => z.Id == x.ProductItemId);
                 if (productItem == null)
                 {
-                    _toastService.ShowError("Đã có lỗi xảy ra 9");
+                    _toastService.ShowError("Sản phẩm đã ngừng kinh doanh");
                     return;
                 }
                 if (x.Quantity > productItem.AvaiableQuantity)
@@ -1806,6 +1816,17 @@ namespace DATN_Client.Areas.Admin.Components
 
 
 
+        }
+
+
+        public void Xacnhanxoasp(Guid Id)
+        {
+            IdBillItemShow = Id;
+        }
+
+        public void Xacnhanxoabill(Guid Id)
+        {
+            IdBillRemove = Id;
         }
 
 
