@@ -166,9 +166,10 @@ else
 								<hr />
 								@foreach (var c in LoadBillItemByBill(a.Id))
 								{
+									var img = _lstImg_PI.Where(x => x.ProductItemId == c.ProductItemId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
 									<div class="row" style="margin: 15px 0;" @onclick="()=>NavBillItem(a.Id)">
 										<div class="col-md-2" style="width:110px;">
-											<img src="https://product.hstatic.net/200000312481/product/ato1007_2_21baaf6cd76d4e6c9b49758dd8d933b8_master.jpg" style="width:95px;height:95px;" />
+											<img src="/images/@img" style="width:95px;height:95px;" />
 										</div>
 										<div class="col-md-10" style="width: calc(100% - 110px);">
 											<div style="font-weight:530;">@c.Name</div>
@@ -191,10 +192,10 @@ else
 									{
 										<button type="button" class="button" @onclick="()=>ThanhToanHdMomo(a)">Thanh toán đơn hàng</button>
 									}
-									@if (a.Status == 5)
+									@* @if (a.Status == 5)
 									{
 										<button type="button" class="button1" style="margin-left:20px;">Mua lại</button>
-									}
+									} *@
 									<button type="button" class="button1" style="margin-left:20px;" @onclick="()=>NavBillItem(a.Id)">Chi tiết</button>
 								</div>
 							</div>
@@ -241,9 +242,10 @@ else
 								<hr />
 								@foreach (var c in LoadBillItemByBill(a.Id))
 								{
+									var img = _lstImg_PI.Where(x => x.ProductItemId == c.ProductItemId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
 									<div class="row" style="margin: 15px 0;" @onclick="()=>NavBillItem(a.Id)">
 										<div class="col-md-2" style="width:110px;">
-											<img src="https://product.hstatic.net/200000312481/product/ato1007_2_21baaf6cd76d4e6c9b49758dd8d933b8_master.jpg" style="width:95px;height:95px;" />
+											<img src="/images/@img" style="width:95px;height:95px;" />
 										</div>
 										<div class="col-md-10" style="width: calc(100% - 110px);">
 											<div style="font-weight:530;">@c.Name</div>
@@ -266,10 +268,10 @@ else
 									{
 										<button type="button" class="button" @onclick="()=>ThanhToanHdMomo(a)">Thanh toán đơn hàng</button>
 									}
-									@if (a.Status == 5)
+									@* @if (a.Status == 5)
 									{
 										<button type="button" class="button1" style="margin-left:20px;">Mua lại</button>
-									}
+									} *@
 									<button type="button" class="button1" style="margin-left:20px;" @onclick="()=>NavBillItem(a.Id)">Chi tiết</button>
 								</div>
 							</div>
@@ -310,9 +312,10 @@ else
 								<hr />
 								@foreach (var c in LoadBillItemByBill(a.Id))
 								{
+									var img = _lstImg_PI.Where(x => x.ProductItemId == c.ProductItemId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
 									<div class="row" style="margin: 15px 0;" @onclick="()=>NavBillItem(a.Id)">
 										<div class="col-md-2" style="width:110px;">
-											<img src="https://product.hstatic.net/200000312481/product/ato1007_2_21baaf6cd76d4e6c9b49758dd8d933b8_master.jpg" style="width:95px;height:95px;" />
+											<img src="/images/@img" style="width:95px;height:95px;" />
 										</div>
 										<div class="col-md-10" style="width: calc(100% - 110px);">
 											<div style="font-weight:530;">@c.Name</div>
@@ -335,10 +338,10 @@ else
 									{
 										<button type="button" class="button" @onclick="()=>ThanhToanHdMomo(a)">Thanh toán đơn hàng</button>
 									}
-									@if (a.Status == 5)
+									@* @if (a.Status == 5)
 									{
 										<button type="button" class="button1" style="margin-left:20px;">Mua lại</button>
-									}
+									} *@
 									<button type="button" class="button1" style="margin-left:20px;" @onclick="()=>NavBillItem(a.Id)">Chi tiết</button>
 								</div>
 							</div>
@@ -379,9 +382,10 @@ else
 								<hr />
 								@foreach (var c in LoadBillItemByBill(a.Id))
 								{
+									var img = _lstImg_PI.Where(x => x.ProductItemId == c.ProductItemId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
 									<div class="row" style="margin: 15px 0;" @onclick="()=>NavBillItem(a.Id)">
 										<div class="col-md-2" style="width:110px;">
-											<img src="https://product.hstatic.net/200000312481/product/ato1007_2_21baaf6cd76d4e6c9b49758dd8d933b8_master.jpg" style="width:95px;height:95px;" />
+											<img src="/images/@img" style="width:95px;height:95px;" />
 										</div>
 										<div class="col-md-10" style="width: calc(100% - 110px);">
 											<div style="font-weight:530;">@c.Name</div>
@@ -404,10 +408,10 @@ else
 									{
 										<button type="button" class="button" @onclick="()=>ThanhToanHdMomo(a)">Thanh toán đơn hàng</button>
 									}
-									@if (a.Status == 5)
+									@* @if (a.Status == 5)
 									{
 										<button type="button" class="button1" style="margin-left:20px;">Mua lại</button>
-									}
+									} *@
 									<button type="button" class="button1" style="margin-left:20px;" @onclick="()=>NavBillItem(a.Id)">Chi tiết</button>
 								</div>
 							</div>
@@ -448,9 +452,10 @@ else
 								<hr />
 								@foreach (var c in LoadBillItemByBill(a.Id))
 								{
+									var img = _lstImg_PI.Where(x => x.ProductItemId == c.ProductItemId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
 									<div class="row" style="margin: 15px 0;" @onclick="()=>NavBillItem(a.Id)">
 										<div class="col-md-2" style="width:110px;">
-											<img src="https://product.hstatic.net/200000312481/product/ato1007_2_21baaf6cd76d4e6c9b49758dd8d933b8_master.jpg" style="width:95px;height:95px;" />
+											<img src="/images/@img" style="width:95px;height:95px;" />
 										</div>
 										<div class="col-md-10" style="width: calc(100% - 110px);">
 											<div style="font-weight:530;">@c.Name</div>
@@ -473,10 +478,10 @@ else
 									{
 										<button type="button" class="button" @onclick="()=>ThanhToanHdMomo(a)">Thanh toán đơn hàng</button>
 									}
-									@if (a.Status == 5)
+									@* @if (a.Status == 5)
 									{
 										<button type="button" class="button1" style="margin-left:20px;">Mua lại</button>
-									}
+									} *@
 									<button type="button" class="button1" style="margin-left:20px;" @onclick="()=>NavBillItem(a.Id)">Chi tiết</button>
 								</div>
 							</div>

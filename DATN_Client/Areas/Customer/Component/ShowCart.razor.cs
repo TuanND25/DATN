@@ -79,7 +79,6 @@ namespace DATN_Client.Areas.Customer.Component
 				ci.Quantity -= 1;
 				await _client.PutAsJsonAsync("https://localhost:7141/api/CartItems/update-CartItems", ci);
 			}
-			await _client.PutAsJsonAsync("https://localhost:7141/api/CartItems/update-CartItems", ci);
 			_tongTien = 0;
 			foreach (var x in _lstCI)
 			{

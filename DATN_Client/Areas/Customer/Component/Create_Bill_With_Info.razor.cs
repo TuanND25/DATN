@@ -132,9 +132,9 @@ namespace DATN_Client.Areas.Customer.Component
 			_afterClick = "afterClick";
 			if (!_lstCI.Any()) _navi.NavigateTo("/cart", true);
 			_lstPrI_show_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
-			if (_bill_validate_vm.VoucherId!=null)
+			if (_bill_validate_vm.VoucherId != null)
 			{
-				 vch = await _httpClient.GetFromJsonAsync<Voucher_VM>($"https://localhost:7141/api/Voucher/ID?Id={_bill_validate_vm.VoucherId}");
+				vch = await _httpClient.GetFromJsonAsync<Voucher_VM>($"https://localhost:7141/api/Voucher/ID?Id={_bill_validate_vm.VoucherId}");
 			}
 			bool checkSl = false;
 			foreach (var a in _lstCI)
@@ -306,6 +306,13 @@ namespace DATN_Client.Areas.Customer.Component
 					_ord.Amount = _tongTienAll;
 					var reponse1 = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/Momo/CreatePaymentAsync", _ord);
 					var reponse2 = await reponse1.Content.ReadFromJsonAsync<MomoCreatePaymentResponseModel>();
+					if (string.IsNullOrEmpty(reponse2.PayUrl))
+					{
+						_toastService.ShowError(reponse2.LocalMessage);
+						_datHangThanhCong = false;
+						_afterClick = string.Empty;
+						return;
+					}
 					_navi.NavigateTo($"{reponse2.PayUrl}", true);
 					return;
 				}
@@ -316,7 +323,7 @@ namespace DATN_Client.Areas.Customer.Component
 					await Task.Delay(3000);
 					if (string.IsNullOrEmpty(_iduser))
 					{
-						_navi.NavigateTo("/home");
+						_navi.NavigateTo("/home", true);
 						return;
 					}
 					else

@@ -84,6 +84,10 @@ namespace DATN_Client.Areas.Customer.Component
 
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 				var responseAuthorize = await _httpClient.GetAsync("https://localhost:7141/api/user/get-user");
+				var iduser = Guid.Parse(iHttpContext.HttpContext.Session.GetString("UserId"));
+				var user = await _httpClient.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get_user_by_id/{iduser}");
+				UserNameShowHome = LayChuCuoiName(user.Name);				
+				iHttpContext.HttpContext.Session.Remove("_lstCI_Vanglai");
 				if (principal.IsInRole("Staff"))
 				{
 					navigationManager.NavigateTo("https://localhost:7075/Admin/SellStalls", true);
@@ -94,12 +98,7 @@ namespace DATN_Client.Areas.Customer.Component
 				}
 				else
 				{
-
-					var iduser = Guid.Parse(iHttpContext.HttpContext.Session.GetString("UserId"));
-					var user = await _httpClient.GetFromJsonAsync<User_VM>($"https://localhost:7141/api/user/get_user_by_id/{iduser}");
-					UserNameShowHome = LayChuCuoiName(user.Name);
 					_chaoLogin = true;
-					iHttpContext.HttpContext.Session.Remove("_lstCI_Vanglai");
 					navigationManager.NavigateTo("/home", true);
 				}
 			}

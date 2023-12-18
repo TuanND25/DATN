@@ -1,342 +1,343 @@
 ﻿@inject IJSRuntime JSRuntime
 
 <div class="pagetitle">
-    <h1>Dashboard</h1>
-    <nav>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/admin">Home</a></li>
-            <li class="breadcrumb-item active"><a href="/admin">Dashboard</a></li>
-        </ol>
-    </nav>
-    <button class="cssbuttons-io-button1" @onclick="ExportExcel" style="margin-left: auto;">
-        <i class="fa-regular fa-cloud-arrow-down"></i>
-        <span>Xuất Excel</span>
-    </button>
+	<h1>Dashboard</h1>
+	<nav>
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="/admin">Home</a></li>
+			<li class="breadcrumb-item active"><a href="/admin">Dashboard</a></li>
+		</ol>
+	</nav>
+	<button class="cssbuttons-io-button1" @onclick="ExportExcel" style="margin-left: auto;">
+		<i class="fa-regular fa-cloud-arrow-down"></i>
+		<span>Xuất Excel</span>
+	</button>
 </div>
 <style>
-    .notpoundimg {
-        height: 300px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
+	.notpoundimg {
+		height: 300px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
 
-    .t {
-        text-align: center;
-    }
+	.t {
+		text-align: center;
+	}
 
-    .t1 {
-        border-left: 2px solid;
-    }
+	.t1 {
+		border-left: 2px solid;
+	}
 
-    .t2 {
-        margin-bottom: 50px;
-        margin-top: 30px;
-    }
+	.t2 {
+		margin-bottom: 50px;
+		margin-top: 30px;
+	}
 
-    h3 {
-        font-weight: 500;
-        font-size: 26px;
-        font-family: "Poppins", sans-serif;
-    }
+	h3 {
+		font-weight: 500;
+		font-size: 26px;
+		font-family: "Poppins", sans-serif;
+	}
 
-    span {
-        font-family: "Poppins", sans-serif;
-        font-weight: 500;
-    }
+	span {
+		font-family: "Poppins", sans-serif;
+		font-weight: 500;
+	}
 </style>
 @if (isLoader)
 {
-    <div class="loader-overlay">
-        <div class="loader-container">
-            <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
-                <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
-                <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
-                <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
-                <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
-            </svg>
-        </div>
-    </div>
+	<div class="loader-overlay">
+		<div class="loader-container">
+			<svg class="pl" width="240" height="240" viewBox="0 0 240 240">
+				<circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+				<circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+				<circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+				<circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+			</svg>
+		</div>
+	</div>
 }
 else
 {
 
-    <section class="section dashboard">
-        <div class="row">
+	<section class="section dashboard">
+		<div class="row">
 
-            <!-- Left side columns -->
-        <div class="col-lg-12">
-                <div class="row">
+			<!-- Left side columns -->
+			<div class="col-lg-12">
+				<div class="row">
 
-                    <!-- Hoá đơn -->
-                <div class="col-xxl-4 col-md-6">
-                        <div class="card info-card sales-card">
-                            <EditForm Model="count">
-                                <div class="filter">
-                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                        <li class="dropdown-header text-start">
-                                            <h6>Filter</h6>
-                                        </li>
-                                        <li><a class="dropdown-item" @onclick="()=>Sale(0)">Today</a></li>
-                                        <li><a class="dropdown-item" @onclick="()=>Sale(1)">This Month</a></li>
-                                        <li><a class="dropdown-item" @onclick="()=>Sale(2)">This Year</a></li>
-                                    </ul>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Hoá đơn <span>| @count.Tittle</span></h5>
+					<!-- Hoá đơn -->
+					<div class="col-xxl-4 col-md-6">
+						<div class="card info-card sales-card">
+							<EditForm Model="count">
+								<div class="filter">
+									<a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+									<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+										<li class="dropdown-header text-start">
+											<h6>Filter</h6>
+										</li>
+										<li><a class="dropdown-item" @onclick="()=>Sale(0)">Today</a></li>
+										<li><a class="dropdown-item" @onclick="()=>Sale(1)">This Month</a></li>
+										<li><a class="dropdown-item" @onclick="()=>Sale(2)">This Year</a></li>
+									</ul>
+								</div>
+								<div class="card-body">
+									<h5 class="card-title">Hoá đơn <span>| @count.Tittle</span></h5>
 
-                                    <div class="d-flex align-items-center">
-                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-cart"></i>
-                                        </div>
-                                        <div class="ps-3">
-                                            <h6>@count.Dem</h6>                                          
-                                        </div>
-                                    </div>
-                                </div>
-                            </EditForm>
-                        </div>
-                    </div><!-- End thẻ hoá đơn -->
-                    <!-- Product Card -->
-                <div class="col-xxl-4 col-xl-12">
+									<div class="d-flex align-items-center">
+										<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+											<i class="bi bi-cart"></i>
+										</div>
+										<div class="ps-3">
+											<h6>@count.Dem</h6>
+										</div>
+									</div>
+								</div>
+							</EditForm>
+						</div>
+					</div><!-- End thẻ hoá đơn -->
+					<!-- Product Card -->
+					<div class="col-xxl-4 col-xl-12">
 
-                        <div class="card info-card customers-card">
-                            <EditForm Model="count2">
-                                <div class="filter">
-                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                        <li class="dropdown-header text-start">
-                                            <h6>Filter</h6>
-                                        </li>
+						<div class="card info-card customers-card">
+							<EditForm Model="count2">
+								<div class="filter">
+									<a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+									<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+										<li class="dropdown-header text-start">
+											<h6>Filter</h6>
+										</li>
 
-                                        <li><a class="dropdown-item" @onclick="()=>Products(0)">Today</a></li>
-                                        <li><a class="dropdown-item" @onclick="()=>Products(1)">This Month</a></li>
-                                        <li><a class="dropdown-item" @onclick="()=>Products(2)">This Year</a></li>
-                                    </ul>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Sản phẩm <span>| @count2.Tittle</span></h5>
+										<li><a class="dropdown-item" @onclick="()=>Products(0)">Today</a></li>
+										<li><a class="dropdown-item" @onclick="()=>Products(1)">This Month</a></li>
+										<li><a class="dropdown-item" @onclick="()=>Products(2)">This Year</a></li>
+									</ul>
+								</div>
+								<div class="card-body">
+									<h5 class="card-title">Sản phẩm <span>| @count2.Tittle</span></h5>
 
-                                    <div class="d-flex align-items-center">
-                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="fa-solid fa-shirt"></i>
-                                        </div>
-                                        <div class="ps-3">
-                                            <h6>@count2.Dem</h6>
+									<div class="d-flex align-items-center">
+										<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+											<i class="fa-solid fa-shirt"></i>
+										</div>
+										<div class="ps-3">
+											<h6>@count2.Dem</h6>
 
-                                        </div>
-                                    </div>
-                                </div>
-                            </EditForm>
-                        </div>
+										</div>
+									</div>
+								</div>
+							</EditForm>
+						</div>
 
-                    </div><!-- End Product Card -->
-                    <!-- Revenue Card -->
-                <div class="col-xxl-4 col-md-6">
-                        <div class="card info-card revenue-card">
-                            <EditForm Model="count1">
-                                <div class="filter">
-                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                        <li class="dropdown-header text-start">
-                                            <h6>Filter</h6>
-                                        </li>
+					</div><!-- End Product Card -->
+					<!-- Revenue Card -->
+					<div class="col-xxl-4 col-md-6">
+						<div class="card info-card revenue-card">
+							<EditForm Model="count1">
+								<div class="filter">
+									<a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+									<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+										<li class="dropdown-header text-start">
+											<h6>Filter</h6>
+										</li>
 
-                                        <li><a class="dropdown-item" @onclick="()=>Revenue(0)">Today</a></li>
-                                        <li><a class="dropdown-item" @onclick="()=>Revenue(1)">This Month</a></li>
-                                        <li><a class="dropdown-item" @onclick="()=>Revenue(2)">This Year</a></li>
-                                    </ul>
-                                </div>
+										<li><a class="dropdown-item" @onclick="()=>Revenue(0)">Today</a></li>
+										<li><a class="dropdown-item" @onclick="()=>Revenue(1)">This Month</a></li>
+										<li><a class="dropdown-item" @onclick="()=>Revenue(2)">This Year</a></li>
+									</ul>
+								</div>
 
-                                <div class="card-body">
-                                    <h5 class="card-title">Doanh thu <span>|@count1.Tittle </span></h5>
+								<div class="card-body">
+									<h5 class="card-title">Doanh thu <span>| @count1.Tittle </span></h5>
 
-                                    <div class="d-flex align-items-center">
-                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-currency-dollar"></i>
-                                        </div>
-                                        <div class="ps-3">
-                                            @if (count1.Dem > 1000000)
-                                            {
-                                                <h5 style="font-weight:700;">₫@count1.Dem?.ToString("#,##0")</h5>
-                                            }
-                                            else
-                                            {
-                                                <h6>₫@count1.Dem?.ToString("#,##0")</h6>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            </EditForm>
-                        </div>
-                    </div><!-- End Revenue Card -->
-                    @{
-                        var d = _lstProductItem.Where(x => x.Status == 1 && x.AvaiableQuantity < 50).Count();
-                        var e = _lstPromotion.Where(x => x.Status == 1).Count();
+									<div class="d-flex align-items-center">
+										<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+											<i class="bi bi-currency-dollar"></i>
+										</div>
+										<div class="ps-3">
+											@if (count1.Dem > 1000000)
+											{
+												<h5 style="font-weight:700;">₫@count1.Dem?.ToString("#,##0")</h5>
+											}
+											else
+											{
+												<h6>₫@count1.Dem?.ToString("#,##0")</h6>
+											}
+										</div>
+									</div>
+								</div>
+							</EditForm>
+						</div>
+					</div><!-- End Revenue Card -->
+					@{
+						var d = _lstProductItem.Where(x => x.Status == 1 && x.AvaiableQuantity < 50).Count();
+						var e = _lstPromotion.Where(x => x.Status == 1).Count();
 
-                    }
-
-
-                    <div class="row">
-                        <div class="col-md-5" style="height:500px;">
-
-                            <div class="card top-selling overflow-auto">
-                                <EditForm Model="count5">
-                                    <div class="filter">
-                                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                            <li class="dropdown-header text-start">
-                                                <h6>Filter</h6>
-                                            </li>
-                                            <li><a class="dropdown-item" @onclick="()=>Task(0)">Hôm nay</a></li>
-                                            <li><a class="dropdown-item" @onclick="()=>Task(1)">Tháng này</a></li>
-                                            <li><a class="dropdown-item" @onclick="()=>Task(2)">Năm nay</a></li>
-                                        </ul>
-                                    </div>
-
-                                    <div class="card-body pb-0" style="">
-                                        <h5 class="card-title">Danh sách cần làm  <span>| @count5.Tittle</span></h5>
-                                        <div class="row col-md-12 t2">
-                                        <div class="col-md-4 t">
-                                            <div><h3>@count5.Dem2</h3></div>
-                                            <div><span>Chờ xác nhận</span></div>
-                                        </div>
-                                        <div class="col-md-4 t t1">
-                                            <div><h3>@count5.Dem3</h3></div>
-                                            <div><span>Chờ lấy hàng</span></div>
-                                        </div>
-                                        <div class="col-md-4 t t1">
-                                            <div><h3>@count5.Dem4</h3></div>
-                                            <div><span>Đã xử lý</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="row col-md-12 t2">
-                                        <div class="col-md-4 t">
-                                            <div><h3>@count5.Dem5</h3></div>
-                                            <div><span>Đơn huỷ</span></div>
-                                        </div>
-                                        <div class="col-md-4 t t1">
-                                            <div><h3>@d</h3></div>
-                                            <div><span>Sản phẩm sắp hết hàng</span></div>
-                                        </div>
-                                        <div class="col-md-4 t t1">
-                                            <div><h3>@e</h3></div>
-                                            <div><span>Chương trình khuyến mại</span></div>
-                                        </div>
-                                    </div>
-                                    </div>
-                                </EditForm>
-                            </div>
-                        </div>
-                        <div class="col-md-7">
-                            <div class="card top-selling overflow-auto">
-                                <EditForm Model="count3">
-                                    <div class="filter">
-                                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                            <li class="dropdown-header text-start">
-                                                <h6>Filter</h6>
-                                            </li>
-                                            <li><a class="dropdown-item" @onclick="()=>TopSale(0)">Today</a></li>
-                                            <li><a class="dropdown-item" @onclick="()=>TopSale(1)">This Month</a></li>
-                                            <li><a class="dropdown-item" @onclick="()=>TopSale(2)">This Year</a></li>
-                                        </ul>
-                                    </div>
-
-                                    <div class="card-body pb-0" style="height:500px;">
-                                        <h5 class="card-title">Sản phẩm bán chạy <span>| @count3.Tittle</span></h5>
-
-                                        <table class="table table-borderless">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Preview</th>
-                                                    <th scope="col">Mã sản phẩm</th>
-                                                    <th scope="col">Tên sản phẩm</th>
-                                                    <th scope="col">Màu sắc/Size</th>
-                                                    <th scope="col">Giá bán</th>
-                                                    <th scope="col">Số lượng</th>
-                                                    <th scope="col">Doanh thu</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @if (_lstThongKeProductItem.Count() == 0)
-                                                {
-                                                    <tr>
-                                                        <td colspan="8">
-                                                            <div class="notpoundimg">
-                                                                <h6 style="margin-top: 20px;">
-                                                                    Chưa có sản phẩm nào được bán trong @(count3.Tittle=="Today"?"Hôm nay":count3.Tittle=="This Month"?"Tháng này":"Năm nay")
-                                                                </h6>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                }
-                                                else
-                                                {
-                                                    @foreach (var a in _lstThongKeProductItem)
-                                                    {
-                                                        <tr>
-                                                            <th scope="row"><a href="#"><img src="/images/Outerity Line Dino Tee.png" alt=""></a></th>
-                                                            <td style="width:150px;">
-                                                                <a href="#" class="text-primary fw-bold">@a.ProductCode</a>
-                                                            </td>
-                                                            <td><a href="#" class="text-primary fw-bold">@a.Name</a></td>
-                                                            <td>@a.SizeName / @a.ColorName</td>
-                                                            <td>@a.CostPrice?.ToString("#,##0")đ</td>
-                                                            <td class="fw-bold">@a.Quantity</td>
-                                                            <td>@((a.CostPrice*a.Quantity)?.ToString("#,##0"))₫</td>
-                                                        </tr>
-                                                    }
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </EditForm>
-                            </div>
-                        </div><!-- End Top Selling -->
-
-                </div>
+					}
 
 
+					<div class="row">
+						<div class="col-md-5" style="height:500px;">
+
+							<div class="card top-selling overflow-auto">
+								<EditForm Model="count5">
+									<div class="filter">
+										<a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+										<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+											<li class="dropdown-header text-start">
+												<h6>Filter</h6>
+											</li>
+											<li><a class="dropdown-item" @onclick="()=>Task(0)">Hôm nay</a></li>
+											<li><a class="dropdown-item" @onclick="()=>Task(1)">Tháng này</a></li>
+											<li><a class="dropdown-item" @onclick="()=>Task(2)">Năm nay</a></li>
+										</ul>
+									</div>
+
+									<div class="card-body pb-0" style="">
+										<h5 class="card-title">Danh sách cần làm  <span>| @count5.Tittle</span></h5>
+										<div class="row col-md-12 t2">
+											<div class="col-md-4 t">
+												<div><h3>@count5.Dem2</h3></div>
+												<div><span>Chờ xác nhận</span></div>
+											</div>
+											<div class="col-md-4 t t1">
+												<div><h3>@count5.Dem3</h3></div>
+												<div><span>Chờ lấy hàng</span></div>
+											</div>
+											<div class="col-md-4 t t1">
+												<div><h3>@count5.Dem4</h3></div>
+												<div><span>Đã xử lý</span></div>
+											</div>
+										</div>
+										<div class="row col-md-12 t2">
+											<div class="col-md-4 t">
+												<div><h3>@count5.Dem5</h3></div>
+												<div><span>Đơn huỷ</span></div>
+											</div>
+											<div class="col-md-4 t t1">
+												<div><h3>@d</h3></div>
+												<div><span>Sản phẩm sắp hết hàng</span></div>
+											</div>
+											<div class="col-md-4 t t1">
+												<div><h3>@e</h3></div>
+												<div><span>Chương trình khuyến mại</span></div>
+											</div>
+										</div>
+									</div>
+								</EditForm>
+							</div>
+						</div>
+						<div class="col-md-7">
+							<div class="card top-selling overflow-auto">
+								<EditForm Model="count3">
+									<div class="filter">
+										<a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+										<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+											<li class="dropdown-header text-start">
+												<h6>Filter</h6>
+											</li>
+											<li><a class="dropdown-item" @onclick="()=>TopSale(0)">Today</a></li>
+											<li><a class="dropdown-item" @onclick="()=>TopSale(1)">This Month</a></li>
+											<li><a class="dropdown-item" @onclick="()=>TopSale(2)">This Year</a></li>
+										</ul>
+									</div>
+
+									<div class="card-body pb-0" style="height:500px;">
+										<h5 class="card-title">Sản phẩm bán chạy <span>| @count3.Tittle</span></h5>
+
+										<table class="table table-borderless">
+											<thead>
+												<tr>
+													<th scope="col">Preview</th>
+													<th scope="col">Mã sản phẩm</th>
+													<th scope="col">Tên sản phẩm</th>
+													<th scope="col">Màu sắc/Size</th>
+													<th scope="col">Giá bán</th>
+													<th scope="col">Số lượng</th>
+													<th scope="col">Doanh thu</th>
+												</tr>
+											</thead>
+											<tbody>
+												@if (_lstThongKeProductItem.Count() == 0)
+												{
+													<tr>
+														<td colspan="8">
+															<div class="notpoundimg">
+																<h6 style="margin-top: 20px;">
+																	Chưa có sản phẩm nào được bán trong @(count3.Tittle == "Today" ? "Hôm nay" : count3.Tittle == "This Month" ? "Tháng này" : "Năm nay")
+																</h6>
+															</div>
+														</td>
+													</tr>
+												}
+												else
+												{
+													@foreach (var a in _lstThongKeProductItem)
+													{
+														var img = _lstImg_PI.Where(c => c.ProductItemId == a.ProductItemId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
+														<tr>
+															<th scope="row"><a><img src="/images/@img" alt=""></a></th>
+															<td style="width:150px;">
+																<a class="text-primary fw-bold">@a.ProductCode</a>
+															</td>
+															<td><a class="text-primary fw-bold">@a.Name</a></td>
+															<td>@a.ColorName / @a.SizeName</td>
+															<td>@a.CostPrice?.ToString("#,##0")đ</td>
+															<td class="fw-bold">@a.Quantity</td>
+															<td>@((a.CostPrice * a.Quantity)?.ToString("#,##0"))₫</td>
+														</tr>
+													}
+												}
+											</tbody>
+										</table>
+									</div>
+								</EditForm>
+							</div>
+						</div><!-- End Top Selling -->
+
+					</div>
 
 
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <BarChart @ref="barChart" Class="col-md-12" />
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="card top-selling overflow-auto">
-                            <EditForm Model="count4">
-                                <div class="filter">
-                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                        <li class="dropdown-header text-start">
-                                            <h6>Filter</h6>
-                                        </li>
-                                        <li><a class="dropdown-item" @onclick='()=>ChonTimeThang("month")'>Tháng này</a></li>
-                                        <li><a class="dropdown-item" @onclick='()=>ChonTimeThang("3-month")'>3 Tháng gần nhất</a></li>
-                                        <li><a class="dropdown-item" @onclick='()=>ChonTimeThang("year")'>Năm nay</a></li>
-                                    </ul>
-                                </div>
 
-                                @*                                <div class="card-body pb-0" style="">
-                                    <h5 class="card-title">Doanh thu  <span>| @count4.Tittle</span></h5>*@
-                                <LineChart @ref="lineChart" class="col-md-12" />
-                                @* </div>*@
-                            </EditForm>
-                        </div>
-                    </div><!-- End Top Selling -->
-                    <!-- Top Selling -->
-            </div>
-            </div>
-        </div>
-    </section>
+					<div class="col-md-6">
+						<div class="card">
+							<div class="card-body">
+								<BarChart @ref="barChart" Class="col-md-12" />
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-6">
+						<div class="card top-selling overflow-auto">
+							<EditForm Model="count4">
+								<div class="filter">
+									<a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+									<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+										<li class="dropdown-header text-start">
+											<h6>Filter</h6>
+										</li>
+										<li><a class="dropdown-item" @onclick='()=>ChonTimeThang("month")'>Tháng này</a></li>
+										<li><a class="dropdown-item" @onclick='()=>ChonTimeThang("3-month")'>3 Tháng gần nhất</a></li>
+										<li><a class="dropdown-item" @onclick='()=>ChonTimeThang("year")'>Năm nay</a></li>
+									</ul>
+								</div>
+
+								@*                                <div class="card-body pb-0" style="">
+							<h5 class="card-title">Doanh thu  <span>| @count4.Tittle</span></h5>*@
+								<LineChart @ref="lineChart" class="col-md-12" />
+								@* </div>*@
+							</EditForm>
+						</div>
+					</div><!-- End Top Selling -->
+					<!-- Top Selling -->
+				</div>
+			</div>
+		</div>
+	</section>
 }
 
 
