@@ -17,7 +17,7 @@ namespace DATN_Shared.ViewModel
 		[Range(1, 100, ErrorMessage = "Phần trăm giảm nằm trong khoảng từ 1-100%")]
 		public int Percent { get; set; }
 		[Required(ErrorMessage = "Số lượng không được để trống")]
-		[Range(1, int.MaxValue, ErrorMessage = "Số lượng phải lớn hơn 0")]
+		//[Range(1, int.MaxValue, ErrorMessage = "Số lượng phải lớn hơn 0")]
 		public int Quantity { get; set; }
 
 		//[CheckStartDate(ErrorMessage = "Ngày bắt đầu phải lớn hơn ngày hiện tại")]

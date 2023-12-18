@@ -13,7 +13,8 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddControllersWithViews();
 builder.Services.AddBlazorBootstrap();
 builder.Services.AddHttpClient();
-
+builder.Services.AddBlazorWebView();
+//builder.Services.AddScoped<Microsoft.JSInterop.IJSRuntime, Microsoft.AspNetCore.Components.WebView.JSInterop.WebViewJSRuntime>();
 
 builder.Services.AddSession(options =>
 {

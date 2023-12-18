@@ -1,4 +1,4 @@
-/**
+﻿/**
 * Template Name: NiceAdmin
 * Updated: Aug 30 2023 with Bootstrap v5.3.1
 * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
@@ -330,4 +330,76 @@ window.saveAsFile = (fileName, byteBase64) => {
     link.download = fileName;
     link.click();
     link.remove();
+};
+
+
+//function showPDFViewer(pdfBytes) {
+//    var byteArray = new Uint8Array(pdfBytes);
+//    var blob = new Blob([byteArray], { type: "application/pdf" });
+
+//    var viewerUrl = "https://mozilla.github.io/pdf.js/web/viewer.html"; // Đường dẫn đến tệp viewer.html của PDF.js
+
+//    var popup = window.open(viewerUrl, "_blank");
+//    popup.onload = function () {
+//        var url = URL.createObjectURL(blob);
+//        popup.PDFViewerApplication.open(url);
+//    };
+//}
+
+function showPDFViewer(pdfBase64) {
+    var pdfData = atob(pdfBase64);
+    var pdfjsLib = window['pdfjs-dist/build/pdf'];
+
+    // Đường dẫn tới tệp PDF.js worker
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '/path/to/pdf.worker.js';
+
+    // Hiển thị tài liệu PDF
+    var container = document.getElementById('pdfContainer');
+    var loadingTask = pdfjsLib.getDocument({ data: pdfData });
+
+    loadingTask.promise.then(function (pdf) {
+        var viewer = new pdfjsViewer.PDFViewer({
+            container: container,
+        });
+
+        viewer.setDocument(pdf);
+
+        // Thêm biểu tượng in
+        var printButton = document.createElement('button');
+        printButton.innerHTML = 'In';
+        printButton.addEventListener('click', function () {
+            window.print();
+        });
+
+        container.appendChild(printButton);
+    });
+}
+
+function viewPdf(iframeId, byteBase64) {
+    document.getElementById(iframeId).innerHTML = "";
+    var ifrm = document.createElement('iframe');
+    ifrm.setAttribute("src", "data:application/pdf;base64," + byteBase64);
+    ifrm.style.width = "100%";
+    ifrm.contentWindow.height = "680px";
+    document.getElementById(iFrameId).appendChild(ifrm);
+}
+
+window.openPDFLink = (filePath) => {
+    const link = document.createElement('a');
+    link.href = filePath;
+    link.target = '_blank';
+    link.download = 'filename.pdf'; // Tên tệp có thể được thay đổi tùy ý
+    link.click();
+};
+
+
+window.loadPDF = (pdfBase64, elementId) => {
+    const viewerContainer = document.getElementById(elementId);
+
+    // Tạo một iframe để hiển thị tài liệu PDF
+    const iframe = document.createElement("iframe");
+    iframe.src = `data:application/pdf;base64,${pdfBase64}`;
+    iframe.width = "100%";
+    iframe.height = "600px";
+    viewerContainer.appendChild(iframe);
 };
