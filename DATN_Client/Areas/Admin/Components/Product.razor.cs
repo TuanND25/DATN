@@ -85,7 +85,6 @@ namespace DATN_Client.Areas.Admin.Components
 				}
 			}
 			if (string.IsNullOrEmpty(products_VM.Name) || string.IsNullOrEmpty(products_VM.ProductCode)) return;
-			products_VM.Id = Guid.NewGuid();
 			var updateP = await _httpClient.PutAsJsonAsync<Products_VM>("https://localhost:7141/api/product/update_product", pro);
 			if (updateP.StatusCode == System.Net.HttpStatusCode.OK && pro.Status != 1)
 			{

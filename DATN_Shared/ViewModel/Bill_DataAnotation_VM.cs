@@ -24,7 +24,8 @@ namespace DATN_Shared.ViewModel
 		public DateTime? ConfirmationDate { get; set; }
 		public DateTime? CompletionDate { get; set; }
 		public int Type { get; set; }
-
+        public string? CanelBy { get; set; }  // người huỷ 
+        public Guid? CreateBy { get; set; }  // người huỷ 
 		public string? Note { get; set; }
 		[Required(ErrorMessage = "Vui lòng nhập thông tin này!")]
 		public string? Recipient { get; set; } // Người nhận

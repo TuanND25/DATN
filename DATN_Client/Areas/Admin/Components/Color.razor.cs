@@ -18,7 +18,7 @@ namespace DATN_Client.Areas.Admin.Components
                 navigationManager.NavigateTo("https://localhost:7075/Admin", true);
                 return;
             }
-            _lstcolor = await _httpClient.GetFromJsonAsync<List<Color_VM>>("https://localhost:7141/api/Color/get_color");
+            _lstcolor = (await _httpClient.GetFromJsonAsync<List<Color_VM>>("https://localhost:7141/api/Color/get_color")).OrderBy(c => c.Name).ToList();
         }
         public async Task AddColor()
         {
@@ -30,7 +30,7 @@ namespace DATN_Client.Areas.Admin.Components
             color_VM.Id = Guid.NewGuid();
             if (!string.IsNullOrEmpty(color_VM.Name))
             {
-                if (_lstcolor.Any(c => c.Name == color_VM.Name))
+                if (_lstcolor.Any(c => c.Name.ToLower().Trim() == color_VM.Name.ToLower().Trim()))
                 {
                     _toastService.ShowError("Màu sắc đã tồn tại");
                     return;
@@ -50,16 +50,16 @@ namespace DATN_Client.Areas.Admin.Components
                 navigationManager.NavigateTo("https://localhost:7075/Admin", true);
                 return;
             }
-            if (!string.IsNullOrEmpty(color_VM.Name))
+            if (!string.IsNullOrEmpty(color.Name))
             {
-                if (_lstcolor.Any(c => c.Name == color_VM.Name) && !_lstcolor.Any(c=>c.Id==color.Id))
+                if (_lstcolor.Any(c => c.Name.ToLower().Trim() == color.Name.ToLower().Trim()) && !_lstcolor.Any(c=>c.Id==color.Id))
                 {
                     _toastService.ShowError("Màu sắc đã tồn tại");
                     return;
                 }
             }
-            if (string.IsNullOrEmpty(color_VM.Name)) return;
-            color.Name = color_VM.Name.Trim();
+            if (string.IsNullOrEmpty(color.Name)) return;
+            color.Name = color.Name.Trim();
             await _httpClient.PutAsJsonAsync<Color_VM>("https://localhost:7141/api/Color/PutColoe", color);
             navigationManager.NavigateTo("/color-management", true);
         }

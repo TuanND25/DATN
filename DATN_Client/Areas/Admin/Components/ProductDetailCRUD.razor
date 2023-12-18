@@ -279,7 +279,7 @@ else
 				<div style="display:flex">
 					<select class="form-select" @bind="_idColorChon">
 						<option value="00000000-0000-0000-0000-000000000000" selected>--Chọn--</option>
-						@foreach (var x in _lstColor)
+						@foreach (var x in _lstColor.Where(c => c.Status == 1).ToList())
 						{
 							<option value="@x.Id">@x.Name</option>
 						}
@@ -321,7 +321,7 @@ else
 				<div style="display:flex">
 					<select class="form-select" @bind="_idCateChon">
 						<option value="00000000-0000-0000-0000-000000000000" selected>--Chọn--</option>
-						@foreach (var x in _lstCate)
+						@foreach (var x in _lstCate.Where(c => c.Status == 1).ToList())
 						{
 							<option value="@x.Id">@x.Name</option>
 						}
@@ -363,7 +363,7 @@ else
 				<div style="display:flex">
 					<select class="form-select" @bind="_idSizeChon">
 						<option value="00000000-0000-0000-0000-000000000000" selected>--Chọn--</option>
-						@foreach (var x in _lstSize)
+						@foreach (var x in _lstSize.Where(c => c.Status == 1).ToList())
 						{
 							<option value="@x.Id">@x.Name</option>
 						}
