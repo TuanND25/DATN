@@ -141,10 +141,28 @@
         background-color: #FE9666;
         color: #fff;
     }
+
+.btn_CancelBill {
+    padding: 10px 30px;
+    border-radius: 10px;
+    border: 1px solid #c24b39;
+    color: #c24b39;
+}
+    .btn_CancelBill:hover {
+        background-color: #c24b39;
+        color: #fff;
+    }
+
+
+
+
+
+
+
 .titleUpadteFee {
     font-size: 16px;
     color: #000;
-    font-weight:500;
+    font-weight: 500;
 }
 
 

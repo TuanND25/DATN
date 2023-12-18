@@ -39,6 +39,10 @@ namespace DATN_Shared.ViewModel
 		public int Status { get; set; }
 		public string PhoneNumber { get; set; }
         public int? ShippingFee { get; set; }
+		
+        public Guid? CreateBy { get; set; }
+		public string? NameCreatBy { get; set; }
+        public string? NameCancelBy { get; set; }
 
 
     }
