@@ -6,6 +6,7 @@ namespace DATN_Client.Areas.Customer.Controllers
 	public class ForgetPasswordController : Controller
 	{
 		[Route("forget-password")]
+		[HttpGet]
 		public IActionResult Index()
 		{
 			return View();
