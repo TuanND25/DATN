@@ -11,7 +11,7 @@ namespace DATN_Client.Areas.Admin.Components
         List<Products_VM> _lstProduct = new List<Products_VM>();
         List<ProductItem_Show_VM> _lstProductItem = new List<ProductItem_Show_VM>();
         List<ProductItem_Show_VM> _lstProductItemShow = new List<ProductItem_Show_VM>();
-        List<Image_VM> _lstImg = new List<Image_VM>();
+        List<Image_Join_ProductItem> _lstImg_PI = new List<Image_Join_ProductItem>();
         Promotions_VM _promotion = new Promotions_VM();
         List<ProductItem_Show_VM> _productItemByPromotion = new List<ProductItem_Show_VM>();
         PromotionItem_VM _promotionItem = new PromotionItem_VM();
@@ -42,7 +42,7 @@ namespace DATN_Client.Areas.Admin.Components
         protected override async Task OnInitializedAsync()
         {
             _lstProduct = await _httpClient.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
-            _lstImg = await _httpClient.GetFromJsonAsync<List<Image_VM>>("https://localhost:7141/api/Image");
+            _lstImg_PI = (await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem")).OrderBy(c => c.STT).ToList();
             _promotion = await _httpClient.GetFromJsonAsync<Promotions_VM>($"https://localhost:7141/api/promotion/{PromotionController._idPromotion}");
             _lstPromotionItem = await _httpClient.GetFromJsonAsync<List<PromotionItem_VM>>($"https://localhost:7141/api/PromotionItem/PromotionItem_By_Promotion/{_promotion.Id}");
             _lstPrI_show_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");

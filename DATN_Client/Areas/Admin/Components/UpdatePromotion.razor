@@ -133,7 +133,7 @@
                                                                     </th>
                                                                     <th>Ảnh minh họa</th>
                                                                     <th>Tên</th>
-                                                                    <th>Thể loại</th>
+                                                                    <th>Danh mục</th>
                                                                     <th>Màu sắc</th>
                                                                     <th>Size</th>
                                                                     <th>Số lượng tồn</th>
@@ -152,7 +152,7 @@
                                                                         </th>
 
                                                                         @{
-                                                                            var img = _lstImg.Where(c => c.ProductItemId == x.Id).Select(c => c.PathImage).FirstOrDefault();
+                                                                            var img = _lstImg_PI.Where(c => c.ProductItemId == x.Id).Select(c => c.PathImage).FirstOrDefault();
                                                                             // var img2 = _lstImg.FirstOrDefault(c => c.ProductItemId == x.Id).PathImage;
                                                                             //if (img == null)
                                                                             //{
@@ -161,7 +161,7 @@
                                                                             //else
                                                                             //{
                                                                                 //<td><img src="/images/@img" alt="" style="width:100px;height: 110px;"></td>
-                                                                                <td><img src="/images/1.png" alt="" style="width:100px;height: 100px;"></td>
+                                                                                <td><img src="/images/@img" alt="" style="width:100px;height: 100px;"></td>
                                                                             //}
                                                                         }
                                                                         <td>@x.Name</td>
@@ -253,7 +253,7 @@
                         <div class="row">
                             <div class="col-md-2">
                                 <InputSelect class="form-select" @bind-Value="_PM_S_VM.CategoryName" @onclick="LocHangLoat">
-                                    <option value="0" selected>Thể loại</option>
+                                    <option value="0" selected>Danh mục</option>
                                     @foreach (var x in _lstCate)
                                     {
                                         <option value="@x.Name">@x.Name</option>
@@ -300,7 +300,7 @@
                                     </th>
                                     <th>Ảnh minh họa</th>
                                     <th>Tên</th>
-                                    <th>Thể loại</th>
+                                    <th>Danh mục</th>
                                     <th>Màu sắc</th>
                                     <th>Size</th>
                                     <th>Số lượng tồn</th>
@@ -319,7 +319,7 @@
                                         </th>
 
                                         @{
-                                            var img = _lstImg.Where(c => c.ProductItemId == x.Id).Select(c => c.PathImage).FirstOrDefault();
+                                            var img = _lstImg_PI.Where(c => c.ProductItemId == x.Id).Select(c => c.PathImage).FirstOrDefault();
                                              //var img2 = _lstImg.FirstOrDefault(c => c.ProductItemId == x.Id).PathImage;
                                             if (img == null)
                                             {
@@ -335,7 +335,6 @@
                                         <td>@x.ColorName</td>
                                         <td>@x.SizeName</td>
                                         <td>@x.AvaiableQuantity</td>
-                                        <td>@x.PriceAfterReduction</td>
                                         <td>@x.CostPrice</td>
                                         <td>@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
                                     </tr>

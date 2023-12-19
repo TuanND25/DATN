@@ -59,7 +59,7 @@
 	</div>
 	<div style="display:flex;height:60px;">
 		<div class="col-md-1" style="display:flex;align-items:center;border-right:1px solid #d3d3d3;justify-content:center">
-			<span>Thể loại</span>
+			<span>Danh mục</span>
 		</div>
 		<div class="col-md-11" style="display:flex;align-items:center">
 			@foreach (var item in _lstCate_Add)
@@ -87,7 +87,7 @@
 			<tr>
 				<th style="width:3%;text-align:center">#</th>
 				<th style="text-align:center">Sản phẩm</th>
-				<th style="text-align:center">Thể loại</th>
+				<th style="text-align:center">Danh mục</th>
 				<th style="text-align:center">Số lượng tồn</th>
 				<th style="text-align:center">Giá bán</th>
 				<th style="text-align:center">Trạng thái</th>
@@ -184,7 +184,7 @@
 			<div class=" row">
 				<div class="col-md-4">
 					<InputSelect class="form-select" @bind-Value="_pri_s_vm_Loc.CategoryName" @onclick="ChonLoc">
-						<option value="" selected>Thể loại</option>
+						<option value="" selected>Danh mục</option>
 						@foreach (var x in _lstCate_Loc)
 						{
 							<option value="@x.Name">@x.Name</option>
@@ -224,7 +224,7 @@ else
 			<tr>
 				<th style="width:3%;text-align:center">#</th>
 				<th style="text-align:center">Sản phẩm</th>
-				<th style="text-align:center">Thể loại</th>
+				<th style="text-align:center">Danh mục</th>
 				<th style="text-align:center">Số lượng tồn</th>
 				<th style="text-align:center">Giá bán</th>
 				<th style="text-align:center">Trạng thái</th>
@@ -314,7 +314,7 @@ else
 	<div class="modal-dialog modal-dialog-centered" style="width:150%">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">Chọn thể loại</h4>
+				<h4 class="modal-title">Chọn danh mục</h4>
 				<button style="border:none;background-color:#fff" class="close" @onclick='()=>ClosePopup("AddCate_Tam")'>&times;</button>
 			</div>
 			<div class="modal-body">
@@ -432,12 +432,12 @@ else
 	<div class="modal-dialog modal-dialog-centered" style="width:150%">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">Thêm thể loại</h4>
+				<h4 class="modal-title">Thêm danh mục</h4>
 				<button style="border:none;background-color:#fff" class="close" @onclick='()=>ClosePopup("AddCate")'>&times;</button>
 			</div>
 			<EditForm Model="_Cate_VM">
 				<div class="modal-body">
-					Tên thể loại
+					Tên danh mục
 					<InputText class="form-control" @bind-Value="@_Cate_VM.Name" />
 				</div>
 				<!-- Phần chân của popup -->
