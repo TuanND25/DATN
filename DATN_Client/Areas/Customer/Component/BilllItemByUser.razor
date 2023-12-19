@@ -416,6 +416,10 @@
                     {
                         <button class="button" @onclick="ThanhToanHdMomo">Thanh toán đơn hàng</button>
                     }
+                    @if (_bill_ShowModel.Status == 5 && _bill_ShowModel.Type == 1)
+                    {
+                        <button class="button" @onclick="ConfirmNhanHang">Đã nhận được hàng</button>
+                    }
                     <h5 class="card-title" style="color:red;">
                         @(_bill_ShowModel.Status == 0 ? "Đã hủy"
                         : _bill_ShowModel.Status == 1 ? "Chờ thanh toán"

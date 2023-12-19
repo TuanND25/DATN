@@ -17,7 +17,7 @@
 <style>
 .message{
     color:red;
-}
+    }
 </style>
 
 
@@ -36,7 +36,7 @@
                             <label for="inputText" class="col-sm-4 col-form-label">Tên khuyến mại</label>
                             <div class="col-sm-8">
                                 <InputText class="form-control" @bind-Value="_promotion.Name" />
-                               <span class="message"><ValidationMessage For="()=>_promotion.Name" /></span>
+                                <span class="message"><ValidationMessage For="()=>_promotion.Name" /></span>
                             </div>
                         </div>
 
@@ -45,7 +45,7 @@
                             <label for="inputNumber" class="col-sm-4 col-form-label">Phần trăm giảm</label>
                             <div class="col-sm-8">
                                 <InputNumber class="form-control" @bind-Value="_promotion.Percent" />
-                                <span class="message"><ValidationMessage For="()=>_promotion.Percent" /></span> 
+                                <span class="message"><ValidationMessage For="()=>_promotion.Percent" /></span>
                             </div>
                         </div>
 
@@ -59,8 +59,8 @@
                                 <div class="col-md-5" style="margin-top:5px;">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" @onchange="ToggleUnlimited" checked="@isUnlimited"
-                                                       style="transform: scale(1.7);margin-right:15px;"
-                                                       value="" id="defaultCheck2" />
+                                               style="transform: scale(1.7);margin-right:15px;"
+                                               value="" id="defaultCheck2" />
                                         <label class="form-check-label" for="defaultCheck2">
                                             Không giới hạn
                                         </label>
@@ -74,7 +74,7 @@
                             <label for="inputDate" class="col-sm-4 col-form-label">Ngày bắt đầu</label>
                             <div class="col-sm-8">
                                 <input type="datetime-local" class="form-control" @bind-value="@_promotion.StartDate" />
-                                <span class="message">@messagestart</span> 
+                                <span class="message">@messagestart</span>
                             </div>
                         </div>
 
@@ -83,7 +83,7 @@
                             <label for="inputDate" class="col-sm-4 col-form-label">Ngày kết thúc</label>
                             <div class="col-sm-8">
                                 <input type="datetime-local" class="form-control" @bind-value="@_promotion.EndDate">
-                                <span class="message">@messageend</span> 
+                                <span class="message">@messageend</span>
                             </div>
                         </div>
 
@@ -94,7 +94,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Mô tả</label>
                             <div class="col-sm-8">
                                 <InputTextArea class="form-control" style="height: 50px" @bind-Value="@_promotion.Description" />
-                                <span class="message"><ValidationMessage For="()=>_promotion.Description" /></span> 
+                                <span class="message"><ValidationMessage For="()=>_promotion.Description" /></span>
                             </div>
                         </div>
 
@@ -110,7 +110,7 @@
                                             <InputRadio Value="0" /> Ngừng hoạt động
                                         </div>
                                     </InputRadioGroup>
-                                    <span class="message"><ValidationMessage For="()=>_promotion.Status" /></span> 
+                                    <span class="message"><ValidationMessage For="()=>_promotion.Status" /></span>
                                 </div>
                             </div>
                         </div>
@@ -146,7 +146,8 @@
                             <table class="table">
                                 <thead style="background-color:orange">
                                     <tr style="position: sticky;top:0">
-                                        <th scope="col" style="background-color:orange">              
+                                        <th scope="col" style="background-color:orange">
+                                            <input type="checkbox" style="transform: scale(1.5);" />
                                         </th>
                                         <th scope="col" style="background-color:orange">#</th>
                                         <th scope="col" style="background-color:orange">Image</th>
@@ -157,14 +158,14 @@
                                 <tbody>
                                     @foreach (var a in _lstProduct)
                                     {
+                                        var img = _lstImg_PI.Where(c => c.ProductId == a.Id).Select(c => c.PathImage).FirstOrDefault();
                                         <tr>
                                             <th scope="col">
                                                 <input type="checkbox" style="transform: scale(1.5);" value="@a.Id" checked="@_lstProductSelect.Contains(a.Id)" @onchange="()=>ToggleProductSelection(a.Id)" />
                                             </th>
                                             <td>@(count++)</td>
                                             <td>
-
-                                                <img src="/images/1.png" alt="" style="width:70px;height:70px" />
+                                                <img src="/images/@img" alt="" style="width:70px;height:70px" />
                                             </td>
                                             <td>@a.Name</td>
                                         </tr>
@@ -187,7 +188,7 @@
                         <div class="row">
                             <div class="col-md-2">
                                 <InputSelect class="form-select" @bind-Value="_PM_S_VM.CategoryName" @onclick="LocHangLoat">
-                                    <option value="0" selected>Thể loại</option>
+                                    <option value="0" selected>Danh mục</option>
                                     @foreach (var x in _lstCate)
                                     {
                                         <option value="@x.Name">@x.Name</option>
@@ -235,7 +236,7 @@
                                     </th>
                                     <th style="background-color:orange">Ảnh minh họa</th>
                                     <th style="background-color:orange">Tên</th>
-                                    <th style="background-color:orange">Thể loại</th>
+                                    <th style="background-color:orange">Danh mục</th>
                                     <th style="background-color:orange">Màu sắc</th>
                                     <th style="background-color:orange">Size</th>
                                     <th style="background-color:orange">Số lượng tồn</th>
@@ -253,7 +254,7 @@
                                         </th>
 
                                         @{
-                                            var img = _lstImg.Where(c => c.ProductItemId == x.Id).Select(c => c.PathImage).FirstOrDefault();
+                                            var img = _lstImg_PI.Where(c => c.ProductItemId == x.Id).Select(c => c.PathImage).FirstOrDefault();
                                             //var img2 = _lstImg.FirstOrDefault(c => c.ProductItemId == x.Id).PathImage;
                                             if (img == null)
                                             {

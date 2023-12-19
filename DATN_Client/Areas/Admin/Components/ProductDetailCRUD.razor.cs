@@ -523,7 +523,7 @@ namespace DATN_Client.Areas.Admin.Components
 			}
 			if (_lstCate.Any(c => c.Name.ToLower() == _Cate_VM.Name.ToLower()))
 			{
-				_toastService.ShowError("Thể loại đã tồn tại");
+				_toastService.ShowError("Danh mục đã tồn tại");
 				return;
 			}
 			_Cate_VM.Status = 1;

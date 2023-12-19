@@ -3,10 +3,10 @@
     <div style="width:100%;height:30vh" class="css-input    ">
         <div class="row">
             <div class="col-4" style="display:flex;align-items:center">
-                <span>Thể loại</span>
+                <span>Loại hình</span>
                 <div style="margin-left:50px;width:250px;" class="group-radio-search">
                     <select class="form-select input-PaymentMethod" aria-label="Default select example" @bind="SearchType">
-                        <option selected value="@string.Empty">Phương thức thanh toán</option>
+                        <option selected value="@string.Empty">Loại hình bán hàng</option>
                         <option value="2">Tại quầy</option>
                         <option value="1">Online</option>
                     </select>
@@ -126,12 +126,13 @@
                                 (item.Type == 1 && item.Status == 2 ? "Chờ xác nhận" :
                                 (item.Type == 1 && item.Status == 3 ? "Đơn hàng đã được xác nhận" :
                                 (item.Type == 1 && item.Status == 4 ? "Đang giao hàng" :
-                                (item.Type == 1 && item.Status == 5 ? "Hoàn thành" :
+                                (item.Type == 1 && item.Status == 5 ? "Giao hàng thành công" :
+                                (item.Type == 1 && item.Status == 6 ? "Hoàn thành" :
                                 (item.Type == 2 && item.Status == 0 ? "Đã hủy" :
                                 (item.Type == 2 && item.Status == 1 ? "Đơn hàng đã được xác nhận" : 
                                 (item.Type == 2 && item.Status == 2 ? "Đang giao hàng" :
                                 (item.Type == 2 && item.Status == 3 ? "Hoàn thành" :
-                                (item.Type == 2 && item.Status == 5 ? "Hóa đơn chờ" : ""))))))))));
+                                (item.Type == 2 && item.Status == 5 ? "Hóa đơn chờ" : "")))))))))));
                             }
                             <div style="width:10%">
                                 @statusText
