@@ -11,6 +11,7 @@ namespace DATN_Client.Areas.Admin.Components
         HttpClient _httpClient = new HttpClient();
         [Inject] NavigationManager _navigationManager { get; set; }
         List<Products_VM> _lstProduct = new List<Products_VM>();
+        List<Products_VM> _lstProductShow = new List<Products_VM>();
         List<ProductItem_Show_VM> _lstProductItemShow = new List<ProductItem_Show_VM>();
         List<ProductItem_Show_VM> _lstProductItem = new List<ProductItem_Show_VM>();
         List<Image_Join_ProductItem> _lstImg_PI = new List<Image_Join_ProductItem>();
@@ -46,11 +47,12 @@ namespace DATN_Client.Areas.Admin.Components
 
         public string messagestart { get; set; }
         public string messageend { get; set; }
-        public string messageQuantity { get; set; }
+        public string? _promotionName = null;
 
         protected override async Task OnInitializedAsync()
         {
             _lstProduct = await _httpClient.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
+            _lstProductShow = _lstProduct.ToList();
             _lstImg_PI = (await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem")).OrderBy(c => c.STT).ToList();
             _lstPromotionItem = await _httpClient.GetFromJsonAsync<List<PromotionItem_VM>>($"https://localhost:7141/api/PromotionItem/PromotionItem_By_Promotion/{_promotion.Id}");
 
@@ -93,51 +95,25 @@ namespace DATN_Client.Areas.Admin.Components
 
         public async Task AddPromotionItem()
         {
-            if (_promotion.StartDate < DateTime.Now)
+            if (_promotion.StartDate < DateTime.Now )
             {
                 messagestart = "Ngày bắt đầu phải lớn hơn ngày hiện tại";
-                messageQuantity = "Số lượng không được để trống hoặc bằng 0";
             }
-            else if (_promotion.StartDate < DateTime.Now && _promotion.Quantity > 0 )
-            {
-                messagestart = "Ngày bắt đầu phải lớn hơn ngày hiện tại";
-                messageQuantity = "";
-            }
-
-            else if(_promotion.StartDate>DateTime.Now && _promotion.Quantity == 0 )
-            {
-                messageQuantity = "Số lượng không được để trống hoặc bằng 0";
-                messagestart = "";
-            }
-
-            else if(_promotion.EndDate < _promotion.StartDate && _promotion.Quantity == 0 )
+            else if (_promotion.StartDate > DateTime.Now && _promotion.EndDate < _promotion.StartDate)
             {
                 messageend = "Ngày kết thúc phải lớn hơn ngày bắt đầu";
                 messagestart = "";
-                messageQuantity = "Số lượng không được để trống hoặc bằng 0";
             }
-
-            else if (_promotion.EndDate < _promotion.StartDate && _promotion.Quantity > 0 )
+            else if (_promotion.EndDate < _promotion.StartDate  )
             {
                 messageend = "Ngày kết thúc phải lớn hơn ngày bắt đầu";
                 messagestart = "";
-                messageQuantity = "Số lượng không được để trống hoặc bằng 0";
             }
-
-            else if(_promotion.EndDate > _promotion.StartDate && _promotion.Quantity == 0 )
-            {
-                messageend = "";
-                messagestart = "";
-                messageQuantity = "Số lượng không được để trống hoặc bằng 0";
-            }
-
             else
             {
                 messagestart = "";
                 messageend = "";
-                messageQuantity = "";
                 var c = _promotion.Id = Guid.NewGuid();
-                _promotion.Quantity = quantityValue;
                 var a = await _httpClient.PostAsJsonAsync<Promotions_VM>("https://localhost:7141/api/promotion/Add", _promotion);
 
                 if (a.IsSuccessStatusCode)
@@ -165,21 +141,7 @@ namespace DATN_Client.Areas.Admin.Components
 
 
 
-        private void ToggleUnlimited(ChangeEventArgs e)   // số lượng có giới hạn hay không 
-        {
-            isUnlimited = (bool)e.Value;
-
-            if (isUnlimited)
-            {
-                _promotion.Quantity = int.MaxValue;
-                quantityValue = 0;
-            }
-            else
-            {
-                _promotion.Quantity = quantityValue;
-            }
-        }
-
+       
         private async Task ToggleProductSelection(Guid productId)
         {
             _lstProductItem = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
@@ -314,6 +276,11 @@ namespace DATN_Client.Areas.Admin.Components
                                 (_PM_S_VM.ColorName == null ||
                                 _PM_S_VM.ColorName == "0" ||
                                 c.ColorName == _PM_S_VM.ColorName)).OrderBy(x => x.Name).ToList();
+        }
+        public async Task Search()
+        {
+            _lstProduct = await _httpClient.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
+            _lstProductShow = _lstProduct.Where(x => x.Name == null || x.Name == string.Empty || x.Name.ToLower().Contains(_promotionName.ToLower())).ToList();
         }
 
     }

@@ -11,6 +11,7 @@ namespace DATN_Client.Areas.Admin.Components
     public partial class ThongKe
     {
         List<Bill_ShowModel> _lstBill = new List<Bill_ShowModel>();
+        List<Bill_ShowModel> _lstBillChart = new List<Bill_ShowModel>();
         List<Bill_ShowModel> _lstBillSale = new List<Bill_ShowModel>();
         List<Bill_ShowModel> _lstBillRevenue = new List<Bill_ShowModel>();
         List<Bill_ShowModel> _lstBillProducts = new List<Bill_ShowModel>();
@@ -51,6 +52,7 @@ namespace DATN_Client.Areas.Admin.Components
             //isLoader = true;
             _lstBill = await _httpClient.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
             _lstBill = _lstBill.Where(x => !(x.Status==5 && x.Type==2) && x.Status!=0).ToList();
+            _lstBillChart = _lstBill.Where(x => !(x.Status==5 && x.Type==2) && x.Status!=0).ToList();
             _lstProductItem = await _httpClient.GetFromJsonAsync<List<ProductItems>>("https://localhost:7141/api/productitem/get_all_productitem");
             _lstPromotion = await _httpClient.GetFromJsonAsync<List<Promotions_VM>>("https://localhost:7141/api/promotion");
             _lstBillDetai = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>("https://localhost:7141/api/BillItem/get_alll_bill_item_show");
@@ -329,7 +331,7 @@ namespace DATN_Client.Areas.Admin.Components
                 count5.Dem2 = d.Where(x => x.Status == 1 || x.Status==2).Count();
                 count5.Dem3 = d.Where(x => x.Status == 3).Count();
                 count5.Dem4 = d.Where(x => x.Status == 4).Count();
-                count5.Dem5 = d.Where(x => x.Status == 0).Count();
+                count5.Dem5 = a.Where(x => !(x.Status == 5 && x.Type == 2) && x.Status == 0&& x.CreateDate?.Date == _optioSale.Date).Count();
                 count5.Dem6 = d.Where(x => x.Status == 6).Count();
                 count5.Tittle = "Hôm nay";
             }
@@ -339,9 +341,9 @@ namespace DATN_Client.Areas.Admin.Components
                 count5.Dem2 = d.Where(x => x.Status == 1 || x.Status == 2).Count();
                 count5.Dem3 = d.Where(x => x.Status == 3).Count();
                 count5.Dem4 = d.Where(x => x.Status == 4).Count();
-                count5.Dem5 = d.Where(x => x.Status == 0).Count();
+                count5.Dem5 = a.Where(x => !(x.Status == 5 && x.Type == 2) && x.Status == 0 && x.CreateDate?.Year == DateTime.Now.Year && x.CreateDate?.Month == DateTime.Now.Month).Count();
                 count5.Dem6 = d.Where(x => x.Status == 6).Count();
-                count.Tittle = "Tháng này";
+                count5.Tittle = "Tháng này";
             }
             else
             {
@@ -349,9 +351,9 @@ namespace DATN_Client.Areas.Admin.Components
                 count5.Dem2 = d.Where(x => x.Status == 1 || x.Status == 2).Count();
                 count5.Dem3 = d.Where(x => x.Status == 3).Count();
                 count5.Dem4 = d.Where(x => x.Status == 4).Count();
-                count5.Dem5 = d.Where(x => x.Status == 0).Count();
+                count5.Dem5 = a.Where(x => !(x.Status == 5 && x.Type == 2) && x.Status == 0 && x.CreateDate?.Year == DateTime.Now.Year).Count();
                 count5.Dem5 = d.Where(x => x.Status == 6).Count();
-                count.Tittle = "Năm nay";
+                count5.Tittle = "Năm nay";
             }
         }
 
@@ -581,6 +583,7 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public async Task RenderWormAsyncThisYeah()
         {
+
             DateTime startDate = new DateTime(DateTime.Now.Year, 1, 1);
             DateTime endDate = new DateTime(DateTime.Now.Year, 12, 31);
 
@@ -603,21 +606,21 @@ namespace DATN_Client.Areas.Admin.Components
             {
                 Labels = countList.Select(x => x.Date).ToList(),
                 Datasets = new List<IChartDataset>()
-        {
-            new LineChartDataset()
             {
-                Label = DateTime.Now.Year.ToString(),
-                Data = countList.Select(x => x.Dem1).ToList(),
-                BackgroundColor = new List<string> { "rgb(88, 80, 141)" },
-                BorderColor = new List<string> { "rgb(88, 80, 141)" },
-                BorderWidth = new List<double> { 2 },
-                HoverBorderWidth= new List<double> { 4 },
-                PointBackgroundColor = new List<string> { "rgb(88, 80, 141)" },
-                PointBorderColor = new List<string> { "rgb(88, 80, 141)" },
-                PointRadius = new List<int> { 0 }, // hide points
-                PointHoverRadius = new List<int> { 4 },
+            new LineChartDataset()
+                {
+                    Label = DateTime.Now.Year.ToString(),
+                    Data = countList.Select(x => x.Dem1).ToList(),
+                    BackgroundColor = new List<string> { "rgb(88, 80, 141)" },
+                    BorderColor = new List<string> { "rgb(88, 80, 141)" },
+                    BorderWidth = new List<double> { 2 },
+                    HoverBorderWidth= new List<double> { 4 },
+                    PointBackgroundColor = new List<string> { "rgb(88, 80, 141)" },
+                    PointBorderColor = new List<string> { "rgb(88, 80, 141)" },
+                    PointRadius = new List<int> { 0 }, // hide points
+                    PointHoverRadius = new List<int> { 4 },
+                }
             }
-        }
             };
 
             var options = new LineChartOptions();
