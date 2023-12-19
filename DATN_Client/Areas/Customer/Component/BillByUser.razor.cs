@@ -17,6 +17,7 @@ namespace DATN_Client.Areas.Customer.Component
 		private User _user = new();
 		private List<BillDetailShow> _listBillItem = new();
 		private List<PaymentMethod_VM> _lstPayM = new();
+		private List<Image_Join_ProductItem> _lstImg_PI = new();
 		private OrderInfoModel _ord = new();
 		private bool isLoader = false;
 
@@ -32,6 +33,7 @@ namespace DATN_Client.Areas.Customer.Component
 				_lstBills = _lstBills.OrderByDescending(x => x.CreateDate).ToList();
 				_listBillItem = await _httpClient.GetFromJsonAsync<List<BillDetailShow>>($"https://localhost:7141/api/BillItem/get_alll_billItem_by_UserId/{a}");
 				_lstPayM = await _httpClient.GetFromJsonAsync<List<PaymentMethod_VM>>("https://localhost:7141/api/paymentMethod/get_all_paymentMethod");
+				_lstImg_PI = (await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>("https://localhost:7141/api/Image/GetAllImage_PrductItem")).OrderBy(c => c.STT).ToList();
 			}
 			else _navigationManager.NavigateTo("/home", true);
 			isLoader = false;
@@ -69,6 +71,11 @@ namespace DATN_Client.Areas.Customer.Component
 			_ord.Amount = b_vm.TotalAmount;
 			var reponse1 = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/Momo/CreatePaymentAsync", _ord);
 			var reponse2 = await reponse1.Content.ReadFromJsonAsync<MomoCreatePaymentResponseModel>();
+			if (string.IsNullOrEmpty(reponse2.PayUrl))
+			{
+				_toastService.ShowError(reponse2.LocalMessage);
+				return;
+			}
 			_navigationManager.NavigateTo($"{reponse2.PayUrl}", true);
 			return;
 		}

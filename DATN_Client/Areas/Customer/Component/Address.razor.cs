@@ -2,6 +2,7 @@
 using DATN_Shared.ViewModel;
 using DATN_Shared.ViewModel.DiaChi;
 using Microsoft.AspNetCore.Components;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DATN_Client.Areas.Customer.Component
 {
@@ -136,6 +137,10 @@ namespace DATN_Client.Areas.Customer.Component
         }
         public async Task UpdateAdress() //update-address
         {
+            if (string.IsNullOrEmpty(addressShip_VM.Province)|| string.IsNullOrEmpty(addressShip_VM.District) || string.IsNullOrEmpty(addressShip_VM.WardName))
+            {
+                return;
+            }
             if (addressShip_VM.Status == 1)
             {
                 foreach (var item in _lstAddressGetById)

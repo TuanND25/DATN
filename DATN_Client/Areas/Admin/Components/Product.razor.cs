@@ -1,4 +1,5 @@
 ﻿using DATN_Client.Areas.Customer.Component;
+using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -15,7 +16,6 @@ namespace DATN_Client.Areas.Admin.Components
 		[Inject] private NavigationManager navigationManager { get; set; }
 		[Inject] Blazored.Toast.Services.IToastService _toastService { get; set; } // Khai báo khi cần gọi ở code-behind
 		private List<Products_VM> products = new();
-		public string Message { get; set; } = string.Empty;
 		private string _check_productCode_byCode { get; set; } = string.Empty;
 		private string _textSearch { get; set; } = string.Empty;
 		protected override async Task OnInitializedAsync()
@@ -46,15 +46,17 @@ namespace DATN_Client.Areas.Admin.Components
 				navigationManager.NavigateTo("https://localhost:7075/Admin", true);
 				return;
 			}
-			if (!string.IsNullOrEmpty(products_VM.ProductCode))
+			if (!string.IsNullOrEmpty(products_VM.Name))
 			{
-				if ((await _httpClient.GetFromJsonAsync<bool>($"https://localhost:7141/api/product/check_productCode_byCode?productCode={products_VM.ProductCode}") == true))
+				if (products.Any(c => c.Name == products_VM.Name))
 				{
-					_toastService.ShowError("Mã sản phẩm đã tồn tại");
+					_toastService.ShowError("Tên sản phẩm đã tồn tại");
 					return;
 				}
 			}
-			if (string.IsNullOrEmpty(products_VM.Name) || string.IsNullOrEmpty(products_VM.ProductCode)) return;
+			if (string.IsNullOrEmpty(products_VM.Name)) return;
+			var stt = products.Select(x => Convert.ToInt32(x.ProductCode.Substring(4))).Max() + 1;
+			products_VM.ProductCode = "BHSP" + stt;
 			products_VM.Id = Guid.NewGuid();
 			await _httpClient.PostAsJsonAsync<Products_VM>("https://localhost:7141/api/product/add_product", products_VM);
 			navigationManager.NavigateTo("/product-manager", true);
@@ -70,7 +72,7 @@ namespace DATN_Client.Areas.Admin.Components
 			if (!string.IsNullOrEmpty(products_VM.ProductCode))
 			{
 				var checkCode = await _httpClient.GetFromJsonAsync<bool>($"https://localhost:7141/api/product/check_productCode_byCode?productCode={products_VM.ProductCode}");
-				if (checkCode == true && !products.Any(c=>c.Id==pro.Id))
+				if (checkCode == true && !products.Any(c => c.Id == pro.Id))
 				{
 					_toastService.ShowError("Mã sản phẩm đã tồn tại");
 					return;

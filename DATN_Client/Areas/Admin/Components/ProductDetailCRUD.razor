@@ -13,7 +13,7 @@
 <button class="btn btn-primary" @onclick="BackToManager">Trở lại</button>
 <button class="btn btn-primary" @onclick="Mo_AddImage">Thêm ảnh minh họa</button>
 <h1>@_nameProduct</h1>
-<h2>Thuộc tính</h2>
+<h2>Thông tin cần thiết</h2>
 <div style="border:1px solid #d3d3d3">
 	<div style="display:flex;height:60px;">
 		<div class="col-md-1" style="display:flex;align-items:center;border-right:1px solid #d3d3d3;border-bottom:1px solid #d3d3d3;justify-content:center">
@@ -134,7 +134,7 @@
 					<td style="vertical-align:middle;text-align:center">
 						<select class="form-select" @bind="@x.Status">
 							<option value="1">Còn hàng</option>
-							<option value="2">Hết hàng</option>
+							<option value="3">Sắp ra mắt</option>
 							<option value="0">Ngừng kinh doanh</option>
 						</select>
 					</td>
@@ -243,7 +243,7 @@ else
 					<td style="vertical-align:middle;text-align:center">@x.CategoryName</td>
 					<td style="vertical-align:middle;text-align:center">@x.AvaiableQuantity</td>
 					<td style="vertical-align:middle;text-align:center">@x.CostPrice</td>
-					<td style="vertical-align:middle;text-align:center">@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
+					<td style="vertical-align:middle;text-align:center">@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : x.Status == 3 ? "Sắp ra mắt" : "Ngừng kinh doanh")</td>
 					<td style="text-align:center;vertical-align:middle">
 						<button style="width:45px;height:45px"
 								class="btn btn-danger"
@@ -636,6 +636,7 @@ else
 							<select class="form-select" @bind="_pri_s_vm_Update.Status">
 								<option value="1">Còn hàng</option>
 								<option value="2">Hết hàng</option>
+								<option value="3">Sắp ra mắt</option>
 								<option value="0">Ngừng kinh doanh</option>
 							</select>
 							<label for="floatingSelect">Trạng thái</label>

@@ -417,10 +417,11 @@
                 <tbody>
                     @foreach (var a in _lstBillItems)
                     {
+                        var img = _lstImg_PI.Where(c => c.ProductItemId == a.ProductItemId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
                         <tr>
                             <th style="width:115px;">
                                 <a href="https://localhost:7075/product-detail/@a.ProductId">
-                                    <img src="https://product.hstatic.net/200000312481/product/ato1007_2_21baaf6cd76d4e6c9b49758dd8d933b8_master.jpg"
+                                    <img src="/images/@img"
                                      style="width: 90px; height: 90px;" alt="Bức ảnh">
                                 </a>
                             </th>

@@ -182,5 +182,11 @@ namespace DATN_API.Service_IService.Services
 						}).ToList();
 			return _lst;
 		}
-    }
+
+		public async Task<List<BillItems>> GetBillItemsByBillId_billitemdb(Guid BillId)
+		{
+			var x = await _context.BillItems.Where(c => c.BillId == BillId).ToListAsync();
+			return x;
+		}
+	}
 }
