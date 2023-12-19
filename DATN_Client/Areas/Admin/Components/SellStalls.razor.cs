@@ -27,6 +27,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using JetBrains.Annotations;
 
 namespace DATN_Client.Areas.Admin.Components
 {
@@ -1809,7 +1810,7 @@ namespace DATN_Client.Areas.Admin.Components
 
 
 
-
+            int tieudiem = 0;
 
 
             //tiêu điểm cho khách hàng nếu có 
@@ -1827,7 +1828,7 @@ namespace DATN_Client.Areas.Admin.Components
                 htsCustomerPoint.Point = InputTichDiem;
                 htsCustomerPoint.Status = 1;
                 htsCustomerPoint.BillId = billMua.Id;
-
+                tieudiem = htsCustomerPoint.Point;
                 var reponsePostHtsCtm = await _client.PostAsJsonAsync("https://localhost:7141/api/HistoryConsumerPoint/add-HistoryConsumerPoint", htsCustomerPoint);
                 if (reponsePostHtsCtm.StatusCode.ToString() != "OK")
                 {
@@ -1952,7 +1953,7 @@ namespace DATN_Client.Areas.Admin.Components
                 List<BillDetailShow> _lstBillDetailShow = await _client.GetFromJsonAsync<List<BillDetailShow>>("https://localhost:7141/api/BillItem/get_alll_bill_item_show");
                 _lstBillDetailShow = _lstBillDetailShow.Where(x => x.BillID == BillId).ToList();
 
-                await ExportPDFHoaDon(bill_res, _lstBillDetailShow);
+                await ExportPDFHoaDon(bill_res, _lstBillDetailShow,tieudiem);
                 //reset các biến cần thiết
                 var billXoa = _lstBill_Vm_show.FirstOrDefault(x => x.Id == billMua.Id);
                 _lstBill_Vm_show.Remove(billXoa);
@@ -2139,7 +2140,7 @@ namespace DATN_Client.Areas.Admin.Components
             return result + (suffix ? " đồng chẵn" : "");
         }
 
-        private async Task ExportPDFHoaDon(Bill_ShowModel _bill, List<BillDetailShow> _lstBillItem)
+        private async Task ExportPDFHoaDon(Bill_ShowModel _bill, List<BillDetailShow> _lstBillItem,int diemdung)
         {
             // Tạo tệp PDF
             var document = new Document();
@@ -2172,7 +2173,7 @@ namespace DATN_Client.Areas.Admin.Components
             document.Add(billTitle);
 
             // Thêm thông tin khách hàng
-            var customerInfo = new Chunk("Ten khach hang: " + _bill.UserName);
+            var customerInfo = new Chunk("Ten khach hang: " + RemoveUnicode(_bill.UserName));
             document.Add(new Paragraph(customerInfo));
             if (_bill.Province != null)
             {
@@ -2231,13 +2232,21 @@ namespace DATN_Client.Areas.Admin.Components
             table.AddCell("Tong tien: ");
             table.AddCell(_bill.TotalAmount?.ToString("#,##0") + "đ");
 
+            if (diemdung!=0)
+            {
+                table.AddCell("");
+                table.AddCell("");
+                table.AddCell("");
+                table.AddCell("Diem  tieu dung: ");
+                table.AddCell("-"+diemdung.ToString());
+            }
 
-            
 
 
-            //Thêm ô tiền thành chữ
-           PdfPCell mergedCell = new PdfPCell(new Phrase(""));
-            mergedCell.Colspan = 1; // Hợp nhất qua 5 cột
+
+           // Thêm ô tiền thành chữ
+            PdfPCell mergedCell = new PdfPCell(new Phrase(""));
+            mergedCell.Colspan = 5; // Hợp nhất qua 5 cột
             mergedCell.Rowspan = 1; // Hợp nhất qua 1 dòng
             mergedCell.Border = iTextSharp.text.Rectangle.NO_BORDER; // Loại bỏ đường viền
             table.AddCell(mergedCell);

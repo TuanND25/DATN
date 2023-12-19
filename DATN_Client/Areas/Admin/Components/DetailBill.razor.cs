@@ -6,6 +6,7 @@ using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using static System.Net.WebRequestMethods;
+using DATN_Client.Areas.Customer.Component;
 
 namespace DATN_Client.Areas.Admin.Components
 {
@@ -42,6 +43,11 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public async Task getDataBill()
         {
+            if (Login.Roleuser != "Admin" && Login.Roleuser != "Staff")
+            {
+                _navi.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
             BillId = BillManagementController._billId;
 
 
@@ -71,6 +77,11 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public void CheckFeeShip(ChangeEventArgs e)
         {
+            if (Login.Roleuser != "Admin" && Login.Roleuser != "Staff")
+            {
+                _navi.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
             if (int.TryParse(e.Value.ToString(), out int inputValue))
             {
                 if (inputValue > 0)
@@ -85,7 +96,11 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public async void UpdateFeeship()
         {
-
+            if (Login.Roleuser != "Admin" && Login.Roleuser != "Staff")
+            {
+                _navi.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
             //CheckFee();
             if (PhiShip == 0 || string.IsNullOrEmpty(PhiShip.ToString()))
             {
@@ -115,6 +130,11 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public void CheckFee()
         {
+            if (Login.Roleuser != "Admin" && Login.Roleuser != "Staff")
+            {
+                _navi.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
             if (PhiShip == 0 || string.IsNullOrEmpty(PhiShip.ToString()))
             {
                 _toastService.ShowError("Vui lòng điền phí vận chuyển");
@@ -129,6 +149,11 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public async void Bangiao()
         {
+            if (Login.Roleuser != "Admin" && Login.Roleuser != "Staff")
+            {
+                _navi.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
             if (_bill.Type == 1)
             {
                 _bill.Status = 4;
@@ -147,6 +172,11 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public async void ThanhCong()
         {
+            if (Login.Roleuser != "Admin" && Login.Roleuser != "Staff")
+            {
+                _navi.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
             if (_bill.Type == 1)
             {
                 _bill.Status = 5;
@@ -157,26 +187,35 @@ namespace DATN_Client.Areas.Admin.Components
             }
             _bill.CompletionDate = DateTime.Now;
 
-            //if (_bill.UserId == null || _bill.UserId == default)
-            //{
 
-            //	var _lstfomula = await _client.GetFromJsonAsync<List<Formula_VM>>("https://localhost:7141/api/Formula/get_formula");
-            //	var Fomula = _lstfomula.FirstOrDefault(x => x.Status == 1);
 
-            //	var _lstPoint = await _client.GetFromJsonAsync<List<CustomerPoint_VM>>("https://localhost:7141/api/CustomerPoint/getAllCustomerPoint");
+            if ((_bill.UserId != null || _bill.UserId != default)&& _bill.Type==2)
+            {
 
-            //	CustomerPoint_VM PointUser = _lstPoint.FirstOrDefault(x => x.UserID == _bill.UserId);
-            //	//Tạo bản ghi 
-            //	HistoryConsumerPoint_VM htr = new HistoryConsumerPoint_VM();
-            //	htr.Id = Guid.NewGuid();
-            //	htr.FormulaId = Fomula.Id;
-            //	htr.BillId = _bill.Id;
-            //	htr.ConsumerPointId = PointUser.UserID;
-            //	htr.Point = _bill.TotalAmount / Fomula.Coefficient ?? 0;
-            //	htr.Status = 1;
+                var _lstfomula = await _client.GetFromJsonAsync<List<Formula_VM>>("https://localhost:7141/api/Formula/get_formula");
+                var Fomula = _lstfomula.FirstOrDefault(x => x.Status == 1);
 
-            //	var reponse1 = await _client.PutAsJsonAsync(" https://localhost:7141/api/HistoryConsumerPoint/update-HistoryConsumerPoint", htr);
-            //}
+                var _lstPoint = await _client.GetFromJsonAsync<List<CustomerPoint_VM>>("https://localhost:7141/api/CustomerPoint/getAllCustomerPoint");
+
+                CustomerPoint_VM PointUser = _lstPoint.FirstOrDefault(x => x.UserID == _bill.UserId);
+                //Tạo bản ghi 
+                HistoryConsumerPoint_VM htr = new HistoryConsumerPoint_VM();
+                htr.Id = Guid.NewGuid();
+                htr.FormulaId = Fomula.Id;
+                htr.BillId = _bill.Id;
+                htr.ConsumerPointId = PointUser.UserID;
+                htr.Point = _bill.TotalAmount / Fomula.Coefficient ?? 0;
+                htr.Status = 1;
+
+                var reponse1 = await _client.PostAsJsonAsync(" https://localhost:7141/api/HistoryConsumerPoint/add-HistoryConsumerPoint", htr);
+
+                PointUser.Point = (Convert.ToInt32(PointUser.Point) - htr.Point).ToString();
+                var reponseUpdatePointUser = await _client.PutAsJsonAsync("https://localhost:7141/api/CustomerPoint/putCustomerPoint", PointUser);
+            }
+
+
+
+
             var reponse = await _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", _bill);
 
             if (reponse.StatusCode.ToString() == "OK")
@@ -192,6 +231,11 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public async void CancelBill()
         {
+            if (Login.Roleuser != "Admin" && Login.Roleuser != "Staff")
+            {
+                _navi.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
             if (string.IsNullOrEmpty(LyDoHuy))
             {
                 _toastService.ShowError("Vui lòng điền lý do hủy đơn");
