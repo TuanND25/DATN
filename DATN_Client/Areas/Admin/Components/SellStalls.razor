@@ -26,7 +26,8 @@ else
     <div class="col-9" style="height:100%;display:flex;flex-direction:column">
         <div style="width:100%">
            <div style="height:55vh;margin-bottom:20px;background-color:#fff">
-                <div style="display:flex; align-items:center;gap:3px;border-bottom:solid;">
+                <div class="add-scroll" style="display:flex; align-items:center;gap:3px;border-bottom:solid; overflow-x:scroll;
+    overflow-x:auto;max-width:100%;">
                 @foreach (var x in _lstBill_Vm_show)
                 {
                     <div class="@(BillId.ToString() == x.Id.ToString() ? "choseBill" :
