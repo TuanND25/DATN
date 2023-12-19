@@ -1,4 +1,5 @@
 ﻿using DATN_Client.Areas.Customer.Component;
+using DATN_Shared.Models;
 using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Components;
 
@@ -14,8 +15,9 @@ namespace DATN_Client.Areas.Admin.Components
 
         List<Voucher_VM> vouchers = new List<Voucher_VM>();
         public string Message { get; set; } = string.Empty;
-
-        protected override async Task OnInitializedAsync()
+		public string messagestart { get; set; }
+		public string messageend { get; set; }
+		protected override async Task OnInitializedAsync()
         {
             if (Login.Roleuser != "Admin")
             {
@@ -57,18 +59,37 @@ namespace DATN_Client.Areas.Admin.Components
                 navigationManager.NavigateTo("https://localhost:7075/Admin", true);
                 return;
             }
+
             if (voucher_VM.Code == string.Empty)
             {
                 _toastService.ShowError("Vui lòng nhập đầy đủ thông tin");
                 return;
             }
-            voucher_VM.Id = Guid.NewGuid();
+			if (voucher_VM.StartDate < DateTime.Now)
+			{
+				messagestart = "Ngày bắt đầu phải lớn hơn ngày hiện tại";
+            }
+            else if (voucher_VM.StartDate > DateTime.Now && voucher_VM.EndDate < voucher_VM.StartDate)
+            {
+                messageend = "Ngày kết thúc phải lớn hơn ngày bắt đầu";
+                messagestart = "";
+            }
+            else if (voucher_VM.EndDate < voucher_VM.StartDate)
+            {
+				messageend = "Ngày kết thúc phải lớn hơn ngày bắt đầu";
+				messagestart = "";
+            }
+            else
+            {
+				voucher_VM.Id = Guid.NewGuid();
 
-            await httpClient.PostAsJsonAsync<Voucher_VM>("https://localhost:7141/api/Voucher/Post-Voucher", voucher_VM);
-            navigationManager.NavigateTo("/voucher-management", true);
+				await httpClient.PostAsJsonAsync<Voucher_VM>("https://localhost:7141/api/Voucher/Post-Voucher", voucher_VM);
+				navigationManager.NavigateTo("/voucher-management", true);
+
+			}
 
 
-        }
+		}
 
 
         public async Task ChangeStatusVoucher(Voucher_VM voucher)
@@ -81,15 +102,39 @@ namespace DATN_Client.Areas.Admin.Components
             voucher.Status = 0;
             await httpClient.PutAsJsonAsync<Voucher_VM>("https://localhost:7141/api/Voucher/Put-Voucher", voucher);
         }
-        public async Task UpdateVoucher(Voucher_VM voucher)
+        public async Task UpdateVoucher()
         {
             if (Login.Roleuser != "Admin")
             {
                 navigationManager.NavigateTo("https://localhost:7075/Admin", true);
                 return;
             }
-            await httpClient.PutAsJsonAsync<Voucher_VM>("https://localhost:7141/api/Voucher/Put-Voucher", voucher);
-            navigationManager.NavigateTo("/voucher-management", true);
+			if (voucher_VM1.Code == string.Empty)
+			{
+				_toastService.ShowError("Vui lòng nhập đầy đủ thông tin");
+				return;
+			}
+
+			if (voucher_VM1.StartDate < DateTime.Now)
+			{
+				messagestart = "Ngày bắt đầu phải lớn hơn ngày hiện tại";
+			}
+			else if (voucher_VM1.StartDate > DateTime.Now && voucher_VM.EndDate < voucher_VM.StartDate)
+			{
+				messageend = "Ngày kết thúc phải lớn hơn ngày bắt đầu";
+				messagestart = "";
+			}
+			else if (voucher_VM1.EndDate < voucher_VM1.StartDate)
+			{
+				messageend = "Ngày kết thúc phải lớn hơn ngày bắt đầu";
+				messagestart = "";
+			}
+            else
+            {
+				await httpClient.PutAsJsonAsync<Voucher_VM>("https://localhost:7141/api/Voucher/Put-Voucher", voucher_VM1);
+				navigationManager.NavigateTo("/voucher-management", true);
+			}
+		
         }
 
         public async Task LoadFormVoucher(Voucher_VM GetValueFromList)
