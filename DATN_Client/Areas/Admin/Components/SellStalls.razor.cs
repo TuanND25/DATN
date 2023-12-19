@@ -18,6 +18,16 @@ using System.Text.RegularExpressions;
 using Twilio.Types;
 
 
+
+
+using Microsoft.JSInterop;
+using System.Drawing;
+using OfficeOpenXml.Drawing;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+
 namespace DATN_Client.Areas.Admin.Components
 {
     public partial class SellStalls
@@ -293,13 +303,13 @@ namespace DATN_Client.Areas.Admin.Components
             {
                 var x = _lstBill_Vm_show.FirstOrDefault(x => x.Id == id);
                 BillId = x.Id;
-                
+
             }
             var _lstProductItem = (await _client.GetFromJsonAsync<List<BillItem_VM>>("https://localhost:7141/api/BillItem/getbilldetail/" + BillId)).ToList();
 
 
-     
-                
+
+
 
             await GetBillItemShowOnBill(id);
         }
@@ -381,14 +391,14 @@ namespace DATN_Client.Areas.Admin.Components
             _lstP_1 = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
             _lstP_1 = _lstP_1.Where(x => x.Status == 1).ToList();
         }
-        public  void SearchProduct(ChangeEventArgs e)
+        public void SearchProduct(ChangeEventArgs e)
         {
             if (Login.Roleuser != "Admin" && Login.Roleuser != "Staff")
             {
                 _navigation.NavigateTo("https://localhost:7075/Admin", true);
                 return;
             }
-            
+
 
             _lstP = _lstP_1;
 
@@ -403,7 +413,7 @@ namespace DATN_Client.Areas.Admin.Components
             //{
             //    _lstP = _lstP_1;
             //}
-           _lstP = _lstP.Where(c => RemoveUnicode(c.Name.ToLower()).Contains(productName) || RemoveUnicode(c.ProductCode.ToLower()).Contains(productName)).ToList();
+            _lstP = _lstP.Where(c => RemoveUnicode(c.Name.ToLower()).Contains(productName) || RemoveUnicode(c.ProductCode.ToLower()).Contains(productName)).ToList();
             //Chưa xong còn search theo mã nữa
         }
 
@@ -524,7 +534,7 @@ namespace DATN_Client.Areas.Admin.Components
             }
 
             _lstProductItem = (await _client.GetFromJsonAsync<List<ProductItem_VM>>($"https://localhost:7141/api/productitem/get_all_productitem_byProduct/{IdProduct}")).ToList();
-            _lstProductItem = _lstProductItem.Where(x => x.Status == 1 &&  x.AvaiableQuantity>0).ToList();
+            _lstProductItem = _lstProductItem.Where(x => x.Status == 1 && x.AvaiableQuantity > 0).ToList();
 
             //Lấy list size All
             _lstSizeAll = (await _client.GetFromJsonAsync<List<Size_VM>>("https://localhost:7141/api/Size/get_size")).ToList();
@@ -540,7 +550,7 @@ namespace DATN_Client.Areas.Admin.Components
                 _lstSize.Add(_lstSizeAll.FirstOrDefault(x => x.Id == item));
             }
             _lstSize = _lstSize.OrderBy(c => _lstSizeSample.IndexOf(c.Name)).ToList();
-            if (_lstSize.Count()==0)
+            if (_lstSize.Count() == 0)
             {
                 hethang = true;
             }
@@ -918,7 +928,7 @@ namespace DATN_Client.Areas.Admin.Components
                     CountPayment = 0;
                 }
 
-                if (CountPayment!=0)
+                if (CountPayment != 0)
                 {
                     tienRefund = CountPayment - Tongtien;
                     tienRefundText = tienRefund.ToString();
@@ -962,6 +972,12 @@ namespace DATN_Client.Areas.Admin.Components
                 _navigation.NavigateTo("https://localhost:7075/Admin", true);
                 return;
             }
+            if (string.IsNullOrEmpty(e.Value.ToString()))
+            {
+                InputTienMat = 0;
+
+            }
+
             if (int.TryParse(e.Value.ToString(), out int inputValue))
             {
                 if (inputValue < 0)
@@ -982,30 +998,40 @@ namespace DATN_Client.Areas.Admin.Components
                 CheckInputPayment();
                 CheckRefund();
             }
+            CheckInputPayment();
 
         }
         public void CheckInputChuyenKhoan(ChangeEventArgs e)
         {
-            
+
             if (Login.Roleuser != "Admin" && Login.Roleuser != "Staff")
             {
                 _navigation.NavigateTo("https://localhost:7075/Admin", true);
                 return;
             }
+
+
             if (e.Value.ToString().Length > 9)
             {
                 _toastService.ClearAll();
                 _toastService.ShowWarning("Giá trị tối đa tiếp nhận: " + e.Value.ToString());
                 return;
             }
-            if (int.TryParse( e.Value.ToString() , out int inputValue))
+            if (string.IsNullOrEmpty(e.Value.ToString()))
             {
-              
+                InputChuyenKhoan = 0;
+                
+            }
+
+
+            if (int.TryParse(e.Value.ToString(), out int inputValue))
+            {
+
                 if (inputValue < 0)
                 {
                     _toastService.ClearAll();
                     _toastService.ShowError("Vui lòng không nhập dấu nhỏ hơn 0");
-                }     
+                }
                 if (inputValue != 0 && inputValue != null)
                 {
                     InputChuyenKhoan = inputValue;
@@ -1017,6 +1043,7 @@ namespace DATN_Client.Areas.Admin.Components
                 CheckInputPayment();
                 CheckRefund();
             }
+            CheckInputPayment();
         }
         public void HandleSubmitAddress()
         {
@@ -1316,7 +1343,7 @@ namespace DATN_Client.Areas.Admin.Components
                 String.IsNullOrEmpty(_TinhTp) ||
                String.IsNullOrEmpty(_QuanHuyen) ||
                 String.IsNullOrEmpty(_PhuongXa) ||
-                String.IsNullOrEmpty(AddressDetail)||
+                String.IsNullOrEmpty(AddressDetail) ||
                 checkPhoneNumberNguoinhan == "khong dung"
                 )
             {
@@ -1343,11 +1370,11 @@ namespace DATN_Client.Areas.Admin.Components
                 nameKhachhang = e.Value.ToString().Trim();
             }
             var regex = @"[!@#$%^&*()_+=\[{\]};:<>|./?,-]";
-            if(Regex.IsMatch(nameKhachhang, regex))
+            if (Regex.IsMatch(nameKhachhang, regex))
             {
                 nameKhachhang = "kytudacbiet";
             }
-         
+
             checkPopupAddUser = checkShowPopupAddUser();
         }
         public void checkPhoneNumberKhachHang(ChangeEventArgs e)
@@ -1445,7 +1472,7 @@ namespace DATN_Client.Areas.Admin.Components
                 userAdd.id = idUser;
                 userAdd.username = username;
 
-               
+
                 Random random = new Random();
 
                 // Lấy ngẫu nhiên 10 ký tự không trùng lặp từ danh sách ký tự
@@ -1464,7 +1491,7 @@ namespace DATN_Client.Areas.Admin.Components
 
                 _lstUser_1 = await _client.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
 
-                
+
                 var checkNullUser = _lstUser_1.FirstOrDefault(x => x.PhoneNumber == numberPhoneKhachHang);
 
                 if (_lstUser_1.Count > 0 && checkNullUser != null)
@@ -1706,11 +1733,11 @@ namespace DATN_Client.Areas.Admin.Components
             }
             else if (activeTienMat == true && activeChuyenKhoan == true)
             {
-                if (InputTienMat != 0 &&  InputChuyenKhoan ==0)
+                if (InputTienMat != 0 && InputChuyenKhoan == 0)
                 {
                     billMua.PaymentMethodId = lstPaymentMethod.FirstOrDefault(x => x.Name == "Tiền mặt").Id;
                 }
-                else if(InputTienMat == 0 && InputChuyenKhoan != 0)
+                else if (InputTienMat == 0 && InputChuyenKhoan != 0)
                 {
                     billMua.PaymentMethodId = lstPaymentMethod.FirstOrDefault(x => x.Name == "Chuyển khoản").Id;
                 }
@@ -1727,7 +1754,7 @@ namespace DATN_Client.Areas.Admin.Components
                 }
             }
 
-         
+
 
 
 
@@ -1735,7 +1762,7 @@ namespace DATN_Client.Areas.Admin.Components
             //tiêu điểm cho khách hàng nếu có 
             if (activeTabDungDiem == true && InputTichDiem > 0)
             {
-                
+
                 var _lstPoint = await _client.GetFromJsonAsync<List<CustomerPoint_VM>>("https://localhost:7141/api/CustomerPoint/getAllCustomerPoint");
                 CustomerPoint_VM PointId = _lstPoint.FirstOrDefault(x => x.UserID == getuser.Id);
 
@@ -1766,7 +1793,7 @@ namespace DATN_Client.Areas.Admin.Components
             }
 
             //tích điểm cho khách hàng nếu có
-            if (getuser != null && activeTabThemThongTin==false)
+            if (getuser != null && activeTabThemThongTin == false)
             {
                 //lấy công thức tính điểm
                 var _lstFomula = await _client.GetFromJsonAsync<List<Formula_VM>>("https://localhost:7141/api/Formula/get_formula");
@@ -1822,8 +1849,8 @@ namespace DATN_Client.Areas.Admin.Components
 
             //check số lượng sản phẩm trong db xem còn không
             //Gett all bill Item 
-          
-            
+
+
 
             foreach (var x in _lstBillItem1)
             {
@@ -1866,6 +1893,13 @@ namespace DATN_Client.Areas.Admin.Components
             if (reponseUpdateBill.StatusCode.ToString() == "OK")
             {
                 _toastService.ShowSuccess("Đơn hàng đã thanh toán thành công");
+
+                List<Bill_ShowModel> lstbill_res = await _client.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
+                Bill_ShowModel bill_res = lstbill_res.FirstOrDefault(x => x.Id == BillId);
+                List<BillDetailShow> _lstBillDetailShow = await _client.GetFromJsonAsync<List<BillDetailShow>>("https://localhost:7141/api/BillItem/get_alll_bill_item_show");
+                _lstBillDetailShow = _lstBillDetailShow.Where(x => x.BillID == BillId).ToList();
+
+                await ExportPDFHoaDon(bill_res, _lstBillDetailShow);
                 //reset các biến cần thiết
                 var billXoa = _lstBill_Vm_show.FirstOrDefault(x => x.Id == billMua.Id);
                 _lstBill_Vm_show.Remove(billXoa);
@@ -1907,11 +1941,12 @@ namespace DATN_Client.Areas.Admin.Components
                 CountPayment = 0;
                 ShowDiaChi = "";
 
-                if (BillId==default)
+                if (BillId == default)
                 {
                     checkBillIsNull = true;
                 }
-                
+
+
 
             }
             else
@@ -2051,7 +2086,123 @@ namespace DATN_Client.Areas.Admin.Components
             return result + (suffix ? " đồng chẵn" : "");
         }
 
+        private async Task ExportPDFHoaDon(Bill_ShowModel _bill, List<BillDetailShow> _lstBillItem)
+        {
+            // Tạo tệp PDF
+            var document = new Document();
+            var stream = new MemoryStream();
+            var writer = PdfWriter.GetInstance(document, stream);
+            document.Open();
 
+            // Thêm tiêu đề
+            var titleFont = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 14, iTextSharp.text.Font.BOLD);
+            var title = new Paragraph("BH UNISEX", titleFont);
+            title.Alignment = Element.ALIGN_CENTER;
+            document.Add(title);
+
+            // Thêm địa chỉ
+            var addressFont = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 9);
+            var address = new Paragraph("Dia chi: 22 ngo 132 Cau Dien, Bac Tu Liem, Ha Noi", addressFont);
+            address.Alignment = Element.ALIGN_CENTER;
+            document.Add(address);
+
+            // Thêm số điện thoại
+            var phoneFont = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 9);
+            var phone = new Paragraph("SDT: 0367180646", phoneFont);
+            phone.Alignment = Element.ALIGN_CENTER;
+            document.Add(phone);
+
+            // Thêm tiêu đề hóa đơn
+            var billTitleFont = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 20, iTextSharp.text.Font.BOLD);
+            var billTitle = new Paragraph("HOA DON BAN HANG", billTitleFont);
+            billTitle.Alignment = Element.ALIGN_CENTER;
+            document.Add(billTitle);
+
+            // Thêm thông tin khách hàng
+            var customerInfo = new Chunk("Ten khach hang: " + _bill.UserName);
+            document.Add(new Paragraph(customerInfo));
+            if (_bill.Province != null)
+            {
+                document.Add(new Paragraph("Dia chi: " + _bill.ToAddress + "," + _bill.WardName + "," + _bill.District + "," + _bill.Province));
+            }            
+            document.Add(new Paragraph("SDT: " + _bill.PhoneNumber));
+            document.Add(new Paragraph("Ma hoa don: " + _bill.BillCode));
+            document.Add(new Paragraph("Ngay: " + _bill.CreateDate?.ToString("HH:mm dd/MM/yyyy")));
+            Paragraph paragraph = new Paragraph();
+            paragraph.SpacingAfter = 10; // Thêm khoảng cách 10 điểm ảnh
+            document.Add(paragraph);
+
+
+            // Thêm bảng sản phẩm
+            var table = new PdfPTable(5);
+            table.WidthPercentage = 100;
+
+            float[] columnWidths = { 0.5f, 3f, 1.5f, 1.5f, 1.5f };
+            table.SetWidths(columnWidths);
+
+            table.AddCell("STT");
+            table.AddCell("TEN SAN PHAM");
+            table.AddCell("DON GIA");
+            table.AddCell("SO LUONG");
+            table.AddCell("THANH TIEN");
+
+
+            for (int i = 0; i < _lstBillItem.Count; i++)
+            {
+                BillDetailShow billTest = _lstBillItem[i];
+                table.AddCell((i + 1).ToString());
+                table.AddCell(billTest.Name);
+                table.AddCell(billTest.PriceAfter.ToString());
+                table.AddCell(billTest.Quantity.ToString());
+                table.AddCell((billTest.PriceAfter * billTest.Quantity)?.ToString("#,##0") + "đ");
+            }
+
+            table.DefaultCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
+
+
+
+            table.AddCell("");
+            table.AddCell("");
+            table.AddCell("");
+            if (_bill.ShippingFee != null)
+            {
+                table.AddCell("Phi ship: ");
+            }          
+            table.AddCell(_bill.ShippingFee?.ToString("#,##0") + "đ");
+
+
+            table.AddCell("");
+            table.AddCell("");
+            table.AddCell("");
+            table.AddCell("Tong tien: ");
+            table.AddCell(_bill.TotalAmount?.ToString("#,##0") + "đ");
+
+
+            
+
+
+            //Thêm ô tiền thành chữ
+           PdfPCell mergedCell = new PdfPCell(new Phrase(""));
+            mergedCell.Colspan = 1; // Hợp nhất qua 5 cột
+            mergedCell.Rowspan = 1; // Hợp nhất qua 1 dòng
+            mergedCell.Border = iTextSharp.text.Rectangle.NO_BORDER; // Loại bỏ đường viền
+            table.AddCell(mergedCell);
+            table.DefaultCell.HorizontalAlignment = Element.ALIGN_LEFT;
+            //table.DefaultCell.Colspan = 5;
+            table.DefaultCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
+            table.AddCell("");
+
+
+            document.Add(table);
+
+            document.Close();
+
+            // Lưu tệp PDF
+            var fileName = $"HoaDonBanHang{_bill.BillCode}.pdf"; // Tên file mặc định
+            await JSRuntime1.InvokeVoidAsync("saveAsFile", fileName, Convert.ToBase64String(stream.ToArray()));
+
+
+        }
 
     }
 
