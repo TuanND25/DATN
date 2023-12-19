@@ -126,6 +126,10 @@
 
 									</tr>
 
+
+
+
+
 								}
 							</tbody>
 						</table>
@@ -196,7 +200,7 @@
 											<label for="inputDate" class="col-sm-4 col-form-label">Ngày bắt đầu</label>
 											<div class="col-sm-8">
 												<input type="datetime-local" class="form-control" @bind-value="@voucher_VM.StartDate" />
-												<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>voucher_VM.StartDate"></ValidationMessage></span>
+												<span class="message" style="color:red;font-size:12pt;">@messagestart</span>
 											</div>
 											
 										</div>
@@ -205,9 +209,8 @@
 										<div class="row mb-3">
 											<label for="inputDate" class="col-sm-4 col-form-label">Ngày kết thúc</label>
 											<div class="col-sm-8">
-												<input type="datetime-local" class="form-control" @bind-value="@voucher_VM.EndDate">
-												<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>voucher_VM.EndDate"></ValidationMessage></span>
-
+												<input type="datetime-local" class="form-control" @bind-value="@voucher_VM.EndDate">												
+												<span class="message" style="color:red;font-size:12pt;">@messageend</span>
 											</div>
 											
 										</div>
@@ -257,7 +260,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-					<button type="submit" class="btn btn-primary" @onclick="AddVoucher" data-bs-dismiss="modal">Thêm mới Voucher</button>
+					<button type="submit" class="btn btn-primary" @onclick="AddVoucher" data-bs-dismiss="">Thêm mới Voucher</button>
 				</div>
 			</EditForm>
 		</div>
@@ -268,6 +271,7 @@
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<EditForm Model="voucher_VM1">
+				
 				<div class="modal-header">
 					<h5 class="modal-title">Cập nhật voucher</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -279,18 +283,20 @@
 							<div class="col-md-12">
 								<div class="card">
 									<div class="card-body" style="margin-top: 20px">
-
+										<DataAnnotationsValidator />
 
 										<div class="row mb-3">
 											<label for="inputText" class="col-sm-4 col-form-label">Tên voucher</label>
 											<div class="col-sm-8">
 												<InputText class="form-control" @bind-Value="voucher_VM1.Name" />
+												<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>voucher_VM1.Name"></ValidationMessage></span>
 											</div>
 										</div>
 										<div class="row mb-3">
 											<label for="inputText" class="col-sm-4 col-form-label">Code</label>
 											<div class="col-sm-8">
 												<InputText class="form-control" @bind-Value="voucher_VM1.Code" />
+												<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>voucher_VM1.Code"></ValidationMessage></span>
 											</div>
 										</div>
 
@@ -298,12 +304,14 @@
 											<label for="inputNumber" class="col-sm-4 col-form-label">Phần trăm giảm</label>
 											<div class="col-sm-8">
 												<InputNumber class="form-control" @bind-Value="voucher_VM1.Percent" />
+												<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>voucher_VM1.Percent"></ValidationMessage></span>
 											</div>
 										</div>
 										<div class="row mb-3">
 											<label for="inputNumber" class="col-sm-4 col-form-label">Số lượng</label>
 											<div class="col-sm-8">
 												<InputNumber class="form-control" @bind-Value="@voucher_VM1.Quantity" />
+												<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>voucher_VM1.Quantity"></ValidationMessage></span>
 											</div>
 										</div>
 
@@ -312,6 +320,7 @@
 											<label for="inputDate" class="col-sm-4 col-form-label">Ngày bắt đầu</label>
 											<div class="col-sm-8">
 												<input type="datetime-local" class="form-control" @bind-value="@voucher_VM1.StartDate" />
+												<span class="message" style="color:red;font-size:12pt;">@messagestart</span>
 											</div>
 										</div>
 
@@ -320,6 +329,7 @@
 											<label for="inputDate" class="col-sm-4 col-form-label">Ngày kết thúc</label>
 											<div class="col-sm-8">
 												<input type="datetime-local" class="form-control" @bind-value="@voucher_VM1.EndDate">
+												<span class="message" style="color:red;font-size:12pt;">@messageend</span>
 											</div>
 										</div>
 
@@ -327,12 +337,14 @@
 											<label for="inputPassword" class="col-sm-4 col-form-label" style="font-size:14px">Điều kiện tối thiểu</label>
 											<div class="col-sm-8">
 												<InputNumber class="form-control" style="height: 50px" @bind-Value="@voucher_VM1.Discount_Conditions" />
+												<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>voucher_VM.Discount_Conditions"></ValidationMessage></span>
 											</div>
 										</div>
 										<div class="row mb-3">
 											<label for="inputPassword" class="col-sm-4 col-form-label" style="font-size:14px">Giám tối đa trên hóa đơn</label>
 											<div class="col-sm-8">
 												<InputNumber class="form-control" style="height: 50px" @bind-Value="@voucher_VM1.Maximum_Reduction" />
+												<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>voucher_VM.Maximum_Reduction"></ValidationMessage></span>
 											</div>
 										</div>
 
@@ -361,7 +373,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-					<button type="submit" class="btn btn-primary" @onclick="()=>UpdateVoucher(voucher_VM1)">Cập nhật</button>
+					<button type="submit" class="btn btn-primary" @onclick="UpdateVoucher">Cập nhật</button>
 				</div>
 			</EditForm>
 		</div>
