@@ -330,7 +330,7 @@ namespace DATN_Client.Areas.Admin.Components
                 count5.Dem3 = d.Where(x => x.Status == 3).Count();
                 count5.Dem4 = d.Where(x => x.Status == 4).Count();
                 count5.Dem5 = d.Where(x => x.Status == 0).Count();
-                count5.Dem5 = d.Where(x => x.Status == 6).Count();
+                count5.Dem6 = d.Where(x => x.Status == 6).Count();
                 count5.Tittle = "Hôm nay";
             }
             else if (option == 1)
@@ -340,7 +340,7 @@ namespace DATN_Client.Areas.Admin.Components
                 count5.Dem3 = d.Where(x => x.Status == 3).Count();
                 count5.Dem4 = d.Where(x => x.Status == 4).Count();
                 count5.Dem5 = d.Where(x => x.Status == 0).Count();
-                count5.Dem5 = d.Where(x => x.Status == 6).Count();
+                count5.Dem6 = d.Where(x => x.Status == 6).Count();
                 count.Tittle = "Tháng này";
             }
             else
