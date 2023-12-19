@@ -4,6 +4,7 @@ using DATN_Shared.ViewModel;
 using DATN_Shared.ViewModel.DiaChi;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Build.Evaluation;
 using Microsoft.IdentityModel.Tokens;
 using NuGet.Protocol;
@@ -12,6 +13,7 @@ using System.Collections.Immutable;
 using System.Globalization;
 using System.Net.Http;
 using System.Net.NetworkInformation;
+using System.Text;
 using System.Text.RegularExpressions;
 using Twilio.Types;
 
@@ -134,8 +136,9 @@ namespace DATN_Client.Areas.Admin.Components
         public bool isLoader { get; set; } = false;
 
         public Guid IdBillItemShow { get; set; }
-        public  Guid IdBillRemove { get; set; }
+        public Guid IdBillRemove { get; set; }
         public string checkPhoneNumberNguoinhan { get; set; }
+        public bool hethang { get; set; }
 
 
 
@@ -153,7 +156,7 @@ namespace DATN_Client.Areas.Admin.Components
 
             _lstP = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
 
-           
+
 
 
             _lstP_1 = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
@@ -163,7 +166,7 @@ namespace DATN_Client.Areas.Admin.Components
 
             _lstUser_1 = await _client.GetFromJsonAsync<List<User_VM>>("https://localhost:7141/api/user/get-user");
 
-            _lstUser_1 = _lstUser_1.Where(x => x.Status != 0).ToList(); 
+            _lstUser_1 = _lstUser_1.Where(x => x.Status != 0).ToList();
 
             _lstBillItemOnBill = await _client.GetFromJsonAsync<List<BillItem_VM>>("https://localhost:7141/api/BillItem/get_alll_bill_item");
             _lstProductItemShow = await _client.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
@@ -191,7 +194,7 @@ namespace DATN_Client.Areas.Admin.Components
                 return;
             }
             _lstBillSearch = await _client.GetFromJsonAsync<List<Bill_VM>>("https://localhost:7141/api/Bill/get_alll_bill\r\n");
-            _lstBillSearch = _lstBillSearch.Where(x => x.Type == 2 && x.Status == 5).OrderByDescending(x=>x.CreateDate).ToList();
+            _lstBillSearch = _lstBillSearch.Where(x => x.Type == 2 && x.Status == 5).OrderByDescending(x => x.CreateDate).ToList();
         }
         public async Task ChonBillSearch(Guid BillId1)
         {
@@ -200,23 +203,23 @@ namespace DATN_Client.Areas.Admin.Components
                 _navigation.NavigateTo("https://localhost:7075/Admin", true);
                 return;
             }
-            checkBillIsNull  = false;
+            checkBillIsNull = false;
             int a = 0;
             BillId = BillId1;
             foreach (var item in _lstBill_Vm_show)
             {
-                
+
                 if (item.Id == BillId1)
                 {
-                    a += 1; 
-                } 
+                    a += 1;
+                }
                 else
                 {
                     a += 0;
-                }    
-                
+                }
+
             }
-            if (a==0)
+            if (a == 0)
             {
 
                 _lstBill_Vm_show.Add(_lstBillSearch.FirstOrDefault(x => x.Id == BillId1));
@@ -266,6 +269,7 @@ namespace DATN_Client.Areas.Admin.Components
                 await GetBillItemShowOnBill(id);
                 checkBillIsNull = false;
             }
+            CheckInputPayment();
         }
         private async Task getBillId(Guid id)
         {
@@ -274,19 +278,28 @@ namespace DATN_Client.Areas.Admin.Components
                 _navigation.NavigateTo("https://localhost:7075/Admin", true);
                 return;
             }
+            if (id != BillId)
+            {
+                activeTabThemThongTin = false;
+                activeTienMat = false;
+                activeChuyenKhoan = false;
+                activeTabDungDiem = false;
+                InputTichDiem = default;
+                InputChuyenKhoan = 0;
+                InputTienMat = 0;
+                CheckInputPayment();
+            }
             if (_lstBill_Vm_show.Count > 0)
             {
                 var x = _lstBill_Vm_show.FirstOrDefault(x => x.Id == id);
                 BillId = x.Id;
+                
             }
             var _lstProductItem = (await _client.GetFromJsonAsync<List<BillItem_VM>>("https://localhost:7141/api/BillItem/getbilldetail/" + BillId)).ToList();
 
-            activeTabThemThongTin = false;
-            activeTienMat = false;
-            activeChuyenKhoan = false;
-            activeTabDungDiem = false;
-            InputTichDiem = default;
 
+     
+                
 
             await GetBillItemShowOnBill(id);
         }
@@ -356,27 +369,32 @@ namespace DATN_Client.Areas.Admin.Components
             _lstUser = _lstUser_1;
 
 
-            _lstUser = _lstUser.Where(c => RemoveUnicode(c.Name.ToLower()).Contains(a) || c.PhoneNumber.Contains(a) ).ToList();
+            _lstUser = _lstUser.Where(c => RemoveUnicode(c.Name.ToLower()).Contains(a) || c.PhoneNumber.Contains(a)).ToList();
 
             var userKhachvanglai = _lstUser.FirstOrDefault(c => c.UserName == "khachvanglai");
             _lstUser.Remove(userKhachvanglai);
 
             ActiveTabSearchUser = 2;
         }
-
-        public async void SearchProduct(ChangeEventArgs e)
+        public async Task loadlaisp()
+        {
+            _lstP_1 = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
+            _lstP_1 = _lstP_1.Where(x => x.Status == 1).ToList();
+        }
+        public  void SearchProduct(ChangeEventArgs e)
         {
             if (Login.Roleuser != "Admin" && Login.Roleuser != "Staff")
             {
                 _navigation.NavigateTo("https://localhost:7075/Admin", true);
                 return;
             }
-            _lstP_1 = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
-            _lstP_1 = _lstP_1.Where(x => x.Status == 1).ToList();
+            
+
             _lstP = _lstP_1;
+
             string productName = RemoveUnicode(e.Value.ToString().ToLower());
 
-            if (e.Value == null || e.Value.ToString() == "" || e.Value.ToString() == string.Empty)
+            if (string.IsNullOrEmpty(e.Value.ToString()))
             {
                 _lstP = _lstP_1;
                 return;
@@ -384,9 +402,8 @@ namespace DATN_Client.Areas.Admin.Components
             //if (_lstUser.Count == 0)
             //{
             //    _lstP = _lstP_1;
-
             //}
-            _lstP = _lstP.Where(c => RemoveUnicode(c.Name.ToLower()).Contains(productName) || RemoveUnicode(c.ProductCode.ToLower()).Contains(productName)).ToList();
+           _lstP = _lstP.Where(c => RemoveUnicode(c.Name.ToLower()).Contains(productName) || RemoveUnicode(c.ProductCode.ToLower()).Contains(productName)).ToList();
             //Chưa xong còn search theo mã nữa
         }
 
@@ -446,6 +463,8 @@ namespace DATN_Client.Areas.Admin.Components
                 return;
             }
             activeTienMat = true;
+            InputTienMat = 0;
+            CheckInputPayment();
         }
         public void ActiveTabChuyenKhoan()
         {
@@ -455,6 +474,9 @@ namespace DATN_Client.Areas.Admin.Components
                 return;
             }
             activeChuyenKhoan = true;
+            InputChuyenKhoan = 0;
+            CheckInputPayment();
+
         }
         public void CloseTabTienMat()
         {
@@ -518,6 +540,14 @@ namespace DATN_Client.Areas.Admin.Components
                 _lstSize.Add(_lstSizeAll.FirstOrDefault(x => x.Id == item));
             }
             _lstSize = _lstSize.OrderBy(c => _lstSizeSample.IndexOf(c.Name)).ToList();
+            if (_lstSize.Count()==0)
+            {
+                hethang = true;
+            }
+            else
+            {
+                hethang = false;
+            }
             //Lấy list size của Product
 
 
@@ -646,7 +676,7 @@ namespace DATN_Client.Areas.Admin.Components
 
 
 
-
+            CheckInputPayment();
         }
 
         public async Task RemoveBillItem(Guid IdBillItem)
@@ -887,6 +917,17 @@ namespace DATN_Client.Areas.Admin.Components
                 {
                     CountPayment = 0;
                 }
+
+                if (CountPayment!=0)
+                {
+                    tienRefund = CountPayment - Tongtien;
+                    tienRefundText = tienRefund.ToString();
+                }
+                else
+                {
+                    tienRefund = 0;
+                    tienRefundText = tienRefund.ToString();
+                }
             }
         }
 
@@ -945,19 +986,27 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public void CheckInputChuyenKhoan(ChangeEventArgs e)
         {
+            
             if (Login.Roleuser != "Admin" && Login.Roleuser != "Staff")
             {
                 _navigation.NavigateTo("https://localhost:7075/Admin", true);
                 return;
             }
-            if (int.TryParse(e.Value.ToString(), out int inputValue))
+            if (e.Value.ToString().Length > 9)
             {
+                _toastService.ClearAll();
+                _toastService.ShowWarning("Giá trị tối đa tiếp nhận: " + e.Value.ToString());
+                return;
+            }
+            if (int.TryParse( e.Value.ToString() , out int inputValue))
+            {
+              
                 if (inputValue < 0)
                 {
                     _toastService.ClearAll();
                     _toastService.ShowError("Vui lòng không nhập dấu nhỏ hơn 0");
-                }
-                if (inputValue != 0 || inputValue != null)
+                }     
+                if (inputValue != 0 && inputValue != null)
                 {
                     InputChuyenKhoan = inputValue;
                 }
@@ -1684,8 +1733,9 @@ namespace DATN_Client.Areas.Admin.Components
 
 
             //tiêu điểm cho khách hàng nếu có 
-            if (activeTabDungDiem == true)
+            if (activeTabDungDiem == true && InputTichDiem > 0)
             {
+                
                 var _lstPoint = await _client.GetFromJsonAsync<List<CustomerPoint_VM>>("https://localhost:7141/api/CustomerPoint/getAllCustomerPoint");
                 CustomerPoint_VM PointId = _lstPoint.FirstOrDefault(x => x.UserID == getuser.Id);
 
@@ -1696,6 +1746,7 @@ namespace DATN_Client.Areas.Admin.Components
                 htsCustomerPoint.FormulaId = default;
                 htsCustomerPoint.Point = InputTichDiem;
                 htsCustomerPoint.Status = 1;
+                htsCustomerPoint.BillId = billMua.Id;
 
                 var reponsePostHtsCtm = await _client.PostAsJsonAsync("https://localhost:7141/api/HistoryConsumerPoint/add-HistoryConsumerPoint", htsCustomerPoint);
                 if (reponsePostHtsCtm.StatusCode.ToString() != "OK")
@@ -1715,7 +1766,7 @@ namespace DATN_Client.Areas.Admin.Components
             }
 
             //tích điểm cho khách hàng nếu có
-            if (getuser != null )
+            if (getuser != null && activeTabThemThongTin==false)
             {
                 //lấy công thức tính điểm
                 var _lstFomula = await _client.GetFromJsonAsync<List<Formula_VM>>("https://localhost:7141/api/Formula/get_formula");
@@ -1724,28 +1775,29 @@ namespace DATN_Client.Areas.Admin.Components
                 var _lstPoint = await _client.GetFromJsonAsync<List<CustomerPoint_VM>>("https://localhost:7141/api/CustomerPoint/getAllCustomerPoint");
                 CustomerPoint_VM PointId = _lstPoint.FirstOrDefault(x => x.UserID == getuser.Id);
 
-                //them ban ghi history tiêu điểm 
-                //HistoryConsumerPoint_VM htsCustomerPoint = new HistoryConsumerPoint_VM();
-                //htsCustomerPoint.Id = Guid.NewGuid();
-                //htsCustomerPoint.ConsumerPointId = PointId.UserID;
-                //htsCustomerPoint.FormulaId = Congthuctinhdiem.Id;
-                //htsCustomerPoint.Point = Tongtien / Congthuctinhdiem.Coefficient;
-                //htsCustomerPoint.Status = 1;
+                //them ban ghi history tiêu điểm
+                HistoryConsumerPoint_VM htsCustomerPoint = new HistoryConsumerPoint_VM();
+                htsCustomerPoint.Id = Guid.NewGuid();
+                htsCustomerPoint.ConsumerPointId = PointId.UserID;
+                htsCustomerPoint.FormulaId = Congthuctinhdiem.Id;
+                htsCustomerPoint.Point = Tongtien / Congthuctinhdiem.Coefficient;
+                htsCustomerPoint.Status = 1;
+                htsCustomerPoint.BillId = billMua.Id;
 
-                //var reponsePostHtsCtm = await _client.PostAsJsonAsync("https://localhost:7141/api/HistoryConsumerPoint/add-HistoryConsumerPoint", htsCustomerPoint);
-                //if (reponsePostHtsCtm.StatusCode.ToString() != "OK")
-                //{
-                //    _toastService.ShowError("Đã có lỗi xảy ra 7");
-                //    return;
-                //}
+                var reponsePostHtsCtm = await _client.PostAsJsonAsync("https://localhost:7141/api/HistoryConsumerPoint/add-HistoryConsumerPoint", htsCustomerPoint);
+                if (reponsePostHtsCtm.StatusCode.ToString() != "OK")
+                {
+                    _toastService.ShowError("Đã có lỗi xảy ra 7");
+                    return;
+                }
                 //update số điểm
-                //PointId.Point = (Convert.ToInt32(PointId.Point) + htsCustomerPoint.Point).ToString();
-                //var reponseUpdatePointUser = await _client.PutAsJsonAsync("https://localhost:7141/api/CustomerPoint/putCustomerPoint", PointId);
-                //if (reponseUpdatePointUser.StatusCode.ToString() != "OK")
-                //{
-                //    _toastService.ShowError("Đã có lỗi xảy ra 8");
-                //    return;
-                //};
+                PointId.Point = (Convert.ToInt32(PointId.Point) + htsCustomerPoint.Point).ToString();
+                var reponseUpdatePointUser = await _client.PutAsJsonAsync("https://localhost:7141/api/CustomerPoint/putCustomerPoint", PointId);
+                if (reponseUpdatePointUser.StatusCode.ToString() != "OK")
+                {
+                    _toastService.ShowError("Đã có lỗi xảy ra 8");
+                    return;
+                };
                 billMua.UserId = getuser.Id;
             }
 
@@ -1855,7 +1907,11 @@ namespace DATN_Client.Areas.Admin.Components
                 CountPayment = 0;
                 ShowDiaChi = "";
 
-
+                if (BillId==default)
+                {
+                    checkBillIsNull = true;
+                }
+                
 
             }
             else
