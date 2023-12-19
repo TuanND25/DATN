@@ -54,7 +54,7 @@
                             <div class="row col-sm-8">
                                 <div class="col-md-7">
                                     <InputNumber class="form-control" @bind-Value="quantityValue" disabled="@isUnlimited" />
-                                    <span class="message"><ValidationMessage For="()=>_promotion.Quantity" /></span> 
+                                    <span class="message">@messageQuantity</span> 
                                 </div>
                                 <div class="col-md-5" style="margin-top:5px;">
                                     <div class="form-check">
@@ -146,8 +146,7 @@
                             <table class="table">
                                 <thead style="background-color:orange">
                                     <tr style="position: sticky;top:0">
-                                        <th scope="col" style="background-color:orange">
-                                            <input type="checkbox" style="transform: scale(1.5);"/>
+                                        <th scope="col" style="background-color:orange">              
                                         </th>
                                         <th scope="col" style="background-color:orange">#</th>
                                         <th scope="col" style="background-color:orange">Image</th>
@@ -164,6 +163,7 @@
                                             </th>
                                             <td>@(count++)</td>
                                             <td>
+
                                                 <img src="/images/1.png" alt="" style="width:70px;height:70px" />
                                             </td>
                                             <td>@a.Name</td>
@@ -239,7 +239,6 @@
                                     <th style="background-color:orange">Màu sắc</th>
                                     <th style="background-color:orange">Size</th>
                                     <th style="background-color:orange">Số lượng tồn</th>
-                                    <th style="background-color:orange">Giá nhập</th>
                                     <th style="background-color:orange">Giá bán</th>
                                     <th style="background-color:orange">Trạng thái</th>
                                     <th style="background-color:orange"></th>
@@ -271,7 +270,6 @@
                                         <td>@x.ColorName</td>
                                         <td>@x.SizeName</td>
                                         <td>@x.AvaiableQuantity</td>
-                                        <td>@x.PriceAfterReduction</td>
                                         <td>@x.CostPrice</td>
                                         <td>@(x.Status == 1 ? "Còn hàng" : x.Status == 2 ? "Hết hàng" : "Ngừng kinh doanh")</td>
                                     </tr>
