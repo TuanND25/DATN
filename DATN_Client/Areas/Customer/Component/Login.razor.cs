@@ -91,10 +91,12 @@ namespace DATN_Client.Areas.Customer.Component
 				if (principal.IsInRole("Staff"))
 				{
 					navigationManager.NavigateTo("https://localhost:7075/Admin/SellStalls", true);
+					return;
 				}
 				if (principal.IsInRole("Admin"))
 				{
 					navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+					return;
 				}
 				else
 				{
