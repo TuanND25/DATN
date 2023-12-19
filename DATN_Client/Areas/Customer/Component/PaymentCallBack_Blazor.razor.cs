@@ -28,12 +28,16 @@ namespace DATN_Client.Areas.Customer.Component
 				Create_Bill_With_Info._bill_validate_vm.Status = 2;
 				var updateStatus = _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", Create_Bill_With_Info._bill_validate_vm);
 			}
-			if (string.IsNullOrEmpty(_iduser))
+			else
 			{
-				Create_Bill_With_Info._bill_validate_vm.Status = 0;
-				Create_Bill_With_Info._bill_validate_vm.CanelBy = Create_Bill_With_Info._bill_validate_vm.UserId.ToString();
-                var updateStatus = _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", Create_Bill_With_Info._bill_validate_vm);
+				if (string.IsNullOrEmpty(_iduser))
+				{
+					Create_Bill_With_Info._bill_validate_vm.Status = 0;
+					Create_Bill_With_Info._bill_validate_vm.CanelBy = Create_Bill_With_Info._bill_validate_vm.UserId.ToString();
+					var updateStatus = _client.PutAsJsonAsync("https://localhost:7141/api/Bill/Put-Bill", Create_Bill_With_Info._bill_validate_vm);
+				}
 			}
+			
 			_billid = Create_Bill_With_Info._bill_validate_vm.Id;
 			Create_Bill_With_Info._bill_validate_vm = new();
         }

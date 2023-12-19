@@ -104,6 +104,7 @@
 			<div style="display:flex;justify-content:center;align-items:center;flex-direction:column;gap:20px">
 				@if (_bill.Type == 1 && _bill.Status == 2)
 				{
+					<button class="btn_UpdateBill" data-target="#AddressShipSellStall" data-toggle="modal">Cập nhật địa chỉ giao hàng</button>
 					<button class="btn_UpdateBill" data-target="#UpdateShippingFee" data-toggle="modal">Cập nhật phí ship</button>
 				}
 				else if ((_bill.Type == 1 && _bill.Status == 3) || (_bill.Type == 2 && _bill.Status == 1))
@@ -121,6 +122,10 @@
 									(_bill.Type == 2 && _bill.Status == 1)
 									)
 				{
+					@if (_bill.Type == 1 && _bill.Status == 1)
+					{
+						<button class="btn_UpdateBill" data-target="#AddressShipSellStall" data-toggle="modal">Cập nhật địa chỉ giao hàng</button>
+					}
 					<button class="btn_CancelBill" data-target="#CancelBill" data-toggle="modal">Hủy đơn hàng</button>
 				}
 
@@ -307,4 +312,124 @@
 	</div>
 </div>
 
+<div class="modal fade" id="AddressShipSellStall">
+        <BlazoredToasts Position="ToastPosition.BottomRight"
+				Timeout="8"
+				IconType="IconType.FontAwesome"
+				SuccessClass="success-toast-override"
+				SuccessIcon="fa-solid fa-check"
+				ErrorIcon="fa-solid fa-triangle-exclamation" 
+                />
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Phần tiêu đề của popup -->
+            <div class="modal-header" style="background-color:#f2cc8c">
+                <h6 class="modal-title">Thông tin địa chỉ giao hàng</h6>
+                <i class="fa-solid fa-xmark close" style="cursor: pointer;" data-dismiss="modal"></i>
+            </div>
+           <div>
+               <div style="margin-top:15px;padding-left:20px">
+
+                       <div class="row" style="margin-top:5px;">
+           <div class="col-3" style="display:flex;gap:5px;align-items:center">
+               <span>Người nhận</span>
+           </div>
+           <div class="col-7 input-text" style="display:flex;justify-content:flex-end">
+              <input type="text" style="width:100%" placeholder="Tên người nhận" @oninput="checkNameNguoiNhan" @bind="nameNguoiNhan"/>
+           </div>
+       </div>
+       <div class="row" style="margin-top:5px;align-items:center">
+           <div class="col-3" style="display:flex;gap:5px">
+               <span>Số điện thoại</span>
+           </div>
+           <div class="col-7 input-Number" style="display:flex;justify-content:flex-end">
+              <input type="number" style="width:100%" placeholder="Số điện thoại" maxlength="10" @oninput="checkPhoneNumberNguoiNhan" @bind="phoneNumberNguoinhan"/>
+           </div>
+       </div>
+
+					<div class="row" style="margin-top:15px">
+                         <div class="col-3">
+						   <span>Tỉnh thành</span>				
+					    </div>
+                        <div class="col-7">
+						    <select class="form-select" @oninput="ChonTinhTP" @bind="_TinhTp">
+							<option value="@string.Empty" selected>--Tỉnh/Thành phố--</option>
+							    @foreach (var x in _lstTinhTp)
+							    {
+								    <option value="@x.Name">@x.Name</option>
+							    }
+						    </select>						
+					    </div>
+                    </div>
+                    
+                    <div class="row" style="margin-top:15px">
+                         <div class="col-3">
+						   <span>Quận huyện</span>				
+					    </div>
+                        <div class="col-7">
+						    <select class="form-select" @oninput="@ChonQuanHuyen"
+                            @bind="@_QuanHuyen">
+							<option value="@string.Empty" selected>--Quận/Huyện/Thị xã--</option>
+							@foreach (var x in _lstQuanHuyen)
+							{
+								<option value="@x.Name">@x.Name</option>
+							}
+						</select>						
+					    </div>
+                    </div>
+                      <div class="row" style="margin-top:15px">
+                         <div class="col-3">
+						   <span>Phường xã</span>				
+					    </div>
+                        <div class="col-7">
+						  <select class="form-select" @oninput="@ChonXaPhuong" @bind="@_PhuongXa">
+							<option value="@string.Empty" selected>--Phường/Xã--</option>
+							@foreach (var x in _lstXaPhuong)
+							{
+								<option value="@x.Name">@x.Name</option>
+							}
+						</select>						
+					    </div>
+                    </div>
+                      <div class="row" style="margin-top:15px">
+                         <div class="col-3" style="display:flex;align-items:center">
+						   <span style="white-space: nowrap;">Địa chỉ chi tiết</span	</div> 
+                         <div class="col-7 input-text">
+						    <input type="text" style="width:100%" @bind="AddressDetail"
+                            placeholder="Vd:123 Phương Canh" @oninput="checkAddressDetail"/>				
+					    </div>   
+                    </div>
+				  <div class="row" style="margin-top:15px">
+                         <div class="col-3" style="display:flex;align-items:center">
+						   <span style="white-space: nowrap;">Ghi chú</span	</div> 
+                         <div class="col-7">
+						    <textarea rows="4" style="width:100%" @bind="NoteAddresShip" @oninput="checkNoteAddresShip"/>				
+					    </div>   
+                  </div>
+               
+				</div>
+                   <div style="display:flex;justify-content:center;align-items:center;margin-top:15px">
+                      <button class="btn_searchUser" @onclick="checkValidateAddress" 
+                      data-dismiss="@(checkPopupAddress == false ? "modal" : "")" style="width:fit-content;padding:10px 50px" >
+                Địa chỉ
+                </button>
+                  </div>
+           </div>
+        </div>
+    </div>
+</div>
+
+@if (isLoader)
+{
+	<div class="loader-overlay">
+		<div class="loader-container">
+			<svg class="pl" width="240" height="240" viewBox="0 0 240 240">
+				<circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+				<circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+				<circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+				<circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+			</svg>
+		</div>
+	</div>
+}
 

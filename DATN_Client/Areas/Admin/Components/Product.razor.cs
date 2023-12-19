@@ -26,7 +26,7 @@ namespace DATN_Client.Areas.Admin.Components
 				return;
 			}
 			products = await _httpClient.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
-
+			products = products.OrderByDescending(x => Convert.ToInt32(x.ProductCode.Substring(4))).ToList();
 			var uri = new Uri(navigationManager.Uri);
 			var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
 			_textSearch = queryParams["search"];
@@ -164,6 +164,7 @@ namespace DATN_Client.Areas.Admin.Components
 				return;
 			}
 			products = await _httpClient.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
+			products = products.OrderByDescending(x => Convert.ToInt32(x.ProductCode.Substring(4))).ToList();
 			if (!string.IsNullOrEmpty(_textSearch))
 			{
 				if (_textSearch.ToLower() != XoaDau(_textSearch))
@@ -171,14 +172,16 @@ namespace DATN_Client.Areas.Admin.Components
 					products = products.Where(c =>
 								string.IsNullOrEmpty(_textSearch) ||
 								c.Name.Trim().ToLower().Contains(_textSearch.ToLower().Trim()) ||
-								c.ProductCode.ToLower().Contains(_textSearch.ToLower().Trim())).ToList();
+								c.ProductCode.ToLower().Contains(_textSearch.ToLower().Trim())).
+								OrderByDescending(x => Convert.ToInt32(x.ProductCode.Substring(4))).ToList();
 				}
 				else
 				{
 					products = products.Where(c =>
 								string.IsNullOrEmpty(_textSearch) ||
 								XoaDau(c.Name.Trim()).Contains(XoaDau(_textSearch.ToLower().Trim())) ||
-								c.ProductCode.ToLower().Contains(_textSearch.ToLower().Trim())).ToList();
+								c.ProductCode.ToLower().Contains(_textSearch.ToLower().Trim())).
+								OrderByDescending(x => Convert.ToInt32(x.ProductCode.Substring(4))).ToList();
 				}
 			}
 		}
