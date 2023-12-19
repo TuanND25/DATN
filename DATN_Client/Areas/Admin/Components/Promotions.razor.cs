@@ -10,6 +10,7 @@ using System.Drawing;
 using OfficeOpenXml.Drawing;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using DATN_Client.Areas.Customer.Component;
 
 namespace DATN_Client.Areas.Admin.Components
 {
@@ -46,13 +47,23 @@ namespace DATN_Client.Areas.Admin.Components
 
         public async Task NavigationUpdatePromotion(Promotions_VM promotionVM)
         {
-            _promotion_VM = promotionVM;
+			if (Login.Roleuser != "Admin")
+			{
+				_navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			_promotion_VM = promotionVM;
             _navigationManager.NavigateTo($"/promotion-management/update?id={promotionVM.Id}", true);
         }
         public async Task DeletePromotion(Promotions_VM promotionVM)
-        {
-            //_promotion_VM = promotionVM;
-            promotionVM.Status = 0;
+		{
+			if (Login.Roleuser != "Admin" )
+			{
+				_navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			//_promotion_VM = promotionVM;
+			promotionVM.Status = 0;
 
             try
             {
@@ -81,13 +92,23 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public async Task Search()
         {
-            _lstPromotion = await _httpClient.GetFromJsonAsync<List<Promotions_VM>>("https://localhost:7141/api/promotion");
+			if (Login.Roleuser != "Admin")
+			{
+				_navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			_lstPromotion = await _httpClient.GetFromJsonAsync<List<Promotions_VM>>("https://localhost:7141/api/promotion");
             _lstPromotion = _lstPromotion.Where(x => x.Name == null || x.Name == string.Empty || x.Name.ToLower().Contains(_promotionName.ToLower())).ToList();
         }
         // status 0 1 
         public async Task Loc()
         {
-            _lstPromotion = await _httpClient.GetFromJsonAsync<List<Promotions_VM>>("https://localhost:7141/api/promotion");
+			if (Login.Roleuser != "Admin")
+			{
+				_navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			_lstPromotion = await _httpClient.GetFromJsonAsync<List<Promotions_VM>>("https://localhost:7141/api/promotion");
 
             if (selectedValue == 1)
             {
@@ -119,7 +140,12 @@ namespace DATN_Client.Areas.Admin.Components
 
         public async Task ExportExcel()
         {
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+			if (Login.Roleuser != "Admin")
+			{
+				_navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+				return;
+			}
+			ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (var package = new ExcelPackage())
             {
                 var worksheet = package.Workbook.Worksheets.Add("Sheet1");
