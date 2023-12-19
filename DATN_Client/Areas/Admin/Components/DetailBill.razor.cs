@@ -108,7 +108,7 @@ namespace DATN_Client.Areas.Admin.Components
 				_toastService.ShowError("Vui lòng điền phí vận chuyển");
 				return;
 			}
-			else if (PhiShip < 0)
+			else if (PhiShip <= 0)
 			{
 				_toastService.ShowError("Phí vận chuyển phải lớn hơn 0");
 				return;
