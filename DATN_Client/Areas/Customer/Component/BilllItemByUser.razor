@@ -295,7 +295,7 @@
 
 
 
-                        @if (_bill_ShowModel.Status >= 3)
+                        @if (_bill_ShowModel.Status==3)
                         {
                             <li class="li">
                                 <i class="fas fa-shipping-fast"></i>
@@ -303,7 +303,19 @@
                                     <p>3</p>
                                     <i class="uil fa-solid fa-check"></i>
                                 </div>
-                                <p class="text">Đã giao cho ĐVVC</p>
+                                <p class="text">Chờ giao cho ĐVVC</p>
+                                
+                            </li>
+                        }
+                        else if(_bill_ShowModel.Status>3)
+                        {
+                            <li class="li">
+                                <i class="fas fa-shipping-fast"></i>
+                                <div class="progress1 three" style="margin-right:-5px;">
+                                    <p>3</p>
+                                    <i class="uil fa-solid fa-check"></i>
+                                </div>
+                                <p class="text">Đã giao giao cho ĐVVC</p>
                                 <p>@_bill_ShowModel.ShippingDate</p>
                             </li>
                         }
@@ -316,12 +328,13 @@
                                     <i class="uil fa-solid fa-check"></i>
                                 </div>
                                 <p class="text">Chờ giao cho ĐVVC</p>
+                                
                             </li>
                         }
 
 
 
-                        @if (_bill_ShowModel.Status == 6)
+                        @if (_bill_ShowModel.Status ==4)
                         {
                             <li class="li">
                                 <i class="fas fa-solid fa-box-open"></i>
@@ -329,7 +342,19 @@
                                     <p>4</p>
                                     <i class="uil fa-solid fa-check"></i>
                                 </div>
-                                <p class="text">Đã nhận được hàng</p>
+                                <p class="text">Giao hàng</p>
+
+                            </li>
+                        }
+                        else if(_bill_ShowModel.Status>=5)
+                        {
+                             <li class="li">
+                                <i class="fas fa-solid fa-box-open"></i>
+                                <div class="progress1 four active1" style="">
+                                    <p>4</p>
+                                    <i class="uil fa-solid fa-check"></i>
+                                </div>
+                                <p class="text">Giao hàng thành công</p>
 
                             </li>
                         }
@@ -341,9 +366,10 @@
                                     <p>4</p>
                                     <i class="uil fa-solid fa-check"></i>
                                 </div>
-                                <p class="text">Đã nhận được hàng</p>
+                                <p class="text">Vận chuyển</p>
                             </li>
                         }
+
 
                         @if (_bill_ShowModel.Status == 6)
                         {
@@ -354,7 +380,7 @@
                                     <i class="uil fa-solid fa-check"></i>
                                 </div>
                                 <p class="text">Hoàn thành</p>
-                                <p>@_bill_ShowModel.CompletionDate</p>
+                                <p>@_bill_ShowModel.CompletionDate?.ToString("HH:mm dd/MM/yyyy")</p>
                             </li>
                         }
                         else
@@ -365,8 +391,7 @@
                                     <p>5</p>
                                     <i class="uil fa-solid fa-check"></i>
                                 </div>
-                                <p class="text">Hoàn thành</p>
-                                <p class="text">@_bill_ShowModel.CompletionDate?.ToString("HH:mm dd/MM/yyyy")</p>
+                                <p class="text">Hoàn thành</p>                            
                             </li>
                         }
                     </ul>

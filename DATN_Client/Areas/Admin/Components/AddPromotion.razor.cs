@@ -46,6 +46,7 @@ namespace DATN_Client.Areas.Admin.Components
 
         public string messagestart { get; set; }
         public string messageend { get; set; }
+        public string messageQuantity { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -92,25 +93,51 @@ namespace DATN_Client.Areas.Admin.Components
 
         public async Task AddPromotionItem()
         {
-            if (_promotion.StartDate < DateTime.Now)
+
+            _promotion.Quantity = quantityValue;
+            if (_promotion.StartDate < DateTime.Now && _promotion.Quantity == 0  )
             {
                 messagestart = "Ngày bắt đầu phải lớn hơn ngày hiện tại";
+                messageQuantity = "Số lượng không được để trống hoặc bằng 0";
+            }
+            else if (_promotion.StartDate < DateTime.Now && _promotion.Quantity > 0 )
+            {
+                messagestart = "Ngày bắt đầu phải lớn hơn ngày hiện tại";
+                messageQuantity = "";
             }
 
-            else if(_promotion.EndDate < _promotion.StartDate)
+            else if(_promotion.StartDate>DateTime.Now && _promotion.Quantity == 0 )
+            {
+                messageQuantity = "Số lượng không được để trống hoặc bằng 0";
+                messagestart = "";
+            }
+
+            else if(_promotion.EndDate < _promotion.StartDate && _promotion.Quantity == 0 )
             {
                 messageend = "Ngày kết thúc phải lớn hơn ngày bắt đầu";
                 messagestart = "";
+                messageQuantity = "Số lượng không được để trống hoặc bằng 0";
             }
-            else if(_promotion.EndDate > _promotion.StartDate)
+
+            else if (_promotion.EndDate < _promotion.StartDate && _promotion.Quantity > 0 )
+            {
+                messageend = "Ngày kết thúc phải lớn hơn ngày bắt đầu";
+                messagestart = "";
+                messageQuantity = "Số lượng không được để trống hoặc bằng 0";
+            }
+
+            else if(_promotion.EndDate > _promotion.StartDate && _promotion.Quantity == 0 )
             {
                 messageend = "";
                 messagestart = "";
+                messageQuantity = "Số lượng không được để trống hoặc bằng 0";
             }
+
             else
             {
                 messagestart = "";
                 messageend = "";
+                messageQuantity = "";
                 var c = _promotion.Id = Guid.NewGuid();
                 _promotion.Quantity = quantityValue;
                 var a = await _httpClient.PostAsJsonAsync<Promotions_VM>("https://localhost:7141/api/promotion/Add", _promotion);
@@ -232,22 +259,6 @@ namespace DATN_Client.Areas.Admin.Components
                 _lstProductItemSelect.Clear();
             }
         }
-        //private void ToggleAllProduct(ChangeEventArgs e)
-        //{
-
-        //    if ((bool)e.Value == true)
-        //    {
-        //        _lstProductSelect = _lstProduct.Select(x => x.Id).ToList();
-        //    }
-        //    else
-        //    {
-        //        _lstProductSelect.Clear();
-        //        //_lstProductItemSelect_Xoa.Clear();
-        //        //_lstProductItemSelect_Xoa = _lstProductItem.Select(x => x.Id).ToList();
-        //        //_lstProductItemSelect_Them.Clear();
-        //        //_lstProductItemSelect.Clear();
-        //    }
-        //}
 
 
 
@@ -263,18 +274,7 @@ namespace DATN_Client.Areas.Admin.Components
                 }
             }
         }
-        //private bool SelectAllChangedProduct
-        //{
-        //    get => SelectAllCheckboxProduct;
-        //    set
-        //    {
-        //        SelectAllCheckboxProduct = value;
-        //        if (SelectAllCheckboxProduct)
-        //        {
-        //            _lstProductSelect = _lstProduct.Select(x => x.Id).Distinct().ToList();
-        //        }
-        //    }
-        //}
+
 
 
         public async Task LocHangLoat()

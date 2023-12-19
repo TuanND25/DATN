@@ -360,7 +360,7 @@ else
 						</div>
 					</div>
 				}
-				@foreach (var a in _lstBills.Where(x=>x.Status==6).ToList())
+				@foreach (var a in _lstBills.Where(x=>x.Status==6 && x.Status==5).ToList())
 				{
 					<div class="card" style="margin-bottom:10px;">
 						<div class="card-body">
