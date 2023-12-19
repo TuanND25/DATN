@@ -139,7 +139,7 @@ namespace DATN_Client.Areas.Admin.Components
         public Guid activeSize { get; set; }
         public Guid activeColor { get; set; }
         public bool checkPopupAddress { get; set; } = true;
-        public bool checkBillIsNull { get; set; } = true;
+        public bool checkBillIsNull { get; set; } = false;
 
         public bool checkPopupAddUser { get; set; } = true;
 
@@ -149,6 +149,7 @@ namespace DATN_Client.Areas.Admin.Components
         public Guid IdBillRemove { get; set; }
         public string checkPhoneNumberNguoinhan { get; set; }
         public bool hethang { get; set; }
+        public string NameProduct { get; set; }
 
 
 
@@ -216,6 +217,8 @@ namespace DATN_Client.Areas.Admin.Components
             checkBillIsNull = false;
             int a = 0;
             BillId = BillId1;
+            activeTabDungDiem = false;
+            InputTichDiem = 0;
             foreach (var item in _lstBill_Vm_show)
             {
 
@@ -294,7 +297,7 @@ namespace DATN_Client.Areas.Admin.Components
                 activeTienMat = false;
                 activeChuyenKhoan = false;
                 activeTabDungDiem = false;
-                InputTichDiem = default;
+                InputTichDiem = 0;
                 InputChuyenKhoan = 0;
                 InputTienMat = 0;
                 CheckInputPayment();
@@ -335,7 +338,7 @@ namespace DATN_Client.Areas.Admin.Components
             {
                 BillId = default;
                 _lstBillItemShow.Clear();
-                checkBillIsNull = true;
+                //checkBillIsNull = true;
 
                 activeTabDungDiem = false;
                 InputTichDiem = 0;
@@ -526,15 +529,56 @@ namespace DATN_Client.Areas.Admin.Components
             SoluongProductItemMua = 1;
             SoluongProductItem = 0;
 
+            //if (_lstBill_Vm_show.Count()==0)
+            //{
+            //    await addBill();
+            //}
 
-            if (BillId == default)
-            {
-                _toastService.ShowError("Vui lòng thêm hóa đơn trước khi thanh toán");
-                return;
-            }
+
+            //if (BillId == default)
+            //{
+            //    _toastService.ShowError("Vui lòng thêm hóa đơn trước khi thanh toán");
+            //    return;
+            //}
 
             _lstProductItem = (await _client.GetFromJsonAsync<List<ProductItem_VM>>($"https://localhost:7141/api/productitem/get_all_productitem_byProduct/{IdProduct}")).ToList();
+
+            var lstProduct = await _client.GetFromJsonAsync<List<Products_VM>>("https://localhost:7141/api/product/get_allProduct");
+            NameProduct = lstProduct.FirstOrDefault(x => x.Id == IdProduct).Name;
             _lstProductItem = _lstProductItem.Where(x => x.Status == 1 && x.AvaiableQuantity > 0).ToList();
+
+            if (_lstBill_Vm_show.Count() == 0)
+            {
+                var codeToday = DateTime.Now.ToString().Replace("/", "").Substring(0, 4) +
+                               DateTime.Now.Year.ToString().Substring(2);
+                var id = Guid.NewGuid();
+                bill = new Bill_VM();
+                bill.Id = id;
+                bill.Status = 5;
+                bill.Type = 2;
+                bill.PaymentMethodId = Guid.Parse("261d402e-dfa8-4213-9e29-4fdd6fc6b95d");
+                bill.UserId = getuser.Id;
+                bill.CreateDate = DateTime.Now;
+                Guid _iduser = Guid.Parse(_ihttpcontextaccessor.HttpContext.Session.GetString("UserId"));
+                bill.CreateBy = _iduser;
+
+                _lstBill = (await _client.GetFromJsonAsync<List<Bill_VM>>("https://localhost:7141/api/Bill/get_alll_bill")).Where(c => c.BillCode.StartsWith(codeToday)).ToList();
+
+
+                if (_lstBill.Count == 0) bill.BillCode = codeToday + "1";
+                else bill.BillCode = codeToday + _lstBill.Max(c => int.Parse(c.BillCode.Substring(6)) + 1).ToString();
+
+
+                var a = await _client.PostAsJsonAsync("https://localhost:7141/api/Bill/Post-Bill", bill);
+                if (a.StatusCode.ToString() == "OK")
+                {
+                    _lstBill_Vm_show.Add(bill);
+                    BillId = id;
+                    await GetBillItemShowOnBill(id);
+                    checkBillIsNull = false;
+                }
+                CheckInputPayment();
+            }
 
             //Lấy list size All
             _lstSizeAll = (await _client.GetFromJsonAsync<List<Size_VM>>("https://localhost:7141/api/Size/get_size")).ToList();
@@ -658,6 +702,19 @@ namespace DATN_Client.Areas.Admin.Components
 
             //check trùng sản phẩm 
             //tìm xem có sản phẩm đó trong bill không 
+            if (activeTabDungDiem==true)
+            {
+                if (pointKhachhang > Tongtienhang / 10)
+                {
+                    InputTichDiem = Tongtienhang / 10;
+                }
+                else
+                {
+                    InputTichDiem = pointKhachhang;
+                }
+                Tongtien = Tongtienhang;
+                Tongtien -= InputTichDiem;
+            }
             var listbillItemInBilll = await _client.GetFromJsonAsync<List<BillItems>>("https://localhost:7141/api/BillItem/get_alll_bill_item");
             var billItemInBill = listbillItemInBilll.FirstOrDefault(x => x.ProductItemsId == billadd.ProductItemsId && x.BillId == BillId);
 
@@ -967,7 +1024,7 @@ namespace DATN_Client.Areas.Admin.Components
 
         public void CheckInputTienMat(ChangeEventArgs e)
         {
-            if (Login.Roleuser != "Admin" && Login.Roleuser != "Staff")
+            if (Login.Roleuser != "Admin"   && Login.Roleuser != "Staff")
             {
                 _navigation.NavigateTo("https://localhost:7075/Admin", true);
                 return;
@@ -2123,7 +2180,7 @@ namespace DATN_Client.Areas.Admin.Components
             document.Add(new Paragraph(customerInfo));
             if (_bill.Province != null)
             {
-                document.Add(new Paragraph("Dia chi: " + _bill.ToAddress + "," + _bill.WardName + "," + _bill.District + "," + _bill.Province));
+                document.Add(new Paragraph(RemoveUnicode("Dia chi: " + _bill.ToAddress + "," + _bill.WardName + "," + _bill.District + "," + _bill.Province)));
             }            
             document.Add(new Paragraph("SDT: " + _bill.PhoneNumber));
             document.Add(new Paragraph("Ma hoa don: " + _bill.BillCode));
@@ -2151,7 +2208,8 @@ namespace DATN_Client.Areas.Admin.Components
             {
                 BillDetailShow billTest = _lstBillItem[i];
                 table.AddCell((i + 1).ToString());
-                table.AddCell(billTest.Name);
+                table.AddCell(RemoveUnicode(billTest.Name + "-" + billTest.SizeName + "-" + billTest.ColorName));
+
                 table.AddCell(billTest.PriceAfter.ToString());
                 table.AddCell(billTest.Quantity.ToString());
                 table.AddCell((billTest.PriceAfter * billTest.Quantity)?.ToString("#,##0") + "đ");
