@@ -110,13 +110,13 @@ else
 
 
 					<div class="input-field">
-						<InputText placeholder="Mật khẩu" @bind-Value="signUp.Password" />
+						<InputText type="password" placeholder="Mật khẩu" @bind-Value="signUp.Password" />
 						<i class="fa-solid fa-lock"></i>
 					</div>
 					<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.Password"></ValidationMessage></span>
 
 					<div class="input-field">
-						<InputText placeholder="Xác nhận lại mật khẩu" @bind-Value="signUp.ConfirmPassword" />
+						<InputText type="password" placeholder="Xác nhận lại mật khẩu" @bind-Value="signUp.ConfirmPassword" />
 						<i class="fa-solid fa-lock"></i>
 					</div>
 					<span><ValidationMessage style="color:red;font-size:12pt;" For="()=>signUp.ConfirmPassword"></ValidationMessage></span>

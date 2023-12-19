@@ -55,6 +55,7 @@ namespace DATN_Client.Areas.Customer.Component
 		private bool isLoader = false;
 		private int _diemCuaNguoiDung { get; set; } = 0;
 		private bool _checkDung { get; set; }
+		private bool isModalXacNhan { get; set; } = false;
 		protected override async Task OnInitializedAsync()
 		{
 			_bill_validate_vm = new();
@@ -126,10 +127,15 @@ namespace DATN_Client.Areas.Customer.Component
 
 		public async Task Btn_DatHang()
 		{
+			if (string.IsNullOrEmpty(_bill_validate_vm.Recipient) || string.IsNullOrEmpty(_bill_validate_vm.NumberPhone) || string.IsNullOrEmpty(_bill_validate_vm.Province) || string.IsNullOrEmpty(_bill_validate_vm.District) || string.IsNullOrEmpty(_bill_validate_vm.WardName)||string.IsNullOrEmpty(_bill_validate_vm.ToAddress))
+			{
+				_toastService.ShowError("Vui lòng nhập đầy đủ thông tin");
+				return;
+			}
 			Voucher_VM? vch = new Voucher_VM();
 			// moi
-			_datHangThanhCong = true;
-			_afterClick = "afterClick";
+			//_datHangThanhCong = true;
+			//_afterClick = "afterClick";
 			if (!_lstCI.Any()) _navi.NavigateTo("/cart", true);
 			_lstPrI_show_VM = await _httpClient.GetFromJsonAsync<List<ProductItem_Show_VM>>("https://localhost:7141/api/productitem/get_all_productitem_show");
 			if (_bill_validate_vm.VoucherId != null)
@@ -181,6 +187,7 @@ namespace DATN_Client.Areas.Customer.Component
 			{
 				_datHangThanhCong = false;
 				_afterClick = string.Empty;
+				_toastService.ShowError("Vui lòng nhập đầy đủ thông tin");
 				return;
 			}
 
@@ -211,6 +218,7 @@ namespace DATN_Client.Areas.Customer.Component
 			// nếu thành công thì tiếp tục
 			if (addBill.StatusCode == System.Net.HttpStatusCode.OK)
 			{
+				ClosePopup("XacNhanTao");
 				// nếu trong list addressShip rỗng và k phải vãng lai thì add để lần sau sử dụng
 				if (_lst_adrS_User.Count == 0 && _bill_validate_vm.UserId != _userVangLai.Id)
 				{
@@ -320,7 +328,7 @@ namespace DATN_Client.Areas.Customer.Component
 				if (_lstPayM.FirstOrDefault(c => c.Id == _bill_validate_vm.PaymentMethodId).Name == "Thanh toán khi nhận hàng (COD)")
 				{
 					_toastService.ShowSuccess("Đơn hàng đã được tạo thành công");
-					await Task.Delay(3000);
+					await Task.Delay(2000);
 					if (string.IsNullOrEmpty(_iduser))
 					{
 						_navi.NavigateTo("/home", true);
@@ -545,5 +553,32 @@ namespace DATN_Client.Areas.Customer.Component
 				}
 			}
 		}
+
+		private void SetModalState(bool isOpen, string modalType)
+		{
+			switch (modalType)
+			{
+				case "XacNhanTao":
+					isModalXacNhan = isOpen;
+					break;				
+				default:
+					break;
+			}
+		}
+
+		private void OpenPopup(string modalType)
+		{
+			SetModalState(true, modalType);
+		}
+
+		private void ClosePopup(string modalType)
+		{
+			SetModalState(false, modalType);
+		}
+
+		private void Mo_XacNhan()
+		{
+			OpenPopup("XacNhanTao");
+		}                                                 
 	}
 }

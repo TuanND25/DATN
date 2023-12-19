@@ -23,7 +23,8 @@ namespace DATN_Client.Areas.Customer.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            return View();
+			HttpContext.Session.SetString($"{Guid.NewGuid()}", JsonConvert.SerializeObject(Guid.NewGuid()));
+			return View();
         }
         //[HttpPost]
         //public async Task<IActionResult> Login(LoginUser user)

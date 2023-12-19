@@ -5,7 +5,11 @@
 				SuccessClass="success-toast-override"
 				SuccessIcon="fa-solid fa-check"
 				ErrorIcon="fa-solid fa-triangle-exclamation" />
-
+<style>
+	.back {
+		background-color: rgba(0,0,0,0.7);
+	}
+</style>
 
 <style>
 	.form-control .form-select {
@@ -517,6 +521,36 @@ else
 				<!-- Phần chân của popup -->
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+				</div>
+			</div>
+		</div>
+		<BlazoredToasts Position="ToastPosition.TopRight"
+						Timeout="5"
+						IconType="IconType.FontAwesome"
+						SuccessClass="success-toast-override"
+						SuccessIcon="fa-solid fa-check"
+						ErrorIcon="fa-solid fa-triangle-exclamation" />
+	</div>
+
+	<div class="modal fade @(isModalXacNhan ? "show back" : "")"
+		 tabindex="-1"
+		 aria-hidden="@(isModalXacNhan ? "" : "true")"
+		 style="display: @(isModalXacNhan ? "block" : "none")"
+		 aria-modal="@(isModalXacNhan ? "true" : "none")"
+		 role="@(isModalXacNhan ? "dialog" : "none")">
+		<div class="modal-dialog modal-dialog-centered" style="width:150%">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Thông báo</h4>
+					<button style="border:none;background-color:#fff" class="close" @onclick='()=>ClosePopup("XacNhanTao")'>&times;</button>
+				</div>
+				<div class="modal-body">
+					<span>Bạn có chắc muốn tạo đơn hàng?</span>
+				</div>
+				<!-- Phần chân của popup -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" @onclick='()=>ClosePopup("XacNhanTao")'>Đóng</button>
+					<button type="button" class="btn btn-primary" @onclick="Btn_DatHang">Xác nhận</button>
 				</div>
 			</div>
 		</div>
