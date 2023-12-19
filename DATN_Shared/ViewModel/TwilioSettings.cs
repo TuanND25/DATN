@@ -8,8 +8,8 @@ namespace DATN_Shared.ViewModel
 {
     public class TwilioSettings
     {
-        public string AccountSid { get; set; } = "AC126653c492854d1932d5be4930729aab";
-        public string AuthToken { get; set; } = "982b03fbbd1004a3dfc2ee10da45658c";
-        public string PhoneNumber { get; set; } = "+13097244115";
+        public string AccountSid { get; set; } = "AC34133323a24ffe92297ae24fb00060a4";
+        public string AuthToken { get; set; } = "368204aea6287d05d4e33b684b510ec5";
+        public string PhoneNumber { get; set; } = "+12058529184";
     }
 }
