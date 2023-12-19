@@ -245,11 +245,7 @@ namespace DATN_Client.Areas.Admin.Components
                 _navigation.NavigateTo("https://localhost:7075/Admin", true);
                 return;
             }
-            if (Login.Roleuser != "Admin")
-            {
-                _navigation.NavigateTo("https://localhost:7075/Admin", true);
-                return;
-            }
+           
 
             var codeToday = DateTime.Now.ToString().Replace("/", "").Substring(0, 4) +
                                 DateTime.Now.Year.ToString().Substring(2);
