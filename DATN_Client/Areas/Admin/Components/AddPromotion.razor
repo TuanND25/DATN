@@ -15,8 +15,8 @@
 </div>
 
 <style>
-.message{
-    color:red;
+    .message {
+        color: red;
     }
 </style>
 
@@ -52,20 +52,8 @@
                         <div class="row mb-3">
                             <label for="inputNumber" class="col-sm-4 col-form-label">Số lượng</label>
                             <div class="row col-sm-8">
-                                <div class="col-md-7">
-                                    <InputNumber class="form-control" @bind-Value="quantityValue" disabled="@isUnlimited" />
-                                    <span class="message">@messageQuantity</span> 
-                                </div>
-                                <div class="col-md-5" style="margin-top:5px;">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" @onchange="ToggleUnlimited" checked="@isUnlimited"
-                                               style="transform: scale(1.7);margin-right:15px;"
-                                               value="" id="defaultCheck2" />
-                                        <label class="form-check-label" for="defaultCheck2">
-                                            Không giới hạn
-                                        </label>
-                                    </div>
-                                </div>
+                                <InputNumber class="form-control" @bind-Value="_promotion.Quantity" />
+                                <span class="message"><ValidationMessage For="()=>_promotion.Quantity" /> </span>
                             </div>
                         </div>
 
@@ -137,26 +125,33 @@
         <div class="col-lg-6">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Product</h4>
-
+                    <h4 class="card-title">Sản phẩm</h4>
+                    <div class="row mb-3">
+                            <div class="col-sm-10" style="margin-left:40px;">
+                                <input type="text" class="form-control" @bind-value="_promotionName" placeholder="Search..." />
+                            </div>
+                            <button type="button" class="btn btn-info col-1" style="width:38px;height:38px;" @onclick="Search"><i class="fas fa-search fa-lg"></i></button>
+                        </div>
+                        
                     <!-- Advanced Form Elements -->
                     <form>
+
                         <!-- Default Table -->
                         <div style="height: 445px; overflow-y: auto;">
                             <table class="table">
                                 <thead style="background-color:orange">
-                                    <tr style="position: sticky;top:0">
+                                    <tr style="position: sticky;top:0; z-index:2">
                                         <th scope="col" style="background-color:orange">
-                                            <input type="checkbox" style="transform: scale(1.5);" />
+
                                         </th>
                                         <th scope="col" style="background-color:orange">#</th>
-                                        <th scope="col" style="background-color:orange">Image</th>
+                                        <th scope="col" style="background-color:orange">Ảnh</th>
                                         <th scope="col" style="background-color:orange">Product Name</th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var a in _lstProduct)
+                                    @foreach (var a in _lstProductShow)
                                     {
                                         var img = _lstImg_PI.Where(c => c.ProductId == a.Id).Select(c => c.PathImage).FirstOrDefault();
                                         <tr>
@@ -182,7 +177,7 @@
 
         <div class="card">
             <div class="card-body">
-                <h4 style="margin-top:20px">Product Item</h4>
+                <h4 style="margin-top:20px">Sản phẩm chi tiết</h4>
                 <div class="pagetitle">
                     <EditForm Model="_PM_S_VM">
                         <div class="row">
@@ -230,7 +225,7 @@
                     <div style="height: 500px; overflow-y: auto;">
                         <table class="table">
                             <thead style="background-color:orange">
-                                <tr style="position: sticky;top:0">
+                                <tr style="position: sticky;top:0;z-index:2">
                                     <th scope="col" style="background-color:orange">
                                         <input type="checkbox" style="transform: scale(1.5);" @onchange="ToggleAllItems" checked="@SelectAllChangedProductItem" />
                                     </th>

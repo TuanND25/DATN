@@ -80,9 +80,9 @@ else
 										<li class="dropdown-header text-start">
 											<h6>Filter</h6>
 										</li>
-										<li><a class="dropdown-item" @onclick="()=>Sale(0)">Today</a></li>
-										<li><a class="dropdown-item" @onclick="()=>Sale(1)">This Month</a></li>
-										<li><a class="dropdown-item" @onclick="()=>Sale(2)">This Year</a></li>
+										<li><a class="dropdown-item" @onclick="()=>Sale(0)">Hôm nay</a></li>
+										<li><a class="dropdown-item" @onclick="()=>Sale(1)">Tháng này</a></li>
+										<li><a class="dropdown-item" @onclick="()=>Sale(2)">Năm nay</a></li>
 									</ul>
 								</div>
 								<div class="card-body">
@@ -100,6 +100,7 @@ else
 							</EditForm>
 						</div>
 					</div><!-- End thẻ hoá đơn -->
+
 					<!-- Product Card -->
 					<div class="col-xxl-4 col-xl-12">
 
@@ -112,9 +113,9 @@ else
 											<h6>Filter</h6>
 										</li>
 
-										<li><a class="dropdown-item" @onclick="()=>Products(0)">Today</a></li>
-										<li><a class="dropdown-item" @onclick="()=>Products(1)">This Month</a></li>
-										<li><a class="dropdown-item" @onclick="()=>Products(2)">This Year</a></li>
+										<li><a class="dropdown-item" @onclick="()=>Products(0)">Hôm nay</a></li>
+										<li><a class="dropdown-item" @onclick="()=>Products(1)">Tháng này</a></li>
+										<li><a class="dropdown-item" @onclick="()=>Products(2)">Năm nay</a></li>
 									</ul>
 								</div>
 								<div class="card-body">
@@ -135,6 +136,7 @@ else
 
 					</div><!-- End Product Card -->
 					<!-- Revenue Card -->
+
 					<div class="col-xxl-4 col-md-6">
 						<div class="card info-card revenue-card">
 							<EditForm Model="count1">
@@ -145,9 +147,9 @@ else
 											<h6>Filter</h6>
 										</li>
 
-										<li><a class="dropdown-item" @onclick="()=>Revenue(0)">Today</a></li>
-										<li><a class="dropdown-item" @onclick="()=>Revenue(1)">This Month</a></li>
-										<li><a class="dropdown-item" @onclick="()=>Revenue(2)">This Year</a></li>
+										<li><a class="dropdown-item" @onclick="()=>Revenue(0)">Hôm nay</a></li>
+										<li><a class="dropdown-item" @onclick="()=>Revenue(1)">Tháng này</a></li>
+										<li><a class="dropdown-item" @onclick="()=>Revenue(2)">Năm nay</a></li>
 									</ul>
 								</div>
 
@@ -240,19 +242,19 @@ else
 											<li class="dropdown-header text-start">
 												<h6>Filter</h6>
 											</li>
-											<li><a class="dropdown-item" @onclick="()=>TopSale(0)">Today</a></li>
-											<li><a class="dropdown-item" @onclick="()=>TopSale(1)">This Month</a></li>
-											<li><a class="dropdown-item" @onclick="()=>TopSale(2)">This Year</a></li>
+											<li><a class="dropdown-item" @onclick="()=>TopSale(0)">Hôm nay</a></li>
+											<li><a class="dropdown-item" @onclick="()=>TopSale(1)">Tháng này</a></li>
+											<li><a class="dropdown-item" @onclick="()=>TopSale(2)">Năm nay</a></li>
 										</ul>
 									</div>
 
-									<div class="card-body pb-0" style="height:500px;">
+									<div class="card-body pb-0" style="height:500px;overflow-y: auto;">
 										<h5 class="card-title">Sản phẩm bán chạy <span>| @count3.Tittle</span></h5>
 
 										<table class="table table-borderless">
-											<thead>
-												<tr>
-													<th scope="col">Preview</th>
+											<thead style="background-color:#f6f6fe">
+												<tr style="position: sticky;top:0; z-index:1">
+													@*<th scope="col">Preview</th>*@
 													<th scope="col">Mã sản phẩm</th>
 													<th scope="col">Tên sản phẩm</th>
 													<th scope="col">Màu sắc/Size</th>
@@ -280,7 +282,7 @@ else
 													{
 														var img = _lstImg_PI.Where(c => c.ProductItemId == a.ProductItemId).OrderBy(c => c.STT).Select(c => c.PathImage).FirstOrDefault();
 														<tr>
-															<th scope="row"><a><img src="/images/@img" alt=""></a></th>
+															@*<th scope="row"><a><img src="/images/@img" alt=""></a></th>*@
 															<td style="width:150px;">
 																<a class="text-primary fw-bold">@a.ProductCode</a>
 															</td>

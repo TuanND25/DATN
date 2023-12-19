@@ -97,6 +97,7 @@ namespace DATN_Client.Areas.Admin.Components
 				_navigationManager.NavigateTo("https://localhost:7075/Admin", true);
 				return;
 			}
+
 			_lstPromotion = await _httpClient.GetFromJsonAsync<List<Promotions_VM>>("https://localhost:7141/api/promotion");
             _lstPromotion = _lstPromotion.Where(x => x.Name == null || x.Name == string.Empty || x.Name.ToLower().Contains(_promotionName.ToLower())).ToList();
         }
