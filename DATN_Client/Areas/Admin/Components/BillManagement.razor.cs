@@ -3,6 +3,7 @@ using DATN_Shared.ViewModel;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
@@ -90,6 +91,11 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public async Task handleSearch()
         {
+            if (Login.Roleuser != "Admin" && Login.Roleuser != "Staff")
+            {
+                _navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
             var currentUrl = _navigationManager.ToAbsoluteUri(_navigationManager.Uri);
 
             // Thêm thông tin vào URL parameters
@@ -164,6 +170,11 @@ namespace DATN_Client.Areas.Admin.Components
 
         public async Task LocDuLieu()
         {
+            if (Login.Roleuser != "Admin" && Login.Roleuser != "Staff")
+            {
+                _navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
             var _GetclstBill = await _client.GetFromJsonAsync<List<Bill_ShowModel>>("https://localhost:7141/api/Bill/get_alll_bill");
 
             if (activeTabType == 1)
@@ -265,6 +276,11 @@ namespace DATN_Client.Areas.Admin.Components
         }
         public async Task HandleActiveTabType(int id)
         {
+            if (Login.Roleuser != "Admin" && Login.Roleuser != "Staff")
+            {
+                _navigationManager.NavigateTo("https://localhost:7075/Admin", true);
+                return;
+            }
             //tabTypes.Add(new TabType { Id = 1, Name = "Tất cả hóa đơn" });
             //tabTypes.Add(new TabType { Id = 2, Name = "Chờ thanh toán" });
             //tabTypes.Add(new TabType { Id = 3, Name = "Chờ xác nhận" });
@@ -344,6 +360,7 @@ namespace DATN_Client.Areas.Admin.Components
 
         public List<BillShowOnMain> ConvertbillShowOnMain(List<Bill_ShowModel> _lstBillGet)
         {
+           
             List<BillShowOnMain> billshow = new List<BillShowOnMain>();
             foreach (var item in _lstBillGet)
             {

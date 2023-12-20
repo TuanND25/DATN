@@ -10,29 +10,29 @@ namespace DATN_Client.Areas.Admin.Controllers
         [Route("bill-management")]
         public IActionResult Index()
         {
-            return View();
-            //         if (Login.Roleuser == "Admin" || Login.Roleuser == "Staff")
-            //{
-            //	return View();
-            //}
-            //else
-            //{
-            //	return Unauthorized();
-            //}
+            //return View();
+            if (Login.Roleuser == "Admin" || Login.Roleuser == "Staff")
+            {
+                return View();
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
         [Route("bill-management/bill-detail")]
         public IActionResult Details(Guid BillId)
         {
             _billId = BillId;
-            return View();
-            //         if (Login.Roleuser == "Admin" || Login.Roleuser == "Staff")
-            //{
-            //	return View();
-            //}
-            //else
-            //{
-            //	return Unauthorized();
-            //}
+            //return View();
+            if (Login.Roleuser == "Admin" || Login.Roleuser == "Staff")
+            {
+                return View();
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
     }
 }

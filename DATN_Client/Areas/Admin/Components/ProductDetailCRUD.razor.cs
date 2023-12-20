@@ -608,6 +608,12 @@ namespace DATN_Client.Areas.Admin.Components
 					Status = a.Status
 				};
 				var addPI = await _httpClient.PostAsJsonAsync("https://localhost:7141/api/productitem/add_productitem", pri_vm);
+				var checkStatusProduct = await _httpClient.GetFromJsonAsync<Products_VM>($"https://localhost:7141/api/product/get_product_byid/{pri_vm.ProductId}");
+				if (pri_vm.Status == 1 && checkStatusProduct.Status != 1)
+				{
+					checkStatusProduct.Status = 1;
+					var updateStatusProduct = await _httpClient.PutAsJsonAsync("https://localhost:7141/api/product/update_product", checkStatusProduct);
+				}
 				if (addPI.StatusCode != System.Net.HttpStatusCode.OK) checkAdd = false;
 				var lstImg = await _httpClient.GetFromJsonAsync<List<Image_Join_ProductItem>>($"https://localhost:7141/api/Image/GetAllImage_PrductItem_ByProductId/{ProductController._productID}");
 				var lstImgMoiTam = lstImg.Where(c => c.ColorId == pri_vm.ColorId).ToList();
