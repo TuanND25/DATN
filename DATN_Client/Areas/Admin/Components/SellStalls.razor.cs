@@ -2216,13 +2216,16 @@ namespace DATN_Client.Areas.Admin.Components
 
 
 
-            table.AddCell("");
-            table.AddCell("");
-            table.AddCell("");
             if (_bill.ShippingFee != null)
             {
+                table.AddCell("");
+                table.AddCell("");
+                table.AddCell("");
                 table.AddCell("Phi ship: ");
-            }          
+            }
+            table.AddCell("");
+            table.AddCell("");
+            table.AddCell("");
             table.AddCell(_bill.ShippingFee?.ToString("#,##0") + "đ");
 
 
@@ -2247,6 +2250,7 @@ namespace DATN_Client.Areas.Admin.Components
            // Thêm ô tiền thành chữ
             PdfPCell mergedCell = new PdfPCell(new Phrase(""));
             mergedCell.Colspan = 5; // Hợp nhất qua 5 cột
+
             mergedCell.Rowspan = 1; // Hợp nhất qua 1 dòng
             mergedCell.Border = iTextSharp.text.Rectangle.NO_BORDER; // Loại bỏ đường viền
             table.AddCell(mergedCell);
