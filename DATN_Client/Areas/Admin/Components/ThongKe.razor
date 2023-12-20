@@ -176,7 +176,7 @@ else
 						</div>
 					</div><!-- End Revenue Card -->
 					@{
-						var d = _lstProductItem.Where(x => x.Status == 1 && x.AvaiableQuantity < 50).Count();
+						var d = _lstProductItem.Where(x => x.Status == 1 && x.AvaiableQuantity < 20).Count();
 						var e = _lstPromotion.Where(x => x.Status == 1).Count();
 
 					}
