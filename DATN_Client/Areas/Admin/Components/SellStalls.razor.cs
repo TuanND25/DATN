@@ -2181,8 +2181,8 @@ namespace DATN_Client.Areas.Admin.Components
             }            
             document.Add(new Paragraph("SDT: " + _bill.PhoneNumber));
             document.Add(new Paragraph("Ma hoa don: " + _bill.BillCode));
-            document.Add(new Paragraph("Ngay: " + _bill.CreateDate?.ToString("HH:mm dd/MM/yyyy")));
-            Paragraph paragraph = new Paragraph();
+			document.Add(new Paragraph("Ngay: " + DateTime.Now.ToString("HH:mm dd/MM/yyyy")));
+			Paragraph paragraph = new Paragraph();
             paragraph.SpacingAfter = 10; // Thêm khoảng cách 10 điểm ảnh
             document.Add(paragraph);
 
