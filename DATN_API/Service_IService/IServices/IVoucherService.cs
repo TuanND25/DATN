@@ -1,7 +1,8 @@
-﻿using DATN_Shared.Models;
+﻿using DATN_API.Models;
+
 namespace DATN_API.Service_IService.IServices
 {
-    public interface IVoucherService
+	public interface IVoucherService
     {
         public Task<Voucher> PostVoucher(Voucher voucher);
         public Task<Voucher> PutVoucher(Voucher voucher);

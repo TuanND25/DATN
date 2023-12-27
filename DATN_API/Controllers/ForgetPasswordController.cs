@@ -1,6 +1,6 @@
 ﻿using DATN_API.Data;
-using DATN_Shared.Models;
-using DATN_Shared.ViewModel;
+using DATN_API.Models;
+using DATN_API.Models.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +12,7 @@ using Twilio.TwiML.Messaging;
 
 namespace DATN_API.Controllers
 {
-    [Route("api/forget-password")]
+	[Route("api/forget-password")]
     [ApiController]
     public class ForgetPasswordController : ControllerBase
     {

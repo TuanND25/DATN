@@ -1,8 +1,8 @@
-﻿using DATN_Shared.Models;
+﻿using DATN_API.Models;
 
 namespace DATN_API.Service_IService.IServices
 {
-    public interface IAddressShipService
+	public interface IAddressShipService
     {
         public Task<AddressShip> PostAddressShip(AddressShip addressShip);
         public Task<AddressShip> PutAddressShip(AddressShip addressShip);

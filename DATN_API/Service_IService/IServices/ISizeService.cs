@@ -1,8 +1,8 @@
-﻿using DATN_Shared.Models;
+﻿using DATN_API.Models;
 
 namespace DATN_API.Service_IService.IServices
 {
-    public interface ISizeService
+	public interface ISizeService
     {
         public Task<Size> PostSize(Size size);
         public Task<Size> PutSize(Size size);

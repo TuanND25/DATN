@@ -1,13 +1,12 @@
 ﻿using System.Data;
-
-using DATN_Shared.Models;
+using DATN_API.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DATN_API.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
+	public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

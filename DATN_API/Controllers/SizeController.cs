@@ -1,13 +1,13 @@
 ﻿
+using DATN_API.Models;
+using DATN_API.Models.ViewModel;
 using DATN_API.Service_IService.IServices;
-using DATN_Shared.Models;
-using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DATN_API.Controllers
 {
-    [Route("api/Size")]
+	[Route("api/Size")]
     [ApiController]
     public class SizeController : ControllerBase
     {

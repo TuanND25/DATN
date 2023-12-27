@@ -1,4 +1,4 @@
-﻿using DATN_Shared.ViewModel;
+﻿using DATN_API.Models.ViewModel;
 
 namespace DATN_API.Service_IService.IServices
 {

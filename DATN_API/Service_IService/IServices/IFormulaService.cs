@@ -1,8 +1,8 @@
-﻿using DATN_Shared.Models;
+﻿using DATN_API.Models;
 
 namespace DATN_API.Service_IService.IServices
 {
-    public interface IFormulaService
+	public interface IFormulaService
     {
         public Task<Formula> PostFormula (Formula formula);
         public Task<Formula> PutFormula (Formula formula);   

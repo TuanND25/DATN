@@ -1,12 +1,12 @@
 ﻿using DATN_API.Data;
-using DATN_Shared.Models;
 using DATN_API.Service_IService.IServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using DATN_API.Models;
 
 namespace DATN_API.Service_IService.Services
 {
-    public class CategoryService : ICategoryService
+	public class CategoryService : ICategoryService
     {
         private readonly ApplicationDbContext _context;
         public CategoryService(ApplicationDbContext context)

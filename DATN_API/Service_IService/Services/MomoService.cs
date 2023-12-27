@@ -1,6 +1,6 @@
-﻿using DATN_API.Service_IService.IServices;
-using DATN_Shared.ViewModel.Momo;
-using DATN_Shared.ViewModel.Momo.Order;
+﻿using DATN_API.Models.ViewModel.Momo;
+using DATN_API.Models.ViewModel.Momo.Order;
+using DATN_API.Service_IService.IServices;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RestSharp;
@@ -9,7 +9,7 @@ using System.Text;
 
 namespace DATN_API.Service_IService.Services
 {
-	public class MomoService : IMomoService
+    public class MomoService : IMomoService
 	{
 		private readonly IOptions<MomoOptionModel> _options;
 

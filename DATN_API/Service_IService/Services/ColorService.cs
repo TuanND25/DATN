@@ -1,11 +1,11 @@
 ﻿using DATN_API.Service_IService.IServices;
 using DATN_API.Data;
-using DATN_Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using DATN_API.Models;
 
 namespace DATN_API.Service_IService.Services
 {
-    public class ColorService : IColorService
+	public class ColorService : IColorService
     {
         private readonly ApplicationDbContext _context;
         public ColorService(ApplicationDbContext context)

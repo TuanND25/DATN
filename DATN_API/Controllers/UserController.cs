@@ -1,7 +1,7 @@
 ﻿using DATN_API.Data;
+using DATN_API.Models;
+using DATN_API.Models.ViewModel;
 using DATN_API.Service_IService.IServices;
-using DATN_Shared.Models;
-using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -11,7 +11,7 @@ using Twilio.Types;
 
 namespace DATN_API.Controllers
 {
-    [Route("api/user")]
+	[Route("api/user")]
     [ApiController]
     public class UserController : ControllerBase
     {

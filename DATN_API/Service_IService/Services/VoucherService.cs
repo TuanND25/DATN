@@ -1,11 +1,11 @@
 ﻿using DATN_API.Data;
-using DATN_Shared.Models;
 using DATN_API.Service_IService.IServices;
 using Microsoft.EntityFrameworkCore;
+using DATN_API.Models;
 
 namespace DATN_API.Service_IService.Services
 {
-    public class VoucherService : IVoucherService
+	public class VoucherService : IVoucherService
     {
         private readonly ApplicationDbContext _context;
         public VoucherService(ApplicationDbContext context)

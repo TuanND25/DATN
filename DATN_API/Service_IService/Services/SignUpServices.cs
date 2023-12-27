@@ -1,8 +1,8 @@
 ﻿using System.Security.Cryptography;
 using DATN_API.Data;
+using DATN_API.Models;
+using DATN_API.Models.ViewModel;
 using DATN_API.Service_IService.IServices;
-using DATN_Shared.Models;
-using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +12,7 @@ using Twilio.Rest.Api.V2010.Account;
 
 namespace DATN_API.Service_IService.Services
 {
-    public class SignUpServices : ISignUpServices
+	public class SignUpServices : ISignUpServices
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;

@@ -1,9 +1,9 @@
-﻿using DATN_Shared.ViewModel.Momo;
-using DATN_Shared.ViewModel.Momo.Order;
+﻿using DATN_API.Models.ViewModel.Momo;
+using DATN_API.Models.ViewModel.Momo.Order;
 
 namespace DATN_API.Service_IService.IServices
 {
-	public interface IMomoService
+    public interface IMomoService
 	{
 		Task<MomoCreatePaymentResponseModel> CreatePaymentAsync(OrderInfoModel model);
 	}

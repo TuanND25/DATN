@@ -1,10 +1,10 @@
 ﻿
 
-using DATN_Shared.Models;
+using DATN_API.Models;
 
 namespace DATN_API.Service_IService.IServices
 {
-    public interface IColorService
+	public interface IColorService
     {
         public Task<Color> PostColor(Color color);
         public Task<Color> PutColor(Color color);

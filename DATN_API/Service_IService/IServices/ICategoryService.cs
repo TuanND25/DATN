@@ -1,8 +1,8 @@
-﻿using DATN_Shared.Models;
+﻿using DATN_API.Models;
 
 namespace DATN_API.Service_IService.IServices
 {
-    public interface ICategoryService
+	public interface ICategoryService
     {
         public Task<Category> PostCategory (Category category);
         public Task<Category> PutCategory (Category category);

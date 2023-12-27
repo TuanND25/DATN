@@ -1,12 +1,11 @@
 ﻿using DATN_API.Data;
+using DATN_API.Models.ViewModel;
 using DATN_API.Service_IService.IServices;
-using DATN_Shared.Models;
-using DATN_Shared.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace DATN_API.Service_IService.Services
 {
-	public class CustomerPointService : ICustomerPointService
+    public class CustomerPointService : ICustomerPointService
 	{
 		private readonly ApplicationDbContext _context;
 		public CustomerPointService(ApplicationDbContext context)

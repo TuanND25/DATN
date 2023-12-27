@@ -1,9 +1,9 @@
-﻿using DATN_Shared.Models;
-using DATN_Shared.ViewModel;
+﻿using DATN_API.Models;
+using DATN_API.Models.ViewModel;
 
 namespace DATN_API.Service_IService.IServices
 {
-    public interface IProductItemServices
+	public interface IProductItemServices
     {
         public Task<ProductItems> AddProductItem(ProductItems item);
         public Task<ProductItems> UpdateProductItem(ProductItems item);

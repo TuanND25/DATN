@@ -1,6 +1,6 @@
 ﻿using DATN_API.Data;
+using DATN_API.Models;
 using DATN_API.Service_IService.IServices;
-using DATN_Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using Twilio.Rest.Api.V2010.Account;
 

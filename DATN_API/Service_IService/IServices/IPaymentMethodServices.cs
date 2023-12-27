@@ -1,8 +1,8 @@
-﻿using DATN_Shared.Models;
+﻿using DATN_API.Models;
 
 namespace DATN_API.Service_IService.IServices
 {
-    public interface IPaymentMethodServices
+	public interface IPaymentMethodServices
     {
         public Task<PaymentMethod> PostPaymentMethod(PaymentMethod paymentMethod);
         public Task<PaymentMethod> PutPaymentMethod(PaymentMethod paymentMethod);

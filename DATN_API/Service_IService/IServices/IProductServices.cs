@@ -1,8 +1,8 @@
-﻿using DATN_Shared.Models;
+﻿using DATN_API.Models;
 
 namespace DATN_API.Service_IService.IServices
 {
-    public interface IProductsServices
+	public interface IProductsServices
     {
         public Task<Products> AddProducts(Products item);
         public Task<Products> UpdateProducts(Products item);

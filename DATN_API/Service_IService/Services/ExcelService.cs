@@ -1,16 +1,16 @@
 ﻿using ClosedXML.Excel;
 using DATN_API.Data;
 using DATN_API.Service_IService.IServices;
-using DATN_Shared.ViewModel;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using DATN_API.Models.ViewModel;
 
 namespace DATN_API.Service_IService.Services
 {
-	public class ExcelService : IExcelService
+    public class ExcelService : IExcelService
 	{
 		private readonly ApplicationDbContext _context;
 

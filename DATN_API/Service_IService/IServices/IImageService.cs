@@ -1,9 +1,9 @@
-﻿using DATN_Shared.Models;
-using DATN_Shared.ViewModel;
+﻿using DATN_API.Models;
+using DATN_API.Models.ViewModel;
 
 namespace DATN_API.Service_IService.IServices
 {
-    public interface IImageService
+	public interface IImageService
     {
         public Task<Image> PostImage(Image image);
         public Task<Image> PutImage(Image image);

@@ -1,12 +1,12 @@
-﻿using DATN_API.Service_IService.IServices;
-using DATN_Shared.Models;
-using DATN_Shared.ViewModel;
+﻿using DATN_API.Models;
+using DATN_API.Models.ViewModel;
+using DATN_API.Service_IService.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DATN_API.Controllers
 {
-    [Route("api/[controller]")]
+	[Route("api/[controller]")]
     [ApiController]
     public class BillItemController : ControllerBase
     {

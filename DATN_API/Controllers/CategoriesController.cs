@@ -1,14 +1,13 @@
-﻿
-using DATN_Shared.ViewModel;
-using DATN_Shared.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using DATN_API.Service_IService.IServices;
+using DATN_API.Models.ViewModel;
+using DATN_API.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace DATN_API.Controllers
 {
-    [Route("api/Categories")]
+	[Route("api/Categories")]
     [ApiController]
     public class CategoriesController : ControllerBase
     {

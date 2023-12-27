@@ -1,8 +1,8 @@
-﻿using DATN_Shared.ViewModel;
+﻿using DATN_API.Models.ViewModel;
 
 namespace DATN_API.Service_IService.IServices
 {
-	public interface IExcelService
+    public interface IExcelService
 	{
 
 

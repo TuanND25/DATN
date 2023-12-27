@@ -1,12 +1,12 @@
-﻿using DATN_API.Service_IService.IServices;
-using DATN_Shared.ViewModel.Momo;
-using DATN_Shared.ViewModel.Momo.Order;
+﻿using DATN_API.Models.ViewModel.Momo;
+using DATN_API.Models.ViewModel.Momo.Order;
+using DATN_API.Service_IService.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DATN_API.Controllers
 {
-	[Route("api/Momo")]
+    [Route("api/Momo")]
 	[ApiController]
 	public class MomoController : ControllerBase
 	{

@@ -1,10 +1,10 @@
 using System.Text;
 using DATN_API.Data;
+using DATN_API.Models;
+using DATN_API.Models.ViewModel;
+using DATN_API.Models.ViewModel.Momo;
 using DATN_API.Service_IService.IServices;
 using DATN_API.Service_IService.Services;
-using DATN_Shared.Models;
-using DATN_Shared.ViewModel;
-using DATN_Shared.ViewModel.Momo;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

@@ -1,14 +1,14 @@
 ﻿
+using DATN_API.Models;
+using DATN_API.Models.ViewModel;
 using DATN_API.Service_IService.IServices;
-using DATN_Shared.Models;
-using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace DATN_API.Controllers
 {
-    [Route("api/Voucher")]
+	[Route("api/Voucher")]
     [ApiController]
     public class VoucherController : ControllerBase
     {

@@ -3,16 +3,16 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using DATN_API.Data;
+using DATN_API.Models;
+using DATN_API.Models.ViewModel;
 using DATN_API.Service_IService.IServices;
-using DATN_Shared.Models;
-using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DATN_API.Service_IService.Services
 {
-    public class LoginServices : ILoginServices
+	public class LoginServices : ILoginServices
     {
         private readonly UserManager<User> _userManager;
 

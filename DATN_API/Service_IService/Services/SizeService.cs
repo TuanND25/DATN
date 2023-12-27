@@ -1,11 +1,11 @@
 ﻿using DATN_API.Data;
-using DATN_Shared.Models;
 using DATN_API.Service_IService.IServices;
 using Microsoft.EntityFrameworkCore;
+using DATN_API.Models;
 
 namespace DATN_API.Service_IService.Services
 {
-    public class SizeService : ISizeService
+	public class SizeService : ISizeService
     {
         private readonly ApplicationDbContext _context;
         public SizeService(ApplicationDbContext context)

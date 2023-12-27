@@ -1,13 +1,13 @@
-﻿using DATN_API.Service_IService.IServices;
+﻿using DATN_API.Models;
+using DATN_API.Models.ViewModel;
+using DATN_API.Service_IService.IServices;
 using DATN_API.Service_IService.Services;
-using DATN_Shared.Models;
-using DATN_Shared.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DATN_API.Controllers
 {
-    [Route("api/paymentMethod")]
+	[Route("api/paymentMethod")]
     [ApiController]
     public class PaymentMethodController : ControllerBase
     {

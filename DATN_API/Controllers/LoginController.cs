@@ -1,5 +1,5 @@
-﻿using DATN_API.Service_IService.IServices;
-using DATN_Shared.ViewModel;
+﻿using DATN_API.Models.ViewModel;
+using DATN_API.Service_IService.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
