@@ -3,11 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DATN_Shared", "DATN_Shared\DATN_Shared.csproj", "{70802AD0-97D7-4987-A1FD-7B04EC59D638}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DATN_API", "DATN_API\DATN_API.csproj", "{E4F721D3-F78B-46EA-88CA-98742E39CD03}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DATN_Client", "DATN_Client\DATN_Client.csproj", "{FD51699A-6C36-46CC-9B54-0448FFD03D0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,18 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{70802AD0-97D7-4987-A1FD-7B04EC59D638}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{70802AD0-97D7-4987-A1FD-7B04EC59D638}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{70802AD0-97D7-4987-A1FD-7B04EC59D638}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{70802AD0-97D7-4987-A1FD-7B04EC59D638}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E4F721D3-F78B-46EA-88CA-98742E39CD03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E4F721D3-F78B-46EA-88CA-98742E39CD03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4F721D3-F78B-46EA-88CA-98742E39CD03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4F721D3-F78B-46EA-88CA-98742E39CD03}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FD51699A-6C36-46CC-9B54-0448FFD03D0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FD51699A-6C36-46CC-9B54-0448FFD03D0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FD51699A-6C36-46CC-9B54-0448FFD03D0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FD51699A-6C36-46CC-9B54-0448FFD03D0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
